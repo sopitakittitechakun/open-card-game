@@ -4,15 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>เปิดไพ่ลุ้นโชค | ร่ำรวย365</title>
-  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Sarabun', sans-serif;
       background: linear-gradient(135deg, #fbe6d4, #fdd9b5, #facd9e);
-      background-attachment: fixed;
-      background-size: cover;
-      text-align: center;
       padding: 40px;
+      text-align: center;
     }
 
     input, button {
@@ -65,8 +62,7 @@
   <audio id="flipSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_72b2a6d7f8.mp3?filename=correct-choice-43861.mp3" preload="auto"></audio>
 
   <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbyaFmU--QWAkJ9C4jbYUh4KuPqZnE3ABXe7CiM8R_aVYjVFwImiVVlNpwRi6SC_Ov8cvA/exec'; // แก้ตรงนี้
-
+    const scriptURL = 'https://script.google.com/macros/library/d/1dIzILWP4llc-Rq0O93WSLG3PF7dIt6Mpc-C7IlGukLRtFVUvXLyINZZn/5'; // 👈 เปลี่ยนเป็นของคุณ
     let hasFlipped = false;
 
     function startGame() {
@@ -83,7 +79,7 @@
       .then(res => res.json())
       .then(data => {
         if (data.alreadyPlayed) {
-          alert("เบอร์นี้เปิดไพ่ไปแล้ววันนี้!");
+          alert("เบอร์นี้เล่นไปแล้ววันนี้");
           return;
         }
 
