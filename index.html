@@ -126,12 +126,15 @@
         return;
       }
 
-      const formData = new FormData();
-      formData.append("phone", phone);
+      const params = new URLSearchParams();
+      params.append("phone", phone);
 
       fetch(scriptURL, {
         method: 'POST',
-        body: formData
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: params
       })
       .then(res => res.json())
       .then(data => {
@@ -182,13 +185,16 @@
       document.getElementById("rewardDisplay").innerHTML =
         `<div class='reward-text'>🎉 เบอร์ ${phone} ได้เลข ${number} ขอให้โชคดี ร่ำรวยเฮงๆ 🎉</div>`;
 
-      const formData = new FormData();
-      formData.append("phone", phone);
-      formData.append("reward", number);
+      const params = new URLSearchParams();
+      params.append("phone", phone);
+      params.append("reward", number);
 
       fetch(scriptURL, {
         method: 'POST',
-        body: formData
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: params
       });
     }
 
