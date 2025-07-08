@@ -12,35 +12,22 @@
       text-align: center;
       color: white;
     }
-
-    h2 {
-      color: #ffd700;
-    }
-
     input, button {
       padding: 12px;
       font-size: 16px;
       border-radius: 12px;
       margin-bottom: 10px;
     }
-
     input {
       border: 2px solid #ffd700;
       width: 240px;
     }
-
     button {
       background: #d32f2f;
       color: white;
       font-weight: bold;
       border: none;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
-
-    button:hover {
-      background: #b71c1c;
-    }
-
     .card {
       width: 100px;
       height: 140px;
@@ -53,13 +40,18 @@
       cursor: pointer;
       color: #b71c1c;
       font-weight: bold;
+      position: relative;
+      overflow: hidden;
     }
-
     .opened {
       background: #ffcc00;
       color: white;
     }
-
+    .card img {
+      width: 80px;
+      height: auto;
+      margin-top: 30px;
+    }
     #cards {
       display: flex;
       flex-wrap: wrap;
@@ -114,11 +106,15 @@
     function flipCard(el, number, phone) {
       if (hasFlipped) return;
       document.getElementById('flipSound').play();
-      el.textContent = number;
+      el.innerHTML = "";
+      const img = document.createElement("img");
+      img.src = `https://raw.githubusercontent.com/sopitakittitechakun/open-card-rewards/main/${number}.png`;
+      img.alt = "รางวัล";
+      el.appendChild(img);
       el.classList.add("opened");
       hasFlipped = true;
 
-      alert(`🎉 เบอร์ ${phone} ได้เลข ${number} 🎉`);
+      alert(`🎉 เบอร์ ${phone} ได้เลข ${number}\nขอให้โชคดี ร่ำรวยเฮงๆ ตลอดวัน! 🎉`);
 
       const formData = new FormData();
       formData.append("phone", phone);
