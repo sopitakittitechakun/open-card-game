@@ -7,10 +7,21 @@
   <style>
     body {
       font-family: 'Sarabun', sans-serif;
-      background: linear-gradient(135deg, #8b0000, #ffcc33);
+      background: url('https://i.imgur.com/GrKdYDh.jpg') no-repeat center center fixed;
+      background-size: cover;
       padding: 40px;
       text-align: center;
       color: #fffbe6;
+    }
+    .logo {
+      width: 160px;
+      margin-bottom: 10px;
+    }
+    h2 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: #ffe066;
+      text-shadow: 1px 1px 3px black;
     }
     input, button {
       padding: 12px;
@@ -48,11 +59,12 @@
       font-weight: bold;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      transition: transform 0.3s;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      transition: transform 0.3s, box-shadow 0.3s;
     }
     .card:hover {
-      transform: scale(1.05);
+      transform: scale(1.07);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.5);
     }
     .opened {
       background: #ffcc00;
@@ -69,13 +81,22 @@
       justify-content: center;
       gap: 10px;
     }
+    .glow {
+      animation: glow 1s ease-in-out infinite alternate;
+    }
+    @keyframes glow {
+      from { box-shadow: 0 0 10px #ffcc00; }
+      to { box-shadow: 0 0 25px #ffd700; }
+    }
   </style>
 </head>
 <body>
+  <img class="logo" src="https://raw.githubusercontent.com/sopitakittitechakun/open-card-rewards/main/logo.png" alt="ร่ำรวย365">
   <h2>🧧 เปิดไพ่ลุ้นโชค (วันละ 1 ครั้ง)</h2>
-  <input type="text" id="phone" placeholder="กรอกเบอร์โทรศัพท์" maxlength="10">
-  <br>
+
+  <input type="text" id="phone" placeholder="กรอกเบอร์โทรศัพท์" maxlength="10"><br>
   <button id="startBtn">เริ่มเกม</button>
+
   <div id="cards"></div>
   <audio id="flipSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_72b2a6d7f8.mp3?filename=correct-choice-43861.mp3" preload="auto"></audio>
 
@@ -130,7 +151,7 @@
       img.src = `https://raw.githubusercontent.com/sopitakittitechakun/open-card-rewards/main/${number}.png`;
       img.alt = "รางวัล";
       el.appendChild(img);
-      el.classList.add("opened");
+      el.classList.add("opened", "glow");
       hasFlipped = true;
 
       alert(`🎉 เบอร์ ${phone} ได้เลข ${number}\nขอให้โชคดี ร่ำรวยเฮงๆ ตลอดวัน! 🎉`);
