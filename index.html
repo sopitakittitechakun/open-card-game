@@ -130,15 +130,27 @@
       background: #ffd700;
       transform: rotateY(180deg);
       animation: glow 1s infinite alternate;
+      position: relative;
+      flex-direction: column;
+    }
+
+    .back img {
+      width: 60px;
+    }
+
+    .back span {
+      position: absolute;
+      bottom: 6px;
+      right: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #7b2e00;
+      text-shadow: 1px 1px 2px #fff;
     }
 
     @keyframes glow {
       from { box-shadow: 0 0 10px #ffd700; }
       to { box-shadow: 0 0 20px #fff200; }
-    }
-
-    .back img {
-      width: 60px;
     }
 
     .reward-text {
@@ -210,6 +222,7 @@
       numbers.forEach(num => {
         const wrapper = document.createElement("div");
         wrapper.className = "card";
+
         const inner = document.createElement("div");
         inner.className = "inner-card";
 
@@ -219,9 +232,15 @@
 
         const back = document.createElement("div");
         back.className = "back";
+
         const img = document.createElement("img");
         img.src = `https://raw.githubusercontent.com/sopitakittitechakun/open-card-rewards/main/${num}.png`;
+
+        const label = document.createElement("span");
+        label.textContent = num;
+
         back.appendChild(img);
+        back.appendChild(label);
 
         inner.appendChild(front);
         inner.appendChild(back);
@@ -238,7 +257,7 @@
       card.classList.add("opened");
       hasFlipped = true;
 
-      let message;
+      let message = "";
       if (number === 10) {
         message = `🎉 เบอร์ ${phone} ได้เลข ${number}<br>ขอแสดงความยินดีกับคุณพี่นะคะ 🎉<br>📸 กรุณาแคปหน้าจอ แล้วแจ้งรับรางวัลกับแอดมินได้เลยค่ะ`;
       } else {
