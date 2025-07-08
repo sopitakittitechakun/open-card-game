@@ -56,14 +56,16 @@
   <h2>🃏 เปิดไพ่ลุ้นเลข (วันละ 1 ครั้ง)</h2>
   <input type="text" id="phone" placeholder="กรอกเบอร์โทรศัพท์" maxlength="10">
   <br>
-  <button onclick="startGame()">เริ่มเกม</button>
+  <button id="startBtn">เริ่มเกม</button>
   <div id="cards"></div>
 
   <audio id="flipSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_72b2a6d7f8.mp3?filename=correct-choice-43861.mp3" preload="auto"></audio>
 
   <script>
-    const scriptURL = 'https://script.google.com/macros/library/d/1dIzILWP4llc-Rq0O93WSLG3PF7dIt6Mpc-C7IlGukLRtFVUvXLyINZZn/5'; // 👈 เปลี่ยนเป็นของคุณ
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbyaFmU--QWAkJ9C4jbYUh4KuPqZnE3ABXe7CiM8R_aVYjVFwImiVVlNpwRi6SC_Ov8cvA/exec'; // แก้ตรงนี้
     let hasFlipped = false;
+
+    document.getElementById('startBtn').addEventListener('click', startGame);
 
     function startGame() {
       const phone = document.getElementById("phone").value.trim();
