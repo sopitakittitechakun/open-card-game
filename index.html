@@ -240,13 +240,16 @@
         back.className = "back";
 
         const img = document.createElement("img");
-        img.src =img.src = `https://raw.githubusercontent.com/sopitakittitechakun/open-card-rewards/main/${num}.png`;
-        
-        const label = document.createElement("span");
-        label.textContent = num;
+img.src = `https://raw.githubusercontent.com/sopitakittitechakun/open-card-rewards/main/${num}.png`;
+img.onerror = () => {
+  img.style.display = 'none';
+};
 
-        back.appendChild(label);
-        back.appendChild(img);
+const label = document.createElement("span");
+label.textContent = num;
+
+back.appendChild(label);
+back.appendChild(img);
 
         inner.appendChild(front);
         inner.appendChild(back);
