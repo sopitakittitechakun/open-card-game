@@ -11,114 +11,68 @@
       background: linear-gradient(135deg, #fbe6d4, #fdd9b5, #facd9e);
       background-attachment: fixed;
       background-size: cover;
-      color: #2f2f2f;
       text-align: center;
       padding: 40px;
     }
 
-    h2 {
-      font-size: 26px;
-      color: #5a3825;
-      margin-bottom: 20px;
-    }
-
-    input {
+    input, button {
       padding: 12px;
-      width: 250px;
       font-size: 16px;
-      border: 1px solid #ccc;
       border-radius: 12px;
       margin-bottom: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
 
     button {
-      padding: 12px 24px;
       background: #c49a6c;
-      border: none;
       color: white;
-      border-radius: 12px;
       font-weight: bold;
-      cursor: pointer;
-      font-size: 16px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-      transition: background 0.3s;
-    }
-
-    button:hover {
-      background: #b18353;
+      border: none;
     }
 
     .card {
-      position: relative;
-      background: #eee;
-      border: 1px solid #d4c2b0;
       width: 100px;
       height: 140px;
+      background: #eee;
       border-radius: 14px;
+      font-size: 48px;
+      line-height: 140px;
       margin: 10px;
       display: inline-block;
-      line-height: 140px;
-      font-size: 48px;
-      color: #5a3825;
       cursor: pointer;
-      user-select: none;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      transform-style: preserve-3d;
-      transition: transform 0.6s, background 0.3s;
     }
 
-    .card.opened {
+    .opened {
       background: #d8af7e;
       color: white;
       font-weight: bold;
-      transform: rotateY(180deg);
-    }
-
-    .card::after {
-      content: "";
-      background: url('https://cdn.pixabay.com/photo/2017/01/31/13/14/sparkle-2024638_1280.png');
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background-size: cover;
-      opacity: 0.15;
-      border-radius: 14px;
-      pointer-events: none;
-    }
-
-    audio {
-      display: none;
     }
 
     #cards {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 12px;
+      gap: 10px;
     }
   </style>
 </head>
 <body>
-  <img src="https://img2.pic.in.th/pic/f2387625-6279-4a4b-894b-3cdfbf8c2a5e.jpg" alt="ร่ำรวย365" style="width: 250px; margin-bottom: 20px;" />
-
-  <h2>🃏 กรอกเบอร์เพื่อเปิดไพ่ 1 ใบ</h2>
-  <input type="text" id="phone" placeholder="กรอกเบอร์โทรศัพท์" maxlength="10" />
-  <br />
+  <h2>🃏 เปิดไพ่ลุ้นเลข (วันละ 1 ครั้ง)</h2>
+  <input type="text" id="phone" placeholder="กรอกเบอร์โทรศัพท์" maxlength="10">
+  <br>
   <button onclick="startGame()">เริ่มเกม</button>
-
-  <div id="cards" style="margin-top: 20px;"></div>
+  <div id="cards"></div>
 
   <audio id="flipSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_72b2a6d7f8.mp3?filename=correct-choice-43861.mp3" preload="auto"></audio>
 
   <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbyaFmU--QWAkJ9C4jbYUh4KuPqZnE3ABXe7CiM8R_aVYjVFwImiVVlNpwRi6SC_Ov8cvA/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbyaFmU--QWAkJ9C4jbYUh4KuPqZnE3ABXe7CiM8R_aVYjVFwImiVVlNpwRi6SC_Ov8cvA/exec'; // แก้ตรงนี้
+
     let hasFlipped = false;
 
     function startGame() {
-      const phone = document.getElementById("phone").value;
+      const phone = document.getElementById("phone").value.trim();
       if (!/^0[0-9]{9}$/.test(phone)) {
-        alert("กรุณาใส่เบอร์โทรให้ถูกต้อง");
+        alert("กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง");
         return;
       }
 
@@ -126,16 +80,15 @@
         method: 'POST',
         body: new URLSearchParams({ phone }),
       })
-      .then(response => response.json())
+      .then(res => res.json())
       .then(data => {
         if (data.alreadyPlayed) {
-          alert("เบอร์นี้เล่นไปแล้ววันนี้");
+          alert("เบอร์นี้เปิดไพ่ไปแล้ววันนี้!");
           return;
         }
 
         hasFlipped = false;
         document.getElementById("cards").innerHTML = "";
-
         const numbers = shuffleArray([1,2,3,4,5,6,7,8,9,10]);
         numbers.forEach(num => {
           const card = document.createElement("div");
@@ -149,7 +102,6 @@
 
     function flipCard(el, number, phone) {
       if (hasFlipped) return;
-
       document.getElementById('flipSound').play();
       el.textContent = number;
       el.classList.add("opened");
@@ -163,16 +115,16 @@
 
       fetch(scriptURL, {
         method: 'POST',
-        body: formData,
+        body: formData
       });
     }
 
-    function shuffleArray(array) {
-      for (let i = array.length - 1; i > 0; i--) {
+    function shuffleArray(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
+        [arr[i], arr[j]] = [arr[j], arr[i]];
       }
-      return array;
+      return arr;
     }
   </script>
 </body>
