@@ -11,21 +11,18 @@
       padding: 40px;
       text-align: center;
     }
-
     input, button {
       padding: 12px;
       font-size: 16px;
       border-radius: 12px;
       margin-bottom: 10px;
     }
-
     button {
       background: #c49a6c;
       color: white;
       font-weight: bold;
       border: none;
     }
-
     .card {
       width: 100px;
       height: 140px;
@@ -37,13 +34,11 @@
       display: inline-block;
       cursor: pointer;
     }
-
     .opened {
       background: #d8af7e;
       color: white;
       font-weight: bold;
     }
-
     #cards {
       display: flex;
       flex-wrap: wrap;
@@ -58,22 +53,17 @@
   <br>
   <button id="startBtn">เริ่มเกม</button>
   <div id="cards"></div>
-
   <audio id="flipSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_72b2a6d7f8.mp3?filename=correct-choice-43861.mp3" preload="auto"></audio>
-
   <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbyaFmU--QWAkJ9C4jbYUh4KuPqZnE3ABXe7CiM8R_aVYjVFwImiVVlNpwRi6SC_Ov8cvA/exec'; // แก้ตรงนี้
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbyaFmU-QWAkJ9C4jbYUh4KuPqZnE3ABWDL_L2dUkK8cU7mZrMbk1sH-RqzC_zlVNc82/exec';
     let hasFlipped = false;
-
     document.getElementById('startBtn').addEventListener('click', startGame);
-
     function startGame() {
       const phone = document.getElementById("phone").value.trim();
       if (!/^0[0-9]{9}$/.test(phone)) {
         alert("กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง");
         return;
       }
-
       fetch(scriptURL, {
         method: 'POST',
         body: new URLSearchParams({ phone }),
@@ -84,7 +74,6 @@
           alert("เบอร์นี้เล่นไปแล้ววันนี้");
           return;
         }
-
         hasFlipped = false;
         document.getElementById("cards").innerHTML = "";
         const numbers = shuffleArray([1,2,3,4,5,6,7,8,9,10]);
@@ -97,26 +86,21 @@
         });
       });
     }
-
     function flipCard(el, number, phone) {
       if (hasFlipped) return;
       document.getElementById('flipSound').play();
       el.textContent = number;
       el.classList.add("opened");
       hasFlipped = true;
-
       alert(`🎉 เบอร์ ${phone} ได้เลข ${number} 🎉`);
-
       const formData = new FormData();
       formData.append("phone", phone);
       formData.append("reward", number);
-
       fetch(scriptURL, {
         method: 'POST',
         body: formData
       });
     }
-
     function shuffleArray(arr) {
       for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
