@@ -4,50 +4,93 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>เปิดไพ่ลุ้นโชค | ร่ำรวย365</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@700&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Sarabun', sans-serif;
       background: url('https://img2.pic.in.th/pic/bg-provider.jpeg') no-repeat center center fixed;
       background-size: cover;
+      position: relative;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* dark overlay */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
       padding: 20px;
       text-align: center;
-      color: #fffbe6;
+      color: #fffde7;
     }
+
     .logo {
-      width: 140px;
+      width: 160px;
       margin-bottom: 15px;
+      filter: drop-shadow(2px 2px 4px #000);
     }
+
     h2 {
-      font-size: 24px;
-      color: #ffe066;
-      text-shadow: 1px 1px 3px black;
-    }
-    input, button {
-      padding: 12px;
-      font-size: 16px;
-      border-radius: 14px;
+      font-size: 28px;
+      font-weight: bold;
+      color: #ffd700;
+      text-shadow: 0 0 5px #fff, 0 0 15px #ff9900;
       margin-bottom: 10px;
+    }
+
+    input, button {
+      padding: 14px;
+      font-size: 16px;
+      border-radius: 16px;
+      margin-bottom: 12px;
       width: 90%;
-      max-width: 300px;
+      max-width: 320px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     }
+
     input {
-      border: 2px solid #ffd700;
-      color: #a52a2a;
+      border: 2px solid #ffcc00;
+      color: #7b2e00;
+      font-weight: bold;
+      text-align: center;
     }
+
     button {
-      background: linear-gradient(to right, #ffd700, #ff9900);
-      color: #5a1e02;
+      background: linear-gradient(to right, #ffcc00, #ffa500);
+      color: #3b1c00;
       font-weight: bold;
       border: none;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
       cursor: pointer;
+      transition: transform 0.2s ease;
     }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    #cards {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
     .card {
-      width: 90px;
-      height: 130px;
+      width: 100px;
+      height: 140px;
       perspective: 1000px;
-      margin: 8px;
+      margin: 6px;
     }
+
     .inner-card {
       width: 100%;
       height: 100%;
@@ -55,156 +98,92 @@
       transform-style: preserve-3d;
       position: relative;
     }
+
     .card.opened .inner-card {
       transform: rotateY(180deg);
     }
+
     .front, .back {
       position: absolute;
       width: 100%;
       height: 100%;
+      border-radius: 12px;
       backface-visibility: hidden;
-      border-radius: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 40px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      font-size: 32px;
+      font-weight: bold;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      border: 3px solid gold;
     }
+
     .front {
-      background: #fff8dc;
+      background: #fffde7;
       color: #b71c1c;
     }
+
     .back {
-      background: #ffcc00;
+      background: #ffd700;
       transform: rotateY(180deg);
+      animation: glow 1s infinite alternate;
     }
+
+    @keyframes glow {
+      from {
+        box-shadow: 0 0 10px #ffd700, 0 0 20px #ff9900;
+      }
+      to {
+        box-shadow: 0 0 20px #fff200, 0 0 30px #ff6600;
+      }
+    }
+
     .back img {
-      width: 70px;
+      width: 60px;
     }
-    #cards {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px;
-    }
+
     .reward-text {
-      margin-top: 12px;
-      font-size: 18px;
-      color: #ffffff;
-      text-shadow: 0 0 3px #000;
+      margin-top: 18px;
+      font-size: 20px;
+      color: #fff8dc;
+      text-shadow: 0 0 5px #000, 0 0 10px #ff9900;
       animation: sparkle 1s infinite alternate;
     }
+
     @keyframes sparkle {
-      0% {text-shadow: 0 0 5px #fff200;}
-      100% {text-shadow: 0 0 12px #ff9900;}
+      0% {text-shadow: 0 0 5px #fff;}
+      100% {text-shadow: 0 0 12px #ffd700;}
     }
+
     @media (max-width: 600px) {
-      .card { width: 70px; height: 100px; }
-      .back img { width: 50px; }
+      .card {
+        width: 80px;
+        height: 110px;
+      }
+      .back img {
+        width: 50px;
+      }
     }
   </style>
 </head>
 <body>
-  <img class="logo" src="https://img2.pic.in.th/pic/1735020594-1.png" alt="ร่ำรวย365">
-  <h2>🧧 เปิดไพ่ลุ้นโชค (วันละ 1 ครั้ง)</h2>
-  <input type="text" id="phone" placeholder="กรอกเบอร์โทรศัพท์" maxlength="10"><br>
-  <button id="startBtn">เริ่มเกม</button>
-  <div id="cards"></div>
-  <div id="rewardDisplay"></div>
-  <audio id="flipSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_72b2a6d7f8.mp3?filename=correct-choice-43861.mp3" preload="auto"></audio>
+  <div class="container">
+    <img class="logo" src="https://img2.pic.in.th/pic/1735020594-1.png" alt="ร่ำรวย365">
+    <h2>💰 เปิดไพ่ลุ้นโชค | ร่ำรวย365</h2>
+    <input type="text" id="phone" placeholder="กรอกเบอร์โทรศัพท์" maxlength="10"><br>
+    <button onclick="alert('เริ่มเกมที่นี่')">เริ่มเกม</button>
 
-  <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbybf8xUEJYD6TigG3QriRdEbKmZF3K3PQs7OvEAHV6Eg8dw4mdGD186N_OWToeS12ry/exec';
-    let hasFlipped = false;
+    <div id="cards">
+      <!-- ตัวอย่างไพ่ -->
+      <div class="card opened">
+        <div class="inner-card">
+          <div class="front">?</div>
+          <div class="back"><img src="https://raw.githubusercontent.com/sopitakittitechakun/open-card-rewards/main/8.png" /></div>
+        </div>
+      </div>
+    </div>
 
-    document.getElementById('startBtn').addEventListener('click', startGame);
-
-    function startGame() {
-      const phone = document.getElementById("phone").value.trim();
-      if (!/^0[0-9]{9}$/.test(phone)) {
-        alert("กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง");
-        return;
-      }
-
-      const params = new URLSearchParams();
-      params.append("phone", phone);
-
-      fetch(scriptURL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: params
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.alreadyPlayed) {
-          alert("เบอร์นี้เล่นไปแล้ววันนี้");
-          return;
-        }
-        showCards(phone);
-      });
-    }
-
-    function showCards(phone) {
-      hasFlipped = false;
-      document.getElementById("cards").innerHTML = "";
-      document.getElementById("rewardDisplay").innerHTML = "";
-      const numbers = shuffleArray([1,2,3,4,5,6,7,8,9,10]);
-      numbers.forEach(num => {
-        const wrapper = document.createElement("div");
-        wrapper.className = "card";
-        const inner = document.createElement("div");
-        inner.className = "inner-card";
-
-        const front = document.createElement("div");
-        front.className = "front";
-        front.textContent = "?";
-
-        const back = document.createElement("div");
-        back.className = "back";
-        const img = document.createElement("img");
-        img.src = `https://raw.githubusercontent.com/sopitakittitechakun/open-card-rewards/main/${num}.png`;
-        back.appendChild(img);
-
-        inner.appendChild(front);
-        inner.appendChild(back);
-        wrapper.appendChild(inner);
-
-        wrapper.onclick = () => flipCard(wrapper, num, phone);
-        document.getElementById("cards").appendChild(wrapper);
-      });
-    }
-
-    function flipCard(card, number, phone) {
-      if (hasFlipped) return;
-      document.getElementById('flipSound').play();
-      card.classList.add("opened");
-      hasFlipped = true;
-
-      document.getElementById("rewardDisplay").innerHTML =
-        `<div class='reward-text'>🎉 เบอร์ ${phone} ได้เลข ${number} ขอให้โชคดี ร่ำรวยเฮงๆ 🎉</div>`;
-
-      const params = new URLSearchParams();
-      params.append("phone", phone);
-      params.append("reward", number);
-
-      fetch(scriptURL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: params
-      });
-    }
-
-    function shuffleArray(arr) {
-      for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-      }
-      return arr;
-    }
-  </script>
+    <div class="reward-text">🎉 เบอร์ 08xxxxxxxx ได้รางวัลเลข 8 🎉</div>
+  </div>
 </body>
 </html>
