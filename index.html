@@ -9,29 +9,29 @@
       font-family: 'Sarabun', sans-serif;
       background: url('https://img2.pic.in.th/pic/bg-provider.jpeg') no-repeat center center fixed;
       background-size: cover;
-      padding: 40px;
+      padding: 20px;
       text-align: center;
       color: #fffbe6;
     }
     .logo {
-      width: 160px;
-      margin-bottom: 10px;
+      width: 140px;
+      margin-bottom: 15px;
     }
     h2 {
-      font-size: 28px;
-      margin-bottom: 20px;
+      font-size: 24px;
       color: #ffe066;
       text-shadow: 1px 1px 3px black;
     }
     input, button {
       padding: 12px;
-      font-size: 18px;
+      font-size: 16px;
       border-radius: 14px;
       margin-bottom: 10px;
+      width: 90%;
+      max-width: 300px;
     }
     input {
       border: 2px solid #ffd700;
-      width: 260px;
       color: #a52a2a;
     }
     button {
@@ -42,68 +42,80 @@
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
       cursor: pointer;
     }
-    button:hover {
-      background: linear-gradient(to right, #ff9900, #ffd700);
-    }
     .card {
-      width: 100px;
-      height: 140px;
-      background: #fff8dc;
-      border-radius: 14px;
-      font-size: 48px;
-      line-height: 140px;
-      margin: 10px;
-      display: inline-block;
-      cursor: pointer;
-      color: #b71c1c;
-      font-weight: bold;
+      width: 90px;
+      height: 130px;
+      perspective: 1000px;
+      margin: 8px;
+    }
+    .inner-card {
+      width: 100%;
+      height: 100%;
+      transition: transform 0.8s;
+      transform-style: preserve-3d;
       position: relative;
-      overflow: hidden;
+    }
+    .card.opened .inner-card {
+      transform: rotateY(180deg);
+    }
+    .front, .back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-      transition: transform 0.3s, box-shadow 0.3s;
     }
-    .card:hover {
-      transform: scale(1.07);
-      box-shadow: 0 6px 14px rgba(0,0,0,0.5);
+    .front {
+      background: #fff8dc;
+      color: #b71c1c;
     }
-    .opened {
+    .back {
       background: #ffcc00;
-      color: white;
+      transform: rotateY(180deg);
     }
-    .card img {
-      width: 80px;
-      height: auto;
-      margin-top: 30px;
+    .back img {
+      width: 70px;
     }
     #cards {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 10px;
+      gap: 12px;
     }
-    .glow {
-      animation: glow 1s ease-in-out infinite alternate;
+    .reward-text {
+      margin-top: 12px;
+      font-size: 18px;
+      color: #ffffff;
+      text-shadow: 0 0 3px #000;
+      animation: sparkle 1s infinite alternate;
     }
-    @keyframes glow {
-      from { box-shadow: 0 0 10px #ffcc00; }
-      to { box-shadow: 0 0 25px #ffd700; }
+    @keyframes sparkle {
+      0% {text-shadow: 0 0 5px #fff200;}
+      100% {text-shadow: 0 0 12px #ff9900;}
+    }
+    @media (max-width: 600px) {
+      .card { width: 70px; height: 100px; }
+      .back img { width: 50px; }
     }
   </style>
 </head>
 <body>
   <img class="logo" src="https://img2.pic.in.th/pic/1735020594-1.png" alt="ร่ำรวย365">
   <h2>🧧 เปิดไพ่ลุ้นโชค (วันละ 1 ครั้ง)</h2>
-
   <input type="text" id="phone" placeholder="กรอกเบอร์โทรศัพท์" maxlength="10"><br>
   <button id="startBtn">เริ่มเกม</button>
-
   <div id="cards"></div>
+  <div id="rewardDisplay"></div>
   <audio id="flipSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_72b2a6d7f8.mp3?filename=correct-choice-43861.mp3" preload="auto"></audio>
 
   <script>
     const scriptURL = 'https://script.google.com/macros/s/AKfycbz1f8dH6y4oYS3mAMVkh5HTxfn7vVtI8dTHNr-wUFzg2qbyk3ourHE7ftgE83c3nlex/exec';
     let hasFlipped = false;
-
     document.getElementById('startBtn').addEventListener('click', startGame);
 
     function startGame() {
@@ -133,28 +145,40 @@
     function showCards(phone) {
       hasFlipped = false;
       document.getElementById("cards").innerHTML = "";
+      document.getElementById("rewardDisplay").innerHTML = "";
       const numbers = shuffleArray([1,2,3,4,5,6,7,8,9,10]);
       numbers.forEach(num => {
-        const card = document.createElement("div");
-        card.className = "card";
-        card.textContent = "?";
-        card.onclick = () => flipCard(card, num, phone);
-        document.getElementById("cards").appendChild(card);
+        const wrapper = document.createElement("div");
+        wrapper.className = "card";
+        const inner = document.createElement("div");
+        inner.className = "inner-card";
+
+        const front = document.createElement("div");
+        front.className = "front";
+        front.textContent = "?";
+
+        const back = document.createElement("div");
+        back.className = "back";
+        const img = document.createElement("img");
+        img.src = `https://raw.githubusercontent.com/sopitakittitechakun/open-card-rewards/main/${num}.png`;
+        back.appendChild(img);
+
+        inner.appendChild(front);
+        inner.appendChild(back);
+        wrapper.appendChild(inner);
+
+        wrapper.onclick = () => flipCard(wrapper, num, phone);
+        document.getElementById("cards").appendChild(wrapper);
       });
     }
 
-    function flipCard(el, number, phone) {
+    function flipCard(card, number, phone) {
       if (hasFlipped) return;
       document.getElementById('flipSound').play();
-      el.innerHTML = "";
-      const img = document.createElement("img");
-      img.src = `https://raw.githubusercontent.com/sopitakittitechakun/open-card-rewards/main/${number}.png`;
-      img.alt = "รางวัล";
-      el.appendChild(img);
-      el.classList.add("opened", "glow");
+      card.classList.add("opened");
       hasFlipped = true;
 
-      alert(`🎉 เบอร์ ${phone} ได้เลข ${number}\nขอให้โชคดี ร่ำรวยเฮงๆ ตลอดวัน! 🎉`);
+      document.getElementById("rewardDisplay").innerHTML = `<div class='reward-text'>🎉 เบอร์ ${phone} ได้เลข ${number} ขอให้โชคดี ร่ำรวยเฮงๆ 🎉</div>`;
 
       const formData = new FormData();
       formData.append("phone", phone);
