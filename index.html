@@ -12,9 +12,7 @@
       background: url('https://img2.pic.in.th/pic/bg-provider.jpeg') no-repeat center center fixed;
       background-size: cover;
       height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      overflow-y: auto;
     }
 
     body::before {
@@ -25,10 +23,23 @@
       z-index: 0;
       animation: glowBg 3s ease-in-out infinite alternate;
     }
-   
+
     @keyframes glowBg {
       from { background-color: rgba(255, 255, 220, 0.3); }
       to { background-color: rgba(255, 250, 180, 0.6); }
+    }
+
+    .promo-banner {
+      text-align: center;
+      margin: 20px auto 10px;
+      z-index: 2;
+      position: relative;
+    }
+
+    .promo-banner img {
+      max-width: 90%;
+      border-radius: 14px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.4);
     }
 
     .container {
@@ -41,6 +52,7 @@
       border-radius: 18px;
       box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
       max-width: 500px;
+      margin: 0 auto 40px;
     }
 
     .logo {
@@ -179,6 +191,13 @@
   </style>
 </head>
 <body>
+
+  <!-- ✅ รูปโปรโมชั่น -->
+  <div class="promo-banner">
+    <img src="https://img2.pic.in.th/pic/photo_--_--deec69ba16a767e7.jpg" alt="โปรโมชั่นเปิดไพ่รับโชค">
+  </div>
+
+  <!-- ✅ กล่องเกม -->
   <div class="container">
     <img class="logo" src="https://img2.pic.in.th/pic/1735020594-1.png" alt="ร่ำรวย365">
     <h2>🂪 เปิดไพ่ลุ้นโชค | ร่ำรวย365</h2>
@@ -240,16 +259,14 @@
         back.className = "back";
 
         const img = document.createElement("img");
-img.src = `https://raw.githubusercontent.com/sopitakittitechakun/open-card-rewards/main/${num}.png`;
-img.onerror = () => {
-  img.style.display = 'none';
-};
+        img.src = `https://raw.githubusercontent.com/sopitakittitechakun/open-card-rewards/main/${num}.png`;
+        img.onerror = () => { img.style.display = 'none'; };
 
-const label = document.createElement("span");
-label.textContent = num;
+        const label = document.createElement("span");
+        label.textContent = num;
 
-back.appendChild(label);
-back.appendChild(img);
+        back.appendChild(label);
+        back.appendChild(img);
 
         inner.appendChild(front);
         inner.appendChild(back);
