@@ -116,6 +116,7 @@
   <script>
     const scriptURL = 'https://script.google.com/macros/s/AKfycbz1f8dH6y4oYS3mAMVkh5HTxfn7vVtI8dTHNr-wUFzg2qbyk3ourHE7ftgE83c3nlex/exec';
     let hasFlipped = false;
+
     document.getElementById('startBtn').addEventListener('click', startGame);
 
     function startGame() {
@@ -178,7 +179,8 @@
       card.classList.add("opened");
       hasFlipped = true;
 
-      document.getElementById("rewardDisplay").innerHTML = `<div class='reward-text'>🎉 เบอร์ ${phone} ได้เลข ${number} ขอให้โชคดี ร่ำรวยเฮงๆ 🎉</div>`;
+      document.getElementById("rewardDisplay").innerHTML =
+        `<div class='reward-text'>🎉 เบอร์ ${phone} ได้เลข ${number} ขอให้โชคดี ร่ำรวยเฮงๆ 🎉</div>`;
 
       const formData = new FormData();
       formData.append("phone", phone);
