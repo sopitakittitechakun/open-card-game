@@ -68,7 +68,7 @@
   <div id="cards"></div>
   <audio id="flipSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_72b2a6d7f8.mp3?filename=correct-choice-43861.mp3" preload="auto"></audio>
   <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbz1f8dH6y4oYS3mAMVkh5HTxfn7vVtI8dTHNr-wUFzg2qbyk3ourHE7ftgE83c3nlex/exec';
+    const scriptURL = 'YOUR_SCRIPT_URL_HERE';
     let hasFlipped = false;
     document.getElementById('startBtn').addEventListener('click', startGame);
 
@@ -81,7 +81,7 @@
 
       fetch(scriptURL, {
         method: 'POST',
-        body: new URLSearchParams({ phone }),
+        body: JSON.stringify({ phone }),
       })
       .then(res => res.json())
       .then(data => {
@@ -90,16 +90,20 @@
           return;
         }
 
-        hasFlipped = false;
-        document.getElementById("cards").innerHTML = "";
-        const numbers = shuffleArray([1,2,3,4,5,6,7,8,9,10]);
-        numbers.forEach(num => {
-          const card = document.createElement("div");
-          card.className = "card";
-          card.textContent = "?";
-          card.onclick = () => flipCard(card, num, phone);
-          document.getElementById("cards").appendChild(card);
-        });
+        showCards(phone);
+      });
+    }
+
+    function showCards(phone) {
+      hasFlipped = false;
+      document.getElementById("cards").innerHTML = "";
+      const numbers = shuffleArray([1,2,3,4,5,6,7,8,9,10]);
+      numbers.forEach(num => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.textContent = "?";
+        card.onclick = () => flipCard(card, num, phone);
+        document.getElementById("cards").appendChild(card);
       });
     }
 
@@ -116,13 +120,9 @@
 
       alert(`🎉 เบอร์ ${phone} ได้เลข ${number}\nขอให้โชคดี ร่ำรวยเฮงๆ ตลอดวัน! 🎉`);
 
-      const formData = new FormData();
-      formData.append("phone", phone);
-      formData.append("reward", number);
-
       fetch(scriptURL, {
         method: 'POST',
-        body: formData
+        body: JSON.stringify({ phone, reward: number }),
       });
     }
 
