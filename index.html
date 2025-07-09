@@ -16,8 +16,6 @@
     .promo-banner {
       text-align: center;
       margin: 20px auto 10px;
-      z-index: 2;
-      position: relative;
     }
     .promo-banner img {
       max-width: 90%;
@@ -25,8 +23,6 @@
       box-shadow: 0 6px 16px rgba(0,0,0,0.4);
     }
     .container {
-      position: relative;
-      z-index: 1;
       text-align: center;
       color: #fff8dc;
       background: rgba(0, 0, 0, 0.4);
@@ -145,11 +141,6 @@
       0% { text-shadow: 0 0 5px #fff; }
       100% { text-shadow: 0 0 12px #ffd700; }
     }
-    @media (max-width: 600px) {
-      .card { width: 75px; height: 110px; }
-      .back img { width: 48px; }
-      .back span { font-size: 34px; }
-    }
   </style>
 </head>
 <body>
@@ -159,7 +150,9 @@
   </div>
 
   <div class="container">
-    <img class="logo" src="https://img2.pic.in.th/pic/1735020594-1.png" alt="ร่ำรวย365" crossorigin="anonymous">
+    <!-- โลโก้แบบ Base64 -->
+    <img class="logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOYAAADmCAMAAACf+HcLAAAAMFBMVEX////MzMyZmZmjo6P8/Pzv7++7u7uDg4Pu7u7x8fGSkpLOzs7FxcWnp6fAwMCkpKTkydMEAAABeklEQVR4nO3bMU4CQRCF4XlZJxBo+v9nsoKMVEkwLz9dvkZB23vNN1vguEEIIIYQQQgghhBBCCCGEEEKIPx0/0AX0PVfdVZf4yM82zOfcGH/1/sHsEOtbft1pssvu11sN++1VY3u+5WW9+/TGLPr1bt1/pLhzP5fjF3Lz3HOmHz7zkz3XHPvOTvcc+85O9xz7zk73HPvOTvcc+85O9xz7zk73HPvOTvcc+85O9xz7zk73HPvOTvcc+85KzbeYXe8+Jbf90uw9t9X6/6t91bX6++n9b6v+rfdW1+vvp/W+r/q33VtfT9l/X9UZwAIIIIAAAggggAACCCCAAAIIIIAAAv8XvwAsynRV3BJ9OQAAAABJRU5ErkJggg==" alt="ร่ำรวย365">
+    
     <h2>🂪 เปิดไพ่ลุ้นโชค | ร่ำรวย365</h2>
     <input type="text" id="phone" placeholder="กรอกเบอร์โทรศัพท์" maxlength="10"><br>
     <button id="startBtn">เริ่มเกม</button>
@@ -271,7 +264,7 @@
     document.getElementById("captureBtn").addEventListener("click", () => {
       html2canvas(document.body, {
         useCORS: true,
-        backgroundColor: "#fff",
+        backgroundColor: "#ffffff",
         windowWidth: document.documentElement.scrollWidth,
         windowHeight: document.documentElement.scrollHeight,
         scrollY: 0
