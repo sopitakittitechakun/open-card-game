@@ -188,6 +188,21 @@
       .back img { width: 48px; }
       .back span { font-size: 34px; }
     }
+
+    /* 🔒 Overlay style */
+    .block-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      color: #ffd700;
+      font-size: 22px;
+      font-weight: bold;
+      text-align: center;
+      padding-top: 30vh;
+      z-index: 999999;
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -218,6 +233,12 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.4);
       cursor: pointer;">📸 แคปหน้าจอ</button>
 
+  </div>
+
+  <div id="devBlocker" class="block-overlay">
+    🚫 ระบบตรวจพบว่าเปิด Developer Tools<br>
+    กรุณาปิดเพื่อใช้งานเว็บไซต์ต่อ<br><br>
+    กำลังนำคุณไปยังช่องทางรับรางวัล...
   </div>
 
   <audio id="flipSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_72b2a6d7f8.mp3" preload="auto"></audio>
@@ -337,10 +358,8 @@
       }
       return arr;
     }
-  </script>
 
-  <!-- 🔒 ป้องกัน Inspect/DevTools/View Source และ redirect ไป LINE -->
-  <script>
+    // 🔒 ป้องกัน Inspect/DevTools + Redirect
     document.addEventListener("contextmenu", e => e.preventDefault());
     document.addEventListener("keydown", function (e) {
       if (
@@ -367,8 +386,11 @@
       devtoolsOpen = false;
       console.log(element);
       if (devtoolsOpen) {
-        alert("🚨 ตรวจพบว่าเปิด Developer Tools\nกำลังนำคุณไปยังช่องทางรับรางวัล...");
-        window.location.href = "https://lin.ee/quaXmJk";
+        const blocker = document.getElementById("devBlocker");
+        if (blocker) blocker.style.display = "block";
+        setTimeout(() => {
+          window.location.href = "https://lin.ee/quaXmJk";
+        }, 3000);
       }
     }, 1000);
   </script>
