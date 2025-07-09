@@ -192,22 +192,40 @@
 </head>
 <body>
 
-  <!-- ✅ รูปโปรโมชั่น -->
   <div class="promo-banner">
     <img src="https://img2.pic.in.th/pic/photo_--_--deec69ba16a767e7.jpg" alt="โปรโมชั่นเปิดไพ่รับโชค">
   </div>
 
-  <!-- ✅ กล่องเกม -->
   <div class="container">
     <img class="logo" src="https://img2.pic.in.th/pic/1735020594-1.png" alt="ร่ำรวย365">
     <h2>🂪 เปิดไพ่ลุ้นโชค | ร่ำรวย365</h2>
     <input type="text" id="phone" placeholder="กรอกเบอร์โทรศัพท์" maxlength="10"><br>
     <button id="startBtn">เริ่มเกม</button>
-    <div id="cards"></div>
-    <div id="rewardDisplay"></div>
+
+    <!-- ✅ ส่วนที่จะ capture -->
+    <div id="captureZone">
+      <div id="cards"></div>
+      <div id="rewardDisplay"></div>
+    </div>
+
+    <!-- ✅ ปุ่มแคปหน้าจอ -->
+    <button id="captureBtn" style="display:none; margin-top:16px;
+      padding: 12px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #3b1c00;
+      background: linear-gradient(to right, #ffd700, #ff9900);
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      cursor: pointer;">📸 แคปหน้าจอ</button>
+
   </div>
 
   <audio id="flipSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_72b2a6d7f8.mp3" preload="auto"></audio>
+
+  <!-- ✅ html2canvas -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <script>
     const scriptURL = 'https://script.google.com/macros/s/AKfycbybf8xUEJYD6TigG3QriRdEbKmZF3K3PQs7OvEAHV6Eg8dw4mdGD186N_OWToeS12ry/exec';
@@ -243,6 +261,8 @@
       hasFlipped = false;
       document.getElementById("cards").innerHTML = "";
       document.getElementById("rewardDisplay").innerHTML = "";
+      document.getElementById("captureBtn").style.display = "none";
+
       const numbers = shuffleArray([1,2,3,4,5,6,7,8,9,10]);
       numbers.forEach(num => {
         const wrapper = document.createElement("div");
@@ -293,6 +313,8 @@
       document.getElementById("rewardDisplay").innerHTML =
         `<div class='reward-text'>${message}</div>`;
 
+      document.getElementById("captureBtn").style.display = "inline-block";
+
       const formData = new FormData();
       formData.append("phone", phone);
       formData.append("reward", number);
@@ -302,6 +324,15 @@
         body: formData
       });
     }
+
+    document.getElementById("captureBtn").addEventListener("click", () => {
+      html2canvas(document.getElementById("captureZone")).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "ผลเปิดไพ่ร่ำรวย365.png";
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    });
 
     function shuffleArray(arr) {
       for (let i = arr.length - 1; i > 0; i--) {
