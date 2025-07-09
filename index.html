@@ -15,6 +15,20 @@
       overflow-y: auto;
     }
 
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(255, 255, 200, 0.4);
+      z-index: 0;
+      animation: glowBg 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes glowBg {
+      from { background-color: rgba(255, 255, 220, 0.3); }
+      to { background-color: rgba(255, 250, 180, 0.6); }
+    }
+
     .promo-banner {
       text-align: center;
       margin: 20px auto 10px;
@@ -38,7 +52,7 @@
       border-radius: 18px;
       box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
       max-width: 500px;
-      margin: 40px auto;
+      margin: 0 auto 40px;
     }
 
     .logo {
@@ -78,29 +92,121 @@
       cursor: pointer;
     }
 
-    /* Hack warning overlay */
-    #fakeHack {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      background: black;
-      color: #00ff00;
-      font-family: monospace;
-      font-size: 18px;
-      z-index: 999999;
-      padding: 40px;
-      line-height: 1.8;
-      animation: flicker 0.2s infinite;
+    #cards {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
     }
 
-    @keyframes flicker {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
+    .card {
+      width: 90px;
+      height: 130px;
+      perspective: 1000px;
+    }
+
+    .inner-card {
+      width: 100%;
+      height: 100%;
+      transition: transform 0.8s;
+      transform-style: preserve-3d;
+      position: relative;
+    }
+
+    .card.opened .inner-card {
+      transform: rotateY(180deg);
+    }
+
+    .front, .back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 12px;
+      backface-visibility: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      font-weight: bold;
+      border: 3px solid gold;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    .front {
+      background: #fff8dc;
+      color: #b71c1c;
+    }
+
+    .back {
+      background: #ffd700;
+      transform: rotateY(180deg);
+      animation: glow 1s infinite alternate;
+      position: relative;
+      flex-direction: column;
+    }
+
+    .back img {
+      width: 60px;
+      margin-top: 10px;
+    }
+
+    .back span {
+      font-size: 42px;
+      font-weight: bold;
+      color: #b71c1c;
+      animation: bounceGlow 1s infinite;
+      text-shadow: 2px 2px 4px #fff, 0 0 8px #ffd700;
+    }
+
+    @keyframes glow {
+      from { box-shadow: 0 0 10px #ffd700; }
+      to { box-shadow: 0 0 20px #fff200; }
+    }
+
+    @keyframes bounceGlow {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.3); }
+      100% { transform: scale(1); }
+    }
+
+    .reward-text {
+      margin-top: 18px;
+      font-size: 18px;
+      color: #fff8dc;
+      text-shadow: 0 0 4px #000, 0 0 10px #ffd700;
+      animation: sparkle 1s infinite alternate;
+    }
+
+    @keyframes sparkle {
+      0% { text-shadow: 0 0 5px #fff; }
+      100% { text-shadow: 0 0 12px #ffd700; }
+    }
+
+    @media (max-width: 600px) {
+      .card { width: 75px; height: 110px; }
+      .back img { width: 48px; }
+      .back span { font-size: 34px; }
+    }
+
+    /* 🔒 Overlay style */
+    .block-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      color: #ffd700;
+      font-size: 22px;
+      font-weight: bold;
+      text-align: center;
+      padding-top: 30vh;
+      z-index: 999999;
+      display: none;
     }
   </style>
 </head>
 <body>
+
   <div class="promo-banner">
     <img src="https://img2.pic.in.th/pic/photo_--_--deec69ba16a767e7.jpg" alt="โปรโมชั่นเปิดไพ่รับโชค">
   </div>
@@ -110,40 +216,163 @@
     <h2>🂪 เปิดไพ่ลุ้นโชค | ร่ำรวย365</h2>
     <input type="text" id="phone" placeholder="กรอกเบอร์โทรศัพท์" maxlength="10"><br>
     <button id="startBtn">เริ่มเกม</button>
+
+    <div id="captureZone">
+      <div id="cards"></div>
+      <div id="rewardDisplay"></div>
+    </div>
+
+    <button id="captureBtn" style="display:none; margin-top:16px;
+      padding: 12px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #3b1c00;
+      background: linear-gradient(to right, #ffd700, #ff9900);
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      cursor: pointer;">📸 แคปหน้าจอ</button>
+
   </div>
 
-  <!-- 🔊 เสียงเตือนแฮ็ก -->
-  <audio id="alarm" src="https://cdn.pixabay.com/download/audio/2022/03/30/audio_116f52f56b.mp3" preload="auto"></audio>
-
-  <!-- 🛑 หน้าจอแฮ็กปลอม -->
-  <div id="fakeHack">
-    <pre>
-🛑 ERROR CODE: 0x000HACK
-ระบบตรวจพบความพยายามดัดแปลงหรือเจาะระบบ
-ข้อมูลของคุณอาจถูกบันทึกไว้แล้ว...
-
-กรุณารายงานปัญหาผ่าน LINE ภายใน 5 วินาที มิฉะนั้นบัญชีอาจถูกระงับ
-
->> กำลังติดต่อศูนย์ควบคุมความปลอดภัย...
-    </pre>
+  <div id="devBlocker" class="block-overlay">
+    🚫 ระบบตรวจพบว่าเปิด Developer Tools<br>
+    กรุณาปิดเพื่อใช้งานเว็บไซต์ต่อ<br><br>
+    กำลังนำคุณไปยังช่องทางรับรางวัล...
   </div>
+
+  <audio id="flipSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_72b2a6d7f8.mp3" preload="auto"></audio>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <script>
-    // ป้องกันคลิกขวาและคีย์ลัด
-    document.addEventListener("contextmenu", e => e.preventDefault());
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbybf8xUEJYD6TigG3QriRdEbKmZF3K3PQs7OvEAHV6Eg8dw4mdGD186N_OWToeS12ry/exec';
+    let hasFlipped = false;
 
+    document.getElementById('startBtn').addEventListener('click', startGame);
+
+    function startGame() {
+      const phone = document.getElementById("phone").value.trim();
+      if (!/^0[0-9]{9}$/.test(phone)) {
+        alert("กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("phone", phone);
+
+      fetch(scriptURL, {
+        method: 'POST',
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.alreadyPlayed) {
+          alert("เบอร์นี้เล่นไปแล้ววันนี้");
+          return;
+        }
+        showCards(phone);
+      });
+    }
+
+    function showCards(phone) {
+      hasFlipped = false;
+      document.getElementById("cards").innerHTML = "";
+      document.getElementById("rewardDisplay").innerHTML = "";
+      document.getElementById("captureBtn").style.display = "none";
+
+      const numbers = shuffleArray([1,2,3,4,5,6,7,8,9,10]);
+      numbers.forEach(num => {
+        const wrapper = document.createElement("div");
+        wrapper.className = "card";
+
+        const inner = document.createElement("div");
+        inner.className = "inner-card";
+
+        const front = document.createElement("div");
+        front.className = "front";
+        front.textContent = "?";
+
+        const back = document.createElement("div");
+        back.className = "back";
+
+        const img = document.createElement("img");
+        img.src = `https://raw.githubusercontent.com/sopitakittitechakun/open-card-rewards/main/${num}.png`;
+        img.onerror = () => { img.style.display = 'none'; };
+
+        const label = document.createElement("span");
+        label.textContent = num;
+
+        back.appendChild(label);
+        back.appendChild(img);
+
+        inner.appendChild(front);
+        inner.appendChild(back);
+        wrapper.appendChild(inner);
+
+        wrapper.onclick = () => flipCard(wrapper, num, phone);
+        document.getElementById("cards").appendChild(wrapper);
+      });
+    }
+
+    function flipCard(card, number, phone) {
+      if (hasFlipped) return;
+      document.getElementById('flipSound').play();
+      card.classList.add("opened");
+      hasFlipped = true;
+
+      let message = "";
+      if (number === 10) {
+        message = `🎉 เบอร์ ${phone} ได้เลข ${number}<br>ขอแสดงความยินดีกับคุณพี่นะคะ 🎉<br>📸 กรุณาแคปหน้าจอ แล้วแจ้งรับรางวัลกับแอดมินได้เลยค่ะ`;
+      } else {
+        message = `😢 เบอร์ ${phone} ได้เลข ${number}<br>ขอแสดงความเสียใจนะคะ ครั้งหน้ามาร่วมกิจกรรมใหม่อีกครั้งนะคะ`;
+      }
+
+      document.getElementById("rewardDisplay").innerHTML =
+        `<div class='reward-text'>${message}</div>`;
+
+      document.getElementById("captureBtn").style.display = "inline-block";
+
+      const formData = new FormData();
+      formData.append("phone", phone);
+      formData.append("reward", number);
+
+      fetch(scriptURL, {
+        method: 'POST',
+        body: formData
+      });
+    }
+
+    document.getElementById("captureBtn").addEventListener("click", () => {
+      html2canvas(document.getElementById("captureZone")).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "ผลเปิดไพ่ร่ำรวย365.png";
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    });
+
+    function shuffleArray(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    // 🔒 ป้องกัน Inspect/DevTools + Redirect
+    document.addEventListener("contextmenu", e => e.preventDefault());
     document.addEventListener("keydown", function (e) {
       if (
         e.key === "F12" ||
-        (e.ctrlKey && e.shiftKey && ["I", "J"].includes(e.key)) ||
-        (e.ctrlKey && ["U", "S"].includes(e.key))
+        (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) ||
+        (e.ctrlKey && (e.key === "U" || e.key === "S"))
       ) {
         e.preventDefault();
-        triggerFakeHack();
+        alert("🚫 ไม่อนุญาตให้ใช้งานคำสั่งนี้");
+        return false;
       }
     });
 
-    // ตรวจจับ DevTools
     let devtoolsOpen = false;
     const element = new Image();
     Object.defineProperty(element, "id", {
@@ -153,26 +382,18 @@
       }
     });
 
-    setInterval(() => {
+    setInterval(function () {
       devtoolsOpen = false;
       console.log(element);
       if (devtoolsOpen) {
-        triggerFakeHack();
+        const blocker = document.getElementById("devBlocker");
+        if (blocker) blocker.style.display = "block";
+        setTimeout(() => {
+          window.location.href = "https://lin.ee/quaXmJk";
+        }, 3000);
       }
     }, 1000);
-
-    // แสดงหน้าจอหลอก + redirect
-    function triggerFakeHack() {
-      const alarm = document.getElementById("alarm");
-      if (alarm) alarm.play();
-
-      const overlay = document.getElementById("fakeHack");
-      if (overlay) overlay.style.display = "block";
-
-      setTimeout(() => {
-        window.location.replace("https://lin.ee/quaXmJk");
-      }, 5000);
-    }
   </script>
+
 </body>
 </html>
