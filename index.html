@@ -342,5 +342,24 @@
       return arr;
     }
   </script>
+  <!-- ✅ html2canvas -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script>
+  // (สคริปต์หลักทั้งหมดของคุณ)
+</script>
+
+<!-- ✅ ใส่สคริปต์ป้องกัน Inspect ที่นี่ -->
+<script>
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "F12" || (e.ctrlKey && e.shiftKey && e.key === "I")) {
+      e.preventDefault();
+    }
+  });
+  document.addEventListener("contextmenu", e => e.preventDefault());
+</script>
+
+</body>
+</html>
 </body>
 </html>
