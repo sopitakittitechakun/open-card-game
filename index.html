@@ -220,6 +220,7 @@
     <h2>🂪 เปิดไพ่ลุ้นโชค | ร่ำรวย365</h2>
     <input type="text" id="phone" placeholder="กรอกเบอร์โทรศัพท์" maxlength="10"><br>
     <button id="startBtn">เริ่มเกม</button>
+    <button id="autoFlipBtn" style="display:none;">🎲 สุ่มอัตโนมัติ</button>
 
     <div id="captureZone">
       <div id="cards"></div>
@@ -271,6 +272,7 @@
       document.getElementById("cards").innerHTML = "";
       document.getElementById("rewardDisplay").innerHTML = "";
       document.getElementById("captureBtn").style.display = "none";
+      document.getElementById("autoFlipBtn").style.display = "inline-block";
 
       const numbers = shuffleArray([1,2,3,4,5,6,7,8,9,10]);
       numbers.forEach(num => {
@@ -354,6 +356,21 @@
       });
     });
 
+    document.getElementById("autoFlipBtn").addEventListener("click", () => {
+      if (hasFlipped) return;
+      const cards = document.querySelectorAll(".card");
+      const randomIndex = Math.floor(Math.random() * cards.length);
+      const randomCard = cards[randomIndex];
+      const number = parseInt(randomCard.querySelector(".back span").textContent);
+      const phone = document.getElementById("phone").value.trim();
+
+      document.getElementById("rewardDisplay").innerHTML = `<div class='reward-text'>🎯 กำลังสุ่มไพ่...</div>`;
+
+      setTimeout(() => {
+        flipCard(randomCard, number, phone);
+      }, 1000);
+    });
+
     function shuffleArray(arr) {
       for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -362,7 +379,6 @@
       return arr;
     }
 
-    // DevTools Detection
     document.addEventListener("contextmenu", e => e.preventDefault());
     document.addEventListener("keydown", function (e) {
       if (
