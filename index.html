@@ -221,12 +221,7 @@
     <input type="text" id="phone" placeholder="กรอกเบอร์โทรศัพท์" maxlength="10"><br>
     <button id="startBtn">เริ่มเกม</button>
     <button id="autoFlipBtn" style="display:none;">🎲 สุ่มอัตโนมัติ</button>
-<button id="autoFlipBtn" style="display:none;">🎲 สุ่มอัตโนมัติ</button>
 
-<!-- ✅ Fake Player Count -->
-<div id="playerCount" style="font-size:16px; color:#fff8dc; margin-top:5px; text-shadow:0 0 4px #000;">
-  👥 มีผู้เข้าร่วมแล้วทั้งหมด ...
-</div>
     <div id="captureZone">
       <div id="cards"></div>
       <div id="rewardDisplay"></div>
@@ -430,20 +425,6 @@
       interactivity: {
         events: { onhover: { enable: false } }
       }
-      let currentCount = 5230; // เริ่มต้นจำนวน
-
-function updateFakeCount() {
-  const increase = Math.floor(Math.random() * 3); // เพิ่มทีละ 0-2 คน
-  currentCount += increase;
-
-  const countDisplay = document.getElementById("playerCount");
-  if (countDisplay) {
-    countDisplay.textContent = `👥 มีผู้เข้าร่วมแล้วทั้งหมด ${currentCount.toLocaleString()} คน`;
-  }
-}
-
-updateFakeCount(); // เรียกครั้งแรกเมื่อโหลด
-setInterval(updateFakeCount, 1000);
     });
   </script>
 </body>
