@@ -11,37 +11,19 @@
       margin: 0;
       background: url('https://img2.pic.in.th/pic/bg-provider.jpeg') no-repeat center center fixed;
       background-size: cover;
-      height: 100vh;
-      overflow-y: auto;
+      overflow-x: hidden;
     }
-
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(255, 255, 200, 0.4);
-      z-index: 0;
-      animation: glowBg 3s ease-in-out infinite alternate;
-    }
-
-    @keyframes glowBg {
-      from { background-color: rgba(255, 255, 220, 0.3); }
-      to { background-color: rgba(255, 250, 180, 0.6); }
-    }
-
     .promo-banner {
       text-align: center;
       margin: 20px auto 10px;
       z-index: 2;
       position: relative;
     }
-
     .promo-banner img {
       max-width: 90%;
       border-radius: 14px;
       box-shadow: 0 6px 16px rgba(0,0,0,0.4);
     }
-
     .container {
       position: relative;
       z-index: 1;
@@ -54,19 +36,16 @@
       max-width: 500px;
       margin: 0 auto 40px;
     }
-
     .logo {
       width: 150px;
       margin-bottom: 16px;
       filter: drop-shadow(2px 2px 4px #000);
     }
-
     h2 {
       font-size: 26px;
       color: #ffd700;
       text-shadow: 0 0 5px #fff, 0 0 12px #ff9900;
     }
-
     input, button {
       padding: 12px;
       font-size: 16px;
@@ -76,14 +55,12 @@
       max-width: 300px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     }
-
     input {
       border: 2px solid #ffcc00;
       color: #5a2e00;
       font-weight: bold;
       text-align: center;
     }
-
     button {
       background: linear-gradient(to right, #ffd700, #ff9900);
       color: #3b1c00;
@@ -91,7 +68,6 @@
       border: none;
       cursor: pointer;
     }
-
     #cards {
       display: flex;
       flex-wrap: wrap;
@@ -99,13 +75,11 @@
       gap: 10px;
       margin-top: 20px;
     }
-
     .card {
       width: 90px;
       height: 130px;
       perspective: 1000px;
     }
-
     .inner-card {
       width: 100%;
       height: 100%;
@@ -113,11 +87,9 @@
       transform-style: preserve-3d;
       position: relative;
     }
-
     .card.opened .inner-card {
       transform: rotateY(180deg);
     }
-
     .front, .back {
       position: absolute;
       width: 100%;
@@ -132,25 +104,20 @@
       border: 3px solid gold;
       box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
-
     .front {
       background: #fff8dc;
       color: #b71c1c;
     }
-
     .back {
       background: #ffd700;
       transform: rotateY(180deg);
       animation: glow 1s infinite alternate;
-      position: relative;
       flex-direction: column;
     }
-
     .back img {
       width: 60px;
       margin-top: 10px;
     }
-
     .back span {
       font-size: 42px;
       font-weight: bold;
@@ -158,18 +125,15 @@
       animation: bounceGlow 1s infinite;
       text-shadow: 2px 2px 4px #fff, 0 0 8px #ffd700;
     }
-
     @keyframes glow {
       from { box-shadow: 0 0 10px #ffd700; }
       to { box-shadow: 0 0 20px #fff200; }
     }
-
     @keyframes bounceGlow {
       0% { transform: scale(1); }
       50% { transform: scale(1.3); }
       100% { transform: scale(1); }
     }
-
     .reward-text {
       margin-top: 18px;
       font-size: 18px;
@@ -177,31 +141,14 @@
       text-shadow: 0 0 4px #000, 0 0 10px #ffd700;
       animation: sparkle 1s infinite alternate;
     }
-
     @keyframes sparkle {
       0% { text-shadow: 0 0 5px #fff; }
       100% { text-shadow: 0 0 12px #ffd700; }
     }
-
     @media (max-width: 600px) {
       .card { width: 75px; height: 110px; }
       .back img { width: 48px; }
       .back span { font-size: 34px; }
-    }
-
-    /* 🔒 Overlay style */
-    .block-overlay {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.95);
-      color: #ffd700;
-      font-size: 22px;
-      font-weight: bold;
-      text-align: center;
-      padding-top: 30vh;
-      z-index: 999999;
-      display: none;
     }
   </style>
 </head>
@@ -212,33 +159,15 @@
   </div>
 
   <div class="container">
-    <img class="logo" src="https://img2.pic.in.th/pic/1735020594-1.png" alt="ร่ำรวย365">
+    <img class="logo" src="https://img2.pic.in.th/pic/1735020594-1.png" alt="ร่ำรวย365" crossorigin="anonymous">
     <h2>🂪 เปิดไพ่ลุ้นโชค | ร่ำรวย365</h2>
     <input type="text" id="phone" placeholder="กรอกเบอร์โทรศัพท์" maxlength="10"><br>
     <button id="startBtn">เริ่มเกม</button>
 
-    <div id="captureZone">
-      <div id="cards"></div>
-      <div id="rewardDisplay"></div>
-    </div>
+    <div id="cards"></div>
+    <div id="rewardDisplay"></div>
 
-    <button id="captureBtn" style="display:none; margin-top:16px;
-      padding: 12px 20px;
-      font-size: 16px;
-      font-weight: bold;
-      color: #3b1c00;
-      background: linear-gradient(to right, #ffd700, #ff9900);
-      border: none;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-      cursor: pointer;">📸 แคปหน้าจอ</button>
-
-  </div>
-
-  <div id="devBlocker" class="block-overlay">
-    🚫 ระบบตรวจพบว่าเปิด Developer Tools<br>
-    กรุณาปิดเพื่อใช้งานเว็บไซต์ต่อ<br><br>
-    กำลังนำคุณไปยังช่องทางรับรางวัล...
+    <button id="captureBtn" style="display:none;">📸 แคปหน้าจอ</button>
   </div>
 
   <audio id="flipSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_72b2a6d7f8.mp3" preload="auto"></audio>
@@ -260,18 +189,15 @@
       const formData = new FormData();
       formData.append("phone", phone);
 
-      fetch(scriptURL, {
-        method: 'POST',
-        body: formData
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.alreadyPlayed) {
-          alert("เบอร์นี้เล่นไปแล้ววันนี้");
-          return;
-        }
-        showCards(phone);
-      });
+      fetch(scriptURL, { method: 'POST', body: formData })
+        .then(res => res.json())
+        .then(data => {
+          if (data.alreadyPlayed) {
+            alert("เบอร์นี้เล่นไปแล้ววันนี้");
+            return;
+          }
+          showCards(phone);
+        });
     }
 
     function showCards(phone) {
@@ -343,10 +269,16 @@
     }
 
     document.getElementById("captureBtn").addEventListener("click", () => {
-      html2canvas(document.getElementById("captureZone")).then(canvas => {
+      html2canvas(document.body, {
+        useCORS: true,
+        backgroundColor: "#fff",
+        windowWidth: document.documentElement.scrollWidth,
+        windowHeight: document.documentElement.scrollHeight,
+        scrollY: 0
+      }).then(canvas => {
         const link = document.createElement("a");
-        link.download = "ผลเปิดไพ่ร่ำรวย365.png";
-        link.href = canvas.toDataURL();
+        link.download = "เปิดไพ่ร่ำรวย365-เต็มจอ.png";
+        link.href = canvas.toDataURL("image/png");
         link.click();
       });
     });
@@ -358,41 +290,6 @@
       }
       return arr;
     }
-
-    // 🔒 ป้องกัน Inspect/DevTools + Redirect
-    document.addEventListener("contextmenu", e => e.preventDefault());
-    document.addEventListener("keydown", function (e) {
-      if (
-        e.key === "F12" ||
-        (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) ||
-        (e.ctrlKey && (e.key === "U" || e.key === "S"))
-      ) {
-        e.preventDefault();
-        alert("🚫 ไม่อนุญาตให้ใช้งานคำสั่งนี้");
-        return false;
-      }
-    });
-
-    let devtoolsOpen = false;
-    const element = new Image();
-    Object.defineProperty(element, "id", {
-      get: function () {
-        devtoolsOpen = true;
-        throw new Error("DevTools Detected");
-      }
-    });
-
-    setInterval(function () {
-      devtoolsOpen = false;
-      console.log(element);
-      if (devtoolsOpen) {
-        const blocker = document.getElementById("devBlocker");
-        if (blocker) blocker.style.display = "block";
-        setTimeout(() => {
-          window.location.href = "https://lin.ee/quaXmJk";
-        }, 3000);
-      }
-    }, 1000);
   </script>
 
 </body>
