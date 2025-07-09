@@ -238,7 +238,7 @@
   <audio id="flipSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_72b2a6d7f8.mp3" preload="auto"></audio>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <script>
     const scriptURL = 'https://script.google.com/macros/s/AKfycbybf8xUEJYD6TigG3QriRdEbKmZF3K3PQs7OvEAHV6Eg8dw4mdGD186N_OWToeS12ry/exec';
     let hasFlipped = false;
@@ -305,6 +305,22 @@
       });
     }
 
+    function celebrateConfetti() {
+      const duration = 2 * 1000;
+      const animationEnd = Date.now() + duration;
+      const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 };
+
+      const interval = setInterval(() => {
+        const timeLeft = animationEnd - Date.now();
+        if (timeLeft <= 0) return clearInterval(interval);
+
+        confetti(Object.assign({}, defaults, {
+          particleCount: 50 * (timeLeft / duration),
+          origin: { x: Math.random(), y: Math.random() - 0.2 }
+        }));
+      }, 250);
+    }
+
     function flipCard(card, number, phone) {
       if (hasFlipped) return;
       document.getElementById('flipSound').play();
@@ -313,6 +329,7 @@
 
       let message = "";
       if (number === 10) {
+        celebrateConfetti();
         message = `🎉 เบอร์ ${phone} ได้เลข ${number}<br>ขอแสดงความยินดีกับคุณพี่นะคะ 🎉<br>📸 กรุณาแคปหน้าจอ แล้วแจ้งรับรางวัลกับแอดมินได้เลยค่ะ`;
       } else {
         message = `😢 เบอร์ ${phone} ได้เลข ${number}<br>ขอแสดงความเสียใจนะคะ ครั้งหน้ามาร่วมกิจกรรมใหม่อีกครั้งนะคะ`;
@@ -320,7 +337,6 @@
 
       document.getElementById("rewardDisplay").innerHTML =
         `<div class='reward-text'>${message}</div>`;
-
       document.getElementById("captureBtn").style.display = "inline-block";
 
       const formData = new FormData();
@@ -381,7 +397,6 @@
       }
     }, 1000);
 
-    // Init particle
     particlesJS("particles-js", {
       particles: {
         number: { value: 60 },
