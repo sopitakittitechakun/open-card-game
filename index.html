@@ -6,40 +6,227 @@
   <title>เปิดไพ่ลุ้นโชค | ร่ำรวย365</title>
   <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@700&display=swap" rel="stylesheet">
   <style>
-    /* ... สไตล์เดิมของคุณ (ตัดออกเพื่อย่อความยาว) ... */
+    body {
+      font-family: 'Sarabun', sans-serif;
+      margin: 0;
+      background: url('https://img2.pic.in.th/pic/bg-provider.jpeg') no-repeat center center fixed;
+      background-size: cover;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(255, 255, 200, 0.4);
+      z-index: 0;
+      animation: glowBg 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes glowBg {
+      from { background-color: rgba(255, 255, 220, 0.3); }
+      to { background-color: rgba(255, 250, 180, 0.6); }
+    }
+
+    .promo-banner {
+      text-align: center;
+      margin: 20px auto 10px;
+      z-index: 2;
+      position: relative;
+    }
+
+    .promo-banner img {
+      max-width: 90%;
+      border-radius: 14px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      color: #fff8dc;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 20px;
+      border-radius: 18px;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+      max-width: 500px;
+      margin: 0 auto 40px;
+    }
+
+    .logo {
+      width: 150px;
+      margin-bottom: 16px;
+      filter: drop-shadow(2px 2px 4px #000);
+    }
+
+    h2 {
+      font-size: 26px;
+      color: #ffd700;
+      text-shadow: 0 0 5px #fff, 0 0 12px #ff9900;
+    }
+
+    input, button {
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 10px;
+      margin-bottom: 14px;
+      width: 90%;
+      max-width: 300px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    input {
+      border: 2px solid #ffcc00;
+      color: #5a2e00;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    button {
+      background: linear-gradient(to right, #ffd700, #ff9900);
+      color: #3b1c00;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+
+    #cards {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .card {
+      width: 90px;
+      height: 130px;
+      perspective: 1000px;
+    }
+
+    .inner-card {
+      width: 100%;
+      height: 100%;
+      transition: transform 0.8s;
+      transform-style: preserve-3d;
+      position: relative;
+    }
+
+    .card.opened .inner-card {
+      transform: rotateY(180deg);
+    }
+
+    .front, .back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 12px;
+      backface-visibility: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      font-weight: bold;
+      border: 3px solid gold;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    .front {
+      background: #fff8dc;
+      color: #b71c1c;
+    }
+
+    .back {
+      background: #ffd700;
+      transform: rotateY(180deg);
+      animation: glow 1s infinite alternate;
+      position: relative;
+      flex-direction: column;
+    }
+
+    .back img {
+      width: 60px;
+      margin-top: 10px;
+    }
+
+    .back span {
+      font-size: 42px;
+      font-weight: bold;
+      color: #b71c1c;
+      animation: bounceGlow 1s infinite;
+      text-shadow: 2px 2px 4px #fff, 0 0 8px #ffd700;
+    }
+
+    @keyframes glow {
+      from { box-shadow: 0 0 10px #ffd700; }
+      to { box-shadow: 0 0 20px #fff200; }
+    }
+
+    @keyframes bounceGlow {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.3); }
+      100% { transform: scale(1); }
+    }
+
+    .reward-text {
+      margin-top: 18px;
+      font-size: 18px;
+      color: #fff8dc;
+      text-shadow: 0 0 4px #000, 0 0 10px #ffd700;
+      animation: sparkle 1s infinite alternate;
+    }
+
+    @keyframes sparkle {
+      0% { text-shadow: 0 0 5px #fff; }
+      100% { text-shadow: 0 0 12px #ffd700; }
+    }
+
+    @media (max-width: 600px) {
+      .card { width: 75px; height: 110px; }
+      .back img { width: 48px; }
+      .back span { font-size: 34px; }
+    }
   </style>
 </head>
 <body>
 
-  <!-- ✅ โปรโมชัน / ส่วนหัว -->
   <div class="promo-banner">
     <img src="https://img2.pic.in.th/pic/photo_--_--deec69ba16a767e7.jpg" alt="โปรโมชั่นเปิดไพ่รับโชค">
   </div>
 
-  <!-- ✅ กล่องหลัก -->
   <div class="container">
     <img class="logo" src="https://img2.pic.in.th/pic/1735020594-1.png" alt="ร่ำรวย365">
     <h2>🂪 เปิดไพ่ลุ้นโชค | ร่ำรวย365</h2>
     <input type="text" id="phone" placeholder="กรอกเบอร์โทรศัพท์" maxlength="10"><br>
     <button id="startBtn">เริ่มเกม</button>
 
-    <!-- ✅ โซนที่ใช้แคปหน้าจอ -->
+    <!-- ✅ ส่วนที่จะ capture -->
     <div id="captureZone">
       <div id="cards"></div>
       <div id="rewardDisplay"></div>
     </div>
 
-    <!-- ✅ ปุ่มแคป -->
-    <button id="captureBtn" style="display:none;">📸 แคปหน้าจอ</button>
+    <!-- ✅ ปุ่มแคปหน้าจอ -->
+    <button id="captureBtn" style="display:none; margin-top:16px;
+      padding: 12px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #3b1c00;
+      background: linear-gradient(to right, #ffd700, #ff9900);
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      cursor: pointer;">📸 แคปหน้าจอ</button>
+
   </div>
 
-  <!-- ✅ เสียง -->
   <audio id="flipSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_72b2a6d7f8.mp3" preload="auto"></audio>
 
   <!-- ✅ html2canvas -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-  <!-- ✅ สคริปต์เกม -->
   <script>
     const scriptURL = 'https://script.google.com/macros/s/AKfycbybf8xUEJYD6TigG3QriRdEbKmZF3K3PQs7OvEAHV6Eg8dw4mdGD186N_OWToeS12ry/exec';
     let hasFlipped = false;
@@ -80,7 +267,6 @@
       numbers.forEach(num => {
         const wrapper = document.createElement("div");
         wrapper.className = "card";
-        wrapper.dataset.number = num;
 
         const inner = document.createElement("div");
         inner.className = "inner-card";
@@ -155,30 +341,6 @@
       }
       return arr;
     }
-  </script>
-
-  <!-- ✅ ป้องกัน Inspect Element -->
-  <script>
-    // ป้องกัน F12, Ctrl+Shift+I/J/C, Ctrl+U
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'F12' || 
-          (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key.toUpperCase())) || 
-          (e.ctrlKey && e.key.toLowerCase() === 'u')) {
-        e.preventDefault();
-      }
-    });
-
-    // ป้องกันคลิกขวา
-    document.addEventListener('contextmenu', function(e) {
-      e.preventDefault();
-    });
-
-    // ป้องกัน DevTools ขนาดเล็ก
-    setInterval(function () {
-      if (window.outerHeight - window.innerHeight > 200 || window.outerWidth - window.innerWidth > 200) {
-        document.body.innerHTML = '<h2 style="color:red;text-align:center;margin-top:50px;">🚫 กรุณาปิด Developer Tools ก่อนใช้งาน</h2>';
-      }
-    }, 1000);
   </script>
 </body>
 </html>
