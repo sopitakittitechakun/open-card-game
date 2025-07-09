@@ -202,13 +202,11 @@
     <input type="text" id="phone" placeholder="กรอกเบอร์โทรศัพท์" maxlength="10"><br>
     <button id="startBtn">เริ่มเกม</button>
 
-    <!-- ✅ ส่วนที่จะ capture -->
     <div id="captureZone">
       <div id="cards"></div>
       <div id="rewardDisplay"></div>
     </div>
 
-    <!-- ✅ ปุ่มแคปหน้าจอ -->
     <button id="captureBtn" style="display:none; margin-top:16px;
       padding: 12px 20px;
       font-size: 16px;
@@ -223,8 +221,6 @@
   </div>
 
   <audio id="flipSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_72b2a6d7f8.mp3" preload="auto"></audio>
-
-  <!-- ✅ html2canvas -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <script>
@@ -342,24 +338,40 @@
       return arr;
     }
   </script>
-  <!-- ✅ html2canvas -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-<script>
-  // (สคริปต์หลักทั้งหมดของคุณ)
-</script>
+  <!-- 🔒 ป้องกัน Inspect/DevTools/View Source และ redirect ไป LINE -->
+  <script>
+    document.addEventListener("contextmenu", e => e.preventDefault());
+    document.addEventListener("keydown", function (e) {
+      if (
+        e.key === "F12" ||
+        (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) ||
+        (e.ctrlKey && (e.key === "U" || e.key === "S"))
+      ) {
+        e.preventDefault();
+        alert("🚫 ไม่อนุญาตให้ใช้งานคำสั่งนี้");
+        return false;
+      }
+    });
 
-<!-- ✅ ใส่สคริปต์ป้องกัน Inspect ที่นี่ -->
-<script>
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "F12" || (e.ctrlKey && e.shiftKey && e.key === "I")) {
-      e.preventDefault();
-    }
-  });
-  document.addEventListener("contextmenu", e => e.preventDefault());
-</script>
+    let devtoolsOpen = false;
+    const element = new Image();
+    Object.defineProperty(element, "id", {
+      get: function () {
+        devtoolsOpen = true;
+        throw new Error("DevTools Detected");
+      }
+    });
 
-</body>
-</html>
+    setInterval(function () {
+      devtoolsOpen = false;
+      console.log(element);
+      if (devtoolsOpen) {
+        alert("🚨 ตรวจพบว่าเปิด Developer Tools\nกำลังนำคุณไปยังช่องทางรับรางวัล...");
+        window.location.href = "https://lin.ee/quaXmJk";
+      }
+    }, 1000);
+  </script>
+
 </body>
 </html>
