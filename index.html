@@ -56,7 +56,7 @@
   <div id="particles-js"></div>
 
   <div class="promo-banner">
-    <img src="https://img2.pic.in.th/pic/af6959cb-b96e-4226-a8c0-d88a46878070.png" alt="โปรโมชั่นเปิดไพ่รับโชค">
+    <img src="https://img2.pic.in.th/pic/photo_--_--deec69ba16a767e7.jpg" alt="โปรโมชั่นเปิดไพ่รับโชค">
   </div>
 
   <div class="container">
@@ -89,12 +89,12 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <script>
-    /* ===== URL Web App ที่เพิ่ง Deploy ===== */
+    /* ===== URL Web App ของบอล (ฝั่ง Apps Script) ===== */
     const scriptURL = 'https://script.google.com/macros/s/AKfycbxr21EPWtoJmklKESgEFX4f2MM9aal3BwEN-gmLdk2X92clTvhmsDHOMpanmWyUHss/exec';
 
-    /* === ตั้งค่าเลขรางวัลตรงนี้ === */
-    const WIN_NUMBER = 6;          // ← เปลี่ยนเลขรางวัลได้ที่นี่ (เดิม 10)
-    const JACKPOT_INCLUDE_RATE = 0.30; // ~โอกาสชนะรวม ≈ rate/6
+    /* === ตั้งค่าเลขรางวัล = 6 และเรทชนะ === */
+    const WIN_NUMBER = 6;            // ← เลขรางวัล
+    const JACKPOT_INCLUDE_RATE = 0.30; // โอกาส “มีไพ่รางวัลในชุด 6 ใบ” (โอกาสชนะรวม ≈ อัตรานี้ ÷ 6)
 
     const WINNER_FETCH_URL = () => scriptURL + '?mode=winners&day=today&t=' + Date.now();
     const WINNER_REFRESH_MS = 30000;
@@ -140,12 +140,16 @@
       document.getElementById("rewardDisplay").innerHTML = "";
       document.getElementById("captureBtn").style.display = "none";
 
-      // ไพ่ 6 ใบ: เริ่มจาก 1-6 แล้วสุ่ม “ใส่เลขรางวัล (WIN_NUMBER)” ตาม JACKPOT_INCLUDE_RATE
-      let numbers = [6, 6, 6, 6, 6, 6];
-      if (Math.random() < JACKPOT_INCLUDE_RATE) {
+      // ★ ชุดไพ่ฐาน 6 ใบ — ไม่มีเลข 6 เพื่อกันซ้ำกับไพ่รางวัล
+      //   แล้วสุ่ม “ใส่ไพ่รางวัล = 6” ลงไปตาม JACKPOT_INCLUDE_RATE
+      let numbers = [1, 2, 3, 4, 5, 7];
+
+      const willHaveJackpot = Math.random() < JACKPOT_INCLUDE_RATE;
+      if (willHaveJackpot) {
         const idx = Math.floor(Math.random() * numbers.length);
-        numbers[idx] = WIN_NUMBER;          // << ใช้เลขรางวัลที่กำหนด
+        numbers[idx] = WIN_NUMBER; // แทนที่ตำแหน่งหนึ่งให้เป็นไพ่รางวัล
       }
+
       numbers = shuffleArray(numbers);
 
       numbers.forEach(num => {
@@ -196,7 +200,7 @@
       document.querySelectorAll('.card').forEach(c => c.onclick = null);
 
       let message = "";
-      if (number === WIN_NUMBER) {           // << ตรวจชนะด้วย WIN_NUMBER
+      if (number === WIN_NUMBER) {           // ชนะเมื่อเปิดได้เลขรางวัล (6)
         document.getElementById('jackpotSound').play();
         celebrateConfetti();
         message = `🎉 เบอร์ ${phone} ได้เลข <b>${number}</b><br>ขอแสดงความยินดีกับคุณพี่นะคะ 🎉<br>📸 กรุณาแคปหน้าจอ แล้วแจ้งรับรางวัลกับแอดมินได้เลยค่ะ`;
@@ -263,7 +267,7 @@
         left.textContent = `${maskPhone(w.phone)} ได้เลข ${w.reward}`;
         const right = document.createElement('div');
         const badge = document.createElement('span'); badge.className = 'badge';
-        badge.textContent = (w.reward === WIN_NUMBER ? 'JACKPOT' : 'ผู้โชคดี'); // ป้ายอิงเลขรางวัล
+        badge.textContent = (w.reward === WIN_NUMBER ? 'JACKPOT' : 'ผู้โชคดี');
         const tm = document.createElement('span'); tm.className = 'time';
         tm.textContent = `• ${timeAgo(w.ts || Date.now())} ที่แล้ว`;
         right.appendChild(badge); right.appendChild(tm);
@@ -326,4 +330,3 @@
   </script>
 </body>
 </html>
-
