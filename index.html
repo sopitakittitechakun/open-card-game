@@ -92,10 +92,13 @@
     /* ===== URL Web App ที่เพิ่ง Deploy ===== */
     const scriptURL = 'https://script.google.com/macros/s/AKfycbxr21EPWtoJmklKESgEFX4f2MM9aal3BwEN-gmLdk2X92clTvhmsDHOMpanmWyUHss/exec';
 
+    /* === ตั้งค่าเลขรางวัลตรงนี้ === */
+    const WIN_NUMBER = 10;          // ← เปลี่ยนเลขรางวัลได้ที่นี่ (เดิม 10)
+    const JACKPOT_INCLUDE_RATE = 0.30; // ~โอกาสชนะรวม ≈ rate/6
+
     const WINNER_FETCH_URL = () => scriptURL + '?mode=winners&day=today&t=' + Date.now();
     const WINNER_REFRESH_MS = 30000;
 
-    const JACKPOT_INCLUDE_RATE = 0.30; // ~โอกาสชนะรวม ≈ rate/6
     let hasFlipped = false;
 
     document.getElementById('startBtn').addEventListener('click', startGame);
@@ -113,7 +116,6 @@
         const data = await res.json();
         if (data.error) { alert("เกิดข้อผิดพลาด: " + data.error); return; }
 
-        // แสดงสิทธิ์คงเหลือ
         if (typeof data.limit !== 'undefined') {
           const left = Math.max(0, (data.limit || 1) - (data.playedToday || 0));
           document.getElementById('quotaInfo').textContent =
@@ -138,11 +140,11 @@
       document.getElementById("rewardDisplay").innerHTML = "";
       document.getElementById("captureBtn").style.display = "none";
 
-      // ไพ่ 6 ใบ: เริ่มจาก 1-6 แล้วสุ่ม “ใส่ 10” ตาม JACKPOT_INCLUDE_RATE
+      // ไพ่ 6 ใบ: เริ่มจาก 1-6 แล้วสุ่ม “ใส่เลขรางวัล (WIN_NUMBER)” ตาม JACKPOT_INCLUDE_RATE
       let numbers = [1, 2, 3, 4, 5, 6];
       if (Math.random() < JACKPOT_INCLUDE_RATE) {
         const idx = Math.floor(Math.random() * numbers.length);
-        numbers[idx] = 10;
+        numbers[idx] = WIN_NUMBER;          // << ใช้เลขรางวัลที่กำหนด
       }
       numbers = shuffleArray(numbers);
 
@@ -191,18 +193,16 @@
       card.classList.add("opened");
       hasFlipped = true;
 
-      // ปิดคลิกการ์ดทั้งหมด
       document.querySelectorAll('.card').forEach(c => c.onclick = null);
 
       let message = "";
-      if (number === 10) {
-        card.classList.add("jackpot");
+      if (number === WIN_NUMBER) {           // << ตรวจชนะด้วย WIN_NUMBER
         document.getElementById('jackpotSound').play();
         celebrateConfetti();
         message = `🎉 เบอร์ ${phone} ได้เลข <b>${number}</b><br>ขอแสดงความยินดีกับคุณพี่นะคะ 🎉<br>📸 กรุณาแคปหน้าจอ แล้วแจ้งรับรางวัลกับแอดมินได้เลยค่ะ`;
 
         // อัปเดต LeaderBoard ฝั่ง client ทันที
-        pushWinnerImmediate({phone, reward: 10, ts: Date.now()});
+        pushWinnerImmediate({phone, reward: WIN_NUMBER, ts: Date.now()});
       } else {
         message = `😢 เบอร์ ${phone} ได้เลข <b>${number}</b><br>ขอแสดงความเสียใจนะคะ ครั้งหน้ามาร่วมกิจกรรมใหม่อีกครั้งนะคะ`;
       }
@@ -237,7 +237,7 @@
     /* ===== LeaderBoard ===== */
     function maskPhone(p){
       const s = String(p||'');
-      if (/[xX]/.test(s)) return s; // ถ้า API ส่งแบบ mask มาแล้ว ใช้อันนั้นเลย
+      if (/[xX]/.test(s)) return s;
       const n = s.replace(/\D/g,'').padStart(10,'0').slice(-10);
       return `${n.slice(0,2)}x-xxx-${n.slice(6,8)}xx`;
     }
@@ -263,7 +263,7 @@
         left.textContent = `${maskPhone(w.phone)} ได้เลข ${w.reward}`;
         const right = document.createElement('div');
         const badge = document.createElement('span'); badge.className = 'badge';
-        badge.textContent = 'JACKPOT';
+        badge.textContent = (w.reward === WIN_NUMBER ? 'JACKPOT' : 'ผู้โชคดี'); // ป้ายอิงเลขรางวัล
         const tm = document.createElement('span'); tm.className = 'time';
         tm.textContent = `• ${timeAgo(w.ts || Date.now())} ที่แล้ว`;
         right.appendChild(badge); right.appendChild(tm);
@@ -314,13 +314,11 @@
       renderWinners(newList);
     }
 
-    // โหลด LeaderBoard เริ่มต้น + รีเฟรชอัตโนมัติ
     document.addEventListener('DOMContentLoaded', ()=>{
       loadWinners();
       setInterval(loadWinners, WINNER_REFRESH_MS);
     });
 
-    // เอฟเฟกต์พื้นหลัง (ใส่/ไม่ใส่ก็ได้)
     particlesJS("particles-js", {
       particles: { number:{value:60}, size:{value:4}, color:{value:"#ffd700"}, opacity:{value:0.6}, move:{speed:1.5}, line_linked:{enable:false} },
       interactivity: { events: { onhover: { enable: false } } }
