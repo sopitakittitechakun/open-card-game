@@ -10,8 +10,8 @@
     body { background: linear-gradient(-45deg, #ffcc00, #ff9900, #ffd700, #fff4c2);
            background-size: 400% 400%; animation: gradientMove 15s ease infinite; }
     @keyframes gradientMove { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
-
     #particles-js { position:fixed; width:100%; height:100%; z-index:0; }
+
     .promo-banner { text-align:center; margin:20px auto 10px; z-index:2; position:relative; }
     .promo-banner img { max-width:90%; border-radius:14px; box-shadow:0 6px 16px rgba(0,0,0,0.4); }
 
@@ -35,20 +35,8 @@
       border:3px solid gold; box-shadow:0 4px 10px rgba(0,0,0,0.3); }
     .front { background:#fff8dc; color:#b71c1c; }
     .back  { background:#ffd700; transform:rotateY(180deg); animation:glow 1s infinite alternate; position:relative; flex-direction:column; }
-    .back img { width:60px; margin-top:10px; }
-    .back span { font-size:42px; font-weight:bold; color:#b71c1c; animation:bounceGlow 1s infinite; text-shadow:2px 2px 4px #fff, 0 0 8px #ffd700; }
+    .back span { font-size:42px; font-weight:bold; color:#b71c1c; }
     @keyframes glow { from{box-shadow:0 0 10px #ffd700;} to{box-shadow:0 0 20px #fff200;} }
-    @keyframes bounceGlow { 0%{transform:scale(1);} 50%{transform:scale(1.3);} 100%{transform:scale(1);} }
-
-    .card.jackpot .back { animation: glow 0.6s infinite alternate, jackpotPulse 1.2s ease-in-out infinite;
-      border-color:#fff; box-shadow:0 0 20px 8px rgba(255,255,255,0.8), 0 0 40px 14px rgba(255,215,0,0.9); }
-    @keyframes jackpotPulse { 0%{transform:rotateY(180deg) scale(1);} 50%{transform:rotateY(180deg) scale(1.08);} 100%{transform:rotateY(180deg) scale(1);} }
-
-    .reward-text { margin-top:12px; font-size:18px; color:#fff8dc; text-shadow:0 0 4px #000, 0 0 10px #ffd700; }
-    #quotaInfo { color:#ffd700; margin:4px 0 10px; font-size:14px; }
-
-    .block-overlay{ position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95);
-      color:#ffd700; font-size:22px; font-weight:bold; text-align:center; padding-top:30vh; z-index:999999; display:none; }
 
     /* LeaderBoard */
     .winners{ margin:16px auto 32px; max-width:500px; background:rgba(255, 215, 0, 0.08);
@@ -87,15 +75,10 @@
     <button id="captureBtn" style="display:none;">📸 แคปหน้าจอ</button>
   </div>
 
-  <div id="winnersBox" class="winners">
+  <!-- LeaderBoard -->
+  <div class="winners">
     <div class="winners-head">🎉 ผู้โชคดีล่าสุด (วันนี้)</div>
     <ul id="winnerList" class="winner-list"></ul>
-  </div>
-
-  <div id="devBlocker" class="block-overlay">
-    🚫 ระบบตรวจพบว่าเปิด Developer Tools<br>
-    กรุณาปิดเพื่อใช้งานเว็บไซต์ต่อ<br><br>
-    กำลังนำคุณไปยังช่องทางรับรางวัล...
   </div>
 
   <audio id="flipSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_72b2a6d7f8.mp3" preload="auto"></audio>
@@ -106,9 +89,10 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <script>
-    /* ===== ใส่ URL Apps Script ที่ Deploy ล่าสุด ===== */
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbzZfHn0GEpLglikPo5MCtGUSFlIHt7zNppN4q5czoXv7P2Oif93eqmttqGqtGSVxGFL/exec';
-    const WINNER_FETCH_URL = () => scriptURL + '?mode=winners&day=today&t=' + Date.now(); // bust cache
+    /* ===== URL Web App ที่เพิ่ง Deploy ===== */
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxr21EPWtoJmklKESgEFX4f2MM9aal3BwEN-gmLdk2X92clTvhmsDHOMpanmWyUHss/exec';
+
+    const WINNER_FETCH_URL = () => scriptURL + '?mode=winners&day=today&t=' + Date.now();
     const WINNER_REFRESH_MS = 30000;
 
     const JACKPOT_INCLUDE_RATE = 0.30; // ~โอกาสชนะรวม ≈ rate/6
@@ -129,10 +113,11 @@
         const data = await res.json();
         if (data.error) { alert("เกิดข้อผิดพลาด: " + data.error); return; }
 
-        const info = document.getElementById('quotaInfo');
+        // แสดงสิทธิ์คงเหลือ
         if (typeof data.limit !== 'undefined') {
           const left = Math.max(0, (data.limit || 1) - (data.playedToday || 0));
-          info.textContent = `สิทธิ์คงเหลือวันนี้: ${left}/${data.limit || 1}`;
+          document.getElementById('quotaInfo').textContent =
+            `สิทธิ์คงเหลือวันนี้: ${left}/${data.limit || 1}`;
         }
 
         if (data.alreadyPlayed) {
@@ -153,7 +138,7 @@
       document.getElementById("rewardDisplay").innerHTML = "";
       document.getElementById("captureBtn").style.display = "none";
 
-      // ไพ่ 6 ใบ: เริ่มไม่มี 10 แล้วสุ่ม "ใส่ 10" ตาม JACKPOT_INCLUDE_RATE
+      // ไพ่ 6 ใบ: เริ่มจาก 1-6 แล้วสุ่ม “ใส่ 10” ตาม JACKPOT_INCLUDE_RATE
       let numbers = [1, 2, 3, 4, 5, 6];
       if (Math.random() < JACKPOT_INCLUDE_RATE) {
         const idx = Math.floor(Math.random() * numbers.length);
@@ -169,23 +154,16 @@
         inner.className = "inner-card";
 
         const front = document.createElement("div");
-        front.className = "front";
-        front.textContent = "?";
+        front.className = "front"; front.textContent = "?";
 
         const back = document.createElement("div");
         back.className = "back";
-
-        const img = document.createElement("img");
-        img.src = `https://raw.githubusercontent.com/sopitakittitechakun/open-card-rewards/main/${num}.png`;
-        img.onerror = () => { img.style.display = 'none'; };
 
         const label = document.createElement("span");
         label.textContent = num;
 
         back.appendChild(label);
-        back.appendChild(img);
-        inner.appendChild(front);
-        inner.appendChild(back);
+        inner.appendChild(front); inner.appendChild(back);
         wrapper.appendChild(inner);
 
         wrapper.onclick = () => flipCard(wrapper, num, phone);
@@ -197,9 +175,9 @@
       const duration = 2000;
       const animationEnd = Date.now() + duration;
       const defaults = { startVelocity: 35, spread: 360, ticks: 60, zIndex: 9999 };
-      const interval = setInterval(() => {
+      const iv = setInterval(() => {
         const timeLeft = animationEnd - Date.now();
-        if (timeLeft <= 0) return clearInterval(interval);
+        if (timeLeft <= 0) return clearInterval(iv);
         confetti(Object.assign({}, defaults, {
           particleCount: 80 * (timeLeft / duration),
           origin: { x: Math.random(), y: Math.random() - 0.2 }
@@ -213,9 +191,8 @@
       card.classList.add("opened");
       hasFlipped = true;
 
-      // ปิดคลิกการ์ดทั้งหมดทันที
+      // ปิดคลิกการ์ดทั้งหมด
       document.querySelectorAll('.card').forEach(c => c.onclick = null);
-      card.onclick = null;
 
       let message = "";
       if (number === 10) {
@@ -224,7 +201,7 @@
         celebrateConfetti();
         message = `🎉 เบอร์ ${phone} ได้เลข <b>${number}</b><br>ขอแสดงความยินดีกับคุณพี่นะคะ 🎉<br>📸 กรุณาแคปหน้าจอ แล้วแจ้งรับรางวัลกับแอดมินได้เลยค่ะ`;
 
-        // ดันขึ้น LeaderBoard ฝั่ง client ทันที
+        // อัปเดต LeaderBoard ฝั่ง client ทันที
         pushWinnerImmediate({phone, reward: 10, ts: Date.now()});
       } else {
         message = `😢 เบอร์ ${phone} ได้เลข <b>${number}</b><br>ขอแสดงความเสียใจนะคะ ครั้งหน้ามาร่วมกิจกรรมใหม่อีกครั้งนะคะ`;
@@ -258,17 +235,22 @@
     }
 
     /* ===== LeaderBoard ===== */
-    function maskPhone(p){ return /^0\d{9}$/.test(p) ? `${p.slice(0,2)}x-xxx-${p.slice(6,8)}xx` : p; }
+    function maskPhone(p){
+      const s = String(p||'');
+      if (/[xX]/.test(s)) return s; // ถ้า API ส่งแบบ mask มาแล้ว ใช้อันนั้นเลย
+      const n = s.replace(/\D/g,'').padStart(10,'0').slice(-10);
+      return `${n.slice(0,2)}x-xxx-${n.slice(6,8)}xx`;
+    }
     function timeAgo(ts){
       try{
         const t = typeof ts === 'number' ? ts : new Date(ts).getTime();
-        let diffSec = Math.floor((Date.now() - t) / 1000);
-        if (!isFinite(diffSec)) diffSec = 0;
-        diffSec = Math.max(0, diffSec); // กันเวลาติดลบ (เผื่อ clock เพี้ยน)
-        if (diffSec < 60)   return `${diffSec} วิ`;
-        if (diffSec < 3600) return `${Math.floor(diffSec/60)} นาที`;
-        if (diffSec < 86400)return `${Math.floor(diffSec/3600)} ชม.`;
-        return `${Math.floor(diffSec/86400)} วัน`;
+        let diff = Math.floor((Date.now() - t)/1000);
+        if (!isFinite(diff)) diff = 0;
+        diff = Math.max(0, diff);
+        if (diff < 60)   return `${diff} วิ`;
+        if (diff < 3600) return `${Math.floor(diff/60)} นาที`;
+        if (diff < 86400)return `${Math.floor(diff/3600)} ชม.`;
+        return `${Math.floor(diff/86400)} วัน`;
       }catch{ return ''; }
     }
     function renderWinners(list){
@@ -281,7 +263,7 @@
         left.textContent = `${maskPhone(w.phone)} ได้เลข ${w.reward}`;
         const right = document.createElement('div');
         const badge = document.createElement('span'); badge.className = 'badge';
-        badge.textContent = w.reward === 10 ? 'JACKPOT' : 'ผู้โชคดี';
+        badge.textContent = 'JACKPOT';
         const tm = document.createElement('span'); tm.className = 'time';
         tm.textContent = `• ${timeAgo(w.ts || Date.now())} ที่แล้ว`;
         right.appendChild(badge); right.appendChild(tm);
@@ -289,17 +271,9 @@
         ul.appendChild(li);
       });
     }
-    function saveWinnerCache(list){
-      try{ localStorage.setItem('rr365_winners_cache', JSON.stringify({ts:Date.now(), list})); }catch{}
-    }
-    function loadWinnerCache(){
-      try{
-        const raw = localStorage.getItem('rr365_winners_cache');
-        if(!raw) return null;
-        const obj = JSON.parse(raw);
-        return obj.list || null;
-      }catch{ return null; }
-    }
+    function saveWinnerCache(list){ try{ localStorage.setItem('rr365_winners_cache', JSON.stringify({ts:Date.now(), list})); }catch{} }
+    function loadWinnerCache(){ try{ const raw = localStorage.getItem('rr365_winners_cache'); return raw ? JSON.parse(raw).list : null; }catch{ return null; } }
+
     async function fetchWinners(){
       const res = await fetch(WINNER_FETCH_URL(), { cache:'no-store' });
       const ct = (res.headers.get('content-type') || '').toLowerCase();
@@ -340,21 +314,13 @@
       renderWinners(newList);
     }
 
+    // โหลด LeaderBoard เริ่มต้น + รีเฟรชอัตโนมัติ
     document.addEventListener('DOMContentLoaded', ()=>{
       loadWinners();
-      setInterval(loadWinners, 30000);
+      setInterval(loadWinners, WINNER_REFRESH_MS);
     });
 
-    // กัน DevTools/คัดลอก (ถ้าต้องการ)
-    document.addEventListener("contextmenu", e => e.preventDefault());
-    document.addEventListener("keydown", e => {
-      if (e.key === "F12" ||
-          (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) ||
-          (e.ctrlKey && (e.key === "U" || e.key === "S"))) {
-        e.preventDefault(); alert("🚫 ไม่อนุญาตให้ใช้งานคำสั่งนี้"); return false;
-      }
-    });
-
+    // เอฟเฟกต์พื้นหลัง (ใส่/ไม่ใส่ก็ได้)
     particlesJS("particles-js", {
       particles: { number:{value:60}, size:{value:4}, color:{value:"#ffd700"}, opacity:{value:0.6}, move:{speed:1.5}, line_linked:{enable:false} },
       interactivity: { events: { onhover: { enable: false } } }
