@@ -137,7 +137,7 @@
 
   <!-- LeaderBoard / ผู้โชคดีล่าสุด -->
   <div id="winnersBox" class="winners">
-    <div class="winners-head">🎉 ผู้โชคดีล่าสุด</div>
+    <div class="winners-head">🎉 ผู้โชคดีล่าสุด (วันนี้)</div>
     <ul id="winnerList" class="winner-list"></ul>
   </div>
 
@@ -157,14 +157,16 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbybf8xUEJYD6TigG3QriRdEbKmZF3K3PQs7OvEAHV6Eg8dw4mdGD186N_OWToeS12ry/exec';
-    let hasFlipped = false;
+    /* ===== ตั้งค่า URL Apps Script ของบอล ===== */
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwKqR7dywc1b35eLP__ovs54v9oJhrWwBiLGIFpwGZp80yRENI7Ky3z-4o-MmPsO_B2/exec'; // <— ใส่ URL Web App ของ Apps Script
+    const WINNER_FETCH_URL = scriptURL + '?mode=winners&day=today'; // ✅ โชว์เฉพาะวันนี้
+    const WINNER_REFRESH_MS = 30000; // รีเฟรช LeaderBoard ทุก 30s
 
-    /* ===== LeaderBoard Config ===== */
-    const WINNER_FETCH_URL = scriptURL + '?mode=winners'; // ให้ Apps Script รองรับโหมดนี้
-    const WINNER_CACHE_KEY = 'rr365_winners_cache';
-    const WINNER_LIMIT = 10;           // โชว์กี่รายการ
-    const WINNER_REFRESH_MS = 30000;   // รีเฟรชทุก 30 วินาที
+    // ✅ ตั้ง “ความยาก” : โอกาสใส่เลข 10 ในชุดไพ่ (รวมชนะ ≈ rate/6)
+    // เช่น 0.30 ≈ รวมโอกาสชนะ ~5% (เพราะต้องเปิดถูก 1 ใน 6 ด้วย)
+    const JACKPOT_INCLUDE_RATE = 0.30;
+
+    let hasFlipped = false;
 
     document.getElementById('startBtn').addEventListener('click', startGame);
 
@@ -181,13 +183,20 @@
       fetch(scriptURL, { method: 'POST', body: formData })
         .then(res => res.json())
         .then(data => {
+          if (data.error) {
+            alert("เกิดข้อผิดพลาด: " + data.error);
+            return;
+          }
           if (data.alreadyPlayed) {
-            alert("เบอร์นี้เล่นไปแล้ววันนี้");
+            const left = Math.max(0, (data.limit || 1) - (data.playedToday || 1));
+            alert(`วันนี้เล่นครบโควตาแล้ว (${data.playedToday}/${data.limit})`);
             return;
           }
           showCards(phone);
         })
-        .catch(() => showCards(phone)); // กันเผื่อสคริปต์ล่ม ให้ยังเล่นได้
+        .catch(() => {
+          alert("ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้");
+        });
     }
 
     function showCards(phone) {
@@ -196,8 +205,13 @@
       document.getElementById("rewardDisplay").innerHTML = "";
       document.getElementById("captureBtn").style.display = "none";
 
-      // ✅ ไพ่ทั้งหมด 6 ใบ มีเลข 10 ใบเดียวเป็นรางวัลใหญ่
-      const numbers = shuffleArray([10, 1, 2, 3, 4, 5]);
+      // เริ่มจากไพ่ 6 ใบ (ไม่มี 10) แล้วสุ่ม “ใส่เลข 10” ตาม JACKPOT_INCLUDE_RATE
+      let numbers = [1, 2, 3, 4, 5, 6];
+      if (Math.random() < JACKPOT_INCLUDE_RATE) {
+        const idx = Math.floor(Math.random() * numbers.length);
+        numbers[idx] = 10;
+      }
+      numbers = shuffleArray(numbers);
 
       numbers.forEach(num => {
         const wrapper = document.createElement("div");
@@ -259,7 +273,7 @@
         celebrateConfetti();
         message = `🎉 เบอร์ ${phone} ได้เลข <b>${number}</b><br>ขอแสดงความยินดีกับคุณพี่นะคะ 🎉<br>📸 กรุณาแคปหน้าจอ แล้วแจ้งรับรางวัลกับแอดมินได้เลยค่ะ`;
 
-        // === อัปเดต LeaderBoard ทันทีฝั่ง client ===
+        // อัปเดต LeaderBoard ฝั่ง client แบบทันที
         pushWinnerImmediate({phone, reward: 10, ts: Date.now()});
 
       } else {
@@ -270,6 +284,7 @@
         `<div class='reward-text'>${message}</div>`;
       document.getElementById("captureBtn").style.display = "inline-block";
 
+      // บันทึกผลไปที่เซิร์ฟเวอร์
       const formData = new FormData();
       formData.append("phone", phone);
       formData.append("reward", number);
@@ -293,7 +308,7 @@
       return arr;
     }
 
-    // ===== LeaderBoard Utils =====
+    /* ===== LeaderBoard ===== */
     function maskPhone(p){
       if(!/^0\d{9}$/.test(p)) return p;
       return `${p.slice(0,2)}x-xxx-${p.slice(6,8)}xx`;
@@ -312,7 +327,7 @@
       const ul = document.getElementById('winnerList');
       if(!ul) return;
       ul.innerHTML = '';
-      list.slice(0, WINNER_LIMIT).forEach(w=>{
+      list.forEach(w=>{
         const li = document.createElement('li');
         const left = document.createElement('div');
         left.textContent = `${maskPhone(w.phone)} ได้เลข ${w.reward}`;
@@ -331,11 +346,11 @@
       });
     }
     function saveWinnerCache(list){
-      try{ localStorage.setItem(WINNER_CACHE_KEY, JSON.stringify({ts:Date.now(), list})); }catch{}
+      try{ localStorage.setItem('rr365_winners_cache', JSON.stringify({ts:Date.now(), list})); }catch{}
     }
     function loadWinnerCache(){
       try{
-        const raw = localStorage.getItem(WINNER_CACHE_KEY);
+        const raw = localStorage.getItem('rr365_winners_cache');
         if(!raw) return null;
         const obj = JSON.parse(raw);
         return obj.list || null;
@@ -345,9 +360,8 @@
       try{
         const res = await fetch(WINNER_FETCH_URL, {cache:'no-store'});
         const data = await res.json();
-        // คาดหวังรูปแบบ: [{phone:"0812345678", reward:10, ts:"2025-08-19T10:10:00Z"}, ...]
-        if(Array.isArray(data) && data.length){
-          data.sort((a,b)=> new Date(b.ts||0) - new Date(a.ts||0));
+        if(Array.isArray(data)){
+          // API คืนเฉพาะวันนี้อยู่แล้ว
           saveWinnerCache(data);
           return data;
         }
@@ -355,11 +369,7 @@
       }catch(e){
         const cached = loadWinnerCache();
         if(cached) return cached;
-        // fallback เล็กน้อย
-        return [
-          {phone:'0891234567', reward:10, ts: Date.now()-1000*60*5},
-          {phone:'0812347890', reward:10, ts: Date.now()-1000*60*22},
-        ];
+        return [];
       }
     }
     async function loadWinners(){
@@ -367,6 +377,7 @@
       renderWinners(winners);
       startWinnersTicker();
     }
+
     let tickerTimer = null;
     function startWinnersTicker(){
       if(tickerTimer) clearInterval(tickerTimer);
@@ -385,7 +396,7 @@
       renderWinners(newList);
     }
 
-    // โหลด LeaderBoard อัตโนมัติ + รีเฟรชตามรอบ
+    // โหลด LeaderBoard + รีเฟรชอัตโนมัติ
     document.addEventListener('DOMContentLoaded', ()=>{
       loadWinners();
       setInterval(loadWinners, WINNER_REFRESH_MS);
