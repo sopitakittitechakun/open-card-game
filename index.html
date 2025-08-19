@@ -34,22 +34,21 @@
       display:flex; align-items:center; justify-content:center; font-size:32px; font-weight:bold;
       border:3px solid gold; box-shadow:0 4px 10px rgba(0,0,0,0.3); }
     .front { background:#fff8dc; color:#b71c1c; }
-    .back  { background:#ffd700; transform:rotateY(180deg); animation:glow 1s infinite alternate; position:relative; flex-direction:column; }
+    .back  { background:#ffd700; transform:rotateY(180deg); }
     .back span { font-size:42px; font-weight:bold; color:#b71c1c; }
-    @keyframes glow { from{box-shadow:0 0 10px #ffd700;} to{box-shadow:0 0 20px #fff200;} }
 
     /* LeaderBoard */
     .winners{ margin:16px auto 32px; max-width:500px; background:rgba(255, 215, 0, 0.08);
       border:1px solid rgba(255, 215, 0, 0.35); border-radius:14px; box-shadow:0 0 12px rgba(255,215,0,0.2) inset; overflow:hidden; }
     .winners-head{ padding:10px 14px; background:linear-gradient(90deg, rgba(255,215,0,0.25), rgba(255,153,0,0.25));
-      color:#ffd700; font-weight:bold; letter-spacing:0.3px; display:flex; align-items:center; gap:8px;
-      border-bottom:1px solid rgba(255,215,0,0.3); }
-    .winner-list{ list-style:none; margin:0; padding:8px 12px; max-height:160px; overflow:hidden; }
+      color:#ffd700; font-weight:bold; letter-spacing:0.3px; display:flex; align-items:center; gap:8px; }
+    .winner-list{ list-style:none; margin:0; padding:8px 12px; max-height:180px; overflow:auto; }
     .winner-list li{ display:flex; justify-content:space-between; align-items:center;
       color:#fff8dc; padding:8px 6px; border-bottom:1px dashed rgba(255,215,0,0.15); font-size:15px; }
     .winner-list li .badge{ background:#22c55e; color:#0b2a0f; font-weight:bold; font-size:12px;
       padding:4px 8px; border-radius:999px; box-shadow:0 0 8px rgba(34,197,94,0.4); }
-    .winner-list li .time{ opacity:0.8; font-size:12px; margin-left:10px; }
+    .winner-list li .time{ opacity:0.85; font-size:12px; margin-left:10px; }
+    .empty{ padding:10px 14px; color:#fff; opacity:.85; }
   </style>
 </head>
 <body>
@@ -75,10 +74,11 @@
     <button id="captureBtn" style="display:none;">📸 แคปหน้าจอ</button>
   </div>
 
-  <!-- LeaderBoard -->
+  <!-- ผู้โชคดีล่าสุด -->
   <div class="winners">
     <div class="winners-head">🎉 ผู้โชคดีล่าสุด (วันนี้)</div>
     <ul id="winnerList" class="winner-list"></ul>
+    <div id="winnerEmpty" class="empty" style="display:none;">ยังไม่มีผู้โชคดีวันนี้</div>
   </div>
 
   <audio id="flipSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_72b2a6d7f8.mp3" preload="auto"></audio>
@@ -93,12 +93,14 @@
     const scriptURL = 'https://script.google.com/macros/s/AKfycbwfzubJNobSGqCd3LI9i4ew4CjkzFDtjiKBjWMc6wr8hVCKD_VrPGVC_qijxxh2sgXJ/exec';
 
     /* === ตั้งค่าเลขรางวัล = 6 และเรทชนะ === */
-    const WIN_NUMBER = 6;            // ← เลขรางวัล
-    const JACKPOT_INCLUDE_RATE = 0.30; // โอกาส “มีไพ่รางวัลในชุด 6 ใบ” (โอกาสชนะรวม ≈ อัตรานี้ ÷ 6)
+    const WIN_NUMBER = 6;               // เลขรางวัล
+    const JACKPOT_INCLUDE_RATE = 0.30;  // โอกาสมีไพ่รางวัลในชุด 6 ใบ
 
-    const WINNER_FETCH_URL = () => scriptURL + '?mode=winners&day=today&t=' + Date.now();
+    // ต้องส่ง jackpot=6 เพื่อให้ API กรองถูก
+    const WINNER_FETCH_URL = () =>
+      scriptURL + '?mode=winners&day=today&jackpot=' + WIN_NUMBER + '&t=' + Date.now();
+
     const WINNER_REFRESH_MS = 30000;
-
     let hasFlipped = false;
 
     document.getElementById('startBtn').addEventListener('click', startGame);
@@ -140,16 +142,12 @@
       document.getElementById("rewardDisplay").innerHTML = "";
       document.getElementById("captureBtn").style.display = "none";
 
-      // ★ ชุดไพ่ฐาน 6 ใบ — ไม่มีเลข 6 เพื่อกันซ้ำกับไพ่รางวัล
-      //   แล้วสุ่ม “ใส่ไพ่รางวัล = 6” ลงไปตาม JACKPOT_INCLUDE_RATE
+      // ชุดฐาน 6 ใบ (ไม่มี 6 ก่อน) แล้วสุ่มใส่ไพ่รางวัล = 6 ตามเรท
       let numbers = [1, 2, 3, 4, 5, 7];
-
-      const willHaveJackpot = Math.random() < JACKPOT_INCLUDE_RATE;
-      if (willHaveJackpot) {
+      if (Math.random() < JACKPOT_INCLUDE_RATE) {
         const idx = Math.floor(Math.random() * numbers.length);
-        numbers[idx] = WIN_NUMBER; // แทนที่ตำแหน่งหนึ่งให้เป็นไพ่รางวัล
+        numbers[idx] = WIN_NUMBER;
       }
-
       numbers = shuffleArray(numbers);
 
       numbers.forEach(num => {
@@ -179,15 +177,17 @@
 
     function celebrateConfetti() {
       const duration = 2000;
-      const animationEnd = Date.now() + duration;
+      const end = Date.now() + duration;
       const defaults = { startVelocity: 35, spread: 360, ticks: 60, zIndex: 9999 };
       const iv = setInterval(() => {
-        const timeLeft = animationEnd - Date.now();
+        const timeLeft = end - Date.now();
         if (timeLeft <= 0) return clearInterval(iv);
-        confetti(Object.assign({}, defaults, {
-          particleCount: 80 * (timeLeft / duration),
-          origin: { x: Math.random(), y: Math.random() - 0.2 }
-        }));
+        if (window.confetti) {
+          window.confetti(Object.assign({}, defaults, {
+            particleCount: 80 * (timeLeft / duration),
+            origin: { x: Math.random(), y: Math.random() - 0.2 }
+          }));
+        }
       }, 200);
     }
 
@@ -200,21 +200,18 @@
       document.querySelectorAll('.card').forEach(c => c.onclick = null);
 
       let message = "";
-      if (number === WIN_NUMBER) {           // ชนะเมื่อเปิดได้เลขรางวัล (6)
+      if (number === WIN_NUMBER) {
         document.getElementById('jackpotSound').play();
         celebrateConfetti();
         message = `🎉 เบอร์ ${phone} ได้เลข <b>${number}</b><br>ขอแสดงความยินดีกับคุณพี่นะคะ 🎉<br>📸 กรุณาแคปหน้าจอ แล้วแจ้งรับรางวัลกับแอดมินได้เลยค่ะ`;
-
-        // อัปเดต LeaderBoard ฝั่ง client ทันที
         pushWinnerImmediate({phone, reward: WIN_NUMBER, ts: Date.now()});
       } else {
-        message = `😢 เบอร์ ${phone} ได้เลข <b>${number}</b><br>ขอแสดงความเสียใจนะคะ ครั้งหน้ามาร่วมกิจกรรมใหม่อีกครั้งนะคะ`;
+        message = `😢 เบอร์ ${phone} ได้เลข <b>${number}</b><br>โอกาสยังมี มาใหม่รอบหน้าได้เลยค่ะ`;
       }
 
       document.getElementById("rewardDisplay").innerHTML = `<div class='reward-text'>${message}</div>`;
       document.getElementById("captureBtn").style.display = "inline-block";
 
-      // บันทึกผลไปที่เซิร์ฟเวอร์
       const formData = new FormData();
       formData.append("phone", phone);
       formData.append("reward", number);
@@ -249,8 +246,7 @@
       try{
         const t = typeof ts === 'number' ? ts : new Date(ts).getTime();
         let diff = Math.floor((Date.now() - t)/1000);
-        if (!isFinite(diff)) diff = 0;
-        diff = Math.max(0, diff);
+        if (!isFinite(diff)) diff = 0; diff = Math.max(0, diff);
         if (diff < 60)   return `${diff} วิ`;
         if (diff < 3600) return `${Math.floor(diff/60)} นาที`;
         if (diff < 86400)return `${Math.floor(diff/3600)} ชม.`;
@@ -259,8 +255,10 @@
     }
     function renderWinners(list){
       const ul = document.getElementById('winnerList');
-      if(!ul) return;
+      const empty = document.getElementById('winnerEmpty');
       ul.innerHTML = '';
+      if (!list || list.length === 0) { empty.style.display = 'block'; return; }
+      empty.style.display = 'none';
       list.forEach(w=>{
         const li = document.createElement('li');
         const left = document.createElement('div');
@@ -281,35 +279,14 @@
     async function fetchWinners(){
       const res = await fetch(WINNER_FETCH_URL(), { cache:'no-store' });
       const ct = (res.headers.get('content-type') || '').toLowerCase();
-      if (!res.ok || !ct.includes('application/json')) {
-        throw new Error('Winners API not JSON — ตรวจสิทธิ์ Web App: Anyone');
-      }
+      if (!res.ok || !ct.includes('application/json')) throw new Error('Web App ต้องตั้ง Anyone และส่ง JSON');
       const data = await res.json();
       if (Array.isArray(data)) { saveWinnerCache(data); return data; }
       return [];
     }
     async function loadWinners(){
-      try{
-        const winners = await fetchWinners();
-        renderWinners(winners);
-        startWinnersTicker();
-      }catch(err){
-        console.warn(err.message || err);
-        const cached = loadWinnerCache();
-        if (cached) renderWinners(cached);
-      }
-    }
-
-    let tickerTimer = null;
-    function startWinnersTicker(){
-      if(tickerTimer) clearInterval(tickerTimer);
-      tickerTimer = setInterval(()=>{
-        const ul = document.getElementById('winnerList');
-        if(!ul || ul.children.length < 2) return;
-        const first = ul.children[0];
-        ul.appendChild(first.cloneNode(true));
-        ul.removeChild(first);
-      }, 3500);
+      try{ renderWinners(await fetchWinners()); }
+      catch(err){ console.warn(err.message||err); const c=loadWinnerCache(); if(c) renderWinners(c); }
     }
     function pushWinnerImmediate(entry){
       const cached = loadWinnerCache() || [];
