@@ -141,7 +141,7 @@
       document.getElementById("captureBtn").style.display = "none";
 
       // ไพ่ 6 ใบ: เริ่มจาก 1-6 แล้วสุ่ม “ใส่เลขรางวัล (WIN_NUMBER)” ตาม JACKPOT_INCLUDE_RATE
-      let numbers = [1, 2, 3, 4, 5, 6];
+      let numbers = [6, 6, 6, 6, 6, 6];
       if (Math.random() < JACKPOT_INCLUDE_RATE) {
         const idx = Math.floor(Math.random() * numbers.length);
         numbers[idx] = WIN_NUMBER;          // << ใช้เลขรางวัลที่กำหนด
