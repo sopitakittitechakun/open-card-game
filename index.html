@@ -106,13 +106,12 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <script>
-    /* ===== ใส่ URL Apps Script ของบอล ===== */
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbzreyppwV1V2LyRQexuKdSC-pHbsno4usUvxT3UxE5kLqnBVNe0UNOpurBXZnon83-j/exec';
+    /* ===== ใส่ URL Apps Script ที่ Deploy ล่าสุด ===== */
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzZfHn0GEpLglikPo5MCtGUSFlIHt7zNppN4q5czoXv7P2Oif93eqmttqGqtGSVxGFL/exec';
     const WINNER_FETCH_URL = () => scriptURL + '?mode=winners&day=today&t=' + Date.now(); // bust cache
     const WINNER_REFRESH_MS = 30000;
 
     const JACKPOT_INCLUDE_RATE = 0.30; // ~โอกาสชนะรวม ≈ rate/6
-
     let hasFlipped = false;
 
     document.getElementById('startBtn').addEventListener('click', startGame);
@@ -262,12 +261,14 @@
     function maskPhone(p){ return /^0\d{9}$/.test(p) ? `${p.slice(0,2)}x-xxx-${p.slice(6,8)}xx` : p; }
     function timeAgo(ts){
       try{
-        const t = typeof ts === 'number' ? ts : Date.parse(ts);
-        const diff = Math.max(0, Date.now()-t)/1000;
-        if(diff < 60) return `${Math.floor(diff)} วิ`;
-        if(diff < 3600) return `${Math.floor(diff/60)} นาที`;
-        if(diff < 86400) return `${Math.floor(diff/3600)} ชม.`;
-        return `${Math.floor(diff/86400)} วัน`;
+        const t = typeof ts === 'number' ? ts : new Date(ts).getTime();
+        let diffSec = Math.floor((Date.now() - t) / 1000);
+        if (!isFinite(diffSec)) diffSec = 0;
+        diffSec = Math.max(0, diffSec); // กันเวลาติดลบ (เผื่อ clock เพี้ยน)
+        if (diffSec < 60)   return `${diffSec} วิ`;
+        if (diffSec < 3600) return `${Math.floor(diffSec/60)} นาที`;
+        if (diffSec < 86400)return `${Math.floor(diffSec/3600)} ชม.`;
+        return `${Math.floor(diffSec/86400)} วัน`;
       }catch{ return ''; }
     }
     function renderWinners(list){
@@ -341,10 +342,10 @@
 
     document.addEventListener('DOMContentLoaded', ()=>{
       loadWinners();
-      setInterval(loadWinners, WINNER_REFRESH_MS);
+      setInterval(loadWinners, 30000);
     });
 
-    // กัน DevTools/คัดลอก (ตามต้องการ)
+    // กัน DevTools/คัดลอก (ถ้าต้องการ)
     document.addEventListener("contextmenu", e => e.preventDefault());
     document.addEventListener("keydown", e => {
       if (e.key === "F12" ||
