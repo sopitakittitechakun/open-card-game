@@ -143,7 +143,7 @@
       document.getElementById("captureBtn").style.display = "none";
 
       // ชุดฐาน 6 ใบ (ไม่มี 6 ก่อน) แล้วสุ่มใส่ไพ่รางวัล = 6 ตามเรท
-      let numbers = [1, 2, 3, 4, 5, 7];
+      let numbers = [1, 2, 3, 4, 5, 5];
       if (Math.random() < JACKPOT_INCLUDE_RATE) {
         const idx = Math.floor(Math.random() * numbers.length);
         numbers[idx] = WIN_NUMBER;
