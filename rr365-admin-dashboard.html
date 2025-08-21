@@ -1,1 +1,286 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>RR365 • Admin Dashboard v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root{ --bg:#0b0e16; --card:#141b2c; --muted:#9db0da; --text:#e9f0ff; --primary:#ffd700; --accent:#ff9900; --ok:#22c55e; --warn:#f59e0b; --bad:#ef4444; }
+  *{ box-sizing:border-box }
+  body{ margin:0; background:var(--bg); color:var(--text); font-family:'Sarabun',sans-serif; }
+  a{ color:var(--primary); text-decoration:none }
+  .wrap{ max-width:1200px; margin:20px auto; padding:0 16px; }
+  .topbar{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  h1{ margin:0; line-height:1.1; }
+  h1 .sub{ font-weight:400; color:var(--muted); font-size:14px; display:block; }
+  button{ cursor:pointer; border:none; border-radius:12px; padding:10px 14px; font-weight:700; background:linear-gradient(90deg,var(--primary),var(--accent)); color:#2b1600; }
+  .btn-ghost{ background:#334155; color:#e5e7eb; border:1px solid #475569; }
+  .btn-danger{ background:#7f1d1d; color:#fff; border:1px solid var(--bad); }
+  .btn-ok{ background:#14532d; color:#d1fae5; border:1px solid #166534; }
+  input,select{ padding:10px 12px; border-radius:10px; border:1px solid rgba(255,215,0,.25); background:#0f1627; color:var(--text); }
+  input::placeholder{ color:#7e93be }
+  .muted{ color:var(--muted) }
+  .tabs{ display:flex; gap:8px; margin:14px 0; }
+  .tab{ padding:10px 14px; border-radius:12px; border:1px solid rgba(255,215,0,.2); background:#0f1627; color:var(--muted); cursor:pointer; }
+  .tab.active{ color:#2b1600; background:linear-gradient(90deg,var(--primary),var(--accent)); font-weight:700; }
+  .grid{ display:grid; gap:12px; }
+  @media(min-width:960px){ .grid.cols-3{ grid-template-columns:repeat(3,1fr); } .grid.cols-2{ grid-template-columns:repeat(2,1fr);} }
+  .card{ background:var(--card); border:1px solid rgba(255,215,0,.16); border-radius:16px; padding:14px; box-shadow:0 10px 34px rgba(0,0,0,.35); }
+  .kpi{ display:flex; flex-direction:column; gap:6px; }
+  .kpi .title{ color:var(--muted); font-size:13px; }
+  .kpi .value{ font-size:32px; font-weight:800; color:var(--primary); }
+  .row{ display:flex; gap:10px; flex-wrap:wrap; }
+  table{ width:100%; border-collapse:collapse; font-size:13px; }
+  th,td{ text-align:left; padding:8px 10px; border-bottom:1px dashed rgba(255,215,0,.15); }
+  .tag{ background:var(--ok); color:#052e16; padding:2px 8px; border-radius:999px; font-weight:700; font-size:12px; }
+  .hl{ color:var(--primary) }
+  .toolbar{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+  .hidden{ display:none !important; }
+  .toast{ position:fixed; bottom:16px; left:50%; transform:translateX(-50%); background:#111827; color:#fff; border:1px solid #374151; padding:10px 14px; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,.45); display:none; z-index:9999; }
+  .err{ background:#7f1d1d; border:1px solid var(--bad); color:#fff; padding:10px 12px; border-radius:10px; margin:10px 0; display:none; }
+  .hint{ font-size:12px; color:var(--muted); }
+  .pill{ font-size:12px; background:#0f172a; border:1px solid #1f2937; color:#cbd5e1; padding:4px 8px; border-radius:999px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <h1>RR365 • Admin Dashboard <span class="sub">v2 single‑file</span></h1>
+    <div class="toolbar">
+      <span id="curApi" class="pill"></span>
+      <button id="btnRefresh" class="btn-ghost">รีเฟรช</button>
+      <button id="btnLogout">ออกจากระบบ</button>
+    </div>
+  </div>
 
+  <!-- LOGIN CARD -->
+  <div id="loginCard" class="card">
+    <div class="grid cols-2">
+      <div>
+        <div class="muted">API Base URL (Web App ของ Apps Script — ต้องลงท้าย <b>/exec</b>)</div>
+        <input id="apiBase" placeholder="เช่น https://script.google.com/macros/s/XXXXX/exec" style="width:100%; margin-top:6px;">
+      </div>
+      <div>
+        <div class="muted">Admin Token (Script Properties → ADMIN_TOKEN)</div>
+        <div class="row" style="margin-top:6px; align-items:center;">
+          <input id="adminToken" placeholder="วาง ADMIN_TOKEN" style="flex:1;">
+          <button id="btnLogin" style="min-width:140px;">เข้าสู่ระบบ</button>
+        </div>
+        <div class="row" style="margin-top:8px; align-items:center;">
+          <label class="hint"><input type="checkbox" id="remember"> จำค่าไว้ในเครื่องนี้</label>
+          <span class="hint">• สามารถใส่ผ่าน URL ได้: <span class="pill">?api=...&token=...</span></span>
+        </div>
+      </div>
+    </div>
+    <div id="loginErr" class="err"></div>
+  </div>
+
+  <!-- APP CONTENT -->
+  <div id="app" class="hidden">
+    <div class="tabs">
+      <div class="tab active" data-tab="overview">ภาพรวม</div>
+      <div class="tab" data-tab="search">ค้นหา</div>
+      <div class="tab" data-tab="codes">โค้ด</div>
+      <div class="tab" data-tab="settings">ตั้งค่า</div>
+    </div>
+
+    <!-- OVERVIEW -->
+    <section id="tab-overview">
+      <div class="grid cols-3">
+        <div class="card kpi"><div class="title">เล่นวันนี้</div><div id="kpi-plays" class="value">0</div></div>
+        <div class="card kpi"><div class="title">ได้เลข <span id="winNum" class="hl">-</span> วันนี้</div><div id="kpi-wins" class="value">0</div></div>
+        <div class="card kpi"><div class="title">อัตราชนะวันนี้</div><div id="kpi-rate" class="value">0.0%</div></div>
+      </div>
+      <div class="grid cols-2" style="margin-top:12px;">
+        <div class="card">
+          <div class="muted" style="margin-bottom:6px;">จำนวนการเล่นรายชั่วโมง (วันนี้)</div>
+          <canvas id="chartHour" height="160"></canvas>
+        </div>
+        <div class="card">
+          <div class="toolbar">
+            <input id="q" placeholder="ค้นหา: วันที่(yyyy-mm-dd)/เบอร์(มาสก์)/โค้ด/เลขที่ได้" style="flex:1">
+            <button id="btnSearch" class="btn-ghost">ค้นหา</button>
+          </div>
+          <div style="max-height:320px; overflow:auto; margin-top:8px;">
+            <table id="tblSearch"><thead><tr><th>เวลา</th><th>เบอร์</th><th>เลข</th><th>โค้ด</th><th>สถานะ</th><th></th></tr></thead><tbody></tbody></table>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:12px;">
+        <div class="toolbar">
+          <div style="font-weight:700">ล่าสุด 50 รายการ</div>
+          <div style="margin-left:auto" class="row">
+            <input id="exportDate" type="date">
+            <button id="btnExport" class="btn-ghost">Export CSV</button>
+          </div>
+        </div>
+        <div style="max-height:360px; overflow:auto; margin-top:8px;">
+          <table id="tblLatest"><thead><tr><th>เวลา</th><th>เบอร์</th><th>เลข</th><th>โค้ด</th><th>สถานะ</th><th></th></tr></thead><tbody></tbody></table>
+        </div>
+      </div>
+      <div id="appErr" class="err"></div>
+    </section>
+
+    <!-- SEARCH STANDALONE -->
+    <section id="tab-search" class="hidden">
+      <div class="card">
+        <div class="toolbar">
+          <input id="q2" placeholder="เช่น 2025-01-02 หรือ RRxxxx หรือ 06x-xxx-xx" style="flex:1">
+          <button id="btnSearch2">ค้นหา</button>
+        </div>
+        <div style="max-height:520px; overflow:auto; margin-top:8px;">
+          <table id="tblSearch2"><thead><tr><th>เวลา</th><th>เบอร์</th><th>เลข</th><th>โค้ด</th><th>สถานะ</th><th></th></tr></thead><tbody></tbody></table>
+        </div>
+      </div>
+    </section>
+
+    <!-- CODES -->
+    <section id="tab-codes" class="hidden">
+      <div class="card">
+        <div class="toolbar"><strong>สร้างโค้ดเดี่ยว</strong></div>
+        <div class="row" style="margin-top:8px;">
+          <input id="codeManual" placeholder="ระบุโค้ดเอง (ว่าง=สุ่ม)" style="flex:1; min-width:240px;">
+          <input id="codePrefix" value="RR" placeholder="Prefix" style="width:120px">
+          <input id="codeLen" value="8" placeholder="ความยาวสุ่ม" style="width:120px">
+          <input id="codeMax" value="1" placeholder="ใช้ได้/โค้ด" style="width:160px">
+          <input id="codeExp" type="datetime-local" style="width:220px">
+          <input id="codeOwner" placeholder="ผู้รับผิดชอบ" style="width:180px">
+          <input id="codeNote" placeholder="หมายเหตุ" style="width:220px">
+          <button id="btnCreateCode">สร้างโค้ด</button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:12px;">
+        <div class="toolbar"><strong>สร้างโค้ดเป็นชุด</strong></div>
+        <div class="row" style="margin-top:8px;">
+          <input id="bulkPrefix" value="RR" placeholder="Prefix" style="width:120px">
+          <input id="bulkLen" value="8" placeholder="ความยาวสุ่ม" style="width:120px">
+          <input id="bulkCount" value="50" placeholder="จำนวน (≤500)" style="width:160px">
+          <input id="bulkMax" value="1" placeholder="ใช้ได้/โค้ด" style="width:160px">
+          <input id="bulkExp" type="datetime-local" style="width:220px">
+          <input id="bulkOwner" placeholder="ผู้รับผิดชอบ" style="width:180px">
+          <input id="bulkNote" placeholder="หมายเหตุ" style="width:220px">
+          <button id="btnBulkCode">สร้างชุด</button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:12px;">
+        <div class="toolbar">
+          <strong>รายการโค้ด</strong>
+          <span class="hint">คลิก “เปิด/ปิด” เพื่อสลับสถานะ • กด “คัดลอก” เพื่อคัดลอก</span>
+        </div>
+        <div style="max-height:480px; overflow:auto; margin-top:8px;">
+          <table id="tblCodes"><thead><tr><th>โค้ด</th><th>สถานะ</th><th>ใช้/ได้</th><th>หมดอายุ</th><th>Owner</th><th>Note</th><th></th></tr></thead><tbody></tbody></table>
+        </div>
+      </div>
+      <div id="codesErr" class="err"></div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section id="tab-settings" class="hidden">
+      <div class="card">
+        <div class="grid cols-2">
+          <div>
+            <div class="muted">API Base URL</div>
+            <input id="setApi" style="width:100%; margin-top:6px;">
+          </div>
+          <div>
+            <div class="muted">Admin Token</div>
+            <input id="setTok" style="width:100%; margin-top:6px;" type="password" placeholder="••••••">
+          </div>
+        </div>
+        <div class="row" style="margin-top:10px;">
+          <button id="btnSaveCfg" class="btn-ok">บันทึก</button>
+          <button id="btnClearCfg" class="btn-danger">ล้างค่าที่จำไว้</button>
+          <span class="hint">รีเฟรชหน้าเพื่อโหลดค่าที่บันทึก</span>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+<div id="toast" class="toast"></div>
+
+<script>
+// ===== Session & Config =====
+const SKEY='rr365_admin_cfg_v2';
+function getCfg(){ const s=sessionStorage.getItem(SKEY)||localStorage.getItem(SKEY); try{ return s?JSON.parse(s):null }catch{ return null } }
+function setCfg(o,remember){ const s=JSON.stringify(o||{}); sessionStorage.setItem(SKEY,s); if(remember) localStorage.setItem(SKEY,s); else localStorage.removeItem(SKEY); }
+function toast(msg,ms=1500){ const t=document.getElementById('toast'); t.textContent=msg; t.style.display='block'; setTimeout(()=>t.style.display='none',ms); }
+function showErr(id,msg){ const el=document.getElementById(id); if(!el) return; el.textContent=msg||''; el.style.display=msg?'block':'none'; }
+
+// ===== Tabs =====
+function activeTab(name){ document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active', x.dataset.tab===name));
+  ['overview','search','codes','settings'].forEach(id=>{ document.getElementById('tab-'+id).classList.toggle('hidden', id!==name); }); }
+
+document.querySelectorAll('.tab').forEach(t=> t.onclick=()=> activeTab(t.dataset.tab));
+
+// ===== Login Flow =====
+function showApp(){ document.getElementById('loginCard').classList.add('hidden'); document.getElementById('app').classList.remove('hidden'); }
+function showLogin(){ document.getElementById('loginCard').classList.remove('hidden'); document.getElementById('app').classList.add('hidden'); }
+
+// ===== API Helper (ส่ง token ผ่าน query param เสมอ) =====
+async function api(path, params={}){
+  const cfg=getCfg(); if(!cfg) throw new Error('NO_CFG');
+  const url=new URL(cfg.api); url.searchParams.set('mode',path); url.searchParams.set('token', cfg.tok);
+  for(const [k,v] of Object.entries(params)) if(v!==undefined && v!==null) url.searchParams.set(k, v);
+  const res=await fetch(url.toString(), { cache:'no-store' });
+  if(path==='admin_export_csv') return res; // blob
+  const ct=(res.headers.get('content-type')||'').toLowerCase(); if(!ct.includes('application/json')) throw new Error('BAD_RESPONSE');
+  const data=await res.json(); if(data && data.error==='UNAUTHORIZED') throw new Error('UNAUTH'); return data;
+}
+
+function fmt(d){ const t=new Date(d); return t.toLocaleString('th-TH'); }
+
+// ===== Overview: Stats & Latest =====
+let chartHour;
+function renderHour(perHour){ const labels=[...Array(24)].map((_,i)=>String(i).padStart(2,'0')+':00'); const data=labels.map((_,i)=>Number(perHour[String(i).padStart(2,'0')]||0)); chartHour&&chartHour.destroy(); chartHour=new Chart(document.getElementById('chartHour'),{type:'bar',data:{labels,datasets:[{label:'เล่น/ชม.',data}]},options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{precision:0}}}}}); }
+function fillTable(tbody,items){ tbody.innerHTML=''; items.forEach(it=>{ const tr=document.createElement('tr'); const iso=new Date(it.ts).toISOString(); tr.innerHTML=`<td>${fmt(it.ts||it.date)}</td><td>${it.phone}</td><td>${it.reward}</td><td>${it.code||''}</td><td>${it.claimed?'<span class=tag>เคลมแล้ว</span>':'-'}</td><td><button class="btn-ghost" data-ts="${iso}" data-claimed="${!it.claimed}">${it.claimed?'ยกเลิกเคลม':'มาร์กเคลม'}</button></td>`; tbody.appendChild(tr); }); tbody.querySelectorAll('button[data-ts]').forEach(btn=>btn.onclick=async()=>{ btn.disabled=true; try{ const ts=btn.getAttribute('data-ts'); const claimed=btn.getAttribute('data-claimed')==='true'; const r=await api('admin_mark_claim',{ts,claimed}); if(r.ok){ await loadStats(); if(document.getElementById('q').value) await doSearch(); if(document.getElementById('q2').value) await doSearch2(); toast('อัปเดตแล้ว'); } }finally{ btn.disabled=false; } }); }
+
+async function loadStats(){ showErr('appErr',''); const r=await api('admin_stats'); if(!r.ok) throw new Error('STATS_FAIL'); document.getElementById('kpi-plays').textContent=r.todayPlays; document.getElementById('kpi-wins').textContent=r.todayWins; document.getElementById('kpi-rate').textContent=(r.todayPlays?(r.todayWins*100/r.todayPlays):0).toFixed(1)+'%'; document.getElementById('winNum').textContent=r.winNumber; renderHour(r.perHour||{}); fillTable(document.querySelector('#tblLatest tbody'), r.latest||[]); }
+async function doSearch(){ const q=document.getElementById('q').value.trim(); const r=await api('admin_search',{q}); if(r.ok) fillTable(document.querySelector('#tblSearch tbody'), r.items||[]); }
+async function doSearch2(){ const q=document.getElementById('q2').value.trim(); const r=await api('admin_search',{q}); if(r.ok) fillTable(document.querySelector('#tblSearch2 tbody'), r.items||[]); }
+
+document.getElementById('btnSearch').onclick=doSearch; document.getElementById('btnSearch2').onclick=doSearch2;
+
+document.getElementById('btnExport').onclick=async()=>{ try{ const d=document.getElementById('exportDate').value||new Date().toISOString().slice(0,10); const res=await api('admin_export_csv',{date:d}); const blob=await res.blob(); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`plays_${d}.csv`; a.click(); }catch{ showErr('appErr','Export ไม่สำเร็จ'); } };
+
+// ===== Codes =====
+async function apiCodesList(){ return api('admin_codes_list'); }
+async function apiCodeCreate(obj){ const p={ code:obj.code, prefix:obj.prefix, len:obj.len, max_uses:obj.max_uses, owner:obj.owner, note:obj.note }; if(obj.expires) p.expires=obj.expires; return api('admin_codes_create',p); }
+async function apiCodeBulk(obj){ const p={ prefix:obj.prefix, len:obj.len, count:obj.count, max_uses:obj.max_uses, owner:obj.owner, note:obj.note }; if(obj.expires) p.expires=obj.expires; return api('admin_codes_bulk',p); }
+async function apiCodeToggle(code,active){ return api('admin_codes_toggle',{code,active}); }
+
+function fillCodesTable(items){ const tb=document.querySelector('#tblCodes tbody'); tb.innerHTML=''; items.forEach(it=>{ const tr=document.createElement('tr'); const exp=it.expires? new Date(it.expires).toLocaleString('th-TH'):'-'; tr.innerHTML=`<td style="font-weight:700">${it.code}</td><td>${it.active?'<span class=tag>ใช้งาน</span>':'-'}</td><td>${it.uses}/${it.max_uses}</td><td>${exp}</td><td>${it.owner||'-'}</td><td>${it.note||'-'}</td><td><button class="btn-ghost" data-act="toggle" data-code="${it.code}" data-next="${!it.active}">${it.active?'ปิดใช้งาน':'เปิดใช้งาน'}</button> <button class="btn-ghost" data-act="copy" data-code="${it.code}">คัดลอก</button></td>`; tb.appendChild(tr); }); tb.querySelectorAll('button[data-act="toggle"]').forEach(btn=>btn.onclick=async()=>{ btn.disabled=true; try{ await apiCodeToggle(btn.getAttribute('data-code'), btn.getAttribute('data-next')==='true'); await loadCodes(); toast('อัปเดตแล้ว'); }finally{ btn.disabled=false; } }); tb.querySelectorAll('button[data-act="copy"]').forEach(btn=>btn.onclick=async()=>{ await navigator.clipboard.writeText(btn.getAttribute('data-code')); toast('คัดลอกแล้ว'); }); }
+
+async function loadCodes(){ showErr('codesErr',''); const r=await apiCodesList(); if(r.ok) fillCodesTable(r.items||[]); }
+
+document.getElementById('btnCreateCode').onclick=async()=>{ showErr('codesErr',''); try{ const code=document.getElementById('codeManual').value.trim().toUpperCase(); const prefix=document.getElementById('codePrefix').value.trim(); const len=document.getElementById('codeLen').value.trim(); const max_uses=document.getElementById('codeMax').value.trim(); const exp=document.getElementById('codeExp').value? new Date(document.getElementById('codeExp').value).toISOString():''; const owner=document.getElementById('codeOwner').value.trim(); const note=document.getElementById('codeNote').value.trim(); const r=await apiCodeCreate({code,prefix,len,max_uses,expires:exp,owner,note}); if(!r.ok) throw new Error(r.error||'สร้างโค้ดไม่สำเร็จ'); await loadCodes(); toast('สร้างโค้ดสำเร็จ: '+r.code); document.getElementById('codeManual').value=''; }catch(e){ showErr('codesErr',e.message||'เกิดข้อผิดพลาด'); } };
+
+document.getElementById('btnBulkCode').onclick=async()=>{ showErr('codesErr',''); try{ const prefix=document.getElementById('bulkPrefix').value.trim(); const len=document.getElementById('bulkLen').value.trim(); const count=document.getElementById('bulkCount').value.trim(); const max_uses=document.getElementById('bulkMax').value.trim(); const exp=document.getElementById('bulkExp').value? new Date(document.getElementById('bulkExp').value).toISOString():''; const owner=document.getElementById('bulkOwner').value.trim(); const note=document.getElementById('bulkNote').value.trim(); const r=await apiCodeBulk({prefix,len,count,max_uses,expires:exp,owner,note}); if(!r.ok) throw new Error(r.error||'สร้างชุดโค้ดไม่สำเร็จ'); await loadCodes(); toast(`สร้างชุดโค้ด ${r.count} รายการ`); }catch(e){ showErr('codesErr',e.message||'เกิดข้อผิดพลาด'); } };
+
+// ===== Boot =====
+async function boot(){
+  // URL prefill
+  const u=new URLSearchParams(location.search);
+  const apiQ=u.get('api'), tokQ=u.get('token'); if(apiQ) document.getElementById('apiBase').value=apiQ; if(tokQ) document.getElementById('adminToken').value=tokQ;
+  // Existing cfg
+  const cfg=getCfg(); if(cfg){ document.getElementById('curApi').textContent=cfg.api; showApp(); await Promise.all([loadStats(), loadCodes()]).catch(()=>{}); setInterval(()=>loadStats().catch(()=>{}), 30000); }
+}
+
+// Login/Logout buttons
+ document.getElementById('btnLogin').onclick=async()=>{ const api=document.getElementById('apiBase').value.trim(); const tok=document.getElementById('adminToken').value.trim(); const remember=document.getElementById('remember').checked; const err=document.getElementById('loginErr'); err.style.display='none'; if(!api||!tok){ err.textContent='กรอก API Base และ Admin Token ให้ครบ'; err.style.display='block'; return; } setCfg({api,tok}, remember); document.getElementById('curApi').textContent=api; try{ await Promise.all([loadStats(), loadCodes()]); showApp(); toast('เข้าสู่ระบบสำเร็จ'); } catch(e){ err.textContent='เข้าระบบไม่สำเร็จ: โปรดตรวจ API/Token'; err.style.display='block'; sessionStorage.removeItem(SKEY); localStorage.removeItem(SKEY); } };
+ document.getElementById('btnLogout').onclick=()=>{ sessionStorage.removeItem(SKEY); localStorage.removeItem(SKEY); showLogin(); toast('ออกจากระบบแล้ว'); };
+ document.getElementById('btnRefresh').onclick=()=>{ Promise.all([loadStats(), loadCodes()]).then(()=>toast('รีเฟรชแล้ว')).catch(()=>showErr('appErr','โหลดข้อมูลไม่สำเร็จ')); };
+
+// Settings
+ document.getElementById('btnSaveCfg').onclick=()=>{ const api=document.getElementById('setApi').value.trim(); const tok=document.getElementById('setTok').value.trim(); if(!api||!tok){ toast('กรอกค่าให้ครบ'); return; } setCfg({api,tok}, true); document.getElementById('curApi').textContent=api; toast('บันทึกแล้ว'); };
+ document.getElementById('btnClearCfg').onclick=()=>{ sessionStorage.removeItem(SKEY); localStorage.removeItem(SKEY); toast('ล้างค่าแล้ว'); };
+
+window.addEventListener('DOMContentLoaded', boot);
+</script>
+</body>
+</html>
