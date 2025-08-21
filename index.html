@@ -37,7 +37,6 @@
     .back  { background:#ffd700; transform:rotateY(180deg); }
     .back span { font-size:42px; font-weight:bold; color:#b71c1c; }
 
-    /* LeaderBoard */
     .winners{ margin:16px auto 32px; max-width:500px; background:rgba(255, 215, 0, 0.08);
       border:1px solid rgba(255, 215, 0, 0.35); border-radius:14px; box-shadow:0 0 12px rgba(255,215,0,0.2) inset; overflow:hidden; }
     .winners-head{ padding:10px 14px; background:linear-gradient(90deg, rgba(255,215,0,0.25), rgba(255,153,0,0.25));
@@ -63,9 +62,8 @@
     <img class="logo" src="https://img2.pic.in.th/pic/1735020594-1.png" alt="ร่ำรวย365">
     <h2>🂪 เปิดไพ่ลุ้นโชค | ร่ำรวย365</h2>
 
-    <!-- รหัสจากแอดมิน (1 โค้ด/1 คน) -->
-    <input type="text" id="inviteCode" placeholder="กรอกรหัสเข้าเล่น (แอดมินส่งให้)" maxlength="16" autocomplete="one-time-code">
-    <div class="hints">ใช้ได้ 1 โค้ดต่อ 1 คน • ระบบจะล็อกโค้ดกับเบอร์ของคุณ</div>
+    <input type="text" id="inviteCode" placeholder="กรอกรหัสเข้าเล่น (แอดมินส่งให้)" maxlength="20" autocomplete="one-time-code">
+    <div class="hints">ใช้ได้ 1 โค้ดต่อ 1 คน • โค้ดจะถูกล็อกหลังเปิดไพ่สำเร็จ</div>
 
     <input type="text" id="phone" placeholder="กรอกเบอร์โทรศัพท์" maxlength="10"><br>
     <button id="startBtn">เริ่มเกม</button>
@@ -79,7 +77,6 @@
     <button id="captureBtn" style="display:none;">📸 แคปหน้าจอ</button>
   </div>
 
-  <!-- ผู้โชคดีล่าสุด -->
   <div class="winners">
     <div class="winners-head">🎉 ผู้โชคดีล่าสุด (วันนี้)</div>
     <ul id="winnerList" class="winner-list"></ul>
@@ -94,19 +91,18 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <script>
-    /* ===== URL Web App ของเก่ง (เชื่อมตามที่ส่งมา) ===== */
+    /* ===== URL Web App ของเก่ง ===== */
     const scriptURL = 'https://script.google.com/macros/s/AKfycbyPfzywG1dqi9yMBcpAMthrm7Vumx-3sv6DPocYxDym22dsFPVdId6R1ig_KwSP-378/exec';
 
-    /* === ตั้งค่าเลขรางวัล = 6 และเรทชนะ === */
-    const WIN_NUMBER = 6;               // เลขรางวัล
-    const JACKPOT_INCLUDE_RATE = 0.30;  // โอกาสมีไพ่รางวัลในชุด 6 ใบ
+    const WIN_NUMBER = 6;
+    const JACKPOT_INCLUDE_RATE = 0.30;
 
-    // ต้องส่ง jackpot=6 เพื่อให้ API กรองถูก
     const WINNER_FETCH_URL = () =>
       scriptURL + '?mode=winners&day=today&jackpot=' + WIN_NUMBER + '&t=' + Date.now();
 
     const WINNER_REFRESH_MS = 30000;
     let hasFlipped = false;
+    let currentInviteCode = '';
 
     document.getElementById('startBtn').addEventListener('click', startGame);
 
@@ -117,11 +113,11 @@
       const code = codeRaw.toUpperCase();
 
       if (!code) { alert("กรุณากรอกรหัสเข้าเล่นจากแอดมิน"); return; }
-      if (!/^0[0-9]{9}$/.test(phone)) { alert("กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง"); return; }
+      if (!/^0[0-9]{9}$/.test(phone)) { alert("กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง (10 หลักขึ้นต้นด้วย 0)"); return; }
 
-      btn.disabled = true; const oldTxt = btn.textContent; btn.textContent = "กำลังตรวจสอบโค้ด...";
+      btn.disabled = true; const oldTxt = btn.textContent; btn.textContent = "กำลังตรวจสอบ...";
       const formData = new FormData();
-      formData.append("mode", "start");
+      formData.append("mode", "start"); // ตรวจโควตา + เช็คว่าโค้ดยังไม่ถูกใช้ (ยังไม่ล็อก)
       formData.append("phone", phone);
       formData.append("code", code);
 
@@ -132,17 +128,11 @@
         if (data.error) {
           switch (data.error) {
             case 'QUOTA_EXCEEDED':
-              alert(`วันนี้เล่นครบโควตาแล้ว (${data.playedToday}/${data.limit})`);
-              break;
+              alert(`วันนี้เล่นครบโควตาแล้ว (${data.playedToday}/${data.limit})`); break;
             case 'CODE_NOT_FOUND':
-              alert("รหัสไม่ถูกต้อง");
-              break;
+              alert("รหัสไม่ถูกต้อง"); break;
             case 'CODE_USED':
-              alert("รหัสนี้ถูกใช้ไปแล้ว");
-              break;
-            case 'CODE_LOCKED_TO_OTHER':
-              alert("รหัสนี้ถูกล็อกกับเบอร์อื่นแล้ว");
-              break;
+              alert("รหัสนี้ถูกใช้ไปแล้ว (โค้ดใช้ได้ครั้งเดียว)"); break;
             default:
               alert("เกิดข้อผิดพลาด: " + data.error);
           }
@@ -155,8 +145,9 @@
             `สิทธิ์คงเหลือวันนี้: ${left}/${data.limit || 1}`;
         }
 
-        showCards(phone);
+        currentInviteCode = code;
         try { sessionStorage.setItem('rr365_code', code); } catch {}
+        showCards(phone);
       } catch (e) {
         alert("ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้");
       } finally {
@@ -218,7 +209,7 @@
       }, 200);
     }
 
-    function flipCard(card, number, phone) {
+    async function flipCard(card, number, phone) {
       if (hasFlipped) return;
       document.getElementById('flipSound').play();
       card.classList.add("opened");
@@ -230,7 +221,7 @@
       if (number === WIN_NUMBER) {
         document.getElementById('jackpotSound').play();
         celebrateConfetti();
-        message = `🎉 เบอร์ ${phone} ได้เลข <b>${number}</b><br>ขอแสดงความยินดีกับคุณพี่นะคะ 🎉<br>📸 กรุณาแคปหน้าจอ แล้วแจ้งรับรางวัลกับแอดมินได้เลยค่ะ`;
+        message = `🎉 เบอร์ ${phone} ได้เลข <b>${number}</b><br>📸 แคปหน้าจอเพื่อยืนยันสิทธิ์กับแอดมินได้เลยค่ะ`;
         pushWinnerImmediate({phone, reward: WIN_NUMBER, ts: Date.now()});
       } else {
         message = `😢 เบอร์ ${phone} ได้เลข <b>${number}</b><br>โอกาสยังมี มาใหม่รอบหน้าได้เลยค่ะ`;
@@ -239,10 +230,24 @@
       document.getElementById("rewardDisplay").innerHTML = `<div class='reward-text'>${message}</div>`;
       document.getElementById("captureBtn").style.display = "inline-block";
 
-      const formData = new FormData();
-      formData.append("phone", phone);
-      formData.append("reward", number);
-      fetch(scriptURL, { method: 'POST', body: formData }).catch(()=>{});
+      // ส่งผล + ล็อกโค้ด (หลังเปิดไพ่สำเร็จ)
+      try {
+        const formData = new FormData();
+        formData.append("phone", phone);
+        formData.append("reward", number);
+        formData.append("code", currentInviteCode || document.getElementById('inviteCode').value.trim().toUpperCase());
+        const res = await fetch(scriptURL, { method: 'POST', body: formData });
+        const data = await res.json().catch(()=>({ok:true}));
+        if (data && data.error) {
+          alert(
+            data.error === 'CODE_USED' ? 'โค้ดนี้ถูกใช้ไปแล้ว กรุณาขอรหัสใหม่จากแอดมิน' :
+            data.error === 'CODE_NOT_FOUND' ? 'ไม่พบโค้ด กรุณาตรวจสอบกับแอดมิน' :
+            'บันทึกผลไม่สำเร็จ กรุณาแจ้งแอดมิน'
+          );
+        }
+      } catch (e) {
+        console.warn('save error', e);
+      }
     }
 
     document.getElementById("captureBtn").addEventListener("click", () => {
@@ -323,10 +328,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', ()=>{
-      try {
-        const s = sessionStorage.getItem('rr365_code');
-        if (s) document.getElementById('inviteCode').value = s;
-      } catch {}
+      try { const s = sessionStorage.getItem('rr365_code'); if (s) { currentInviteCode = s; document.getElementById('inviteCode').value = s; } } catch {}
       loadWinners();
       setInterval(loadWinners, WINNER_REFRESH_MS);
     });
