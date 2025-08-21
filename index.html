@@ -7,22 +7,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@700&display=swap" rel="stylesheet">
   <style>
     html, body { margin:0; padding:0; height:100%; font-family:'Sarabun',sans-serif; overflow-x:hidden; }
-    body { background: linear-gradient(-45deg, #ffcc00, #ff9900, #ffd700, #fff4c2);
-           background-size: 400% 400%; animation: gradientMove 15s ease infinite; }
+    body { background: linear-gradient(-45deg, #ffcc00, #ff9900, #ffd700, #fff4c2); background-size: 400% 400%; animation: gradientMove 15s ease infinite; }
     @keyframes gradientMove { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
     #particles-js { position:fixed; width:100%; height:100%; z-index:0; }
 
     .promo-banner { text-align:center; margin:20px auto 10px; z-index:2; position:relative; }
     .promo-banner img { max-width:90%; border-radius:14px; box-shadow:0 6px 16px rgba(0,0,0,0.4); }
 
-    .container { position:relative; z-index:1; text-align:center; color:#fff8dc;
-      background:rgba(0,0,0,0.4); padding:20px; border-radius:18px;
-      box-shadow:0 0 15px rgba(255,215,0,0.5); max-width:500px; margin:0 auto 16px; }
+    .container { position:relative; z-index:1; text-align:center; color:#fff8dc; background:rgba(0,0,0,0.4); padding:20px; border-radius:18px; box-shadow:0 0 15px rgba(255,215,0,0.5); max-width:520px; margin:0 auto 16px; }
     .logo { width:150px; margin-bottom:16px; filter:drop-shadow(2px 2px 4px #000); }
     h2 { font-size:26px; color:#ffd700; text-shadow:0 0 5px #fff, 0 0 12px #ff9900; }
 
-    input, button { padding:12px; font-size:16px; border-radius:10px; margin-bottom:8px;
-      width:90%; max-width:300px; box-shadow:0 2px 6px rgba(0,0,0,0.2); }
+    input, button { padding:12px; font-size:16px; border-radius:10px; margin-bottom:8px; width:90%; max-width:340px; box-shadow:0 2px 6px rgba(0,0,0,0.2); }
     input { border:2px solid #ffcc00; color:#5a2e00; font-weight:bold; text-align:center; }
     button { background:linear-gradient(to right,#ffd700,#ff9900); color:#3b1c00; font-weight:bold; border:none; cursor:pointer; }
 
@@ -30,25 +26,25 @@
     .card { width:90px; height:130px; perspective:1000px; position:relative; }
     .inner-card { width:100%; height:100%; transition:transform 0.8s; transform-style:preserve-3d; position:relative; }
     .card.opened .inner-card { transform: rotateY(180deg); }
-    .front, .back { position:absolute; width:100%; height:100%; border-radius:12px; backface-visibility:hidden;
-      display:flex; align-items:center; justify-content:center; font-size:32px; font-weight:bold;
-      border:3px solid gold; box-shadow:0 4px 10px rgba(0,0,0,0.3); }
+    .front, .back { position:absolute; width:100%; height:100%; border-radius:12px; backface-visibility:hidden; display:flex; align-items:center; justify-content:center; font-size:32px; font-weight:bold; border:3px solid gold; box-shadow:0 4px 10px rgba(0,0,0,0.3); }
     .front { background:#fff8dc; color:#b71c1c; }
     .back  { background:#ffd700; transform:rotateY(180deg); }
     .back span { font-size:42px; font-weight:bold; color:#b71c1c; }
 
-    /* LeaderBoard */
-    .winners{ margin:16px auto 32px; max-width:500px; background:rgba(255, 215, 0, 0.08);
-      border:1px solid rgba(255, 215, 0, 0.35); border-radius:14px; box-shadow:0 0 12px rgba(255,215,0,0.2) inset; overflow:hidden; }
-    .winners-head{ padding:10px 14px; background:linear-gradient(90deg, rgba(255,215,0,0.25), rgba(255,153,0,0.25));
-      color:#ffd700; font-weight:bold; letter-spacing:0.3px; display:flex; align-items:center; gap:8px; }
+    /* Leaderboard */
+    .winners{ margin:16px auto 32px; max-width:520px; background:rgba(255, 215, 0, 0.08); border:1px solid rgba(255, 215, 0, 0.35); border-radius:14px; box-shadow:0 0 12px rgba(255,215,0,0.2) inset; overflow:hidden; }
+    .winners-head{ padding:10px 14px; background:linear-gradient(90deg, rgba(255,215,0,0.25), rgba(255,153,0,0.25)); color:#ffd700; font-weight:bold; letter-spacing:0.3px; display:flex; align-items:center; gap:8px; }
     .winner-list{ list-style:none; margin:0; padding:8px 12px; max-height:180px; overflow:auto; }
-    .winner-list li{ display:flex; justify-content:space-between; align-items:center;
-      color:#fff8dc; padding:8px 6px; border-bottom:1px dashed rgba(255,215,0,0.15); font-size:15px; }
-    .winner-list li .badge{ background:#22c55e; color:#0b2a0f; font-weight:bold; font-size:12px;
-      padding:4px 8px; border-radius:999px; box-shadow:0 0 8px rgba(34,197,94,0.4); }
+    .winner-list li{ display:flex; justify-content:space-between; align-items:center; color:#fff8dc; padding:8px 6px; border-bottom:1px dashed rgba(255,215,0,0.15); font-size:15px; }
+    .winner-list li .badge{ background:#22c55e; color:#0b2a0f; font-weight:bold; font-size:12px; padding:4px 8px; border-radius:999px; box-shadow:0 0 8px rgba(34,197,94,0.4); }
     .winner-list li .time{ opacity:0.85; font-size:12px; margin-left:10px; }
     .empty{ padding:10px 14px; color:#fff; opacity:.85; }
+
+    .pdpa { font-size:12px; color:#fff8dc; opacity:.9; margin-top:10px; }
+    .ask-admin { display:inline-block; margin:6px 0 10px; color:#fff8dc; text-decoration:underline; }
+
+    .error { max-width:520px; margin:0 auto 12px; background:rgba(190,0,0,.15); border:1px solid rgba(190,0,0,.35); color:#fff; padding:10px 14px; border-radius:12px; display:none; }
+    .error b{ color:#fff }
   </style>
 </head>
 <body>
@@ -58,11 +54,16 @@
     <img src="https://img5.pic.in.th/file/secure-sv1/photo_--_--72c7c95c2df97877.jpg" alt="โปรโมชั่นเปิดไพ่รับโชค">
   </div>
 
+  <div id="errBox" class="error"></div>
+
   <div class="container">
     <img class="logo" src="https://img2.pic.in.th/pic/1735020594-1.png" alt="ร่ำรวย365">
     <h2>🂪 เปิดไพ่ลุ้นโชค | ร่ำรวย365</h2>
 
     <input type="text" id="phone" placeholder="กรอกเบอร์โทรศัพท์" maxlength="10"><br>
+    <input type="text" id="adminCode" placeholder="ใส่รหัสจากแอดมิน" maxlength="16"><br>
+    <a id="askAdmin" class="ask-admin" href="https://t.me/YourAdminHandle" target="_blank">ทักหาแอดมินเพื่อขอรหัส</a>
+
     <button id="startBtn">เริ่มเกม</button>
     <div id="quotaInfo"></div>
 
@@ -72,6 +73,7 @@
     </div>
 
     <button id="captureBtn" style="display:none;">📸 แคปหน้าจอ</button>
+    <div class="pdpa">โดยการกดเริ่มเกม คุณยินยอมให้เก็บข้อมูลที่จำเป็น (เบอร์/อุปกรณ์/สถิติการเล่น) เพื่อใช้ตรวจสิทธิ์และป้องกันการทุจริต</div>
   </div>
 
   <!-- ผู้โชคดีล่าสุด -->
@@ -89,222 +91,150 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <script>
-    /* ===== URL Web App ของบอล (ฝั่ง Apps Script) ===== */
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbwfzubJNobSGqCd3LI9i4ew4CjkzFDtjiKBjWMc6wr8hVCKD_VrPGVC_qijxxh2sgXJ/exec';
-
-    /* === ตั้งค่าเลขรางวัล = 6 และเรทชนะ === */
-    const WIN_NUMBER = 6;               // เลขรางวัล
-    const JACKPOT_INCLUDE_RATE = 0.30;  // โอกาสมีไพ่รางวัลในชุด 6 ใบ
-
-    // ต้องส่ง jackpot=6 เพื่อให้ API กรองถูก
-    const WINNER_FETCH_URL = () =>
-      scriptURL + '?mode=winners&day=today&jackpot=' + WIN_NUMBER + '&t=' + Date.now();
-
+    /* ===== ตั้งค่า ===== */
+    const ADMIN_TG_URL = 'https://t.me/YourAdminHandle'; // ← เปลี่ยนเป็น Telegram ของแอดมินคุณ
+    const scriptURL    = 'https://script.google.com/macros/s/AKfycbzpofdRjZiZ56BhaixItPMfL4gydPrl19QOewbFKxxxmHIiz6KnbfVdeBC-BmErUAMK/exec';
+    const WIN_NUMBER = 6;                 // เลขรางวัลใหญ่
+    const JACKPOT_INCLUDE_RATE = 0.30;    // โอกาสมีไพ่รางวัลในชุด 6 ใบ
     const WINNER_REFRESH_MS = 30000;
-    let hasFlipped = false;
 
-    document.getElementById('startBtn').addEventListener('click', startGame);
+    document.addEventListener('DOMContentLoaded', ()=>{
+      const a = document.getElementById('askAdmin');
+      if (a && ADMIN_TG_URL) a.href = ADMIN_TG_URL;
+    });
 
-    async function startGame() {
-      const btn = document.getElementById('startBtn');
-      const phone = document.getElementById("phone").value.trim();
-      if (!/^0[0-9]{9}$/.test(phone)) { alert("กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง"); return; }
+    /* ===== Error helper ===== */
+    function showErr(msg){ const box=document.getElementById('errBox'); if(!box) return alert(msg); box.innerHTML = '<b>เกิดข้อผิดพลาด:</b> '+(msg||'ไม่ทราบสาเหตุ'); box.style.display='block'; setTimeout(()=>{box.style.display='none';}, 8000); }
 
-      btn.disabled = true; const oldTxt = btn.textContent; btn.textContent = "กำลังตรวจสอบ...";
-      const formData = new FormData(); formData.append("phone", phone);
-
-      try {
-        const res = await fetch(scriptURL, { method: 'POST', body: formData });
-        const data = await res.json();
-        if (data.error) { alert("เกิดข้อผิดพลาด: " + data.error); return; }
-
-        if (typeof data.limit !== 'undefined') {
-          const left = Math.max(0, (data.limit || 1) - (data.playedToday || 0));
-          document.getElementById('quotaInfo').textContent =
-            `สิทธิ์คงเหลือวันนี้: ${left}/${data.limit || 1}`;
-        }
-
-        if (data.alreadyPlayed) {
-          alert(`วันนี้เล่นครบโควตาแล้ว (${data.playedToday}/${data.limit})`);
-          return;
-        }
-        showCards(phone);
-      } catch {
-        alert("ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้");
-      } finally {
-        btn.disabled = false; btn.textContent = oldTxt;
+    /* ===== Simple call แบบ GET (เลี่ยง CORS) ===== */
+    async function callAPI(params){
+      const url = scriptURL + '?' + new URLSearchParams(params).toString();
+      const res = await fetch(url, { method:'GET', cache:'no-store' });
+      if (!res.ok) throw new Error('HTTP '+res.status+' '+res.statusText);
+      const ct = (res.headers.get('content-type')||'').toLowerCase();
+      if (!ct.includes('application/json')){
+        const txt = await res.text();
+        throw new Error('ไม่ใช่ JSON (ตรวจ Deploy/Anyone): '+txt.slice(0,140));
       }
+      return res.json();
     }
 
-    function showCards(phone) {
-      hasFlipped = false;
-      document.getElementById("cards").innerHTML = "";
-      document.getElementById("rewardDisplay").innerHTML = "";
-      document.getElementById("captureBtn").style.display = "none";
+    /* ===== Helpers: device/session ===== */
+    function getDeviceId(){ let id = localStorage.getItem('rr365_device'); if (!id) { id = (crypto.randomUUID ? crypto.randomUUID() : String(Math.random()).slice(2)); localStorage.setItem('rr365_device', id); } return id; }
+    function getSession(){ return localStorage.getItem('rr365_session') || ''; }
+    function setSession(tok){ localStorage.setItem('rr365_session', tok); }
 
-      // ชุดฐาน 6 ใบ (ไม่มี 6 ก่อน) แล้วสุ่มใส่ไพ่รางวัล = 6 ตามเรท
-      let numbers = [1, 2, 3, 4, 5, 5];
-      if (Math.random() < JACKPOT_INCLUDE_RATE) {
-        const idx = Math.floor(Math.random() * numbers.length);
-        numbers[idx] = WIN_NUMBER;
+    /* ===== Verify Admin Code (โค้ดต่อคน) ===== */
+    async function verifyAdminCode(phone, code){
+      const data = await callAPI({ mode:'verify_admin_code', phone, code, deviceId: getDeviceId() });
+      if (!data.ok || !data.session) throw new Error(data.error || 'รหัสไม่ถูกต้อง');
+      setSession(data.session); return true;
+    }
+
+    async function loadQuotaThenShow(phone){
+      const data = await callAPI({ mode:'quota', phone, deviceId: getDeviceId(), session: getSession() });
+      if (data.error) throw new Error(data.error);
+      if (typeof data.limit !== 'undefined'){
+        const left = Math.max(0, (data.limit||1) - (data.playedToday||0));
+        document.getElementById('quotaInfo').textContent = `สิทธิ์คงเหลือวันนี้: ${left}/${data.limit || 1}`;
       }
+      if (data.alreadyPlayed) throw new Error(`วันนี้เล่นครบโควตาแล้ว (${data.playedToday}/${data.limit})`);
+      showCards(phone);
+    }
+
+    document.getElementById('startBtn').addEventListener('click', startGame);
+    async function startGame(){
+      const btn = document.getElementById('startBtn');
+      const phone = document.getElementById('phone').value.trim();
+      const code  = document.getElementById('adminCode').value.trim();
+      if (!/^0[0-9]{9}$/.test(phone)) { showErr('กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง'); return; }
+      if (!code) { showErr('กรุณากรอกรหัสจากแอดมินก่อน'); return; }
+      btn.disabled = true; const oldTxt = btn.textContent; btn.textContent = 'กำลังตรวจสอบรหัส...';
+      try{ await verifyAdminCode(phone, code); await loadQuotaThenShow(phone); }
+      catch(e){ console.error(e); showErr(e.message || 'เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ (ตรวจ Deploy/Anyone/URL)'); }
+      finally{ btn.disabled = false; btn.textContent = oldTxt; }
+    }
+
+    /* ===== เกมเปิดไพ่ ===== */
+    let hasFlipped = false;
+    function showCards(phone){
+      hasFlipped = false;
+      document.getElementById('cards').innerHTML = '';
+      document.getElementById('rewardDisplay').innerHTML = '';
+      document.getElementById('captureBtn').style.display = 'none';
+      let numbers = [1,2,3,4,5,5];
+      if (Math.random() < JACKPOT_INCLUDE_RATE) numbers[Math.floor(Math.random()*numbers.length)] = WIN_NUMBER;
       numbers = shuffleArray(numbers);
-
       numbers.forEach(num => {
-        const wrapper = document.createElement("div");
-        wrapper.className = "card";
-
-        const inner = document.createElement("div");
-        inner.className = "inner-card";
-
-        const front = document.createElement("div");
-        front.className = "front"; front.textContent = "?";
-
-        const back = document.createElement("div");
-        back.className = "back";
-
-        const label = document.createElement("span");
-        label.textContent = num;
-
-        back.appendChild(label);
-        inner.appendChild(front); inner.appendChild(back);
-        wrapper.appendChild(inner);
-
+        const wrapper = document.createElement('div'); wrapper.className = 'card';
+        const inner = document.createElement('div'); inner.className = 'inner-card';
+        const front = document.createElement('div'); front.className = 'front'; front.textContent = '?';
+        const back  = document.createElement('div'); back.className  = 'back';
+        const label = document.createElement('span'); label.textContent = num; back.appendChild(label);
+        inner.appendChild(front); inner.appendChild(back); wrapper.appendChild(inner);
         wrapper.onclick = () => flipCard(wrapper, num, phone);
-        document.getElementById("cards").appendChild(wrapper);
+        document.getElementById('cards').appendChild(wrapper);
       });
     }
 
-    function celebrateConfetti() {
-      const duration = 2000;
-      const end = Date.now() + duration;
-      const defaults = { startVelocity: 35, spread: 360, ticks: 60, zIndex: 9999 };
-      const iv = setInterval(() => {
-        const timeLeft = end - Date.now();
-        if (timeLeft <= 0) return clearInterval(iv);
-        if (window.confetti) {
-          window.confetti(Object.assign({}, defaults, {
-            particleCount: 80 * (timeLeft / duration),
-            origin: { x: Math.random(), y: Math.random() - 0.2 }
-          }));
-        }
-      }, 200);
-    }
-
-    function flipCard(card, number, phone) {
-      if (hasFlipped) return;
+    function flipCard(card, number, phone){
+      if (hasFlipped) return; hasFlipped = true;
       document.getElementById('flipSound').play();
-      card.classList.add("opened");
-      hasFlipped = true;
-
+      card.classList.add('opened');
       document.querySelectorAll('.card').forEach(c => c.onclick = null);
 
-      let message = "";
-      if (number === WIN_NUMBER) {
+      let message = '';
+      if (number === WIN_NUMBER){
         document.getElementById('jackpotSound').play();
         celebrateConfetti();
-        message = `🎉 เบอร์ ${phone} ได้เลข <b>${number}</b><br>ขอแสดงความยินดีกับคุณพี่นะคะ 🎉<br>📸 กรุณาแคปหน้าจอ แล้วแจ้งรับรางวัลกับแอดมินได้เลยค่ะ`;
+        message = `🎉 เบอร์ ${phone} ได้เลข <b>${number}</b><br>ยินดีด้วย!<br>📸 แคปหน้าจอ แล้วทักแอดมินเพื่อรับสิทธิ์`;
         pushWinnerImmediate({phone, reward: WIN_NUMBER, ts: Date.now()});
       } else {
-        message = `😢 เบอร์ ${phone} ได้เลข <b>${number}</b><br>โอกาสยังมี มาใหม่รอบหน้าได้เลยค่ะ`;
+        message = `😢 เบอร์ ${phone} ได้เลข <b>${number}</b><br>โอกาสยังมี กลับมาใหม่รอบหน้าได้เลย`;
       }
+      document.getElementById('rewardDisplay').innerHTML = `<div class='reward-text'>${message}</div>`;
+      document.getElementById('captureBtn').style.display = 'inline-block';
 
-      document.getElementById("rewardDisplay").innerHTML = `<div class='reward-text'>${message}</div>`;
-      document.getElementById("captureBtn").style.display = "inline-block";
-
-      const formData = new FormData();
-      formData.append("phone", phone);
-      formData.append("reward", number);
-      fetch(scriptURL, { method: 'POST', body: formData }).catch(()=>{});
+      callAPI({ mode:'play', phone, reward:number, deviceId:getDeviceId(), session:getSession() })
+        .catch(err=>console.warn('log play failed:', err.message));
     }
 
-    document.getElementById("captureBtn").addEventListener("click", () => {
-      html2canvas(document.getElementById("captureZone")).then(canvas => {
-        const link = document.createElement("a");
-        link.download = "ผลเปิดไพ่ร่ำรวย365.png";
+    document.getElementById('captureBtn').addEventListener('click', () => {
+      html2canvas(document.getElementById('captureZone')).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'ผลเปิดไพ่.png';
         link.href = canvas.toDataURL();
         link.click();
       });
     });
 
-    function shuffleArray(arr) {
-      for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-      }
-      return arr;
+    function celebrateConfetti(){
+      const duration = 2000, end = Date.now() + duration;
+      const defaults = { startVelocity:35, spread:360, ticks:60, zIndex:9999 };
+      const iv = setInterval(()=>{
+        const timeLeft = end - Date.now(); if (timeLeft<=0) return clearInterval(iv);
+        if (window.confetti) window.confetti(Object.assign({}, defaults, {
+          particleCount: 80*(timeLeft/duration), origin: {x:Math.random(), y:Math.random()-0.2}
+        }));
+      },200);
     }
+    function shuffleArray(arr){ for (let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
 
-    /* ===== LeaderBoard ===== */
-    function maskPhone(p){
-      const s = String(p||'');
-      if (/[xX]/.test(s)) return s;
-      const n = s.replace(/\D/g,'').padStart(10,'0').slice(-10);
-      return `${n.slice(0,2)}x-xxx-${n.slice(6,8)}xx`;
-    }
-    function timeAgo(ts){
-      try{
-        const t = typeof ts === 'number' ? ts : new Date(ts).getTime();
-        let diff = Math.floor((Date.now() - t)/1000);
-        if (!isFinite(diff)) diff = 0; diff = Math.max(0, diff);
-        if (diff < 60)   return `${diff} วิ`;
-        if (diff < 3600) return `${Math.floor(diff/60)} นาที`;
-        if (diff < 86400)return `${Math.floor(diff/3600)} ชม.`;
-        return `${Math.floor(diff/86400)} วัน`;
-      }catch{ return ''; }
-    }
-    function renderWinners(list){
-      const ul = document.getElementById('winnerList');
-      const empty = document.getElementById('winnerEmpty');
-      ul.innerHTML = '';
-      if (!list || list.length === 0) { empty.style.display = 'block'; return; }
-      empty.style.display = 'none';
-      list.forEach(w=>{
-        const li = document.createElement('li');
-        const left = document.createElement('div');
-        left.textContent = `${maskPhone(w.phone)} ได้เลข ${w.reward}`;
-        const right = document.createElement('div');
-        const badge = document.createElement('span'); badge.className = 'badge';
-        badge.textContent = (w.reward === WIN_NUMBER ? 'JACKPOT' : 'ผู้โชคดี');
-        const tm = document.createElement('span'); tm.className = 'time';
-        tm.textContent = `• ${timeAgo(w.ts || Date.now())} ที่แล้ว`;
-        right.appendChild(badge); right.appendChild(tm);
-        li.appendChild(left); li.appendChild(right);
-        ul.appendChild(li);
-      });
-    }
+    /* ===== Leaderboard ===== */
+    function maskPhone(p){ const s=String(p||''); if (/[xX]/.test(s)) return s; const n=s.replace(/\D/g,'').padStart(10,'0').slice(-10); return `${n.slice(0,2)}x-xxx-${n.slice(6,8)}xx`; }
+    function timeAgo(ts){ try{ const t=typeof ts==='number'?ts:new Date(ts).getTime(); let d=Math.max(0, Math.floor((Date.now()-t)/1000)); if(d<60)return `${d} วิ`; if(d<3600)return `${Math.floor(d/60)} นาที`; if(d<86400)return `${Math.floor(d/3600)} ชม.`; return `${Math.floor(d/86400)} วัน`; }catch{return ''} }
+    function renderWinners(list){ const ul=document.getElementById('winnerList'); const empty=document.getElementById('winnerEmpty'); ul.innerHTML=''; if(!list||list.length===0){ empty.style.display='block'; return;} empty.style.display='none'; list.forEach(w=>{ const li=document.createElement('li'); const left=document.createElement('div'); left.textContent=`${maskPhone(w.phone)} ได้เลข ${w.reward}`; const right=document.createElement('div'); const badge=document.createElement('span'); badge.className='badge'; badge.textContent=(w.reward===WIN_NUMBER?'JACKPOT':'ผู้โชคดี'); const tm=document.createElement('span'); tm.className='time'; tm.textContent=`• ${timeAgo(w.ts||Date.now())} ที่แล้ว`; right.appendChild(badge); right.appendChild(tm); li.appendChild(left); li.appendChild(right); ul.appendChild(li); }); }
     function saveWinnerCache(list){ try{ localStorage.setItem('rr365_winners_cache', JSON.stringify({ts:Date.now(), list})); }catch{} }
-    function loadWinnerCache(){ try{ const raw = localStorage.getItem('rr365_winners_cache'); return raw ? JSON.parse(raw).list : null; }catch{ return null; } }
+    function loadWinnerCache(){ try{ const raw=localStorage.getItem('rr365_winners_cache'); return raw?JSON.parse(raw).list:null; }catch{ return null; } }
 
-    async function fetchWinners(){
-      const res = await fetch(WINNER_FETCH_URL(), { cache:'no-store' });
-      const ct = (res.headers.get('content-type') || '').toLowerCase();
-      if (!res.ok || !ct.includes('application/json')) throw new Error('Web App ต้องตั้ง Anyone และส่ง JSON');
-      const data = await res.json();
-      if (Array.isArray(data)) { saveWinnerCache(data); return data; }
-      return [];
-    }
-    async function loadWinners(){
-      try{ renderWinners(await fetchWinners()); }
-      catch(err){ console.warn(err.message||err); const c=loadWinnerCache(); if(c) renderWinners(c); }
-    }
-    function pushWinnerImmediate(entry){
-      const cached = loadWinnerCache() || [];
-      const newList = [entry, ...cached].slice(0, 50);
-      saveWinnerCache(newList);
-      renderWinners(newList);
-    }
+    function WINNER_FETCH_URL(){ return scriptURL + '?mode=winners&day=today&jackpot=' + WIN_NUMBER + '&t=' + Date.now(); }
+    async function fetchWinners(){ const res=await fetch(WINNER_FETCH_URL(), {cache:'no-store'}); const ct=(res.headers.get('content-type')||'').toLowerCase(); if(!res.ok || !ct.includes('application/json')) throw new Error('Web App ต้องตั้ง Anyone และส่ง JSON'); const data=await res.json(); if(Array.isArray(data)){ saveWinnerCache(data); return data;} return []; }
+    async function loadWinners(){ try{ renderWinners(await fetchWinners()); } catch(err){ console.warn(err.message||err); const c=loadWinnerCache(); if(c) renderWinners(c); } }
+    function pushWinnerImmediate(entry){ const cached=loadWinnerCache()||[]; const newList=[entry,...cached].slice(0,50); saveWinnerCache(newList); renderWinners(newList); }
 
-    document.addEventListener('DOMContentLoaded', ()=>{
-      loadWinners();
-      setInterval(loadWinners, WINNER_REFRESH_MS);
-    });
+    document.addEventListener('DOMContentLoaded', ()=>{ loadWinners(); setInterval(loadWinners, WINNER_REFRESH_MS); });
 
-    particlesJS("particles-js", {
-      particles: { number:{value:60}, size:{value:4}, color:{value:"#ffd700"}, opacity:{value:0.6}, move:{speed:1.5}, line_linked:{enable:false} },
-      interactivity: { events: { onhover: { enable: false } } }
-    });
+    particlesJS('particles-js', { particles:{ number:{value:60}, size:{value:4}, color:{value:'#ffd700'}, opacity:{value:0.6}, move:{speed:1.5}, line_linked:{enable:false} }, interactivity:{ events:{ onhover:{ enable:false } } } });
   </script>
 </body>
 </html>
-
