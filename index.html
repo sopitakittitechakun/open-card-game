@@ -102,6 +102,7 @@
 
     const WINNER_REFRESH_MS = 30000;
     let hasFlipped = false;
+    let savingResult = false;        // 🔒 กันส่งผลซ้ำ
     let currentInviteCode = '';
 
     document.getElementById('startBtn').addEventListener('click', startGame);
@@ -117,7 +118,7 @@
 
       btn.disabled = true; const oldTxt = btn.textContent; btn.textContent = "กำลังตรวจสอบ...";
       const formData = new FormData();
-      formData.append("mode", "start"); // ตรวจโควตา + เช็คว่าโค้ดยังไม่ถูกใช้ (ยังไม่ล็อก)
+      formData.append("mode", "start");
       formData.append("phone", phone);
       formData.append("code", code);
 
@@ -127,28 +128,23 @@
 
         if (data.error) {
           switch (data.error) {
-            case 'QUOTA_EXCEEDED':
-              alert(`วันนี้เล่นครบโควตาแล้ว (${data.playedToday}/${data.limit})`); break;
-            case 'CODE_NOT_FOUND':
-              alert("รหัสไม่ถูกต้อง"); break;
-            case 'CODE_USED':
-              alert("รหัสนี้ถูกใช้ไปแล้ว (โค้ดใช้ได้ครั้งเดียว)"); break;
-            default:
-              alert("เกิดข้อผิดพลาด: " + data.error);
+            case 'QUOTA_EXCEEDED': alert(`วันนี้เล่นครบโควตาแล้ว (${data.playedToday}/${data.limit})`); break;
+            case 'CODE_NOT_FOUND': alert("รหัสไม่ถูกต้อง"); break;
+            case 'CODE_USED':      alert("รหัสนี้ถูกใช้ไปแล้ว (โค้ดใช้ได้ครั้งเดียว)"); break;
+            default:               alert("เกิดข้อผิดพลาด: " + data.error);
           }
           return;
         }
 
         if (typeof data.limit !== 'undefined') {
           const left = Math.max(0, (data.limit || 1) - (data.playedToday || 0));
-          document.getElementById('quotaInfo').textContent =
-            `สิทธิ์คงเหลือวันนี้: ${left}/${data.limit || 1}`;
+          document.getElementById('quotaInfo').textContent = `สิทธิ์คงเหลือวันนี้: ${left}/${data.limit || 1}`;
         }
 
         currentInviteCode = code;
         try { sessionStorage.setItem('rr365_code', code); } catch {}
         showCards(phone);
-      } catch (e) {
+      } catch {
         alert("ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้");
       } finally {
         btn.disabled = false; btn.textContent = oldTxt;
@@ -157,6 +153,8 @@
 
     function showCards(phone) {
       hasFlipped = false;
+      savingResult = false;                      // ปลดล็อกรอบใหม่
+      document.getElementById("cards").style.pointerEvents = 'auto';
       document.getElementById("cards").innerHTML = "";
       document.getElementById("rewardDisplay").innerHTML = "";
       document.getElementById("captureBtn").style.display = "none";
@@ -180,11 +178,10 @@
 
         const back = document.createElement("div");
         back.className = "back";
-
         const label = document.createElement("span");
         label.textContent = num;
-
         back.appendChild(label);
+
         inner.appendChild(front); inner.appendChild(back);
         wrapper.appendChild(inner);
 
@@ -211,11 +208,14 @@
 
     async function flipCard(card, number, phone) {
       if (hasFlipped) return;
-      document.getElementById('flipSound').play();
-      card.classList.add("opened");
       hasFlipped = true;
 
+      // 🔒 กันคลิกซ้ำ: ปิดคลิกทั้งหมดทันที
+      document.getElementById("cards").style.pointerEvents = 'none';
       document.querySelectorAll('.card').forEach(c => c.onclick = null);
+
+      document.getElementById('flipSound').play();
+      card.classList.add("opened");
 
       let message = "";
       if (number === WIN_NUMBER) {
@@ -226,22 +226,25 @@
       } else {
         message = `😢 เบอร์ ${phone} ได้เลข <b>${number}</b><br>โอกาสยังมี มาใหม่รอบหน้าได้เลยค่ะ`;
       }
-
       document.getElementById("rewardDisplay").innerHTML = `<div class='reward-text'>${message}</div>`;
       document.getElementById("captureBtn").style.display = "inline-block";
 
-      // ส่งผล + ล็อกโค้ด (หลังเปิดไพ่สำเร็จ)
+      // ส่งผล + ล็อกโค้ด (ครั้งเดียวเท่านั้น)
+      if (savingResult) return;
+      savingResult = true;
       try {
         const formData = new FormData();
         formData.append("phone", phone);
         formData.append("reward", number);
         formData.append("code", currentInviteCode || document.getElementById('inviteCode').value.trim().toUpperCase());
+
         const res = await fetch(scriptURL, { method: 'POST', body: formData });
         const data = await res.json().catch(()=>({ok:true}));
         if (data && data.error) {
           alert(
-            data.error === 'CODE_USED' ? 'โค้ดนี้ถูกใช้ไปแล้ว กรุณาขอรหัสใหม่จากแอดมิน' :
+            data.error === 'CODE_USED' ? 'โค้ดนี้ถูกใช้ไปแล้ว/มีการกดซ้ำ ระบบไม่บันทึกซ้ำ' :
             data.error === 'CODE_NOT_FOUND' ? 'ไม่พบโค้ด กรุณาตรวจสอบกับแอดมิน' :
+            data.error === 'LOCK_TIMEOUT' ? 'มีการใช้งานพร้อมกัน โค้ดนี้ถูกล็อกโดยอีกอุปกรณ์แล้ว' :
             'บันทึกผลไม่สำเร็จ กรุณาแจ้งแอดมิน'
           );
         }
@@ -268,71 +271,37 @@
     }
 
     /* ===== LeaderBoard ===== */
-    function maskPhone(p){
-      const s = String(p||'');
-      if (/[xX]/.test(s)) return s;
-      const n = s.replace(/\D/g,'').padStart(10,'0').slice(-10);
-      return `${n.slice(0,2)}x-xxx-${n.slice(6,8)}xx`;
-    }
-    function timeAgo(ts){
-      try{
-        const t = typeof ts === 'number' ? ts : new Date(ts).getTime();
-        let diff = Math.floor((Date.now() - t)/1000);
-        if (!isFinite(diff)) diff = 0; diff = Math.max(0, diff);
-        if (diff < 60)   return `${diff} วิ`;
-        if (diff < 3600) return `${Math.floor(diff/60)} นาที`;
-        if (diff < 86400)return `${Math.floor(diff/3600)} ชม.`;
-        return `${Math.floor(diff/86400)} วัน`;
-      }catch{ return ''; }
-    }
+    function maskPhone(p){ const s=String(p||''); if(/[xX]/.test(s)) return s; const n=s.replace(/\D/g,'').padStart(10,'0').slice(-10); return `${n.slice(0,2)}x-xxx-${n.slice(6,8)}xx`; }
+    function timeAgo(ts){ try{ const t=typeof ts==='number'?ts:new Date(ts).getTime(); let d=Math.max(0,Math.floor((Date.now()-t)/1000)); if(d<60) return `${d} วิ`; if(d<3600) return `${Math.floor(d/60)} นาที`; if(d<86400) return `${Math.floor(d/3600)} ชม.`; return `${Math.floor(d/86400)} วัน`; }catch{ return '';} }
     function renderWinners(list){
-      const ul = document.getElementById('winnerList');
-      const empty = document.getElementById('winnerEmpty');
-      ul.innerHTML = '';
-      if (!list || list.length === 0) { empty.style.display = 'block'; return; }
-      empty.style.display = 'none';
+      const ul=document.getElementById('winnerList'); const empty=document.getElementById('winnerEmpty');
+      ul.innerHTML=''; if(!list||list.length===0){ empty.style.display='block'; return; } empty.style.display='none';
       list.forEach(w=>{
-        const li = document.createElement('li');
-        const left = document.createElement('div');
-        left.textContent = `${maskPhone(w.phone)} ได้เลข ${w.reward}`;
-        const right = document.createElement('div');
-        const badge = document.createElement('span'); badge.className = 'badge';
-        badge.textContent = (w.reward === WIN_NUMBER ? 'JACKPOT' : 'ผู้โชคดี');
-        const tm = document.createElement('span'); tm.className = 'time';
-        tm.textContent = `• ${timeAgo(w.ts || Date.now())} ที่แล้ว`;
-        right.appendChild(badge); right.appendChild(tm);
-        li.appendChild(left); li.appendChild(right);
-        ul.appendChild(li);
+        const li=document.createElement('li');
+        const left=document.createElement('div'); left.textContent=`${maskPhone(w.phone)} ได้เลข ${w.reward}`;
+        const right=document.createElement('div');
+        const badge=document.createElement('span'); badge.className='badge'; badge.textContent=(w.reward===WIN_NUMBER?'JACKPOT':'ผู้โชคดี');
+        const tm=document.createElement('span'); tm.className='time'; tm.textContent=`• ${timeAgo(w.ts||Date.now())} ที่แล้ว`;
+        right.appendChild(badge); right.appendChild(tm); li.appendChild(left); li.appendChild(right); ul.appendChild(li);
       });
     }
     function saveWinnerCache(list){ try{ localStorage.setItem('rr365_winners_cache', JSON.stringify({ts:Date.now(), list})); }catch{} }
-    function loadWinnerCache(){ try{ const raw = localStorage.getItem('rr365_winners_cache'); return raw ? JSON.parse(raw).list : null; }catch{ return null; } }
-
+    function loadWinnerCache(){ try{ const raw=localStorage.getItem('rr365_winners_cache'); return raw?JSON.parse(raw).list:null; }catch{ return null; } }
     async function fetchWinners(){
-      const res = await fetch(WINNER_FETCH_URL(), { cache:'no-store' });
-      const ct = (res.headers.get('content-type') || '').toLowerCase();
-      if (!res.ok || !ct.includes('application/json')) throw new Error('Web App ต้องตั้ง Anyone และส่ง JSON');
-      const data = await res.json();
-      if (Array.isArray(data)) { saveWinnerCache(data); return data; }
-      return [];
+      const res=await fetch(WINNER_FETCH_URL(), { cache:'no-store' });
+      const ct=(res.headers.get('content-type')||'').toLowerCase();
+      if(!res.ok || !ct.includes('application/json')) throw new Error('Web App ต้องตั้ง Anyone และส่ง JSON');
+      const data=await res.json(); if(Array.isArray(data)){ saveWinnerCache(data); return data; } return [];
     }
-    async function loadWinners(){
-      try{ renderWinners(await fetchWinners()); }
-      catch(err){ console.warn(err.message||err); const c=loadWinnerCache(); if(c) renderWinners(c); }
-    }
-    function pushWinnerImmediate(entry){
-      const cached = loadWinnerCache() || [];
-      const newList = [entry, ...cached].slice(0, 50);
-      saveWinnerCache(newList);
-      renderWinners(newList);
-    }
+    async function loadWinners(){ try{ renderWinners(await fetchWinners()); } catch(err){ console.warn(err.message||err); const c=loadWinnerCache(); if(c) renderWinners(c); } }
+    function pushWinnerImmediate(entry){ const cached=loadWinnerCache()||[]; const newList=[entry,...cached].slice(0,50); saveWinnerCache(newList); renderWinners(newList); }
 
     document.addEventListener('DOMContentLoaded', ()=>{
-      try { const s = sessionStorage.getItem('rr365_code'); if (s) { currentInviteCode = s; document.getElementById('inviteCode').value = s; } } catch {}
-      loadWinners();
-      setInterval(loadWinners, WINNER_REFRESH_MS);
+      try { const s=sessionStorage.getItem('rr365_code'); if (s){ currentInviteCode=s; document.getElementById('inviteCode').value=s; } } catch {}
+      loadWinners(); setInterval(loadWinners, WINNER_REFRESH_MS);
     });
 
+    // BG partcles
     particlesJS("particles-js", {
       particles: { number:{value:60}, size:{value:4}, color:{value:"#ffd700"}, opacity:{value:0.6}, move:{speed:1.5}, line_linked:{enable:false} },
       interactivity: { events: { onhover: { enable: false } } }
