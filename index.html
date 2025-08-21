@@ -68,4 +68,34 @@ button { background:linear-gradient(to right,#ffd700,#ff9900); color:#3b1c00; fo
 
 <input type="text" id="phone" placeholder="กรอกเบอร์โทรศัพท์" maxlength="10"><br>
 <input type="text" id="adminCode" placeholder="ใส่รหัสจากแอดมิน (เช่น ABCD-1234)" maxlength="16"><br>
-</html>
+
+
+<button id="startBtn">เริ่มเกม</button>
+<div id="quotaInfo"></div>
+
+
+<div id="captureZone">
+<div id="cards"></div>
+<div id="rewardDisplay"></div>
+</div>
+
+
+<button id="captureBtn" style="display:none;">📸 แคปหน้าจอ</button>
+</div>
+
+
+<div class="winners">
+<div class="winners-head">🎉 ผู้โชคดีล่าสุด (วันนี้)</div>
+<ul id="winnerList" class="winner-list"></ul>
+<div id="winnerEmpty" class="empty" style="display:none;">ยังไม่มีผู้โชคดีวันนี้</div>
+</div>
+
+
+<audio id="flipSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_72b2a6d7f8.mp3" preload="auto"></audio>
+<audio id="jackpotSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_b9b19751f3.mp3" preload="auto"></audio>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+function toInt_(v,def){ v=parseInt(v,10); return isNaN(v)?def:v; }
