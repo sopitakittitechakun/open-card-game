@@ -37,8 +37,8 @@
     .back  { background:#ffd700; transform:rotateY(180deg); }
     .back span { font-size:42px; font-weight:bold; color:#b71c1c; }
 
-    .winners{ margin:16px auto 32px; max-width:500px; background:rgba(255, 215, 0, 0.08);
-      border:1px solid rgba(255, 215, 0, 0.35); border-radius:14px; box-shadow:0 0 12px rgba(255,215,0,0.2) inset; overflow:hidden; }
+    .winners{ margin:16px auto 32px; max-width:500px; background:rgba(255,215,0,0.08);
+      border:1px solid rgba(255,215,0,0.35); border-radius:14px; box-shadow:0 0 12px rgba(255,215,0,0.2) inset; overflow:hidden; }
     .winners-head{ padding:10px 14px; background:linear-gradient(90deg, rgba(255,215,0,0.25), rgba(255,153,0,0.25));
       color:#ffd700; font-weight:bold; letter-spacing:0.3px; display:flex; align-items:center; gap:8px; }
     .winner-list{ list-style:none; margin:0; padding:8px 12px; max-height:180px; overflow:auto; }
@@ -102,8 +102,13 @@
 
     const WINNER_REFRESH_MS = 30000;
     let hasFlipped = false;
-    let savingResult = false;        // 🔒 กันส่งผลซ้ำ
+    let savingResult = false;           // กันส่งผลซ้ำ
     let currentInviteCode = '';
+
+    /* ===== กันเปิดซ้ำในอุปกรณ์เดิม ===== */
+    function loadUsedCodes(){ try{ return new Set(JSON.parse(localStorage.getItem('rr365_used_codes')||'[]')); }catch{ return new Set(); } }
+    function markCodeUsed(code){ try{ const s=loadUsedCodes(); s.add(String(code||'').toUpperCase()); localStorage.setItem('rr365_used_codes', JSON.stringify([...s])); }catch{} }
+    function isCodeUsedLocally(code){ return loadUsedCodes().has(String(code||'').toUpperCase()); }
 
     document.getElementById('startBtn').addEventListener('click', startGame);
 
@@ -115,6 +120,7 @@
 
       if (!code) { alert("กรุณากรอกรหัสเข้าเล่นจากแอดมิน"); return; }
       if (!/^0[0-9]{9}$/.test(phone)) { alert("กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง (10 หลักขึ้นต้นด้วย 0)"); return; }
+      if (isCodeUsedLocally(code)) { alert("โค้ดนี้ถูกใช้ไปแล้วในอุปกรณ์นี้ กรุณาขอรหัสใหม่จากแอดมิน"); return; }
 
       btn.disabled = true; const oldTxt = btn.textContent; btn.textContent = "กำลังตรวจสอบ...";
       const formData = new FormData();
@@ -124,16 +130,14 @@
 
       try {
         const res = await fetch(scriptURL, { method: 'POST', body: formData });
-        const data = await res.json();
-
-        if (data.error) {
-          switch (data.error) {
-            case 'QUOTA_EXCEEDED': alert(`วันนี้เล่นครบโควตาแล้ว (${data.playedToday}/${data.limit})`); break;
-            case 'CODE_NOT_FOUND': alert("รหัสไม่ถูกต้อง"); break;
-            case 'CODE_USED':      alert("รหัสนี้ถูกใช้ไปแล้ว (โค้ดใช้ได้ครั้งเดียว)"); break;
-            default:               alert("เกิดข้อผิดพลาด: " + data.error);
-          }
-          return;
+        let data = null; try { data = await res.json(); } catch {}
+        if (!data || data.ok !== true) {
+          const err = data && data.error;
+          if (err === 'QUOTA_EXCEEDED') alert(`วันนี้เล่นครบโควตาแล้ว (${data.playedToday}/${data.limit})`);
+          else if (err === 'CODE_NOT_FOUND') alert("รหัสไม่ถูกต้อง");
+          else if (err === 'CODE_USED') alert("รหัสนี้ถูกใช้ไปแล้ว (โค้ดใช้ได้ครั้งเดียว)");
+          else alert("เริ่มเกมไม่สำเร็จ กรุณาลองใหม่/แจ้งแอดมิน");
+          return; // ❌ ไม่แสดงไพ่
         }
 
         if (typeof data.limit !== 'undefined') {
@@ -153,7 +157,7 @@
 
     function showCards(phone) {
       hasFlipped = false;
-      savingResult = false;                      // ปลดล็อกรอบใหม่
+      savingResult = false;
       document.getElementById("cards").style.pointerEvents = 'auto';
       document.getElementById("cards").innerHTML = "";
       document.getElementById("rewardDisplay").innerHTML = "";
@@ -210,7 +214,6 @@
       if (hasFlipped) return;
       hasFlipped = true;
 
-      // 🔒 กันคลิกซ้ำ: ปิดคลิกทั้งหมดทันที
       document.getElementById("cards").style.pointerEvents = 'none';
       document.querySelectorAll('.card').forEach(c => c.onclick = null);
 
@@ -229,28 +232,36 @@
       document.getElementById("rewardDisplay").innerHTML = `<div class='reward-text'>${message}</div>`;
       document.getElementById("captureBtn").style.display = "inline-block";
 
-      // ส่งผล + ล็อกโค้ด (ครั้งเดียวเท่านั้น)
       if (savingResult) return;
       savingResult = true;
       try {
+        const code = currentInviteCode || document.getElementById('inviteCode').value.trim().toUpperCase();
         const formData = new FormData();
         formData.append("phone", phone);
         formData.append("reward", number);
-        formData.append("code", currentInviteCode || document.getElementById('inviteCode').value.trim().toUpperCase());
+        formData.append("code", code);
 
         const res = await fetch(scriptURL, { method: 'POST', body: formData });
-        const data = await res.json().catch(()=>({ok:true}));
-        if (data && data.error) {
-          alert(
-            data.error === 'CODE_USED' ? 'โค้ดนี้ถูกใช้ไปแล้ว/มีการกดซ้ำ ระบบไม่บันทึกซ้ำ' :
-            data.error === 'CODE_NOT_FOUND' ? 'ไม่พบโค้ด กรุณาตรวจสอบกับแอดมิน' :
-            data.error === 'LOCK_TIMEOUT' ? 'มีการใช้งานพร้อมกัน โค้ดนี้ถูกล็อกโดยอีกอุปกรณ์แล้ว' :
-            'บันทึกผลไม่สำเร็จ กรุณาแจ้งแอดมิน'
-          );
+        let data = null; try { data = await res.json(); } catch {}
+
+        if (data && data.ok === true) {
+          markCodeUsed(code); disableStartAfterUsed();
+        } else {
+          const err = data && data.error;
+          if (err === 'CODE_USED') { markCodeUsed(code); disableStartAfterUsed(); alert('โค้ดนี้ถูกใช้ไปแล้ว/มีการกดซ้ำ ระบบไม่บันทึกซ้ำ'); }
+          else if (err === 'CODE_NOT_FOUND') alert('ไม่พบโค้ด กรุณาตรวจสอบกับแอดมิน');
+          else if (err === 'LOCK_TIMEOUT') alert('มีการใช้งานพร้อมกัน โค้ดนี้ถูกล็อกโดยอีกอุปกรณ์แล้ว');
+          else alert('บันทึกผลไม่สำเร็จ กรุณาแจ้งแอดมิน');
         }
       } catch (e) {
         console.warn('save error', e);
       }
+    }
+
+    function disableStartAfterUsed(){
+      const btn = document.getElementById('startBtn');
+      btn.disabled = true;
+      btn.textContent = 'โค้ดนี้ใช้แล้ว';
     }
 
     document.getElementById("captureBtn").addEventListener("click", () => {
@@ -301,7 +312,6 @@
       loadWinners(); setInterval(loadWinners, WINNER_REFRESH_MS);
     });
 
-    // BG partcles
     particlesJS("particles-js", {
       particles: { number:{value:60}, size:{value:4}, color:{value:"#ffd700"}, opacity:{value:0.6}, move:{speed:1.5}, line_linked:{enable:false} },
       interactivity: { events: { onhover: { enable: false } } }
