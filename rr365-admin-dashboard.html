@@ -19,7 +19,7 @@
   .kpi b{ display:block; font-size:30px; color:var(--primary); margin-top:6px; }
   .row{ display:flex; gap:12px; margin-top:12px; }
   .row .card{ flex:1; }
-  input,button,select{ padding:10px 12px; border-radius:10px; border:1px solid rgba(255,215,0,.25); background:#0f1627; color:var(--text); }
+  input,button{ padding:10px 12px; border-radius:10px; border:1px solid rgba(255,215,0,.25); background:#0f1627; color:var(--text); }
   input::placeholder{ color:#7e93be }
   button{ background:linear-gradient(90deg,#ffd700,#ff9900); color:#2b1600; border:none; cursor:pointer; font-weight:700; }
   table{ width:100%; border-collapse:collapse; font-size:13px; }
@@ -28,7 +28,6 @@
   .topbar{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
   .muted{ color:var(--muted); font-size:13px }
   .err{ background:#7f1d1d; border:1px solid #ef4444; color:#fff; padding:8px 10px; border-radius:10px; font-size:13px; display:none; }
-  /* Login */
   .login{ max-width:520px; margin:10vh auto; padding:20px; background:var(--card); border:1px solid rgba(255,215,0,.18); border-radius:16px; box-shadow:0 10px 40px rgba(0,0,0,.45);}
   .login h2{ margin:0 0 10px; color:var(--primary) }
   .login .g{ display:grid; gap:10px; }
@@ -40,18 +39,18 @@
 <body>
 
 <!-- LOGIN VIEW -->
-<div id="loginView" class="login" style="display:none;">
+<div id="loginView" class="login">
   <h2>เข้าสู่ระบบ • RR365 Admin</h2>
   <div class="g">
     <label>API Base URL (Web App ของ Apps Script)
-      <input id="apiBase" placeholder="เช่น https://script.google.com/macros/s/xxx/exec">
+      <input id="apiBase" placeholder="เช่น https://script.google.com/macros/s/XXXXX/exec">
     </label>
     <label>Admin Token
       <input id="adminToken" placeholder="วาง ADMIN_TOKEN ที่ตั้งใน Script Properties">
     </label>
     <label class="split">
       <span><input type="checkbox" id="remember"> จำค่าไว้ในเครื่องนี้</span>
-      <span class="muted" style="margin-left:auto;">* เก็บใน session/localStorage</span>
+      <span class="muted" style="margin-left:auto;">* ไม่แนะนำฝัง token ลงไฟล์เมื่อโฮสต์สาธารณะ</span>
     </label>
     <div class="right">
       <button id="btnLogin">เข้าสู่ระบบ</button>
@@ -109,11 +108,10 @@
       </div>
     </div>
 
-    <!-- จัดการโค้ด -->
     <div class="card" style="margin-top:12px;">
       <div class="topbar">
         <div style="font-weight:700;">จัดการโค้ด</div>
-        <div class="muted">สร้างโค้ดเดี่ยว / สร้างชุด / เปิด–ปิดการใช้งาน</div>
+        <div class="muted">สร้าง/ชุด/เปิด–ปิด</div>
       </div>
 
       <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:10px;">
@@ -160,7 +158,7 @@
 </div>
 
 <script>
-/* ---------- Session & Login ---------- */
+// ===== Session & Login =====
 const SKEY = 'rr365_admin_cfg';
 function getCfg(){ const s = sessionStorage.getItem(SKEY) || localStorage.getItem(SKEY); try{ return s? JSON.parse(s): null; }catch{ return null; } }
 function setCfg(obj, remember){ const s = JSON.stringify(obj||{}); sessionStorage.setItem(SKEY, s); if(remember) localStorage.setItem(SKEY, s); else localStorage.removeItem(SKEY); }
@@ -171,8 +169,7 @@ document.getElementById('btnLogin').onclick = async ()=>{
   const api = document.getElementById('apiBase').value.trim();
   const tok = document.getElementById('adminToken').value.trim();
   const remember = document.getElementById('remember').checked;
-  const err = document.getElementById('loginErr');
-  err.style.display='none';
+  const err = document.getElementById('loginErr'); err.style.display='none';
   if(!api || !tok){ err.textContent='กรอก API Base และ Admin Token ให้ครบ'; err.style.display='block'; return; }
   setCfg({api, tok}, remember);
   try{ await loadStats(); await loadCodes(); document.getElementById('curApi').textContent = api; showApp(); }
@@ -181,14 +178,15 @@ document.getElementById('btnLogin').onclick = async ()=>{
 document.getElementById('btnLogout').onclick = ()=>{ sessionStorage.removeItem(SKEY); localStorage.removeItem(SKEY); showLogin(); };
 document.getElementById('btnRefresh').onclick = ()=>{ loadStats().catch(()=>{}); loadCodes().catch(()=>{}); };
 
-/* ---------- API helper ---------- */
+// ===== API helper (ส่ง token เป็น query param เสมอ) =====
 async function api(path, params={}){
   const cfg = getCfg(); if(!cfg) throw new Error('NO_CFG');
   const url = new URL(cfg.api);
   url.searchParams.set('mode', path);
+  url.searchParams.set('token', cfg.tok);   // สำคัญ: ส่ง token เป็น query
   for(const [k,v] of Object.entries(params)) url.searchParams.set(k, v);
-  const res = await fetch(url.toString(), { headers:{ 'Authorization':'Bearer '+cfg.tok }, cache:'no-store', credentials:'omit' });
-  if(path==='admin_export_csv') return res; // จะได้ Blob
+  const res = await fetch(url.toString(), { cache:'no-store' });
+  if(path==='admin_export_csv') return res; // Blob
   const ct = (res.headers.get('content-type')||'').toLowerCase();
   if(!ct.includes('application/json')) throw new Error('BAD_RESPONSE');
   const data = await res.json();
@@ -198,7 +196,7 @@ async function api(path, params={}){
 function fmt(d){ const t=new Date(d); return t.toLocaleString('th-TH'); }
 function showErr(msg){ const el = document.getElementById('appErr'); el.textContent = msg; el.style.display = msg? 'block':'none'; }
 
-/* ---------- UI rendering ---------- */
+// ===== UI render =====
 let chartHour;
 function renderHourChart(perHour){
   const labels = [...Array(24)].map((_,i)=> String(i).padStart(2,'0')+':00');
@@ -237,7 +235,7 @@ function fillTable(tbody, items){
   });
 }
 
-/* ---------- Actions (Stats/Search/Export) ---------- */
+// ===== Actions (Stats/Search/Export) =====
 async function loadStats(){
   showErr('');
   const res = await api('admin_stats');
@@ -267,7 +265,7 @@ document.getElementById('btnExport').onclick = async ()=>{
   }catch(e){ showErr('Export ไม่สำเร็จ'); }
 };
 
-/* ---------- Codes Management ---------- */
+// ===== Codes Management =====
 async function apiCodesList(){ return api('admin_codes_list'); }
 async function apiCodeCreate({code,prefix,len,max_uses,expires,owner,note}){
   const params = { code, prefix, len, max_uses, owner, note }; if(expires) params.expires = expires; return api('admin_codes_create', params);
@@ -312,64 +310,15 @@ function fillCodesTable(items){
     };
   });
 }
+async function loadCodes(){ showErr(''); const r = await apiCodesList(); if(r.ok) fillCodesTable(r.items||[]); }
 
-async function loadCodes(){
-  showErr('');
-  const r = await apiCodesList();
-  if(r.ok) fillCodesTable(r.items||[]);
-}
-
-document.getElementById('btnCreateCode').onclick = async ()=>{
-  showErr('');
-  const code  = document.getElementById('codeManual').value.trim().toUpperCase();
-  const prefix= document.getElementById('codePrefix').value.trim();
-  const len   = document.getElementById('codeLen').value.trim();
-  const maxU  = document.getElementById('codeMax').value.trim();
-  const exp   = document.getElementById('codeExp').value ? new Date(document.getElementById('codeExp').value).toISOString() : '';
-  const owner = document.getElementById('codeOwner').value.trim();
-  const note  = document.getElementById('codeNote').value.trim();
-
-  const res = await apiCodeCreate({ code, prefix, len, max_uses:maxU, expires:exp, owner, note });
-  if(!res.ok){ showErr(res.error||'สร้างโค้ดไม่สำเร็จ'); return; }
-  document.getElementById('codeManual').value='';
-  await loadCodes();
-  alert('สร้างโค้ดสำเร็จ: '+res.code);
-};
-
-document.getElementById('btnBulkCode').onclick = async ()=>{
-  showErr('');
-  const prefix= document.getElementById('bulkPrefix').value.trim();
-  const len   = document.getElementById('bulkLen').value.trim();
-  const count = document.getElementById('bulkCount').value.trim();
-  const maxU  = document.getElementById('bulkMax').value.trim();
-  const exp   = document.getElementById('bulkExp').value ? new Date(document.getElementById('bulkExp').value).toISOString() : '';
-  const owner = document.getElementById('bulkOwner').value.trim();
-  const note  = document.getElementById('bulkNote').value.trim();
-
-  const res = await apiCodeBulk({ prefix, len, count, max_uses:maxU, expires:exp, owner, note });
-  if(!res.ok){ showErr(res.error||'สร้างชุดโค้ดไม่สำเร็จ'); return; }
-  await loadCodes();
-  alert(`สร้างโค้ดสำเร็จ ${res.count} รายการ`);
-};
-
-/* ---------- Boot ---------- */
+// ===== Boot =====
 async function boot(){
-  const cfg = getCfg();
-  if(!cfg){ showLogin(); return; }
-  document.getElementById('curApi').textContent = cfg.api;
-  try{
-    await loadStats();
-    await loadCodes();
-    showApp();
-    setInterval(loadStats, 30000);
-  }catch(e){
-    showErr('โหลดข้อมูลไม่สำเร็จ: โปรดตรวจ API/Token'); showLogin();
-  }
+  const params = new URLSearchParams(location.search);
+  if(params.get('api')) document.getElementById('apiBase').value = params.get('api');
+  showLogin(); // เริ่มจากหน้า Login
 }
-window.addEventListener('DOMContentLoaded', ()=>{
-  const cfg = getCfg(); if(cfg){ document.getElementById('apiBase').value = cfg.api; }
-  boot();
-});
+window.addEventListener('DOMContentLoaded', boot);
 </script>
 </body>
 </html>
