@@ -49,6 +49,7 @@
       padding:4px 8px; border-radius:999px; box-shadow:0 0 8px rgba(34,197,94,0.4); }
     .winner-list li .time{ opacity:0.85; font-size:12px; margin-left:10px; }
     .empty{ padding:10px 14px; color:#fff; opacity:.85; }
+    .hints { font-size:12px; opacity:.9; margin-top:-2px; margin-bottom:8px; }
   </style>
 </head>
 <body>
@@ -61,6 +62,10 @@
   <div class="container">
     <img class="logo" src="https://img2.pic.in.th/pic/1735020594-1.png" alt="ร่ำรวย365">
     <h2>🂪 เปิดไพ่ลุ้นโชค | ร่ำรวย365</h2>
+
+    <!-- รหัสจากแอดมิน (1 โค้ด/1 คน) -->
+    <input type="text" id="inviteCode" placeholder="กรอกรหัสเข้าเล่น (แอดมินส่งให้)" maxlength="16" autocomplete="one-time-code">
+    <div class="hints">ใช้ได้ 1 โค้ดต่อ 1 คน • ระบบจะล็อกโค้ดกับเบอร์ของคุณ</div>
 
     <input type="text" id="phone" placeholder="กรอกเบอร์โทรศัพท์" maxlength="10"><br>
     <button id="startBtn">เริ่มเกม</button>
@@ -89,8 +94,8 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <script>
-    /* ===== URL Web App ของบอล (ฝั่ง Apps Script) ===== */
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbwfzubJNobSGqCd3LI9i4ew4CjkzFDtjiKBjWMc6wr8hVCKD_VrPGVC_qijxxh2sgXJ/exec';
+    /* ===== URL Web App ของเก่ง (เชื่อมตามที่ส่งมา) ===== */
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbyPfzywG1dqi9yMBcpAMthrm7Vumx-3sv6DPocYxDym22dsFPVdId6R1ig_KwSP-378/exec';
 
     /* === ตั้งค่าเลขรางวัล = 6 และเรทชนะ === */
     const WIN_NUMBER = 6;               // เลขรางวัล
@@ -108,15 +113,41 @@
     async function startGame() {
       const btn = document.getElementById('startBtn');
       const phone = document.getElementById("phone").value.trim();
+      const codeRaw = document.getElementById("inviteCode").value.trim();
+      const code = codeRaw.toUpperCase();
+
+      if (!code) { alert("กรุณากรอกรหัสเข้าเล่นจากแอดมิน"); return; }
       if (!/^0[0-9]{9}$/.test(phone)) { alert("กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง"); return; }
 
-      btn.disabled = true; const oldTxt = btn.textContent; btn.textContent = "กำลังตรวจสอบ...";
-      const formData = new FormData(); formData.append("phone", phone);
+      btn.disabled = true; const oldTxt = btn.textContent; btn.textContent = "กำลังตรวจสอบโค้ด...";
+      const formData = new FormData();
+      formData.append("mode", "start");
+      formData.append("phone", phone);
+      formData.append("code", code);
 
       try {
         const res = await fetch(scriptURL, { method: 'POST', body: formData });
         const data = await res.json();
-        if (data.error) { alert("เกิดข้อผิดพลาด: " + data.error); return; }
+
+        if (data.error) {
+          switch (data.error) {
+            case 'QUOTA_EXCEEDED':
+              alert(`วันนี้เล่นครบโควตาแล้ว (${data.playedToday}/${data.limit})`);
+              break;
+            case 'CODE_NOT_FOUND':
+              alert("รหัสไม่ถูกต้อง");
+              break;
+            case 'CODE_USED':
+              alert("รหัสนี้ถูกใช้ไปแล้ว");
+              break;
+            case 'CODE_LOCKED_TO_OTHER':
+              alert("รหัสนี้ถูกล็อกกับเบอร์อื่นแล้ว");
+              break;
+            default:
+              alert("เกิดข้อผิดพลาด: " + data.error);
+          }
+          return;
+        }
 
         if (typeof data.limit !== 'undefined') {
           const left = Math.max(0, (data.limit || 1) - (data.playedToday || 0));
@@ -124,12 +155,9 @@
             `สิทธิ์คงเหลือวันนี้: ${left}/${data.limit || 1}`;
         }
 
-        if (data.alreadyPlayed) {
-          alert(`วันนี้เล่นครบโควตาแล้ว (${data.playedToday}/${data.limit})`);
-          return;
-        }
         showCards(phone);
-      } catch {
+        try { sessionStorage.setItem('rr365_code', code); } catch {}
+      } catch (e) {
         alert("ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้");
       } finally {
         btn.disabled = false; btn.textContent = oldTxt;
@@ -142,7 +170,6 @@
       document.getElementById("rewardDisplay").innerHTML = "";
       document.getElementById("captureBtn").style.display = "none";
 
-      // ชุดฐาน 6 ใบ (ไม่มี 6 ก่อน) แล้วสุ่มใส่ไพ่รางวัล = 6 ตามเรท
       let numbers = [1, 2, 3, 4, 5, 5];
       if (Math.random() < JACKPOT_INCLUDE_RATE) {
         const idx = Math.floor(Math.random() * numbers.length);
@@ -296,6 +323,10 @@
     }
 
     document.addEventListener('DOMContentLoaded', ()=>{
+      try {
+        const s = sessionStorage.getItem('rr365_code');
+        if (s) document.getElementById('inviteCode').value = s;
+      } catch {}
       loadWinners();
       setInterval(loadWinners, WINNER_REFRESH_MS);
     });
@@ -307,4 +338,3 @@
   </script>
 </body>
 </html>
-
