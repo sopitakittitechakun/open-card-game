@@ -19,108 +19,254 @@
   --shadow:0 18px 60px rgba(0,0,0,.45);
   --radius:18px;
 }
+
 *{box-sizing:border-box}
+
 body{
   margin:0;
-  font-family:system-ui,-apple-system,"Segoe UI",Arial,"Noto Sans Thai",sans-serif;
+  font-family: system-ui, -apple-system, "Segoe UI", Arial, "Noto Sans Thai", sans-serif;
   background:
     radial-gradient(900px 500px at 20% 10%, rgba(225,6,0,.25), transparent 55%),
     radial-gradient(900px 500px at 90% 30%, rgba(255,59,59,.22), transparent 55%),
     linear-gradient(180deg, #090303, var(--bg));
   color:var(--text);
 }
-.wrap{max-width:1100px;margin:auto;padding:20px 16px 80px}
 
-/* Header */
+.wrap{
+  max-width:1100px;
+  margin:auto;
+  padding:20px 16px 80px;
+}
+
+/* ===== Header ===== */
 .header{
-  display:flex;justify-content:space-between;align-items:center;gap:12px;
-  padding:16px;background:linear-gradient(135deg,var(--red),var(--red2));
-  border-radius:20px;box-shadow:var(--shadow)
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  padding:16px;
+  background:linear-gradient(135deg,var(--red),var(--red2));
+  border-radius:20px;
+  box-shadow:var(--shadow);
 }
-.brand{display:flex;gap:12px;align-items:center}
+
+.brand{
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+
+/* LOGO */
 .logo{
-  width:60px;height:60px;border-radius:16px;background:#fff;
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 0 0 3px rgba(255,59,59,.35),0 12px 28px rgba(0,0,0,.35);
-  overflow:hidden
+  width:60px;
+  height:60px;
+  border-radius:16px;
+  background:#ffffff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:
+    0 0 0 3px rgba(255,59,59,.35),
+    0 12px 28px rgba(0,0,0,.35);
+  overflow:hidden;
 }
-.logo img{width:85%;height:85%;object-fit:contain}
-.header h1{margin:0;font-size:18px}
-.header p{margin:4px 0 0;font-size:12px;opacity:.9}
-.headerRight{display:flex;gap:10px;flex-wrap:wrap}
+.logo img{
+  width:85%;
+  height:85%;
+  object-fit:contain;
+  display:block;
+}
+
+.header h1{
+  margin:0;
+  font-size:18px;
+  line-height:1.1;
+}
+.header p{
+  margin:4px 0 0;
+  font-size:12px;
+  opacity:.9;
+}
+
+.headerRight{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
 .topPill{
-  padding:8px 12px;border-radius:999px;font-size:12px;
-  background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.25)
+  padding:8px 12px;
+  border-radius:999px;
+  font-size:12px;
+  background:rgba(255,255,255,.18);
+  border:1px solid rgba(255,255,255,.25);
+  color:#fff;
 }
 
-/* Layout */
-.grid{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;margin-top:16px}
-@media(max-width:900px){.grid{grid-template-columns:1fr}}
+/* ===== Layout ===== */
+.grid{
+  display:grid;
+  grid-template-columns:1.2fr .8fr;
+  gap:16px;
+  margin-top:16px;
+}
+@media(max-width:900px){
+  .grid{grid-template-columns:1fr}
+}
 
-/* Card */
+/* ===== Card ===== */
 .card{
   background:linear-gradient(180deg,var(--card),var(--card2));
   border:1px solid rgba(255,59,59,.35);
-  border-radius:var(--radius);box-shadow:var(--shadow)
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  overflow:hidden;
 }
-.cardHead{padding:14px;border-bottom:1px solid rgba(255,59,59,.35)}
-.cardHead h2{margin:0;font-size:16px}
-.cardSub{margin-top:6px;font-size:12px;color:var(--muted)}
-.cardBody{padding:14px}
+.cardHead{
+  padding:14px;
+  border-bottom:1px solid rgba(255,59,59,.35);
+}
+.cardHead h2{
+  margin:0;
+  font-size:16px;
+}
+.cardSub{
+  margin-top:6px;
+  font-size:12px;
+  color:var(--muted);
+}
+.cardBody{
+  padding:14px;
+}
 
-/* Pills */
-.pills{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+/* ===== Pills ===== */
+.pills{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:12px;
+}
 .pill{
-  padding:8px 12px;border-radius:999px;font-size:12px;
-  background:rgba(255,59,59,.18);border:1px solid rgba(255,59,59,.35)
+  padding:8px 12px;
+  border-radius:999px;
+  font-size:12px;
+  background:rgba(255,59,59,.18);
+  border:1px solid rgba(255,59,59,.35);
+  color:#ffdede;
 }
 
-/* Rules */
-.rules{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+/* ===== Rules ===== */
+.rules{
+  list-style:none;
+  padding:0;
+  margin:0;
+  display:grid;
+  gap:10px;
+}
 .rules li{
-  padding:12px;border-radius:14px;border:1px solid rgba(255,59,59,.25);
-  background:rgba(0,0,0,.15);font-size:12px;color:var(--muted)
+  padding:12px;
+  border-radius:14px;
+  border:1px solid rgba(255,59,59,.25);
+  background:rgba(0,0,0,.15);
+  font-size:12px;
+  color:var(--muted);
+  line-height:1.6;
 }
+.rules b{color:var(--text);}
 
-/* Form */
-label{font-size:12px;color:var(--muted)}
+/* ===== Form ===== */
+label{
+  font-size:12px;
+  color:var(--muted);
+}
 .input{
-  width:100%;padding:12px;margin-top:6px;border-radius:14px;
-  border:1px solid rgba(255,59,59,.35);background:#120606;color:var(--text)
+  width:100%;
+  padding:12px;
+  margin-top:6px;
+  border-radius:14px;
+  border:1px solid rgba(255,59,59,.35);
+  background:#120606;
+  color:var(--text);
+  font-size:15px;
 }
-.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media(max-width:520px){.row{grid-template-columns:1fr}}
+.input::placeholder{color:#f1a1a1}
 
-/* Buttons */
-.btnRow{display:flex;gap:10px;margin-top:14px}
+.row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+@media(max-width:520px){
+  .row{grid-template-columns:1fr}
+}
+
+/* ===== Buttons ===== */
+.btnRow{
+  display:flex;
+  gap:10px;
+  margin-top:14px;
+}
 .btn{
-  flex:1;padding:12px;border-radius:14px;
-  border:1px solid rgba(255,59,59,.35);background:#140909;
-  color:var(--text);font-weight:800;cursor:pointer
+  flex:1;
+  padding:12px;
+  border-radius:14px;
+  border:1px solid rgba(255,59,59,.35);
+  background:#140909;
+  color:var(--text);
+  font-weight:800;
+  cursor:pointer;
 }
-.btn.primary{background:linear-gradient(135deg,var(--red),var(--red2));border:none;color:#120303}
+.btn.primary{
+  background:linear-gradient(135deg,var(--red),var(--red2));
+  border:none;
+  color:#120303;
+}
 
-/* Preview */
+/* ===== Preview ===== */
 .preview{
-  margin-top:14px;padding:14px;border-radius:16px;
-  border:1px dashed rgba(255,59,59,.35);text-align:center
+  margin-top:14px;
+  padding:14px;
+  border-radius:16px;
+  border:1px dashed rgba(255,59,59,.35);
+  text-align:center;
 }
 .numberBox{
-  width:72px;height:72px;margin:10px auto;border-radius:18px;
+  width:72px;
+  height:72px;
+  margin:10px auto;
+  border-radius:18px;
   background:linear-gradient(135deg,var(--red2),var(--gold));
-  color:#120303;font-size:26px;font-weight:1000;
-  display:grid;place-items:center;letter-spacing:2px
+  color:#120303;
+  font-size:26px;
+  font-weight:1000;
+  display:grid;
+  place-items:center;
+  letter-spacing:2px;
 }
 
-/* Alert */
-.alert{margin-top:10px;padding:10px 12px;border-radius:14px;font-size:13px;display:none}
-.alert.error{background:rgba(255,59,59,.18);border:1px solid rgba(255,59,59,.35)}
-.alert.ok{background:rgba(46,229,157,.18);border:1px solid rgba(46,229,157,.35)}
+/* ===== Alert ===== */
+.alert{
+  margin-top:10px;
+  padding:10px 12px;
+  border-radius:14px;
+  font-size:13px;
+  display:none;
+}
+.alert.error{
+  background:rgba(255,59,59,.18);
+  border:1px solid rgba(255,59,59,.35);
+  color:#ffd1d1;
+}
+.alert.ok{
+  background:rgba(46,229,157,.18);
+  border:1px solid rgba(46,229,157,.35);
+  color:#d7fff1;
+}
 </style>
 </head>
 
 <body>
 <div class="wrap">
+
   <div class="header">
     <div class="brand">
       <div class="logo">
@@ -131,6 +277,7 @@ label{font-size:12px;color:var(--muted)}
         <p>ร่วมสนุกง่าย ๆ | เลข 00–99</p>
       </div>
     </div>
+
     <div class="headerRight">
       <div class="topPill">สถานะ: เปิดรับ</div>
       <div class="topPill">1 คน / 1 เลข</div>
@@ -150,10 +297,11 @@ label{font-size:12px;color:var(--muted)}
           <div class="pill">ส่งได้ 1 ครั้ง</div>
           <div class="pill">ประกาศผลหลังหวยออก</div>
         </div>
+
         <ul class="rules">
           <li><b>วิธีเล่น:</b> กรอกยูส และเลข 2 ตัวล่างที่เลือก</li>
           <li><b>สิทธิ์:</b> 1 ยูส ต่อ 1 ครั้ง</li>
-          <li><b>การตัดสิน:</b> ทีมงานเป็นผู้ตัดสินสุดท้าย</li>
+          <li><b>การตัดสิน:</b> คำตัดสินทีมงานถือเป็นที่สิ้นสุด</li>
         </ul>
       </div>
     </section>
@@ -192,64 +340,100 @@ label{font-size:12px;color:var(--muted)}
 </div>
 
 <script>
-/* 🔗 Web App URL ล่าสุด */
+/** ✅ Web App URL (ลิงก์ชีทใหม่) */
 const SHEET_WEBAPP_URL =
-"https://script.google.com/macros/s/AKfycbz6oHrJfuLRyPjiSdpZyIabs-nf70MZ0Nl0PAgaPpxnSiiLp8-iLdFjBMpS-A09Pie0/exec";
+"https://script.google.com/macros/s/AKfycbzp3HNdyP7-Z78hD-65UYmOY9jaYZNlZdLrIMN4LbCosXcvRj2SFtVeU5oFxcecgAWt/exec";
 
-const nameEl=document.getElementById("name");
-const numEl=document.getElementById("num");
-const alertEl=document.getElementById("alert");
-const previewNum=document.getElementById("previewNum");
-const clearBtn=document.getElementById("clearBtn");
-const sendBtn=document.getElementById("sendBtn");
+const nameEl = document.getElementById("name");
+const numEl = document.getElementById("num");
+const alertEl = document.getElementById("alert");
+const previewNum = document.getElementById("previewNum");
+const clearBtn = document.getElementById("clearBtn");
+const sendBtn = document.getElementById("sendBtn");
 
-function showMsg(type,text){
-  alertEl.style.display="block";
-  alertEl.className="alert "+type;
-  alertEl.textContent=text;
+function showMsg(type, text){
+  alertEl.style.display = "block";
+  alertEl.className = "alert " + type;
+  alertEl.textContent = text;
 }
+
 function thaiTimeString(d){
-  return new Intl.DateTimeFormat("th-TH",{timeZone:"Asia/Bangkok",
-    year:"numeric",month:"2-digit",day:"2-digit",
-    hour:"2-digit",minute:"2-digit",second:"2-digit"}).format(d);
+  return new Intl.DateTimeFormat("th-TH", {
+    timeZone: "Asia/Bangkok",
+    year:"numeric", month:"2-digit", day:"2-digit",
+    hour:"2-digit", minute:"2-digit", second:"2-digit"
+  }).format(d);
 }
 
-numEl.addEventListener("input",()=>{
-  numEl.value=numEl.value.replace(/\D/g,'').slice(0,2);
-  previewNum.textContent=numEl.value.length===2?numEl.value:"--";
+numEl.addEventListener("input", ()=>{
+  numEl.value = numEl.value.replace(/\D/g,'').slice(0,2);
+  previewNum.textContent = numEl.value.length === 2 ? numEl.value : "--";
 });
-clearBtn.addEventListener("click",()=>{
-  nameEl.value="";numEl.value="";previewNum.textContent="--";alertEl.style.display="none";
+
+clearBtn.addEventListener("click", ()=>{
+  nameEl.value = "";
+  numEl.value = "";
+  previewNum.textContent = "--";
+  alertEl.style.display = "none";
 });
-sendBtn.addEventListener("click",submitGuess);
+
+sendBtn.addEventListener("click", submitGuess);
 
 async function submitGuess(){
-  const user=nameEl.value.trim();
-  const number=numEl.value.trim();
-  if(!user){showMsg("error","กรุณากรอกยูส");return}
-  if(!/^\d{2}$/.test(number)){showMsg("error","กรุณากรอกเลข 2 หลัก (00–99)");return}
+  const user = nameEl.value.trim();
+  const number = numEl.value.trim();
 
-  sendBtn.disabled=true;sendBtn.textContent="กำลังส่ง...";
-  const now=new Date();
-  const payload={user,number,time:thaiTimeString(now),ts:now.getTime()};
+  if(!user){
+    showMsg("error","กรุณากรอกยูส");
+    return;
+  }
+  if(!/^\d{2}$/.test(number)){
+    showMsg("error","กรุณากรอกเลข 2 หลัก (00–99)");
+    return;
+  }
+
+  sendBtn.disabled = true;
+  sendBtn.textContent = "กำลังส่ง...";
+
+  const now = new Date();
+  const timeThai = thaiTimeString(now);
+
+  const payload = {
+    user,
+    number,
+    time: timeThai,
+    ts: now.getTime()
+  };
 
   try{
-    const res=await fetch(SHEET_WEBAPP_URL,{
-      method:"POST",headers:{"Content-Type":"application/json"},
-      body:JSON.stringify(payload)
+    const res = await fetch(SHEET_WEBAPP_URL, {
+      method: "POST",
+      headers: { "Content-Type":"application/json" },
+      body: JSON.stringify(payload)
     });
-    const text=await res.text();
-    if(res.ok){
-      showMsg("ok",`ส่งสำเร็จ ✅ ยูส: ${user} | เลข: ${number}`);
-    }else{
-      showMsg("error","ส่งไม่สำเร็จ");
+
+    const text = await res.text();
+    let out = null;
+    try { out = JSON.parse(text); } catch(_) {}
+
+    if (res.ok && out && out.ok){
+      showMsg("ok", `ส่งสำเร็จ ✅ ยูส: ${user} | เลข: ${number} | เวลา: ${timeThai}`);
+      return;
     }
-  }catch(e){
-    showMsg("error","เชื่อมต่อชีทไม่ได้ ตรวจสอบ Deploy เป็นทุกคน (Anyone)");
-  }finally{
-    sendBtn.disabled=false;sendBtn.textContent="ส่งคำทาย";
+    if (res.ok && !out){
+      showMsg("ok", `ส่งสำเร็จ ✅ ยูส: ${user} | เลข: ${number} | เวลา: ${timeThai}`);
+      return;
+    }
+
+    showMsg("error", "ส่งไม่สำเร็จ: " + (out && out.error ? out.error : (text || "unknown")));
+  } catch(e){
+    showMsg("error","เชื่อมต่อชีทไม่ได้: ตรวจสอบ Deploy เป็นทุกคน (Anyone) และ URL ให้ถูก");
+  } finally{
+    sendBtn.disabled = false;
+    sendBtn.textContent = "ส่งคำทาย";
   }
 }
 </script>
+
 </body>
 </html>
