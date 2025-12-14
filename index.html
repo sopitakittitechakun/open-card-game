@@ -7,17 +7,10 @@
 
 <style>
 :root{
-  --bg:#0e0505;
-  --card:#1a0b0b;
-  --card2:#140909;
-  --text:#fff1f1;
-  --muted:#f1b7b7;
-  --red:#e10600;
-  --red2:#ff3b3b;
-  --gold:#ffb020;
-  --ok:#2ee59d;
-  --shadow:0 18px 60px rgba(0,0,0,.45);
-  --radius:18px;
+  --bg:#0e0505; --card:#1a0b0b; --card2:#140909;
+  --text:#fff1f1; --muted:#f1b7b7;
+  --red:#e10600; --red2:#ff3b3b; --gold:#ffb020; --ok:#2ee59d;
+  --shadow:0 18px 60px rgba(0,0,0,.45); --radius:18px;
 }
 *{box-sizing:border-box}
 body{
@@ -30,8 +23,6 @@ body{
   color:var(--text);
 }
 .wrap{max-width:1100px;margin:auto;padding:20px 16px 80px}
-
-/* Header */
 .header{
   display:flex;justify-content:space-between;align-items:center;gap:12px;
   padding:16px;background:linear-gradient(135deg,var(--red),var(--red2));
@@ -52,80 +43,51 @@ body{
   padding:8px 12px;border-radius:999px;font-size:12px;
   background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.25);
 }
-
-/* Layout */
 .grid{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;margin-top:16px}
 @media(max-width:900px){.grid{grid-template-columns:1fr}}
-
-/* Card */
 .card{
   background:linear-gradient(180deg,var(--card),var(--card2));
   border:1px solid rgba(255,59,59,.35);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  overflow:hidden;
+  border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;
 }
 .cardHead{padding:14px;border-bottom:1px solid rgba(255,59,59,.35)}
 .cardHead h2{margin:0;font-size:16px}
 .cardSub{margin-top:6px;font-size:12px;color:var(--muted)}
 .cardBody{padding:14px}
-
-/* Pills */
 .pills{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
 .pill{
   padding:8px 12px;border-radius:999px;font-size:12px;
-  background:rgba(255,59,59,.18);
-  border:1px solid rgba(255,59,59,.35);
+  background:rgba(255,59,59,.18);border:1px solid rgba(255,59,59,.35);
 }
-
-/* Rules */
 .rules{list-style:none;padding:0;margin:0;display:grid;gap:10px}
 .rules li{
-  padding:12px;border-radius:14px;
-  border:1px solid rgba(255,59,59,.25);
-  background:rgba(0,0,0,.15);
-  font-size:12px;color:var(--muted);line-height:1.6;
+  padding:12px;border-radius:14px;border:1px solid rgba(255,59,59,.25);
+  background:rgba(0,0,0,.15);font-size:12px;color:var(--muted);line-height:1.6;
 }
 .rules b{color:var(--text)}
-
-/* Form */
 label{font-size:12px;color:var(--muted)}
 .input{
   width:100%;padding:12px;margin-top:6px;border-radius:14px;
-  border:1px solid rgba(255,59,59,.35);
-  background:#120606;color:var(--text);font-size:15px;
+  border:1px solid rgba(255,59,59,.35);background:#120606;color:var(--text);font-size:15px;
 }
 .input::placeholder{color:#f1a1a1}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:520px){.row{grid-template-columns:1fr}}
-
-/* Buttons */
 .btnRow{display:flex;gap:10px;margin-top:14px}
 .btn{
-  flex:1;padding:12px;border-radius:14px;
-  border:1px solid rgba(255,59,59,.35);
-  background:#140909;color:var(--text);
-  font-weight:800;cursor:pointer;
+  flex:1;padding:12px;border-radius:14px;border:1px solid rgba(255,59,59,.35);
+  background:#140909;color:var(--text);font-weight:800;cursor:pointer;
 }
-.btn.primary{
-  background:linear-gradient(135deg,var(--red),var(--red2));
-  border:none;color:#120303;
-}
-
-/* Preview */
+.btn.primary{background:linear-gradient(135deg,var(--red),var(--red2));border:none;color:#120303}
 .preview{
-  margin-top:14px;padding:14px;border-radius:16px;
-  border:1px dashed rgba(255,59,59,.35);
+  margin-top:14px;padding:14px;border-radius:16px;border:1px dashed rgba(255,59,59,.35);
   text-align:center;
 }
 .numberBox{
   width:72px;height:72px;margin:10px auto;border-radius:18px;
   background:linear-gradient(135deg,var(--red2),var(--gold));
-  color:#120303;font-size:26px;font-weight:1000;
-  display:grid;place-items:center;letter-spacing:2px;
+  color:#120303;font-size:26px;font-weight:1000;display:grid;place-items:center;letter-spacing:2px;
 }
-
-/* Alert */
 .alert{margin-top:10px;padding:10px 12px;border-radius:14px;font-size:13px;display:none}
 .alert.error{background:rgba(255,59,59,.18);border:1px solid rgba(255,59,59,.35);color:#ffd1d1}
 .alert.ok{background:rgba(46,229,157,.18);border:1px solid rgba(46,229,157,.35);color:#d7fff1}
@@ -134,7 +96,6 @@ label{font-size:12px;color:var(--muted)}
 
 <body>
 <div class="wrap">
-
   <div class="header">
     <div class="brand">
       <div class="logo">
@@ -203,13 +164,11 @@ label{font-size:12px;color:var(--muted)}
       </div>
     </aside>
   </div>
-
 </div>
 
 <script>
-/** ✅ Web App URL ใหม่ล่าสุด */
 const SHEET_WEBAPP_URL =
-"https://script.google.com/macros/s/AKfycbx-BNdq7ps9X0Q4kQpcuGWQiuDh8s0SsdNjkw6ENxJ1jw-sXkC54a3VGClTQDTqUdOR/exec";
+"https://script.google.com/macros/s/AKfycbyB2ZO23lIkbGCtmEa62BMWpoO0Q8j7CjDRbfQkhNVihCG_z4e_mb1m6D2zN6tooR26/exec";
 
 const nameEl = document.getElementById("name");
 const numEl = document.getElementById("num");
@@ -232,7 +191,6 @@ function thaiTimeString(d){
   }).format(d);
 }
 
-// เติมเฉพาะเลข 0-9 และจำกัด 2 หลัก
 numEl.addEventListener("input", ()=>{
   numEl.value = numEl.value.replace(/\D/g,'').slice(0,2);
   previewNum.textContent = numEl.value.length === 2 ? numEl.value : "--";
@@ -251,59 +209,45 @@ async function submitGuess(){
   const user = nameEl.value.trim();
   const number = numEl.value.trim();
 
-  if(!user){
-    showMsg("error","กรุณากรอกยูส");
-    return;
-  }
-  if(!/^\d{2}$/.test(number)){
-    showMsg("error","กรุณากรอกเลข 2 หลัก (00–99)");
-    return;
-  }
+  if(!user){ showMsg("error","กรุณากรอกยูส"); return; }
+  if(!/^\d{2}$/.test(number)){ showMsg("error","กรุณากรอกเลข 2 หลัก (00–99)"); return; }
 
   sendBtn.disabled = true;
   sendBtn.textContent = "กำลังส่ง...";
 
   const now = new Date();
   const timeThai = thaiTimeString(now);
+  const ts = now.getTime();
 
-  const payload = {
-    user,
-    number,
-    time: timeThai,
-    ts: now.getTime()
-  };
+  // ✅ ส่งแบบ Form (ไม่ใส่ header) เพื่อตัดปัญหา CORS/preflight
+  const form = new URLSearchParams();
+  form.append("user", user);
+  form.append("number", number);
+  form.append("time", timeThai);
+  form.append("ts", String(ts));
 
   try{
     const res = await fetch(SHEET_WEBAPP_URL, {
       method: "POST",
-      headers: { "Content-Type":"application/json" },
-      body: JSON.stringify(payload)
+      body: form
     });
 
-    const text = await res.text();
-    let out = null;
-    try { out = JSON.parse(text); } catch(_) {}
+    // บางครั้งอ่าน response ไม่ได้ก็ยังถือว่าส่งถึงแล้ว (แต่ส่วนมากอ่านได้)
+    let text = "";
+    try { text = await res.text(); } catch(_) {}
 
-    if (res.ok && out && out.ok){
-      showMsg("ok", `ส่งสำเร็จ ✅ ยูส: ${user} | เลข: ${number} | เวลา: ${timeThai}`);
-      return;
+    if(res.ok){
+      showMsg("ok", `ส่งสำเร็จ ✅ ยูส: ${user} | เลข: ${number}`);
+    }else{
+      showMsg("error", "ส่งไม่สำเร็จ (HTTP " + res.status + ") " + (text || ""));
     }
-
-    // เผื่อสคริปต์ตอบเป็น text เฉย ๆ
-    if (res.ok && !out){
-      showMsg("ok", `ส่งสำเร็จ ✅ ยูส: ${user} | เลข: ${number} | เวลา: ${timeThai}`);
-      return;
-    }
-
-    showMsg("error", "ส่งไม่สำเร็จ: " + (out && out.error ? out.error : (text || "unknown")));
-  } catch(e){
-    showMsg("error","เชื่อมต่อชีทไม่ได้: ตรวจสอบ Deploy เป็นทุกคน (Anyone) และ URL ให้ถูก");
-  } finally{
+  }catch(e){
+    showMsg("error","ส่งไม่สำเร็จ: ตรวจสอบว่า Deploy เป็นทุกคน (Anyone) และใช้ลิงก์ /exec ล่าสุด");
+  }finally{
     sendBtn.disabled = false;
     sendBtn.textContent = "ส่งคำทาย";
   }
 }
 </script>
-
 </body>
 </html>
