@@ -1,320 +1,442 @@
 <!doctype html>
 <html lang="th">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>กิจกรรมทายผลบอล</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>กิจกรรมทายผลบอล</title>
 
-<style>
-/* ================== RED THEME ================== */
-:root{
-  --bg:#0a0202;
-  --card:#1a0505;
-  --txt:#ffecec;
-  --muted:#ffb3b3;
-  --line:rgba(255,60,60,.25);
-  --shadow:0 18px 45px rgba(0,0,0,.6);
-  --radius:18px;
-  --accent:#ff2b2b;
-  --accent2:#b80000;
-  --ok:#ff8f8f;
-  --err:#ff3b3b;
-}
+  <style>
+    :root{
+      --bg:#0a0202;
+      --card:#170404;
+      --card2:#0e0202;
+      --txt:#ffecec;
+      --muted:#ffb3b3;
+      --line:rgba(255,60,60,.25);
+      --shadow:0 18px 48px rgba(0,0,0,.65);
+      --radius:18px;
 
-*{box-sizing:border-box}
+      --accent:#ff2b2b;
+      --accent2:#b80000;
+      --soft:rgba(255,43,43,.14);
+      --soft2:rgba(255,43,43,.22);
 
-body{
-  margin:0;
-  min-height:100vh;
-  padding:24px;
-  font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;
-  color:var(--txt);
-  background:
-    radial-gradient(800px 500px at 20% 10%, rgba(255,0,0,.25), transparent 60%),
-    radial-gradient(800px 500px at 80% 20%, rgba(255,0,0,.18), transparent 60%),
-    var(--bg);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
+      --okbg:rgba(255,140,140,.14);
+      --okbd:rgba(255,140,140,.35);
+      --errbg:rgba(255,50,50,.18);
+      --errbd:rgba(255,50,50,.45);
+    }
 
-.wrap{
-  width:min(900px,100%);
-  display:grid;
-  grid-template-columns:1.1fr .9fr;
-  gap:16px;
-}
-@media(max-width:860px){
-  .wrap{grid-template-columns:1fr}
-}
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      padding:24px;
+      font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;
+      color:var(--txt);
+      background:
+        radial-gradient(900px 520px at 18% 10%, rgba(255,0,0,.25), transparent 60%),
+        radial-gradient(900px 520px at 82% 22%, rgba(255,0,0,.18), transparent 60%),
+        radial-gradient(900px 520px at 50% 110%, rgba(255,0,0,.12), transparent 55%),
+        var(--bg);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
 
-.card{
-  background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-  border:1px solid var(--line);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  overflow:hidden;
-}
+    .wrap{
+      width:min(930px,100%);
+      display:grid;
+      grid-template-columns: 1.08fr .92fr;
+      gap:16px;
+    }
+    @media (max-width: 860px){
+      .wrap{grid-template-columns:1fr}
+    }
 
-.head{
-  padding:18px;
-  border-bottom:1px solid var(--line);
-  background:linear-gradient(180deg, rgba(255,43,43,.25), transparent);
-}
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
 
-.logo-wrap{
-  display:flex;
-  justify-content:center;
-  margin-bottom:10px;
-}
-.logo-wrap img{
-  max-width:160px;
-  height:auto;
-  filter:drop-shadow(0 0 15px rgba(255,0,0,.6));
-  transition:.25s;
-}
-.logo-wrap img:hover{
-  transform:scale(1.05);
-  filter:drop-shadow(0 0 25px rgba(255,0,0,.9));
-}
+    .head{
+      padding:18px;
+      border-bottom:1px solid var(--line);
+      background:
+        linear-gradient(180deg, rgba(255,43,43,.26), transparent);
+    }
 
-.title{
-  text-align:center;
-  font-weight:900;
-  font-size:18px;
-}
-.sub{
-  margin-top:6px;
-  text-align:center;
-  font-size:13px;
-  color:var(--muted);
-  line-height:1.45;
-}
+    /* โลโก้ */
+    .logo-wrap{
+      display:flex;
+      justify-content:center;
+      margin-bottom:10px;
+    }
+    .logo-wrap a{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,60,60,.28);
+      background: rgba(0,0,0,.14);
+      text-decoration:none;
+    }
+    .logo-wrap img{
+      max-width:170px;
+      height:auto;
+      display:block;
+      filter: drop-shadow(0 0 16px rgba(255,0,0,.65));
+      transition: transform .22s ease, filter .22s ease;
+    }
+    .logo-wrap a:hover img{
+      transform: scale(1.05);
+      filter: drop-shadow(0 0 26px rgba(255,0,0,.95));
+    }
+    @media (max-width:480px){
+      .logo-wrap img{max-width:130px}
+    }
 
-.body{padding:18px}
+    .title{
+      text-align:center;
+      font-weight:900;
+      font-size:18px;
+      letter-spacing:.2px;
+    }
+    .badge{
+      display:inline-block;
+      margin-top:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:rgba(255,230,230,.85);
+      font-size:12px;
+    }
+    .sub{
+      margin-top:8px;
+      text-align:center;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.5;
+    }
 
-label{
-  display:block;
-  margin-bottom:8px;
-  font-size:13px;
-  color:var(--muted);
-}
+    .body{padding:18px}
 
-input{
-  width:100%;
-  padding:12px;
-  border-radius:14px;
-  border:1px solid var(--line);
-  background:rgba(0,0,0,.25);
-  color:var(--txt);
-  outline:none;
-}
-input::placeholder{color:rgba(255,200,200,.45)}
-input:focus{
-  border-color:rgba(255,43,43,.8);
-  box-shadow:0 0 0 4px rgba(255,43,43,.3);
-}
+    label{
+      display:block;
+      margin:0 0 8px;
+      font-size:13px;
+      color:var(--muted);
+    }
+    input{
+      width:100%;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(0,0,0,.22);
+      color:var(--txt);
+      outline:none;
+    }
+    input::placeholder{color:rgba(255,200,200,.45)}
+    input:focus{
+      border-color: rgba(255,43,43,.85);
+      box-shadow: 0 0 0 4px rgba(255,43,43,.28);
+    }
 
-.scorebox{
-  margin-top:10px;
-  display:grid;
-  grid-template-columns:1fr auto 1fr;
-  gap:10px;
-  align-items:center;
-  padding:12px;
-  border-radius:14px;
-  border:1px dashed rgba(255,43,43,.45);
-  background:rgba(80,0,0,.35);
-}
-.vs{
-  font-weight:900;
-  color:#ffb3b3;
-  text-align:center;
-}
+    .scorebox{
+      margin-top:10px;
+      display:grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap:10px;
+      align-items:center;
+      padding:12px;
+      border-radius:14px;
+      border:1px dashed rgba(255,43,43,.48);
+      background: rgba(80,0,0,.30);
+    }
+    .vs{
+      font-weight:900;
+      letter-spacing:1px;
+      color: rgba(255,200,200,.85);
+      text-align:center;
+      user-select:none;
+    }
 
-.actions{
-  display:flex;
-  gap:10px;
-  margin-top:14px;
-  flex-wrap:wrap;
-}
+    .hint{
+      margin-top:10px;
+      font-size:12px;
+      color: rgba(255,220,220,.62);
+      line-height:1.45;
+    }
 
-button{
-  cursor:pointer;
-  border:none;
-  border-radius:14px;
-  padding:12px 14px;
-  font-weight:900;
-}
+    .actions{
+      display:flex;
+      gap:10px;
+      margin-top:14px;
+      flex-wrap:wrap;
+    }
 
-.btn-primary{
-  flex:1;
-  min-width:180px;
-  color:#fff;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-}
-.btn-ghost{
-  background:rgba(255,255,255,.06);
-  color:var(--txt);
-  border:1px solid var(--line);
-}
+    button{
+      cursor:pointer;
+      border:none;
+      border-radius:14px;
+      padding:12px 14px;
+      font-weight:900;
+      letter-spacing:.2px;
+    }
+    .btn-primary{
+      flex:1;
+      min-width:190px;
+      color:#fff;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+    }
+    .btn-primary:active{transform: translateY(1px)}
+    .btn-ghost{
+      background: rgba(255,255,255,.06);
+      color: var(--txt);
+      border:1px solid var(--line);
+    }
 
-.ok,.err{
-  margin-top:12px;
-  padding:10px 12px;
-  border-radius:14px;
-  font-size:13px;
-}
-.ok{background:rgba(255,140,140,.15);border:1px solid rgba(255,140,140,.4)}
-.err{background:rgba(255,50,50,.18);border:1px solid rgba(255,50,50,.45)}
+    .ok,.err{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:10px 12px;
+      border-radius:14px;
+      font-size:13px;
+      margin-top:12px;
+    }
+    .ok{background:var(--okbg); border:1px solid var(--okbd)}
+    .err{background:var(--errbg); border:1px solid var(--errbd)}
 
-.box{
-  padding:16px;
-  border-radius:var(--radius);
-  border:1px solid var(--line);
-  background:rgba(0,0,0,.25);
-}
-.box h3{
-  margin:0 0 10px;
-  font-size:14px;
-}
-.kv{
-  display:grid;
-  grid-template-columns:120px 1fr;
-  gap:8px 12px;
-  font-size:13px;
-}
-.k{color:var(--muted)}
+    .box{
+      padding:16px;
+      border-radius:var(--radius);
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.22);
+    }
+    .box h3{
+      margin:0 0 10px;
+      font-size:14px;
+      color: rgba(255,240,240,.95);
+    }
+    .kv{
+      display:grid;
+      grid-template-columns: 125px 1fr;
+      gap:8px 12px;
+      font-size:13px;
+      color: rgba(255,240,240,.92);
+    }
+    .k{color: rgba(255,200,200,.72)}
 
-.copy{
-  white-space:pre-wrap;
-  font-size:13px;
-  color:#ffdede;
-}
-</style>
+    .copy{
+      white-space:pre-wrap;
+      user-select:text;
+      font-size:13px;
+      color: rgba(255,230,230,.92);
+      line-height:1.55;
+    }
+  </style>
 </head>
 
 <body>
 
-<!-- ================== ADMIN CONFIG ================== -->
+<!-- ================== ADMIN CONFIG (แก้วันละคู่ตรงนี้) ================== -->
 <script>
-const ADMIN_MATCH = "คู่วันนี้ : ทีมเหย้า vs ทีมเยือน";
-const ADMIN_CLOSE = "ปิดรับคำทาย : วันนี้ 14.00 น.";
+  const ADMIN_MATCH_TEXT = "คู่วันนี้: ทีมเหย้า vs ทีมเยือน";
+  const ADMIN_CLOSE_TEXT = "ปิดรับคำทาย: วันนี้ 14:00 น.";
 </script>
-<!-- ================================================ -->
+<!-- ===================================================================== -->
 
 <main class="wrap">
 
-<!-- ================== FORM ================== -->
-<section class="card">
-  <div class="head">
+  <!-- ฟอร์ม -->
+  <section class="card">
+    <div class="head">
 
-    <div class="logo-wrap">
-      <a target="_blank" href="https://uppic.cloud/kqhR9Ce4FkYXUoX">
-        <img src="https://uppic.cloud/ib/dorDAREGSar3dtW_1765716067.png" alt="logo">
-      </a>
-    </div>
-
-    <div class="title">⚽ กิจกรรมทายผลบอล</div>
-    <div class="sub">
-      กรอกแค่ <b>ยูส</b> และ <b>สกอร์</b><br>
-      <span id="matchText"></span><br>
-      <span id="closeText"></span>
-    </div>
-  </div>
-
-  <div class="body">
-    <form id="form">
-      <label>ยูสเซอร์ลูกค้า</label>
-      <input id="user" placeholder="เช่น user1234" required>
-
-      <label style="margin-top:12px">ทายสกอร์</label>
-      <div class="scorebox">
-        <input id="h" type="number" min="0" placeholder="เหย้า" required>
-        <div class="vs">VS</div>
-        <input id="a" type="number" min="0" placeholder="เยือน" required>
+      <!-- โลโก้ (แก้ปัญหารูปไม่ขึ้น: ใส่ referrerpolicy + onerror fallback ไป logo.png) -->
+      <div class="logo-wrap">
+        <a target="_blank" href="https://uppic.cloud/kqhR9Ce4FkYXUoX" rel="noopener">
+          <img
+            src="https://uppic.cloud/ib/dorDAREGSar3dtW_1765716067.png"
+            alt="logo"
+            loading="lazy"
+            referrerpolicy="no-referrer"
+            onerror="this.onerror=null; this.src='logo.png';"
+          />
+        </a>
       </div>
 
-      <div class="actions">
-        <button class="btn-primary" type="submit">ส่งคำทาย</button>
-        <button class="btn-ghost" type="button" onclick="demo()">ตัวอย่าง</button>
-        <button class="btn-ghost" type="reset">ล้างค่า</button>
-      </div>
-
-      <div id="msg"></div>
-    </form>
-  </div>
-</section>
-
-<!-- ================== PREVIEW ================== -->
-<aside class="card">
-  <div class="head">
-    <div class="title">📌 สรุปคำทาย</div>
-  </div>
-  <div class="body">
-    <div class="box">
-      <div class="kv">
-        <div class="k">คู่วันนี้</div><div id="pm">-</div>
-        <div class="k">ยูส</div><div id="pu">-</div>
-        <div class="k">สกอร์</div><div id="ps">-</div>
+      <div class="title">⚽ กิจกรรมทายผลบอล</div>
+      <div class="sub">
+        ลูกค้ากรอกแค่ <b>ยูส</b> และ <b>สกอร์</b> เท่านั้น<br>
+        <span id="matchText"></span><br>
+        <span id="closeText"></span><br>
+        <span class="badge">ธีมแดง • ใช้งานมือถือได้</span>
       </div>
     </div>
 
-    <div class="box" style="margin-top:12px">
-      <h3>ข้อความส่งแอดมิน</h3>
-      <div id="copy" class="copy">-</div>
-      <div class="actions" style="margin-top:10px">
-        <button class="btn-ghost" onclick="copyText()">คัดลอก</button>
-      </div>
-      <div id="cmsg"></div>
+    <div class="body">
+      <form id="predictForm" autocomplete="off">
+
+        <div>
+          <label>ยูสเซอร์ลูกค้า</label>
+          <input id="username" placeholder="เช่น user1234" required />
+        </div>
+
+        <div style="margin-top:12px">
+          <label>ทายสกอร์</label>
+          <div class="scorebox">
+            <input id="homeScore" type="number" min="0" max="99" placeholder="เหย้า" required />
+            <div class="vs">VS</div>
+            <input id="awayScore" type="number" min="0" max="99" placeholder="เยือน" required />
+          </div>
+          <div class="hint">ตัวอย่าง: 2 - 1</div>
+        </div>
+
+        <div class="actions">
+          <button class="btn-primary" type="submit">✅ ส่งคำทาย</button>
+          <button class="btn-ghost" type="button" id="btnFillDemo">ใส่ตัวอย่าง</button>
+          <button class="btn-ghost" type="reset" id="btnReset">ล้างค่า</button>
+        </div>
+
+        <div id="msg"></div>
+
+        <div class="hint">
+          * หน้านี้เป็นฟอร์มตัวอย่าง (ยังไม่บันทึกลงชีท/ระบบ)  
+          ถ้าต้องการ “กดส่งแล้วเข้า Google Sheet” บอกได้ เดี๋ยวผมต่อให้ครบ
+        </div>
+      </form>
     </div>
-  </div>
-</aside>
+  </section>
+
+  <!-- สรุป -->
+  <aside class="card">
+    <div class="head">
+      <div class="title">📌 สรุปคำทาย</div>
+      <div class="sub">ตรวจสอบก่อนส่ง + กดคัดลอกส่งแอดมินได้</div>
+    </div>
+
+    <div class="body">
+      <div class="box">
+        <h3>ข้อมูลที่กรอก</h3>
+        <div class="kv">
+          <div class="k">คู่วันนี้:</div><div id="pMatch">—</div>
+          <div class="k">ปิดรับ:</div><div id="pClose">—</div>
+          <div class="k">ยูส:</div><div id="pUser">—</div>
+          <div class="k">สกอร์:</div><div id="pScore">—</div>
+        </div>
+      </div>
+
+      <div class="box" style="margin-top:12px">
+        <h3>ข้อความส่งแอดมิน</h3>
+        <div id="copyText" class="copy">—</div>
+        <div class="actions" style="margin-top:10px">
+          <button class="btn-ghost" type="button" id="btnCopy">คัดลอกข้อความ</button>
+        </div>
+        <div id="copyMsg"></div>
+
+        <div class="hint">
+          ถ้าเปิดในมือถือแล้วคัดลอกไม่ได้ ให้กดค้างที่ข้อความแล้วเลือก “คัดลอก”
+        </div>
+      </div>
+    </div>
+  </aside>
 
 </main>
 
 <script>
-const $=id=>document.getElementById(id);
-$("matchText").textContent=ADMIN_MATCH;
-$("closeText").textContent=ADMIN_CLOSE;
+  const $ = (id) => document.getElementById(id);
 
-function render(){
-  const u=$("user").value||"-";
-  const h=$("h").value;
-  const a=$("a").value;
-  const s=(h!==""&&a!=="")?`${h}-${a}`:"-";
+  // แสดงข้อความคู่วันนี้/ปิดรับ
+  $("matchText").textContent = ADMIN_MATCH_TEXT;
+  $("closeText").textContent = ADMIN_CLOSE_TEXT;
 
-  $("pm").textContent=ADMIN_MATCH.replace("คู่วันนี้ : ","");
-  $("pu").textContent=u;
-  $("ps").textContent=s;
+  const msg = $("msg");
+  const copyMsg = $("copyMsg");
 
-  $("copy").textContent=
+  function safe(v){ return (!v || String(v).trim()==="") ? "—" : String(v).trim(); }
+
+  function renderPreview(){
+    const user = safe($("username").value);
+    const hs = $("homeScore").value;
+    const as = $("awayScore").value;
+    const score = (hs !== "" && as !== "") ? `${hs} - ${as}` : "—";
+
+    $("pMatch").textContent = ADMIN_MATCH_TEXT.replace("คู่วันนี้:", "").trim();
+    $("pClose").textContent = ADMIN_CLOSE_TEXT.replace("ปิดรับคำทาย:", "").trim();
+    $("pUser").textContent = user;
+    $("pScore").textContent = score;
+
+    $("copyText").textContent =
 `[ทายผลบอล]
-${ADMIN_MATCH}
-${ADMIN_CLOSE}
-ยูส : ${u}
-ทายสกอร์ : ${s}`;
-}
+${ADMIN_MATCH_TEXT}
+${ADMIN_CLOSE_TEXT}
+ยูส: ${user}
+ทายสกอร์: ${score}`;
+  }
 
-["user","h","a"].forEach(i=>$(i).addEventListener("input",render));
-render();
+  function showAlert(type, text){
+    msg.innerHTML = (type === "ok")
+      ? `<div class="ok">✅ ${text}</div>`
+      : `<div class="err">⚠️ ${text}</div>`;
+    setTimeout(()=>{ msg.innerHTML = ""; }, 3500);
+  }
 
-$("form").onsubmit=e=>{
-  e.preventDefault();
-  $("msg").innerHTML=`<div class="ok">✅ ส่งคำทายเรียบร้อย</div>`;
-};
+  // อัปเดตสรุปแบบเรียลไทม์
+  ["username","homeScore","awayScore"].forEach(id=>{
+    $(id).addEventListener("input", renderPreview);
+    $(id).addEventListener("change", renderPreview);
+  });
+  renderPreview();
 
-function demo(){
-  $("user").value="user1234";
-  $("h").value=2;
-  $("a").value=1;
-  render();
-}
+  // ส่งฟอร์ม
+  $("predictForm").addEventListener("submit", (e)=>{
+    e.preventDefault();
 
-function copyText(){
-  navigator.clipboard.writeText($("copy").textContent);
-  $("cmsg").innerHTML=`<div class="ok">📋 คัดลอกแล้ว</div>`;
-}
+    const user = $("username").value.trim();
+    const hs = $("homeScore").value;
+    const as = $("awayScore").value;
+
+    if(!user) return showAlert("err", "กรุณากรอกยูส");
+    if(hs === "" || as === "") return showAlert("err", "กรุณากรอกสกอร์ให้ครบ");
+    if(Number(hs) < 0 || Number(as) < 0) return showAlert("err", "สกอร์ต้องเป็น 0 ขึ้นไป");
+
+    showAlert("ok", "ส่งคำทายเรียบร้อย (ตัวอย่างหน้านี้ยังไม่บันทึกลงระบบ)");
+  });
+
+  // ใส่ตัวอย่าง
+  $("btnFillDemo").addEventListener("click", ()=>{
+    $("username").value = "user1234";
+    $("homeScore").value = 2;
+    $("awayScore").value = 1;
+    renderPreview();
+    showAlert("ok", "ใส่ตัวอย่างให้แล้ว");
+  });
+
+  // รีเซ็ต
+  $("btnReset").addEventListener("click", ()=>{
+    setTimeout(()=> {
+      renderPreview();
+      copyMsg.innerHTML = "";
+    }, 0);
+  });
+
+  // คัดลอก
+  $("btnCopy").addEventListener("click", async ()=>{
+    try{
+      await navigator.clipboard.writeText($("copyText").textContent);
+      copyMsg.innerHTML = `<div class="ok">📋 คัดลอกแล้ว</div>`;
+      setTimeout(()=> copyMsg.innerHTML="", 2500);
+    }catch(e){
+      copyMsg.innerHTML = `<div class="err">คัดลอกไม่สำเร็จ (เบราว์เซอร์ไม่อนุญาต)</div>`;
+      setTimeout(()=> copyMsg.innerHTML="", 3000);
+    }
+  });
 </script>
 
 </body>
