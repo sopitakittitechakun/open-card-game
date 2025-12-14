@@ -1,198 +1,526 @@
 <!doctype html>
 <html lang="th">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>กิจกรรมทายผลบอล</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>กิจกรรมทายผลบอล (โหมดคอม)</title>
 
-<style>
-:root{
-  --bg:#0a0202;
-  --card:#170404;
-  --txt:#ffecec;
-  --muted:#ffb3b3;
-  --line:rgba(255,60,60,.25);
-  --radius:18px;
-  --shadow:0 18px 45px rgba(0,0,0,.65);
-  --accent:#ff2b2b;
-  --accent2:#b80000;
-}
+  <style>
+    :root{
+      --bg:#0a0202;
+      --panel:#160404;
+      --panel2:#0e0202;
+      --txt:#ffecec;
+      --muted:#ffb3b3;
+      --line:rgba(255,60,60,.25);
+      --shadow:0 18px 48px rgba(0,0,0,.65);
+      --radius:18px;
 
-*{box-sizing:border-box}
-body{
-  margin:0; padding:24px; min-height:100vh;
-  font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;
-  color:var(--txt);
-  background:
-    radial-gradient(900px 520px at 20% 10%, rgba(255,0,0,.25), transparent 60%),
-    radial-gradient(900px 520px at 80% 20%, rgba(255,0,0,.18), transparent 60%),
-    var(--bg);
-  display:flex; justify-content:center; align-items:center;
-}
+      --accent:#ff2b2b;
+      --accent2:#b80000;
 
-.wrap{
-  width:min(920px,100%);
-  display:grid;
-  grid-template-columns:1.1fr .9fr;
-  gap:16px;
-}
-@media(max-width:860px){.wrap{grid-template-columns:1fr}}
+      --okbg:rgba(255,140,140,.14);
+      --okbd:rgba(255,140,140,.35);
+      --errbg:rgba(255,50,50,.18);
+      --errbd:rgba(255,50,50,.45);
+    }
 
-.card{
-  border:1px solid var(--line);
-  border-radius:var(--radius);
-  background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-  box-shadow:var(--shadow);
-  overflow:hidden;
-}
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      padding:26px;
+      font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;
+      color:var(--txt);
+      background:
+        radial-gradient(1100px 650px at 18% 10%, rgba(255,0,0,.25), transparent 60%),
+        radial-gradient(1100px 650px at 82% 18%, rgba(255,0,0,.18), transparent 60%),
+        radial-gradient(1100px 650px at 50% 115%, rgba(255,0,0,.10), transparent 55%),
+        var(--bg);
+    }
 
-.head{
-  padding:18px;
-  border-bottom:1px solid var(--line);
-  background:linear-gradient(180deg, rgba(255,43,43,.25), transparent);
-  text-align:center;
-}
+    /* ===== โหมดคอม: ล็อกเลย์เอาต์สองคอลัมน์ ===== */
+    .wrap{
+      width:min(1180px, 100%);
+      margin:0 auto;
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:18px;
+      align-items:start;
+    }
 
-/* โลโก้เว็บ */
-.logo-wrap img{
-  max-width:160px;
-  filter:drop-shadow(0 0 16px rgba(255,0,0,.6));
-}
+    /* ถ้าจอเล็กมากค่อยซ้อน (กันแตก) */
+    @media (max-width: 900px){
+      .wrap{grid-template-columns:1fr}
+    }
 
-/* โลโก้ทีม */
-.team-logos{
-  display:grid;
-  grid-template-columns:1fr auto 1fr;
-  align-items:center;
-  gap:14px;
-  margin-top:14px;
-}
-.team{
-  text-align:center;
-}
-.team img{
-  max-width:90px;
-  height:auto;
-  background:#2a0606;
-  border-radius:12px;
-  padding:8px;
-  border:1px solid rgba(255,60,60,.35);
-}
-.vs{
-  font-weight:900;
-  color:#ffb3b3;
-}
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
 
-.title{font-weight:900;font-size:18px;margin-top:10px}
-.sub{font-size:13px;color:var(--muted);line-height:1.5}
+    .head{
+      padding:18px 18px 14px;
+      border-bottom:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,43,43,.26), transparent);
+    }
 
-.body{padding:18px}
+    /* โลโก้เว็บ */
+    .logo-wrap{
+      display:flex;
+      justify-content:center;
+      margin-bottom:10px;
+    }
+    .logo-wrap a{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,60,60,.28);
+      background: rgba(0,0,0,.14);
+      text-decoration:none;
+    }
+    .logo-wrap img{
+      max-width:180px;
+      height:auto;
+      display:block;
+      filter: drop-shadow(0 0 16px rgba(255,0,0,.65));
+      transition: transform .22s ease, filter .22s ease;
+    }
+    .logo-wrap a:hover img{
+      transform: scale(1.05);
+      filter: drop-shadow(0 0 28px rgba(255,0,0,.95));
+    }
 
-label{display:block;margin-bottom:8px;font-size:13px;color:var(--muted)}
-input{
-  width:100%; padding:12px;
-  border-radius:14px;
-  border:1px solid var(--line);
-  background:rgba(0,0,0,.25);
-  color:var(--txt);
-}
-.scorebox{
-  display:grid;
-  grid-template-columns:1fr auto 1fr;
-  gap:10px;
-  padding:12px;
-  border-radius:14px;
-  border:1px dashed rgba(255,43,43,.45);
-  background:rgba(80,0,0,.3);
-}
-.actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
-button{
-  border:none; cursor:pointer;
-  border-radius:14px; padding:12px 14px;
-  font-weight:900;
-}
-.btn-primary{
-  flex:1; min-width:180px;
-  color:#fff;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-}
-.btn-ghost{
-  background:rgba(255,255,255,.06);
-  color:var(--txt);
-  border:1px solid var(--line);
-}
-</style>
+    .title{
+      text-align:center;
+      font-weight:900;
+      font-size:20px;
+      letter-spacing:.2px;
+      margin-top:6px;
+    }
+    .sub{
+      text-align:center;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.55;
+      margin-top:8px;
+    }
+
+    /* โลโก้ทีม */
+    .matchbar{
+      margin-top:14px;
+      padding:14px;
+      border-radius:16px;
+      border:1px solid rgba(255,60,60,.28);
+      background: rgba(0,0,0,.18);
+    }
+
+    .team-logos{
+      display:grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap:14px;
+      align-items:center;
+    }
+    .team{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      flex-direction:column;
+      text-align:center;
+    }
+    .team img{
+      width:88px;
+      height:88px;
+      object-fit:contain;
+      border-radius:16px;
+      padding:10px;
+      background: rgba(255,255,255,.04);
+      border:1px solid rgba(255,60,60,.35);
+      box-shadow: 0 10px 26px rgba(0,0,0,.35);
+    }
+    .team .name{
+      font-size:12px;
+      color: rgba(255,230,230,.90);
+      max-width: 220px;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+    .vs{
+      font-weight:1000;
+      letter-spacing:1px;
+      color: rgba(255,200,200,.85);
+      text-align:center;
+      user-select:none;
+      font-size:18px;
+    }
+
+    .body{ padding:18px; }
+
+    label{
+      display:block;
+      margin:0 0 8px;
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    input{
+      width:100%;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(0,0,0,.22);
+      color:var(--txt);
+      outline:none;
+      font-size:14px;
+    }
+    input::placeholder{color:rgba(255,200,200,.45)}
+    input:focus{
+      border-color: rgba(255,43,43,.85);
+      box-shadow: 0 0 0 4px rgba(255,43,43,.28);
+    }
+
+    .scorebox{
+      margin-top:10px;
+      display:grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap:10px;
+      align-items:center;
+      padding:12px;
+      border-radius:14px;
+      border:1px dashed rgba(255,43,43,.48);
+      background: rgba(80,0,0,.28);
+    }
+    .hint{
+      margin-top:10px;
+      font-size:12px;
+      color: rgba(255,220,220,.62);
+      line-height:1.45;
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      margin-top:14px;
+      flex-wrap:wrap;
+    }
+
+    button{
+      cursor:pointer;
+      border:none;
+      border-radius:14px;
+      padding:12px 14px;
+      font-weight:900;
+      letter-spacing:.2px;
+      font-size:14px;
+    }
+    .btn-primary{
+      flex:1;
+      min-width:200px;
+      color:#fff;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+    }
+    .btn-primary:active{transform: translateY(1px)}
+    .btn-ghost{
+      background: rgba(255,255,255,.06);
+      color: var(--txt);
+      border:1px solid var(--line);
+    }
+
+    .ok,.err{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:10px 12px;
+      border-radius:14px;
+      font-size:13px;
+      margin-top:12px;
+    }
+    .ok{background:var(--okbg); border:1px solid var(--okbd)}
+    .err{background:var(--errbg); border:1px solid var(--errbd)}
+
+    /* การ์ดสรุปด้านขวา */
+    .box{
+      padding:16px;
+      border-radius:var(--radius);
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.22);
+    }
+    .box h3{
+      margin:0 0 10px;
+      font-size:14px;
+      color: rgba(255,240,240,.95);
+    }
+    .kv{
+      display:grid;
+      grid-template-columns: 120px 1fr;
+      gap:8px 12px;
+      font-size:13px;
+      color: rgba(255,240,240,.92);
+    }
+    .k{color: rgba(255,200,200,.72)}
+    .copy{
+      white-space:pre-wrap;
+      user-select:text;
+      font-size:13px;
+      color: rgba(255,230,230,.92);
+      line-height:1.55;
+    }
+
+    .pill{
+      display:inline-block;
+      margin-top:10px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color: rgba(255,230,230,.85);
+      font-size:12px;
+    }
+  </style>
 </head>
 
 <body>
 
-<!-- ===== ADMIN CONFIG ===== -->
+<!-- ================== ADMIN CONFIG (แก้วันละคู่ตรงนี้) ================== -->
 <script>
-const ADMIN_MATCH_TEXT = "ทีมเหย้า vs ทีมเยือน";
-const ADMIN_CLOSE_TEXT = "ปิดรับคำทาย วันนี้ 14:00 น.";
+  // ชื่อคู่วันนี้ (เอาแค่ชื่อทีม)
+  const HOME_TEAM_NAME = "ทีมเหย้า";
+  const AWAY_TEAM_NAME = "ทีมเยือน";
 
-const HOME_LOGO = "home.png";
-const AWAY_LOGO = "away.png";
+  // ข้อความปิดรับ
+  const ADMIN_CLOSE_TEXT = "ปิดรับคำทาย: วันนี้ 14:00 น.";
+
+  // โลโก้ทีม (ใส่เป็น URL หรือชื่อไฟล์ในโฟลเดอร์เดียวกัน เช่น home.png / away.png)
+  const HOME_LOGO = "home.png";
+  const AWAY_LOGO = "away.png";
+
+  // โลโก้เว็บ (ถ้าดึงจากลิงก์ไม่ได้ จะ fallback ไป logo.png)
+  const WEB_LOGO_URL = "https://uppic.cloud/ib/dorDAREGSar3dtW_1765716067.png";
+  const WEB_LOGO_LINK = "https://uppic.cloud/kqhR9Ce4FkYXUoX";
 </script>
-<!-- ======================= -->
+<!-- ===================================================================== -->
 
 <main class="wrap">
 
-<section class="card">
-  <div class="head">
+  <!-- ซ้าย: ฟอร์ม -->
+  <section class="card">
+    <div class="head">
 
-    <!-- โลโก้เว็บ -->
-    <div class="logo-wrap">
-      <img src="logo.png" alt="logo">
+      <div class="logo-wrap">
+        <a target="_blank" rel="noopener" href="" id="webLogoLink">
+          <img
+            id="webLogo"
+            src=""
+            alt="logo"
+            loading="lazy"
+            referrerpolicy="no-referrer"
+            onerror="this.onerror=null; this.src='logo.png';"
+          />
+        </a>
+      </div>
+
+      <div class="title">⚽ กิจกรรมทายผลบอล (โหมดคอม)</div>
+      <div class="sub">
+        ลูกค้ากรอกแค่ <b>ยูส</b> และ <b>สกอร์</b> เท่านั้น<br>
+        <span id="closeText"></span>
+      </div>
+
+      <div class="matchbar">
+        <div class="team-logos">
+          <div class="team">
+            <img id="homeLogo" src="" alt="ทีมเหย้า"
+                 referrerpolicy="no-referrer"
+                 onerror="this.onerror=null; this.src='home.png';" />
+            <div class="name" id="homeName">—</div>
+          </div>
+
+          <div class="vs">VS</div>
+
+          <div class="team">
+            <img id="awayLogo" src="" alt="ทีมเยือน"
+                 referrerpolicy="no-referrer"
+                 onerror="this.onerror=null; this.src='away.png';" />
+            <div class="name" id="awayName">—</div>
+          </div>
+        </div>
+
+        <div class="sub" style="margin-top:10px">
+          คู่วันนี้: <b id="matchText">—</b>
+          <span class="pill">ทายสกอร์เท่านั้น</span>
+        </div>
+      </div>
+
     </div>
 
-    <!-- โลโก้ทีม -->
-    <div class="team-logos">
-      <div class="team">
-        <img id="homeLogo" src="" alt="ทีมเหย้า"
-             onerror="this.src='home.png'">
-      </div>
-      <div class="vs">VS</div>
-      <div class="team">
-        <img id="awayLogo" src="" alt="ทีมเยือน"
-             onerror="this.src='away.png'">
-      </div>
+    <div class="body">
+      <form id="predictForm" autocomplete="off">
+
+        <div>
+          <label>ยูสเซอร์ลูกค้า</label>
+          <input id="username" placeholder="เช่น user1234" required />
+        </div>
+
+        <div style="margin-top:12px">
+          <label>ทายสกอร์</label>
+          <div class="scorebox">
+            <input id="homeScore" type="number" min="0" max="99" placeholder="เหย้า" required />
+            <div class="vs" style="font-size:16px">VS</div>
+            <input id="awayScore" type="number" min="0" max="99" placeholder="เยือน" required />
+          </div>
+          <div class="hint">ตัวอย่าง: 2 - 1</div>
+        </div>
+
+        <div class="actions">
+          <button class="btn-primary" type="submit">✅ ส่งคำทาย</button>
+          <button class="btn-ghost" type="button" id="btnFillDemo">ใส่ตัวอย่าง</button>
+          <button class="btn-ghost" type="reset" id="btnReset">ล้างค่า</button>
+        </div>
+
+        <div id="msg"></div>
+
+        <div class="hint">
+          * หน้านี้ยังไม่บันทึกลงชีท/ระบบ (ถ้าจะต่อ Google Sheet บอกได้)
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ขวา: สรุป -->
+  <aside class="card">
+    <div class="head">
+      <div class="title" style="font-size:18px">📌 สรุปคำทาย</div>
+      <div class="sub">เช็กก่อนส่ง + คัดลอกส่งแอดมิน</div>
     </div>
 
-    <div class="title">⚽ กิจกรรมทายผลบอล</div>
-    <div class="sub">
-      <span id="matchText"></span><br>
-      <span id="closeText"></span>
+    <div class="body">
+      <div class="box">
+        <h3>ข้อมูลกิจกรรม</h3>
+        <div class="kv">
+          <div class="k">คู่วันนี้:</div><div id="pMatch">—</div>
+          <div class="k">ปิดรับ:</div><div id="pClose">—</div>
+        </div>
+      </div>
+
+      <div class="box" style="margin-top:12px">
+        <h3>ข้อมูลลูกค้า</h3>
+        <div class="kv">
+          <div class="k">ยูส:</div><div id="pUser">—</div>
+          <div class="k">สกอร์:</div><div id="pScore">—</div>
+        </div>
+      </div>
+
+      <div class="box" style="margin-top:12px">
+        <h3>ข้อความส่งแอดมิน</h3>
+        <div id="copyText" class="copy">—</div>
+        <div class="actions" style="margin-top:10px">
+          <button class="btn-ghost" type="button" id="btnCopy">คัดลอกข้อความ</button>
+        </div>
+        <div id="copyMsg"></div>
+        <div class="hint">ถ้าคัดลอกไม่ได้ ให้ลากคลุมข้อความแล้วคัดลอกเองได้</div>
+      </div>
     </div>
-  </div>
-
-  <div class="body">
-    <form>
-      <label>ยูสเซอร์ลูกค้า</label>
-      <input placeholder="เช่น user1234" required>
-
-      <label style="margin-top:12px">ทายสกอร์</label>
-      <div class="scorebox">
-        <input type="number" min="0" placeholder="เหย้า" required>
-        <div class="vs">VS</div>
-        <input type="number" min="0" placeholder="เยือน" required>
-      </div>
-
-      <div class="actions">
-        <button class="btn-primary">ส่งคำทาย</button>
-        <button type="reset" class="btn-ghost">ล้างค่า</button>
-      </div>
-    </form>
-  </div>
-</section>
+  </aside>
 
 </main>
 
 <script>
-document.getElementById("matchText").textContent = ADMIN_MATCH_TEXT;
-document.getElementById("closeText").textContent = ADMIN_CLOSE_TEXT;
-document.getElementById("homeLogo").src = HOME_LOGO;
-document.getElementById("awayLogo").src = AWAY_LOGO;
+  const $ = (id) => document.getElementById(id);
+
+  // ตั้งค่าบนหน้า (แอดมิน)
+  const match = `${HOME_TEAM_NAME} vs ${AWAY_TEAM_NAME}`;
+
+  $("closeText").textContent = ADMIN_CLOSE_TEXT;
+  $("matchText").textContent = match;
+
+  $("homeName").textContent = HOME_TEAM_NAME;
+  $("awayName").textContent = AWAY_TEAM_NAME;
+
+  $("homeLogo").src = HOME_LOGO;
+  $("awayLogo").src = AWAY_LOGO;
+
+  $("webLogo").src = WEB_LOGO_URL;
+  $("webLogoLink").href = WEB_LOGO_LINK;
+
+  // พรีวิว/สรุป
+  const msg = $("msg");
+  const copyMsg = $("copyMsg");
+
+  function safe(v){ return (!v || String(v).trim()==="") ? "—" : String(v).trim(); }
+
+  function renderPreview(){
+    const user = safe($("username").value);
+    const hs = $("homeScore").value;
+    const as = $("awayScore").value;
+    const score = (hs !== "" && as !== "") ? `${hs} - ${as}` : "—";
+
+    $("pMatch").textContent = match;
+    $("pClose").textContent = ADMIN_CLOSE_TEXT.replace("ปิดรับคำทาย:", "").trim();
+    $("pUser").textContent = user;
+    $("pScore").textContent = score;
+
+    $("copyText").textContent =
+`[ทายผลบอล]
+คู่วันนี้: ${match}
+${ADMIN_CLOSE_TEXT}
+ยูส: ${user}
+ทายสกอร์: ${score}`;
+  }
+
+  function showAlert(type, text){
+    msg.innerHTML = (type === "ok")
+      ? `<div class="ok">✅ ${text}</div>`
+      : `<div class="err">⚠️ ${text}</div>`;
+    setTimeout(()=>{ msg.innerHTML=""; }, 3500);
+  }
+
+  ["username","homeScore","awayScore"].forEach(id=>{
+    $(id).addEventListener("input", renderPreview);
+    $(id).addEventListener("change", renderPreview);
+  });
+  renderPreview();
+
+  $("predictForm").addEventListener("submit", (e)=>{
+    e.preventDefault();
+    const user = $("username").value.trim();
+    const hs = $("homeScore").value;
+    const as = $("awayScore").value;
+
+    if(!user) return showAlert("err","กรุณากรอกยูส");
+    if(hs==="" || as==="") return showAlert("err","กรุณากรอกสกอร์ให้ครบ");
+    if(Number(hs) < 0 || Number(as) < 0) return showAlert("err","สกอร์ต้องเป็น 0 ขึ้นไป");
+
+    showAlert("ok","ส่งคำทายเรียบร้อย (หน้านี้ยังไม่บันทึกลงระบบ)");
+  });
+
+  $("btnFillDemo").addEventListener("click", ()=>{
+    $("username").value = "user1234";
+    $("homeScore").value = 2;
+    $("awayScore").value = 1;
+    renderPreview();
+    showAlert("ok","ใส่ตัวอย่างให้แล้ว");
+  });
+
+  $("btnReset").addEventListener("click", ()=>{
+    setTimeout(()=>{ renderPreview(); copyMsg.innerHTML=""; }, 0);
+  });
+
+  $("btnCopy").addEventListener("click", async ()=>{
+    try{
+      await navigator.clipboard.writeText($("copyText").textContent);
+      copyMsg.innerHTML = `<div class="ok">📋 คัดลอกแล้ว</div>`;
+      setTimeout(()=> copyMsg.innerHTML="", 2500);
+    }catch(e){
+      copyMsg.innerHTML = `<div class="err">คัดลอกไม่สำเร็จ (เบราว์เซอร์ไม่อนุญาต)</div>`;
+      setTimeout(()=> copyMsg.innerHTML="", 3000);
+    }
+  });
 </script>
 
 </body>
