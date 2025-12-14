@@ -508,7 +508,7 @@ ${ADMIN_CLOSE_TEXT}
       const data = await res.json();
 
       if(data.ok){
-        showAlert("ok","บันทึกเข้าชีทเรียบร้อย ✅");
+        showAlert("ok","บันทึกเรียบร้อย ✅");
         $("predictForm").reset();
         renderPreview();
       }else{
@@ -518,7 +518,7 @@ ${ADMIN_CLOSE_TEXT}
       showAlert("err","ส่งไม่สำเร็จ: ตรวจสอบ Web App / การ Deploy / อินเทอร์เน็ต");
     }finally{
       $("btnSend").disabled = false;
-      $("btnSend").textContent = "✅ ส่งเข้าชีท";
+      $("btnSend").textContent = "✅ ส่งคำทาย";
     }
   });
 
