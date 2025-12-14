@@ -7,10 +7,17 @@
 
 <style>
 :root{
-  --bg:#0e0505; --card:#1a0b0b; --card2:#140909;
-  --text:#fff1f1; --muted:#f1b7b7;
-  --red:#e10600; --red2:#ff3b3b; --gold:#ffb020; --ok:#2ee59d;
-  --shadow:0 18px 60px rgba(0,0,0,.45); --radius:18px;
+  --bg:#0e0505;
+  --card:#1a0b0b;
+  --card2:#140909;
+  --text:#fff1f1;
+  --muted:#f1b7b7;
+  --red:#e10600;
+  --red2:#ff3b3b;
+  --gold:#ffb020;
+  --ok:#2ee59d;
+  --shadow:0 18px 60px rgba(0,0,0,.45);
+  --radius:18px;
 }
 *{box-sizing:border-box}
 body{
@@ -23,17 +30,19 @@ body{
   color:var(--text);
 }
 .wrap{max-width:1100px;margin:auto;padding:20px 16px 80px}
+
+/* Header */
 .header{
   display:flex;justify-content:space-between;align-items:center;gap:12px;
   padding:16px;background:linear-gradient(135deg,var(--red),var(--red2));
-  border-radius:20px;box-shadow:var(--shadow);
+  border-radius:20px;box-shadow:var(--shadow)
 }
 .brand{display:flex;gap:12px;align-items:center}
 .logo{
   width:60px;height:60px;border-radius:16px;background:#fff;
   display:flex;align-items:center;justify-content:center;
   box-shadow:0 0 0 3px rgba(255,59,59,.35),0 12px 28px rgba(0,0,0,.35);
-  overflow:hidden;
+  overflow:hidden
 }
 .logo img{width:85%;height:85%;object-fit:contain;display:block}
 .header h1{margin:0;font-size:18px;line-height:1.1}
@@ -41,56 +50,94 @@ body{
 .headerRight{display:flex;gap:10px;flex-wrap:wrap}
 .topPill{
   padding:8px 12px;border-radius:999px;font-size:12px;
-  background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.25);
+  background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.25)
 }
+
+/* Layout */
 .grid{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;margin-top:16px}
 @media(max-width:900px){.grid{grid-template-columns:1fr}}
+
+/* Card */
 .card{
   background:linear-gradient(180deg,var(--card),var(--card2));
   border:1px solid rgba(255,59,59,.35);
-  border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  overflow:hidden;
 }
 .cardHead{padding:14px;border-bottom:1px solid rgba(255,59,59,.35)}
 .cardHead h2{margin:0;font-size:16px}
 .cardSub{margin-top:6px;font-size:12px;color:var(--muted)}
 .cardBody{padding:14px}
+
+/* Pills */
 .pills{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
 .pill{
   padding:8px 12px;border-radius:999px;font-size:12px;
-  background:rgba(255,59,59,.18);border:1px solid rgba(255,59,59,.35);
+  background:rgba(255,59,59,.18);border:1px solid rgba(255,59,59,.35)
 }
+
+/* Rules */
 .rules{list-style:none;padding:0;margin:0;display:grid;gap:10px}
 .rules li{
   padding:12px;border-radius:14px;border:1px solid rgba(255,59,59,.25);
-  background:rgba(0,0,0,.15);font-size:12px;color:var(--muted);line-height:1.6;
+  background:rgba(0,0,0,.15);font-size:12px;color:var(--muted);line-height:1.6
 }
 .rules b{color:var(--text)}
+
+/* Form */
 label{font-size:12px;color:var(--muted)}
 .input{
   width:100%;padding:12px;margin-top:6px;border-radius:14px;
-  border:1px solid rgba(255,59,59,.35);background:#120606;color:var(--text);font-size:15px;
+  border:1px solid rgba(255,59,59,.35);background:#120606;color:var(--text);
+  font-size:15px
 }
 .input::placeholder{color:#f1a1a1}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:520px){.row{grid-template-columns:1fr}}
+
+/* Buttons */
 .btnRow{display:flex;gap:10px;margin-top:14px}
 .btn{
-  flex:1;padding:12px;border-radius:14px;border:1px solid rgba(255,59,59,.35);
-  background:#140909;color:var(--text);font-weight:800;cursor:pointer;
+  flex:1;padding:12px;border-radius:14px;
+  border:1px solid rgba(255,59,59,.35);background:#140909;
+  color:var(--text);font-weight:800;cursor:pointer
 }
-.btn.primary{background:linear-gradient(135deg,var(--red),var(--red2));border:none;color:#120303}
+.btn.primary{
+  background:linear-gradient(135deg,var(--red),var(--red2));
+  border:none;color:#120303
+}
+
+/* Preview */
 .preview{
-  margin-top:14px;padding:14px;border-radius:16px;border:1px dashed rgba(255,59,59,.35);
-  text-align:center;
+  margin-top:14px;padding:14px;border-radius:16px;
+  border:1px dashed rgba(255,59,59,.35);text-align:center
 }
 .numberBox{
   width:72px;height:72px;margin:10px auto;border-radius:18px;
   background:linear-gradient(135deg,var(--red2),var(--gold));
-  color:#120303;font-size:26px;font-weight:1000;display:grid;place-items:center;letter-spacing:2px;
+  color:#120303;font-size:26px;font-weight:1000;
+  display:grid;place-items:center;letter-spacing:2px
 }
+
+/* Alert */
 .alert{margin-top:10px;padding:10px 12px;border-radius:14px;font-size:13px;display:none}
 .alert.error{background:rgba(255,59,59,.18);border:1px solid rgba(255,59,59,.35);color:#ffd1d1}
 .alert.ok{background:rgba(46,229,157,.18);border:1px solid rgba(46,229,157,.35);color:#d7fff1}
+
+/* Debug box */
+.debug{
+  margin-top:10px;
+  padding:10px 12px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(0,0,0,.18);
+  color:#ffdede;
+  font-size:12px;
+  display:none;
+  white-space:pre-wrap;
+  word-break:break-word;
+}
 </style>
 </head>
 
@@ -142,11 +189,11 @@ label{font-size:12px;color:var(--muted)}
         <div class="row">
           <div>
             <label>ยูส</label>
-            <input id="name" class="input" placeholder="เช่น คุณเก่ง">
+            <input id="name" class="input" placeholder="เช่น 0631087044">
           </div>
           <div>
             <label>เลขที่ทาย (00–99)</label>
-            <input id="num" class="input" maxlength="2" inputmode="numeric" placeholder="เช่น 07">
+            <input id="num" class="input" maxlength="2" inputmode="numeric" placeholder="เช่น 44">
           </div>
         </div>
 
@@ -156,6 +203,7 @@ label{font-size:12px;color:var(--muted)}
         </div>
 
         <div id="alert" class="alert"></div>
+        <div id="debug" class="debug"></div>
 
         <div class="preview">
           <div>เลขที่คุณเลือก</div>
@@ -167,12 +215,14 @@ label{font-size:12px;color:var(--muted)}
 </div>
 
 <script>
+/** 🔴 ใส่ URL /exec ที่ใช้งานจริงของเก่งตรงนี้ */
 const SHEET_WEBAPP_URL =
 "https://script.google.com/macros/s/AKfycby3GMMK5ThixZ8C4Aa1dXf8l5wKAGS7AGWC8ROoo5GoFXECTc-HHq9Q4vca-bDnld8/exec";
 
 const nameEl = document.getElementById("name");
 const numEl = document.getElementById("num");
 const alertEl = document.getElementById("alert");
+const debugEl = document.getElementById("debug");
 const previewNum = document.getElementById("previewNum");
 const clearBtn = document.getElementById("clearBtn");
 const sendBtn = document.getElementById("sendBtn");
@@ -181,6 +231,16 @@ function showMsg(type, text){
   alertEl.style.display = "block";
   alertEl.className = "alert " + type;
   alertEl.textContent = text;
+}
+
+function showDebug(text){
+  debugEl.style.display = "block";
+  debugEl.textContent = text;
+}
+
+function hideDebug(){
+  debugEl.style.display = "none";
+  debugEl.textContent = "";
 }
 
 function thaiTimeString(d){
@@ -201,6 +261,7 @@ clearBtn.addEventListener("click", ()=>{
   numEl.value = "";
   previewNum.textContent = "--";
   alertEl.style.display = "none";
+  hideDebug();
 });
 
 sendBtn.addEventListener("click", submitGuess);
@@ -214,35 +275,43 @@ async function submitGuess(){
 
   sendBtn.disabled = true;
   sendBtn.textContent = "กำลังส่ง...";
+  alertEl.style.display = "none";
+  hideDebug();
 
   const now = new Date();
   const timeThai = thaiTimeString(now);
-  const ts = now.getTime();
 
-  // ✅ ส่งแบบ Form (ไม่ใส่ header) เพื่อตัดปัญหา CORS/preflight
+  // ✅ ส่งแบบ Form เพื่อตัดปัญหา CORS/preflight
   const form = new URLSearchParams();
   form.append("user", user);
   form.append("number", number);
   form.append("time", timeThai);
-  form.append("ts", String(ts));
+  form.append("ts", String(now.getTime()));
 
   try{
-    const res = await fetch(SHEET_WEBAPP_URL, {
-      method: "POST",
-      body: form
-    });
+    const res = await fetch(SHEET_WEBAPP_URL, { method:"POST", body: form });
 
-    // บางครั้งอ่าน response ไม่ได้ก็ยังถือว่าส่งถึงแล้ว (แต่ส่วนมากอ่านได้)
-    let text = "";
-    try { text = await res.text(); } catch(_) {}
+    const text = await res.text();
+    let out = null;
+    try { out = JSON.parse(text); } catch(_) {}
 
-    if(res.ok){
+    // ✅ ต้องได้ ok:true จริงเท่านั้น ถึงนับว่าส่งสำเร็จ
+    if(res.ok && out && out.ok){
+      const info = [];
+      if (out.tab) info.push("แท็บ: " + out.tab);
+      if (out.row) info.push("แถว: " + out.row);
+      if (out.wrote_to) info.push("ไฟล์: " + out.wrote_to);
       showMsg("ok", `ส่งสำเร็จ ✅ ยูส: ${user} | เลข: ${number}`);
-    }else{
-      showMsg("error", "ส่งไม่สำเร็จ (HTTP " + res.status + ") " + (text || ""));
+      if (info.length) showDebug(info.join(" | "));
+    } else {
+      // ถ้ามี error จะโชว์ชัด ๆ
+      const errMsg = (out && out.error) ? out.error : (text || "unknown_error");
+      showMsg("error", "ส่งไม่สำเร็จ: " + errMsg);
+      showDebug("Response:\n" + (text || "(empty)"));
     }
+
   }catch(e){
-    showMsg("error","ส่งไม่สำเร็จ: ตรวจสอบว่า Deploy เป็นทุกคน (Anyone) และใช้ลิงก์ /exec ล่าสุด");
+    showMsg("error","เชื่อมต่อไม่ได้: ตรวจสอบว่า Deploy เป็น Anyone และ URL /exec ล่าสุด");
   }finally{
     sendBtn.disabled = false;
     sendBtn.textContent = "ส่งคำทาย";
