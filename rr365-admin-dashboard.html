@@ -3,27 +3,23 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>ทายผลบอล</title>
+  <title>ทายผลบอล (ต้องอนุมัติสิทธิ์ก่อน)</title>
 
   <style>
     :root{
       --bg:#0a0202;
-      --panel:#160404;
       --txt:#ffecec;
       --muted:#ffb3b3;
       --line:rgba(255,60,60,.25);
       --shadow:0 18px 48px rgba(0,0,0,.65);
       --radius:18px;
-
       --accent:#ff2b2b;
       --accent2:#b80000;
-
       --okbg:rgba(255,140,140,.14);
       --okbd:rgba(255,140,140,.35);
       --errbg:rgba(255,50,50,.18);
       --errbd:rgba(255,50,50,.45);
     }
-
     *{box-sizing:border-box}
     body{
       margin:0;
@@ -34,11 +30,11 @@
       background:
         radial-gradient(1100px 650px at 18% 10%, rgba(255,0,0,.25), transparent 60%),
         radial-gradient(1100px 650px at 82% 18%, rgba(255,0,0,.18), transparent 60%),
-        radial-gradient(1100px 650px at 50% 115%, rgba(255,0,0,.10), transparent 55%),
+        radial-gradient(900px 520px at 50% 120%, rgba(255,0,0,.10), transparent 55%),
         var(--bg);
     }
 
-    /* โหมดคอม: 2 คอลัมน์ */
+    /* โหมดคอม 2 คอลัมน์ */
     .wrap{
       width:min(1180px, 100%);
       margin:0 auto;
@@ -66,39 +62,11 @@
       text-align:center;
     }
 
-    /* โลโก้เว็บ */
-    .logo-wrap{
-      display:flex;
-      justify-content:center;
-      margin-bottom:10px;
-    }
-    .logo-wrap a{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      padding:10px 14px;
-      border-radius:999px;
-      border:1px solid rgba(255,60,60,.28);
-      background: rgba(0,0,0,.14);
-      text-decoration:none;
-    }
-    .logo-wrap img{
-      max-width:180px;
-      height:auto;
-      display:block;
-      filter: drop-shadow(0 0 16px rgba(255,0,0,.65));
-      transition: transform .22s ease, filter .22s ease;
-    }
-    .logo-wrap a:hover img{
-      transform: scale(1.05);
-      filter: drop-shadow(0 0 28px rgba(255,0,0,.95));
-    }
-
     .title{
       font-weight:900;
       font-size:20px;
       letter-spacing:.2px;
-      margin-top:6px;
+      margin-top:2px;
     }
     .sub{
       color:var(--muted);
@@ -107,7 +75,6 @@
       margin-top:8px;
     }
 
-    /* กล่องคู่แข่งขัน + โลโก้ทีม */
     .matchbar{
       margin-top:14px;
       padding:14px;
@@ -223,12 +190,12 @@
       color:#fff;
       background: linear-gradient(135deg, var(--accent), var(--accent2));
     }
-    .btn-primary:active{transform: translateY(1px)}
     .btn-ghost{
       background: rgba(255,255,255,.06);
       color: var(--txt);
       border:1px solid var(--line);
     }
+    button[disabled]{opacity:.55; cursor:not-allowed}
 
     .ok,.err{
       display:inline-flex;
@@ -273,58 +240,37 @@
 
 <body>
 
-<!-- ================== ADMIN CONFIG (แก้วันละคู่ตรงนี้) ================== -->
+<!-- ================== ADMIN CONFIG (แก้ตรงนี้) ================== -->
 <script>
-  // ✅ ใส่ Web App URL จาก Apps Script (ต้องลงท้าย /exec)
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxcM2M-Gmy8xNDC0cdNljEas-0yojpyHHuyzxesYsci5N20DLkxC-Jh389lYIi_jskr/exec";
+  // ✅ ใส่ URL /exec ของเก่ง
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx1ZzQNUdVAWYmdfjlA1htlYy7MvNGy1-Hb-CGahrJI2Q-JMWELO_YBei5HM_11jZ5C/exec";
 
-  // ชื่อทีม
+  // คู่แข่งขัน (แอดมินแก้วันละคู่)
   const HOME_TEAM_NAME = "แมนยู";
   const AWAY_TEAM_NAME = "แมนซิตี้";
-
-  // ข้อความปิดรับ
   const ADMIN_CLOSE_TEXT = "ปิดรับคำทาย: วันนี้ 14:00 น.";
 
-  // โลโก้ทีม (ใส่ URL หรือชื่อไฟล์ในโฟลเดอร์เดียวกัน เช่น home.png / away.png)
+  // โลโก้ทีม (URL)
   const HOME_LOGO = "https://media.api-sports.io/football/teams/33.png";
   const AWAY_LOGO = "https://media.api-sports.io/football/teams/50.png";
-
-  // โลโก้เว็บ (ถ้าดึง URL ไม่ได้ จะ fallback ไป logo.png)
-  const WEB_LOGO_URL = "https://img2.pic.in.th/pic/1735020594.png";
-  const WEB_LOGO_LINK = "https://uppic.cloud/kqhR9Ce4FkYXUoX";
 </script>
-<!-- ===================================================================== -->
+<!-- ============================================================= -->
 
 <main class="wrap">
 
   <!-- ซ้าย: ฟอร์ม -->
   <section class="card">
     <div class="head">
-
-      <div class="logo-wrap">
-        <a target="_blank" rel="noopener" href="" id="webLogoLink">
-          <img
-            id="webLogo"
-            src=""
-            alt="logo"
-            loading="lazy"
-            referrerpolicy="no-referrer"
-            onerror="this.onerror=null; this.src='logo.png';"
-          />
-        </a>
-      </div>
-
-      <div class="title">⚽</div>
+      <div class="title">⚽ ทายผลบอล</div>
       <div class="sub">
-        ลูกค้ากรอกแค่ <b>ยูส</b> และ <b>สกอร์</b> แล้วกดส่งได้เลย<br>
+        ขั้นตอน: กรอกเบอร์ → กด “ตรวจสิทธิ์” → ผ่านแล้วค่อยทายสกอร์และส่ง<br>
         <span id="closeText"></span>
       </div>
 
       <div class="matchbar">
         <div class="team-logos">
           <div class="team">
-            <img id="homeLogo" src="" alt="ทีมเหย้า"
-                 referrerpolicy="no-referrer"
+            <img id="homeLogo" src="" alt="ทีมเหย้า" referrerpolicy="no-referrer"
                  onerror="this.onerror=null; this.src='home.png';" />
             <div class="name" id="homeName">—</div>
           </div>
@@ -332,8 +278,7 @@
           <div class="vs">VS</div>
 
           <div class="team">
-            <img id="awayLogo" src="" alt="ทีมเยือน"
-                 referrerpolicy="no-referrer"
+            <img id="awayLogo" src="" alt="ทีมเยือน" referrerpolicy="no-referrer"
                  onerror="this.onerror=null; this.src='away.png';" />
             <div class="name" id="awayName">—</div>
           </div>
@@ -343,7 +288,6 @@
           คู่วันนี้: <b id="matchText">—</b>
         </div>
       </div>
-
     </div>
 
     <div class="body">
@@ -351,30 +295,30 @@
 
         <div>
           <label>เบอร์โทรที่สมัคร</label>
-          <input id="username" placeholder="เช่น 096xxxxxxx" required />
+          <input id="username" placeholder="เช่น 096xxxxxxx" inputmode="numeric" required />
+        </div>
+
+        <div class="actions" style="margin-top:10px">
+          <button class="btn-ghost" type="button" id="btnCheck">🔎 ตรวจสิทธิ์</button>
+          <button class="btn-ghost" type="button" id="btnFillDemo">ใส่ตัวอย่าง</button>
+          <button class="btn-ghost" type="reset" id="btnReset">ล้างค่า</button>
         </div>
 
         <div style="margin-top:12px">
           <label>ทายสกอร์</label>
           <div class="scorebox">
-            <input id="homeScore" type="number" min="0" max="99" placeholder="เหย้า" required />
+            <input id="homeScore" type="number" min="0" max="99" placeholder="เหย้า" disabled required />
             <div class="vs" style="font-size:16px">VS</div>
-            <input id="awayScore" type="number" min="0" max="99" placeholder="เยือน" required />
+            <input id="awayScore" type="number" min="0" max="99" placeholder="เยือน" disabled required />
           </div>
-          <div class="hint">ตัวอย่าง: 2 - 1</div>
+          <div class="hint">* ทายได้ครั้งเดียว/วัน (ล็อกทั้งเบอร์และอุปกรณ์)</div>
         </div>
 
         <div class="actions">
-          <button class="btn-primary" id="btnSend" type="submit">✅ ส่งคำทาย</button>
-          <button class="btn-ghost" type="button" id="btnFillDemo">ใส่ตัวอย่าง</button>
-          <button class="btn-ghost" type="reset" id="btnReset">ล้างค่า</button>
+          <button class="btn-primary" id="btnSend" type="submit" disabled>⛔ รอแอดมินยืนยันสิทธิ์</button>
         </div>
 
         <div id="msg"></div>
-
-        <div class="hint">
-          * กิจกรรมทายผลสำหรับลูกค้า "ร่ำรวย365" ที่เข้าเงื่อนไขกับทางเราเท่านั้นค่อยสามารถเข้าร่วมได้
-        </div>
       </form>
     </div>
   </section>
@@ -410,7 +354,6 @@
           <button class="btn-ghost" type="button" id="btnCopy">คัดลอกข้อความ</button>
         </div>
         <div id="copyMsg"></div>
-        <div class="hint">ถ้าคัดลอกไม่ได้ ให้ลากคลุมข้อความแล้วคัดลอกเอง</div>
       </div>
     </div>
   </aside>
@@ -420,9 +363,55 @@
 <script>
   const $ = (id) => document.getElementById(id);
 
-  // ตั้งค่าบนหน้า
-  const match = `${HOME_TEAM_NAME} vs ${AWAY_TEAM_NAME}`;
+  const btnSend = $("btnSend");
+  const btnCheck = $("btnCheck");
+  const msg = $("msg");
+  const copyMsg = $("copyMsg");
 
+  function showAlert(type, text){
+    msg.innerHTML = (type === "ok")
+      ? `<div class="ok">✅ ${text}</div>`
+      : `<div class="err">⚠️ ${text}</div>`;
+  }
+  function showCopy(type, text){
+    copyMsg.innerHTML = (type === "ok")
+      ? `<div class="ok">📋 ${text}</div>`
+      : `<div class="err">⚠️ ${text}</div>`;
+    setTimeout(()=> copyMsg.innerHTML="", 2500);
+  }
+
+  function getDeviceId(){
+    const key = "RR365_DEVICE_ID";
+    let v = localStorage.getItem(key);
+    if (!v) {
+      v = (crypto && crypto.randomUUID) ? crypto.randomUUID()
+        : ("dev_" + Math.random().toString(16).slice(2) + Date.now());
+      localStorage.setItem(key, v);
+    }
+    return v;
+  }
+  const deviceId = getDeviceId();
+
+  function isValidPhone(p){
+    return /^0\d{8,9}$/.test(p);
+  }
+
+  function lockForever(text){
+    btnSend.dataset.locked = "1";
+    btnSend.disabled = true;
+    btnSend.textContent = text;
+    btnCheck.disabled = true;
+    $("homeScore").disabled = true;
+    $("awayScore").disabled = true;
+  }
+
+  function setScoreEnabled(on){
+    $("homeScore").disabled = !on;
+    $("awayScore").disabled = !on;
+  }
+
+  // ตั้งค่าหน้า
+  const match = `${HOME_TEAM_NAME} vs ${AWAY_TEAM_NAME}`;
   $("closeText").textContent = ADMIN_CLOSE_TEXT;
   $("matchText").textContent = match;
 
@@ -432,20 +421,12 @@
   $("homeLogo").src = HOME_LOGO;
   $("awayLogo").src = AWAY_LOGO;
 
-  $("webLogo").src = WEB_LOGO_URL;
-  $("webLogoLink").href = WEB_LOGO_LINK;
-
   // สรุป
-  const msg = $("msg");
-  const copyMsg = $("copyMsg");
-
-  function safe(v){ return (!v || String(v).trim()==="") ? "—" : String(v).trim(); }
-
   function renderPreview(){
-    const user = safe($("username").value);
+    const user = $("username").value.trim() || "—";
     const hs = $("homeScore").value;
     const as = $("awayScore").value;
-    const score = (hs !== "" && as !== "") ? `${hs} - ${as}` : "—";
+    const score = (hs !== "" && as !== "") ? `${hs}-${as}` : "—";
 
     $("pMatch").textContent = match;
     $("pClose").textContent = ADMIN_CLOSE_TEXT.replace("ปิดรับคำทาย:", "").trim();
@@ -460,83 +441,155 @@ ${ADMIN_CLOSE_TEXT}
 ทายสกอร์: ${score}`;
   }
 
-  function showAlert(type, text){
-    msg.innerHTML = (type === "ok")
-      ? `<div class="ok">✅ ${text}</div>`
-      : `<div class="err">⚠️ ${text}</div>`;
-  }
-
   ["username","homeScore","awayScore"].forEach(id=>{
     $(id).addEventListener("input", renderPreview);
     $(id).addEventListener("change", renderPreview);
   });
+
+  // เริ่มต้น: ล็อกไว้ก่อน
+  setScoreEnabled(false);
+  btnSend.disabled = true;
+  btnSend.textContent = "⛔ รอแอดมินยืนยันสิทธิ์";
   renderPreview();
 
-  // ปุ่มตัวอย่าง
+  // ใส่ตัวอย่าง
   $("btnFillDemo").addEventListener("click", ()=>{
-    $("username").value = "user1234";
-    $("homeScore").value = 2;
-    $("awayScore").value = 1;
+    $("username").value = "0960000000";
     renderPreview();
-    showAlert("ok","ใส่ตัวอย่างให้แล้ว");
+    showAlert("ok","ใส่เบอร์ตัวอย่างแล้ว กดตรวจสิทธิ์ได้เลย");
   });
 
-  // ส่งเข้าชีท
+  // ตรวจสิทธิ์ (action: check)
+  btnCheck.addEventListener("click", async ()=>{
+    if (btnSend.dataset.locked === "1") return;
+
+    const username = $("username").value.trim();
+    if (!isValidPhone(username)){
+      return showAlert("err","กรุณากรอกเบอร์ให้ถูกต้อง (เช่น 096xxxxxxx)");
+    }
+
+    btnCheck.disabled = true;
+    btnCheck.textContent = "กำลังตรวจสิทธิ์...";
+
+    try{
+      const res = await fetch(WEB_APP_URL, {
+        method: "POST",
+        body: JSON.stringify({
+          action: "check",
+          username,
+          deviceId,
+          userAgent: navigator.userAgent
+        })
+      });
+      const data = await res.json();
+
+      if (data.ok){
+        showAlert("ok","ผ่านสิทธิ์แล้ว ✅ กรอกสกอร์และกดส่งได้เลย");
+        setScoreEnabled(true);
+        btnSend.disabled = false;
+        btnSend.textContent = "✅ ส่งคำทาย";
+      } else {
+        showAlert("err", data.msg || "ไม่ผ่านเงื่อนไข");
+
+        // ถ้าโดนล็อกว่าเคยทายแล้ว -> ล็อกถาวร
+        const m = String(data.msg || "");
+        if (m.includes("ทายไปแล้ว") || m.includes("อุปกรณ์นี้")){
+          lockForever("ทายแล้ววันนี้");
+        } else {
+          setScoreEnabled(false);
+          btnSend.disabled = true;
+          btnSend.textContent = "⛔ รอแอดมินยืนยันสิทธิ์";
+        }
+      }
+    } catch (e){
+      showAlert("err","ตรวจสิทธิ์ไม่สำเร็จ: ตรวจสอบ Web App / อินเทอร์เน็ต");
+    } finally {
+      btnCheck.disabled = false;
+      btnCheck.textContent = "🔎 ตรวจสิทธิ์";
+    }
+  });
+
+  // ส่งคำทาย (action: submit)
   $("predictForm").addEventListener("submit", async (e)=>{
     e.preventDefault();
+    if (btnSend.dataset.locked === "1") return;
 
     const username = $("username").value.trim();
     const homeScore = $("homeScore").value;
     const awayScore = $("awayScore").value;
 
-    if(!WEB_APP_URL || WEB_APP_URL.includes("PUT_YOUR_WEB_APP_URL_HERE")){
-      return showAlert("err","ยังไม่ได้ใส่ WEB_APP_URL (ลิงก์ Web App)");
+    if (!isValidPhone(username)){
+      return showAlert("err","กรุณากรอกเบอร์ให้ถูกต้อง (เช่น 096xxxxxxx)");
     }
-    if(!username) return showAlert("err","กรุณากรอกยูส");
-    if(homeScore==="" || awayScore==="") return showAlert("err","กรุณากรอกสกอร์ให้ครบ");
+    if (homeScore === "" || awayScore === ""){
+      return showAlert("err","กรุณากรอกสกอร์ให้ครบ");
+    }
 
-    $("btnSend").disabled = true;
-    $("btnSend").textContent = "กำลังส่ง...";
+    btnSend.disabled = true;
+    btnSend.textContent = "กำลังส่ง...";
 
     try{
-      // ✅ ไม่ใส่ headers เพื่อลดปัญหา preflight/cors
       const res = await fetch(WEB_APP_URL, {
         method: "POST",
-        body: JSON.stringify({ username, homeScore, awayScore })
+        body: JSON.stringify({
+          action: "submit",
+          username,
+          homeScore,
+          awayScore,
+          deviceId,
+          userAgent: navigator.userAgent
+        })
       });
-
       const data = await res.json();
 
-      if(data.ok){
-        showAlert("ok","บันทึกเรียบร้อย ✅");
+      if (data.ok){
+        showAlert("ok","บันทึกคำทายเรียบร้อย ✅ (ทายได้ครั้งเดียว/วัน)");
+        lockForever("ทายแล้ววันนี้");
         $("predictForm").reset();
         renderPreview();
-      }else{
-        showAlert("err","ส่งไม่สำเร็จ: " + (data.error || data.msg || "unknown"));
+      } else {
+        const m = String(data.msg || "ส่งไม่สำเร็จ");
+        showAlert("err", m);
+
+        if (m.includes("ทายไปแล้ว") || m.includes("อุปกรณ์นี้")){
+          lockForever("ทายแล้ววันนี้");
+        } else if (m.includes("ยังไม่ได้รับสิทธิ์")){
+          setScoreEnabled(false);
+          btnSend.disabled = true;
+          btnSend.textContent = "⛔ รอแอดมินยืนยันสิทธิ์";
+        } else {
+          // allow retry
+          btnSend.disabled = false;
+          btnSend.textContent = "✅ ส่งคำทาย";
+        }
       }
-    }catch(err){
-      showAlert("err","ส่งไม่สำเร็จ: ตรวจสอบ Web App / การ Deploy / อินเทอร์เน็ต");
-    }finally{
-      $("btnSend").disabled = false;
-      $("btnSend").textContent = "✅ ส่งคำทาย";
+    } catch (err){
+      showAlert("err","ส่งไม่สำเร็จ: ตรวจสอบ Web App / Deploy / อินเทอร์เน็ต");
+      btnSend.disabled = false;
+      btnSend.textContent = "✅ ส่งคำทาย";
     }
+  });
+
+  // รีเซ็ต
+  $("btnReset").addEventListener("click", ()=>{
+    setTimeout(()=>{
+      renderPreview();
+      if (btnSend.dataset.locked !== "1"){
+        setScoreEnabled(false);
+        btnSend.disabled = true;
+        btnSend.textContent = "⛔ รอแอดมินยืนยันสิทธิ์";
+      }
+    }, 0);
   });
 
   // คัดลอก
   $("btnCopy").addEventListener("click", async ()=>{
     try{
       await navigator.clipboard.writeText($("copyText").textContent);
-      copyMsg.innerHTML = `<div class="ok">📋 คัดลอกแล้ว</div>`;
-      setTimeout(()=> copyMsg.innerHTML="", 2500);
+      showCopy("ok","คัดลอกแล้ว");
     }catch(e){
-      copyMsg.innerHTML = `<div class="err">คัดลอกไม่สำเร็จ</div>`;
-      setTimeout(()=> copyMsg.innerHTML="", 2500);
+      showCopy("err","คัดลอกไม่สำเร็จ");
     }
-  });
-
-  // รีเซ็ต
-  $("btnReset").addEventListener("click", ()=>{
-    setTimeout(()=>{ renderPreview(); copyMsg.innerHTML=""; }, 0);
   });
 </script>
 
