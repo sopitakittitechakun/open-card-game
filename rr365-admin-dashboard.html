@@ -62,6 +62,30 @@
       text-align:center;
     }
 
+    /* ===== โลโก้เว็บ ===== */
+    .web-logo{
+      display:flex;
+      justify-content:center;
+      margin-bottom:10px;
+    }
+    .web-logo .pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,60,60,.28);
+      background: rgba(0,0,0,.14);
+      box-shadow: 0 10px 26px rgba(0,0,0,.35);
+    }
+    .web-logo img{
+      max-width:180px;
+      height:auto;
+      display:block;
+      filter: drop-shadow(0 0 18px rgba(255,0,0,.75));
+    }
+    /* ===================== */
+
     .title{
       font-weight:900;
       font-size:20px;
@@ -242,25 +266,34 @@
 
 <!-- ================== ADMIN CONFIG (แก้ตรงนี้) ================== -->
 <script>
-  // ✅ ใส่ URL /exec ของเก่ง
   const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx1ZzQNUdVAWYmdfjlA1htlYy7MvNGy1-Hb-CGahrJI2Q-JMWELO_YBei5HM_11jZ5C/exec";
 
-  // คู่แข่งขัน (แอดมินแก้วันละคู่)
   const HOME_TEAM_NAME = "แมนยู";
   const AWAY_TEAM_NAME = "แมนซิตี้";
   const ADMIN_CLOSE_TEXT = "ปิดรับคำทาย: วันนี้ 14:00 น.";
 
-  // โลโก้ทีม (URL)
   const HOME_LOGO = "https://media.api-sports.io/football/teams/33.png";
   const AWAY_LOGO = "https://media.api-sports.io/football/teams/50.png";
+
+  // ✅ โลโก้เว็บ
+  const WEB_LOGO_URL = "https://img2.pic.in.th/pic/17350205942206ca421a361980.png";
 </script>
 <!-- ============================================================= -->
 
 <main class="wrap">
 
-  <!-- ซ้าย: ฟอร์ม -->
   <section class="card">
     <div class="head">
+
+      <!-- ✅ โลโก้เว็บ -->
+      <div class="web-logo">
+        <div class="pill">
+          <img id="webLogo" src="" alt="โลโก้เว็บ" loading="lazy"
+               referrerpolicy="no-referrer"
+               onerror="this.onerror=null; this.src='logo.png';" />
+        </div>
+      </div>
+
       <div class="title">⚽ ทายผลบอล</div>
       <div class="sub">
         ขั้นตอน: กรอกเบอร์ → กด “ตรวจสิทธิ์” → ผ่านแล้วค่อยทายสกอร์และส่ง<br>
@@ -323,7 +356,6 @@
     </div>
   </section>
 
-  <!-- ขวา: สรุป -->
   <aside class="card">
     <div class="head">
       <div class="title" style="font-size:18px">📌 สรุปคำทาย</div>
@@ -421,6 +453,9 @@
   $("homeLogo").src = HOME_LOGO;
   $("awayLogo").src = AWAY_LOGO;
 
+  // ✅ ใส่โลโก้เว็บ
+  $("webLogo").src = WEB_LOGO_URL;
+
   // สรุป
   function renderPreview(){
     const user = $("username").value.trim() || "—";
@@ -491,7 +526,6 @@ ${ADMIN_CLOSE_TEXT}
       } else {
         showAlert("err", data.msg || "ไม่ผ่านเงื่อนไข");
 
-        // ถ้าโดนล็อกว่าเคยทายแล้ว -> ล็อกถาวร
         const m = String(data.msg || "");
         if (m.includes("ทายไปแล้ว") || m.includes("อุปกรณ์นี้")){
           lockForever("ทายแล้ววันนี้");
@@ -553,12 +587,11 @@ ${ADMIN_CLOSE_TEXT}
 
         if (m.includes("ทายไปแล้ว") || m.includes("อุปกรณ์นี้")){
           lockForever("ทายแล้ววันนี้");
-        } else if (m.includes("ยังไม่ได้รับสิทธิ์")){
+        } else if (m.includes("ยังไม่ได้รับสิทธิ์") || m.includes("ยังไม่ได้รับสิทธิ์") || m.includes("รอแอดมิน")){
           setScoreEnabled(false);
           btnSend.disabled = true;
           btnSend.textContent = "⛔ รอแอดมินยืนยันสิทธิ์";
         } else {
-          // allow retry
           btnSend.disabled = false;
           btnSend.textContent = "✅ ส่งคำทาย";
         }
