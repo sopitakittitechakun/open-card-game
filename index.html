@@ -12,7 +12,6 @@
   label{display:block;margin:10px 0 6px;opacity:.9}
   input{width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0f0f0f;color:#fff;font-size:16px}
 
-  /* ✅ ปุ่มคลิกได้แน่นอน */
   button{
     width:100%;
     padding:12px 14px;
@@ -32,14 +31,10 @@
   }
   button.secondary{background:#8d1a1a}
   button:disabled{opacity:.55;cursor:not-allowed}
+
   .msg{margin-top:12px;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);white-space:pre-line;display:none}
   .ok{border-color:rgba(0,255,140,.25)} .err{border-color:rgba(255,60,60,.35)}
   .small{font-size:12px;opacity:.7;margin-top:10px}
-  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-  .chip{font-size:12px;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);opacity:.9}
-
-  /* ✅ กันชั้นอะไรทับ */
-  .card *{ pointer-events:auto; }
 </style>
 </head>
 <body>
@@ -48,14 +43,9 @@
   <h1>📌 ลงชื่อก่อนเข้าร่วมกิจกรรม</h1>
   <p>กรอกเบอร์เพื่อเช็คสิทธิ์ (1 เบอร์/1 สิทธิ์) และ 1 อุปกรณ์/1 สิทธิ์</p>
 
-  <div class="row" style="margin-bottom:10px">
-    
-  </div>
-
   <label>เบอร์โทรศัพท์</label>
-  <input id="phone" inputmode="numeric" placeholder="เช่น 0611111111"/>
+  <input id="phone" inputmode="numeric" placeholder="เช่น 0631087044"/>
 
-  <!-- ✅ ใส่ onclick เผื่อเคสบางเครื่อง addEventListener โดนทับ -->
   <button id="btnCheck" type="button" onclick="runCheck()">เช็คสิทธิ์</button>
   <button id="btnJoin" type="button" onclick="runRegister()" disabled>ยืนยันเข้าร่วมกิจกรรม</button>
 
@@ -64,11 +54,8 @@
 </div>
 
 <script>
-  // ✅ ใส่ลิงก์ Web App /exec ตรงนี้
+  // ✅ ใส่ลิงก์ Web App /exec ของเก่งตรงนี้
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwFDCqjkEpps69bguwp9fVZ8mn4v-4-rTVO1YQ0iy-3Cxoy1Z78yqnE5xWp4t2T4LXupA/exec";
-
-  // โหมดสื่อสาร: jsonp แนะนำสุด (กัน CORS)
-  let MODE = "jsonp";
 
   const DEVICE_JOIN_KEY = "rr365_joined_activity";
   const DEVICE_ID_KEY   = "rr365_device_id";
@@ -77,8 +64,6 @@
   const $btnCheck = document.getElementById("btnCheck");
   const $btnJoin  = document.getElementById("btnJoin");
   const $msg = document.getElementById("msg");
-  const $modeChip = document.getElementById("modeChip");
-  const $toggleMode = document.getElementById("toggleMode");
 
   function show(text, type="ok"){
     $msg.style.display="block";
@@ -110,17 +95,6 @@
   function markJoined(){
     localStorage.setItem(DEVICE_JOIN_KEY,"1");
   }
-
-  function updateModeUI(){
-    $modeChip.textContent = MODE==="jsonp" ? "โหมด: JSONP (กัน CORS)" : "โหมด: fetch (ง่าย แต่บางทีติด CORS)";
-  }
-  updateModeUI();
-
-  $toggleMode.addEventListener("click", ()=>{
-    MODE = (MODE==="jsonp") ? "fetch" : "jsonp";
-    updateModeUI();
-    show("สลับโหมดแล้ว ลองกดเช็คสิทธิ์ใหม่", "ok");
-  });
 
   // ---------- JSONP helper (กัน CORS 100%) ----------
   function jsonpRequest(params){
@@ -156,16 +130,6 @@
     });
   }
 
-  // ---------- fetch helper (อาจติด CORS) ----------
-  async function fetchRequest(payload){
-    const res = await fetch(SCRIPT_URL, {
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify(payload)
-    });
-    return await res.json();
-  }
-
   async function request(action){
     const p = normalizePhone($phone.value);
     if(!p){ show("กรุณากรอกเบอร์ให้ถูกต้อง (ตัวอย่าง 0631087044)", "err"); return null; }
@@ -178,21 +142,15 @@
     };
 
     try{
-      if(MODE==="jsonp"){
-        return await jsonpRequest(payload);
-      }else{
-        return await fetchRequest(payload);
-      }
+      return await jsonpRequest(payload); // ✅ ล็อก JSONP อย่างเดียว
     }catch(e){
       return null;
     }
   }
 
-  // ✅ ทำให้เรียกได้จาก onclick
+  // ✅ เรียกจาก onclick
   window.runCheck = async function(){
-    // ทดสอบคลิก (ถ้ายังไม่ได้จะรู้เลย)
-    // console.log("clicked check");
-
+    // ถ้าเคยลงชื่อสำเร็จในเครื่องนี้แล้ว ให้บล็อกทันที (กันกดซ้ำ)
     if(alreadyJoined()){
       show("⚠️ อุปกรณ์นี้เคยเข้าร่วมกิจกรรมแล้ว ไม่สามารถทำซ้ำได้", "err");
       return;
@@ -205,7 +163,7 @@
     $btnCheck.disabled=false;
 
     if(!data){
-      show("เชื่อมต่อไม่สำเร็จ กรุณาตรวจสอบลิงก์ /exec และการ Deploy (แนะนำใช้โหมด JSONP)", "err");
+      show("เชื่อมต่อไม่สำเร็จ กรุณาตรวจสอบลิงก์ /exec และการ Deploy", "err");
       return;
     }
 
@@ -240,7 +198,7 @@
     $btnCheck.disabled=false;
 
     if(!data){
-      show("เชื่อมต่อไม่สำเร็จ กรุณาตรวจสอบลิงก์ /exec และการ Deploy (แนะนำใช้โหมด JSONP)", "err");
+      show("เชื่อมต่อไม่สำเร็จ กรุณาตรวจสอบลิงก์ /exec และการ Deploy", "err");
       return;
     }
 
