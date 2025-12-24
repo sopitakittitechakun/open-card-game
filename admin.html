@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Admin ตรวจสอบ</title>
+<style>
+body{font-family:system-ui;background:#0b0b0b;color:#fff;padding:20px;margin:0}
+.wrap{max-width:1100px;margin:0 auto}
+h1{font-size:20px;margin:0 0 12px}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+input,button{border-radius:10px;border:1px solid rgba(255,255,255,.12);background:#101010;color:#fff;padding:10px 12px;font-size:14px}
+button{border:0;background:#ff2b2b;font-weight:700;cursor:pointer}
+table{width:100%;border-collapse:collapse;margin-top:14px;background:#141414}
+th,td{padding:10px;border:1px solid rgba(255,255,255,.1);font-size:13px;vertical-align:top}
+th{background:#1f1f1f;text-align:left}
+tr:nth-child(even){background:#101010}
+.hint{opacity:.8;margin-top:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>📋 Admin: รายชื่อผู้เข้าร่วมกิจกรรม</h1>
+
+  <div class="row">
+    <input id="key" placeholder="admin_key" style="min-width:220px">
+    <button id="btnLoad">โหลดข้อมูล</button>
+    <input id="q" placeholder="ค้นหาเบอร์" style="flex:1;min-width:240px">
+  </div>
+
+  <div id="count" class="hint"></div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:60px">#</th>
+        <th style="width:190px">เวลา</th>
+        <th style="width:130px">เบอร์</th>
+        <th>อุปกรณ์</th>
+        <th style="width:240px">device_id</th>
+      </tr>
+    </thead>
+    <tbody id="tb"></tbody>
+  </table>
+</div>
+
+<script>
+const SCRIPT_URL = "PASTE_YOUR_WEB_APP_EXEC_URL_HERE"; // <-- ใส่ URL /exec
+
+const tb = document.getElementById("tb");
+const count = document.getElementById("count");
+const q = document.getElementById("q");
+const key = document.getElementById("key");
+const btnLoad = document.getElementById("btnLoad");
+
+let allRows = [];
+
+function fmt(v){ try{return new Date(v).toLocaleString("th-TH")}catch(e){return String(v||"")} }
+
+function render(){
+  const kw = (q.value||"").replace(/\D/g,"").trim();
+  const rows = kw ? allRows.filter(r => String(r.phone||"").includes(kw)) : allRows;
+
+  count.textContent = `ทั้งหมด ${allRows.length} รายการ | แสดง ${rows.length} รายการ`;
+
+  if(!rows.length){ tb.innerHTML = `<tr><td colspan="5">ไม่พบข้อมูล</td></tr>`; return; }
+
+  tb.innerHTML = rows.map((r,i)=>`
+    <tr>
+      <td>${i+1}</td>
+      <td>${fmt(r.created_at)}</td>
+      <td>${r.phone||""}</td>
+      <td style="word-break:break-word">${r.user_agent||""}</td>
+      <td style="word-break:break-word">${r.device_id||""}</td>
+    </tr>
+  `).join("");
+}
+
+async function loadData(){
+  btnLoad.disabled = true;
+  tb.innerHTML = `<tr><td colspan="5">กำลังโหลด...</td></tr>`;
+
+  try{
+    const res = await fetch(SCRIPT_URL, {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({ action:"admin_list", admin_key: key.value })
+    });
+    const data = await res.json();
+
+    if(!data.ok){
+      tb.innerHTML = `<tr><td colspan="5">${data.msg || "สิทธิ์ไม่ถูกต้อง"}</td></tr>`;
+      btnLoad.disabled = false;
+      return;
+    }
+
+    allRows = data.rows || [];
+    render();
+  }catch(e){
+    tb.innerHTML = `<tr><td colspan="5">เชื่อมต่อไม่สำเร็จ (อาจติด CORS/สิทธิ์ Deploy)</td></tr>`;
+  }finally{
+    btnLoad.disabled = false;
+  }
+}
+
+btnLoad.addEventListener("click", loadData);
+q.addEventListener("input", render);
+</script>
+</body>
+</html>
