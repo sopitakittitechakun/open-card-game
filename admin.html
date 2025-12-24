@@ -5,22 +5,22 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Admin ตรวจสอบ</title>
 <style>
-body{font-family:system-ui;background:#0b0b0b;color:#fff;padding:20px;margin:0}
-.wrap{max-width:1100px;margin:0 auto}
-h1{font-size:20px;margin:0 0 12px}
-.row{display:flex;gap:10px;flex-wrap:wrap}
-input,button{border-radius:10px;border:1px solid rgba(255,255,255,.12);background:#101010;color:#fff;padding:10px 12px;font-size:14px}
-button{border:0;background:#ff2b2b;font-weight:700;cursor:pointer}
-table{width:100%;border-collapse:collapse;margin-top:14px;background:#141414}
-th,td{padding:10px;border:1px solid rgba(255,255,255,.1);font-size:13px;vertical-align:top}
-th{background:#1f1f1f;text-align:left}
-tr:nth-child(even){background:#101010}
-.hint{opacity:.8;margin-top:10px}
+  body{font-family:system-ui;background:#0b0b0b;color:#fff;padding:20px;margin:0}
+  .wrap{max-width:1100px;margin:0 auto}
+  h1{font-size:20px;margin:0 0 12px}
+  .row{display:flex;gap:10px;flex-wrap:wrap}
+  input,button{border-radius:10px;border:1px solid rgba(255,255,255,.12);background:#101010;color:#fff;padding:10px 12px;font-size:14px}
+  button{border:0;background:#ff2b2b;font-weight:700;cursor:pointer}
+  table{width:100%;border-collapse:collapse;margin-top:14px;background:#141414}
+  th,td{padding:10px;border:1px solid rgba(255,255,255,.1);font-size:13px;vertical-align:top}
+  th{background:#1f1f1f;text-align:left}
+  tr:nth-child(even){background:#101010}
+  .hint{opacity:.8;margin-top:10px}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>📋 Admin: รายชื่อผู้เข้าร่วมกิจกรรม</h1>
+  <h1>📋 Admin: รายชื่อผู้เข้าร่วมกิจกรรม (สำเร็จ)</h1>
 
   <div class="row">
     <input id="key" placeholder="admin_key" style="min-width:220px">
@@ -45,7 +45,7 @@ tr:nth-child(even){background:#101010}
 </div>
 
 <script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwFDCqjkEpps69bguwp9fVZ8mn4v-4-rTVO1YQ0iy-3Cxoy1Z78yqnE5xWp4t2T4LXupA/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx6Y11dtBBcAOJEjrXWCakQpPolaHCHF9pwtRZD8GYhDJ6nYyn9w4OrgmVYIMI4UP6npQ/exec";
 
   const tb = document.getElementById("tb");
   const count = document.getElementById("count");
@@ -92,15 +92,8 @@ tr:nth-child(even){background:#101010}
       script.src = url;
       script.async = true;
 
-      window[cbName] = (data)=>{
-        cleanup();
-        resolve(data);
-      };
-
-      script.onerror = ()=>{
-        cleanup();
-        reject(new Error("JSONP error"));
-      };
+      window[cbName] = (data)=>{ cleanup(); resolve(data); };
+      script.onerror = ()=>{ cleanup(); reject(new Error("JSONP error")); };
 
       function cleanup(){
         try{ delete window[cbName]; }catch(e){ window[cbName]=undefined; }
@@ -117,10 +110,7 @@ tr:nth-child(even){background:#101010}
     tb.innerHTML = `<tr><td colspan="5">กำลังโหลด...</td></tr>`;
 
     try{
-      const data = await jsonpRequest({
-        action:"admin_list",
-        admin_key: key.value
-      });
+      const data = await jsonpRequest({ action:"admin_list", admin_key: key.value });
 
       if(!data || !data.ok){
         tb.innerHTML = `<tr><td colspan="5">${(data && data.msg) || "สิทธิ์ไม่ถูกต้อง"}</td></tr>`;
