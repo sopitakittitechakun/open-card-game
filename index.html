@@ -2,18 +2,18 @@
 <html lang="th">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>ลงชื่อเข้าร่วมกิจกรรม</title>
   <style>
-    body{font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;background:#0b0b0b;color:#fff;margin:0;padding:24px}
+    body{font-family:system-ui;background:#0b0b0b;color:#fff;margin:0;padding:24px}
     .card{max-width:520px;margin:0 auto;background:#141414;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:18px}
     h1{font-size:20px;margin:0 0 8px}
     p{opacity:.85;margin:0 0 14px;line-height:1.55}
     label{display:block;margin:10px 0 6px;opacity:.9}
-    input{width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0f0f0f;color:#fff;font-size:16px;outline:none}
+    input{width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0f0f0f;color:#fff;font-size:16px}
     button{width:100%;padding:12px 14px;border-radius:12px;border:0;background:#ff2b2b;color:#fff;font-size:16px;font-weight:700;cursor:pointer;margin-top:12px}
     button:disabled{opacity:.55;cursor:not-allowed}
-    .msg{margin-top:12px;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);white-space:pre-line}
+    .msg{margin-top:12px;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);white-space:pre-line;display:none}
     .ok{border-color:rgba(0,255,140,.25)}
     .err{border-color:rgba(255,60,60,.35)}
     .small{font-size:12px;opacity:.7;margin-top:10px}
@@ -24,45 +24,35 @@
     <h1>📌 ลงชื่อก่อนเข้าร่วมกิจกรรม</h1>
     <p>กรอกเบอร์โทรเพื่อเช็คสิทธิ์ (1 เบอร์ / 1 สิทธิ์) และ 1 อุปกรณ์ / 1 สิทธิ์</p>
 
-    <label for="phone">เบอร์โทรศัพท์</label>
-    <input id="phone" inputmode="numeric" placeholder="เช่น 0991234567" maxlength="14" />
+    <label>เบอร์โทรศัพท์</label>
+    <input id="phone" inputmode="numeric" placeholder="เช่น 0631087044" />
 
-    <button id="btnCheck" type="button">เช็คสิทธิ์</button>
-    <button id="btnJoin" type="button" disabled>ยืนยันเข้าร่วมกิจกรรม</button>
+    <button id="btnCheck">เช็คสิทธิ์</button>
+    <button id="btnJoin" disabled>ยืนยันเข้าร่วมกิจกรรม</button>
 
-    <div id="msg" class="msg" style="display:none;"></div>
+    <div id="msg" class="msg"></div>
     <div class="small">* ถ้าเคยเข้าร่วมแล้ว แม้กรอกเบอร์อื่น ระบบจะเตือนและไม่ให้ทำซ้ำ</div>
   </div>
 
 <script>
-  // ✅ ใส่ URL ของ Apps Script Web App
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyqOKB00lD2UjNvSymtHFuPztzhFhOfq7j1l8bAR1OUWZRsw9VA4n9lRIujfv-_HWnSuA/exec";
-
-  // ✅ ถ้าลงชื่อสำเร็จแล้วอยากพาไปหน้ากิจกรรม ใส่ลิงก์ตรงนี้
-  const NEXT_URL = ""; // เช่น "activity.html"
-
-  // ✅ คีย์ล็อกเครื่อง (localStorage)
   const DEVICE_JOIN_KEY = "rr365_joined_activity";
   const DEVICE_ID_KEY   = "rr365_device_id";
 
-  const $phone = document.getElementById("phone");
-  const $msg = document.getElementById("msg");
-  const $btnCheck = document.getElementById("btnCheck");
-  const $btnJoin = document.getElementById("btnJoin");
+  const phone = document.getElementById("phone");
+  const btnCheck = document.getElementById("btnCheck");
+  const btnJoin = document.getElementById("btnJoin");
+  const msg = document.getElementById("msg");
 
-  function showMsg(text, type="ok"){
-    $msg.style.display = "block";
-    $msg.className = "msg " + (type === "err" ? "err" : "ok");
-    $msg.textContent = text;
+  function show(text, type="ok"){
+    msg.style.display = "block";
+    msg.className = "msg " + (type==="err" ? "err" : "ok");
+    msg.textContent = text;
   }
 
-  function onlyDigits(v){ return (v||"").replace(/\D/g,""); }
-
   function normalizePhone(v){
-    let p = onlyDigits(v);
-    if (!p) return "";
-    if (p.startsWith("66")) p = "0" + p.slice(2);
-    if (p.length === 9) p = "0" + p;
+    let p = (v||"").replace(/\D/g,"");
+    if (p.startsWith("66")) p = "0"+p.slice(2);
+    if (p.length === 9) p = "0"+p;
     if (p.length === 10 && p.startsWith("0")) return p;
     return "";
   }
@@ -73,7 +63,6 @@
   function markDeviceJoined(){
     localStorage.setItem(DEVICE_JOIN_KEY, "1");
   }
-
   function getOrCreateDeviceId(){
     let id = localStorage.getItem(DEVICE_ID_KEY);
     if (!id){
@@ -83,95 +72,77 @@
     return id;
   }
 
-  // ✅ ถ้าเครื่องนี้เคยร่วมแล้ว เตือนทันที (กันกรอกเบอร์อื่น)
-  if (deviceAlreadyJoined()) {
+  // ถ้าเครื่องนี้เคยร่วมแล้ว ปิดเลย
+  if (deviceAlreadyJoined()){
     document.body.innerHTML = `
-      <div style="
-        max-width:520px;margin:80px auto;background:#141414;color:#fff;border-radius:16px;
-        padding:24px;text-align:center;font-family:system-ui;border:1px solid rgba(255,60,60,.35)
-      ">
+      <div style="max-width:520px;margin:80px auto;background:#141414;color:#fff;border-radius:16px;
+      padding:24px;text-align:center;border:1px solid rgba(255,60,60,.35);font-family:system-ui">
         <h2 style="margin:0 0 10px">⚠️ แจ้งเตือน</h2>
-        <p style="line-height:1.7;margin:0">
+        <p style="margin:0;line-height:1.7">
           อุปกรณ์นี้ได้เข้าร่วมกิจกรรมไปแล้ว<br>
           ไม่สามารถเข้าร่วมซ้ำได้ แม้จะเปลี่ยนเบอร์โทร
         </p>
       </div>
     `;
-    throw new Error("DEVICE_ALREADY_JOINED");
   }
 
-  async function post(action){
-    const phone = normalizePhone($phone.value);
-    if (!phone){
-      showMsg("กรุณากรอกเบอร์โทรให้ถูกต้อง (ตัวอย่าง 0991234567)", "err");
-      $btnJoin.disabled = true;
-      return null;
-    }
+  function runCheck(){
+    const p = normalizePhone(phone.value);
+    if (!p) return show("กรุณากรอกเบอร์ให้ถูกต้อง (ตัวอย่าง 0631087044)", "err");
 
-    $btnCheck.disabled = true;
-    $btnJoin.disabled = true;
+    btnCheck.disabled = true; btnJoin.disabled = true;
 
-    try{
-      const res = await fetch(SCRIPT_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action,
-          phone,
-          userAgent: navigator.userAgent,
-          deviceId: getOrCreateDeviceId()
-        })
-      });
-      return await res.json();
-    }catch(e){
-      showMsg("เชื่อมต่อไม่สำเร็จ กรุณาลองใหม่อีกครั้ง", "err");
-      return null;
-    }finally{
-      $btnCheck.disabled = false;
-    }
+    google.script.run
+      .withSuccessHandler((res)=>{
+        btnCheck.disabled = false;
+
+        if (!res || !res.ok) return show((res&&res.msg)||"เกิดข้อผิดพลาด", "err");
+
+        if (res.exists){
+          show("⚠️ เบอร์นี้เคยเข้าร่วมกิจกรรมแล้ว (ไม่สามารถทำซ้ำได้)", "err");
+          btnJoin.disabled = true;
+        } else {
+          show("✅ ยังไม่เคยเข้าร่วม สามารถกดยืนยันเข้าร่วมได้เลย", "ok");
+          btnJoin.disabled = false;
+        }
+      })
+      .withFailureHandler((err)=>{
+        btnCheck.disabled = false;
+        show("เชื่อมต่อไม่สำเร็จ (ฝั่งสคริปต์มีปัญหา) กรุณาลองใหม่", "err");
+      })
+      .apiCheck(p, getOrCreateDeviceId(), navigator.userAgent);
   }
 
-  $btnCheck.addEventListener("click", async ()=>{
-    const data = await post("check");
-    if (!data) return;
+  function runRegister(){
+    const p = normalizePhone(phone.value);
+    if (!p) return show("กรุณากรอกเบอร์ให้ถูกต้อง", "err");
 
-    if (data.ok && data.exists === false){
-      showMsg("✅ ยังไม่เคยเข้าร่วม สามารถกดยืนยันเข้าร่วมได้เลย");
-      $btnJoin.disabled = false;
-    } else if (data.ok && data.exists === true){
-      showMsg("⚠️ เบอร์นี้เคยเข้าร่วมกิจกรรมแล้ว (ไม่สามารถทำซ้ำได้)", "err");
-      $btnJoin.disabled = true;
-    } else {
-      showMsg(data.msg || "เกิดข้อผิดพลาด", "err");
-      $btnJoin.disabled = true;
-    }
-  });
+    btnCheck.disabled = true; btnJoin.disabled = true;
 
-  $btnJoin.addEventListener("click", async ()=>{
-    const data = await post("register");
-    if (!data) return;
+    google.script.run
+      .withSuccessHandler((res)=>{
+        btnCheck.disabled = false;
 
-    if (data.ok && data.registered){
-      showMsg("🎉 ลงชื่อสำเร็จ! ระบบบันทึกสิทธิ์แล้ว\nกำลังพาไปหน้ากิจกรรม...", "ok");
+        if (!res || !res.ok) return show((res&&res.msg)||"เกิดข้อผิดพลาด", "err");
 
-      // ✅ ล็อกเครื่องนี้ว่าเคยร่วมแล้ว (กันกรอกเบอร์อื่น)
-      markDeviceJoined();
+        if (res.registered){
+          markDeviceJoined();
+          show("🎉 ลงชื่อสำเร็จ! ระบบบันทึกสิทธิ์แล้ว", "ok");
+          btnJoin.disabled = true;
+        } else {
+          show(res.msg || "ไม่สามารถลงชื่อได้", "err");
+          btnJoin.disabled = true;
+        }
+      })
+      .withFailureHandler((err)=>{
+        btnCheck.disabled = false;
+        show("เชื่อมต่อไม่สำเร็จ (ฝั่งสคริปต์มีปัญหา) กรุณาลองใหม่", "err");
+      })
+      .apiRegister(p, getOrCreateDeviceId(), navigator.userAgent);
+  }
 
-      $btnJoin.disabled = true;
-
-      if (NEXT_URL){
-        setTimeout(()=> window.location.href = NEXT_URL, 600);
-      }
-    } else if (data.ok && data.exists){
-      showMsg("⚠️ เบอร์นี้ทำกิจกรรมไปแล้ว ไม่สามารถทำซ้ำได้", "err");
-      $btnJoin.disabled = true;
-    } else {
-      showMsg(data.msg || "เกิดข้อผิดพลาด", "err");
-      $btnJoin.disabled = true;
-    }
-  });
-
-  $phone.addEventListener("input", ()=>{ $btnJoin.disabled = true; });
+  btnCheck.addEventListener("click", runCheck);
+  btnJoin.addEventListener("click", runRegister);
 </script>
 </body>
 </html>
