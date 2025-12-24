@@ -1,322 +1,177 @@
 <!doctype html>
 <html lang="th">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>กิจกรรมทายเลข 2 ตัวล่าง ประจำวันที่ 16/12/2568</title>
-
-<style>
-:root{
-  --bg:#0e0505;
-  --card:#1a0b0b;
-  --card2:#140909;
-  --text:#fff1f1;
-  --muted:#f1b7b7;
-  --red:#e10600;
-  --red2:#ff3b3b;
-  --gold:#ffb020;
-  --ok:#2ee59d;
-  --shadow:0 18px 60px rgba(0,0,0,.45);
-  --radius:18px;
-}
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:system-ui,-apple-system,"Segoe UI",Arial,"Noto Sans Thai",sans-serif;
-  background:
-    radial-gradient(900px 500px at 20% 10%, rgba(225,6,0,.25), transparent 55%),
-    radial-gradient(900px 500px at 90% 30%, rgba(255,59,59,.22), transparent 55%),
-    linear-gradient(180deg, #090303, var(--bg));
-  color:var(--text);
-}
-.wrap{max-width:1100px;margin:auto;padding:20px 16px 80px}
-
-/* Header */
-.header{
-  display:flex;justify-content:space-between;align-items:center;gap:12px;
-  padding:16px;background:linear-gradient(135deg,var(--red),var(--red2));
-  border-radius:20px;box-shadow:var(--shadow)
-}
-.brand{display:flex;gap:12px;align-items:center}
-.logo{
-  width:60px;height:60px;border-radius:16px;background:#fff;
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 0 0 3px rgba(255,59,59,.35),0 12px 28px rgba(0,0,0,.35);
-  overflow:hidden
-}
-.logo img{width:85%;height:85%;object-fit:contain;display:block}
-.header h1{margin:0;font-size:18px;line-height:1.1}
-.header p{margin:4px 0 0;font-size:12px;opacity:.9}
-.headerRight{display:flex;gap:10px;flex-wrap:wrap}
-.topPill{
-  padding:8px 12px;border-radius:999px;font-size:12px;
-  background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.25)
-}
-
-/* Layout */
-.grid{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;margin-top:16px}
-@media(max-width:900px){.grid{grid-template-columns:1fr}}
-
-/* Card */
-.card{
-  background:linear-gradient(180deg,var(--card),var(--card2));
-  border:1px solid rgba(255,59,59,.35);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  overflow:hidden;
-}
-.cardHead{padding:14px;border-bottom:1px solid rgba(255,59,59,.35)}
-.cardHead h2{margin:0;font-size:16px}
-.cardSub{margin-top:6px;font-size:12px;color:var(--muted)}
-.cardBody{padding:14px}
-
-/* Pills */
-.pills{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
-.pill{
-  padding:8px 12px;border-radius:999px;font-size:12px;
-  background:rgba(255,59,59,.18);border:1px solid rgba(255,59,59,.35)
-}
-
-/* Rules */
-.rules{list-style:none;padding:0;margin:0;display:grid;gap:10px}
-.rules li{
-  padding:12px;border-radius:14px;border:1px solid rgba(255,59,59,.25);
-  background:rgba(0,0,0,.15);font-size:12px;color:var(--muted);line-height:1.6
-}
-.rules b{color:var(--text)}
-
-/* Form */
-label{font-size:12px;color:var(--muted)}
-.input{
-  width:100%;padding:12px;margin-top:6px;border-radius:14px;
-  border:1px solid rgba(255,59,59,.35);background:#120606;color:var(--text);
-  font-size:15px
-}
-.input::placeholder{color:#f1a1a1}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media(max-width:520px){.row{grid-template-columns:1fr}}
-
-/* Buttons */
-.btnRow{display:flex;gap:10px;margin-top:14px}
-.btn{
-  flex:1;padding:12px;border-radius:14px;
-  border:1px solid rgba(255,59,59,.35);background:#140909;
-  color:var(--text);font-weight:800;cursor:pointer
-}
-.btn.primary{
-  background:linear-gradient(135deg,var(--red),var(--red2));
-  border:none;color:#120303
-}
-
-/* Preview */
-.preview{
-  margin-top:14px;padding:14px;border-radius:16px;
-  border:1px dashed rgba(255,59,59,.35);text-align:center
-}
-.numberBox{
-  width:72px;height:72px;margin:10px auto;border-radius:18px;
-  background:linear-gradient(135deg,var(--red2),var(--gold));
-  color:#120303;font-size:26px;font-weight:1000;
-  display:grid;place-items:center;letter-spacing:2px
-}
-
-/* Alert */
-.alert{margin-top:10px;padding:10px 12px;border-radius:14px;font-size:13px;display:none}
-.alert.error{background:rgba(255,59,59,.18);border:1px solid rgba(255,59,59,.35);color:#ffd1d1}
-.alert.ok{background:rgba(46,229,157,.18);border:1px solid rgba(46,229,157,.35);color:#d7fff1}
-
-/* Debug box */
-.debug{
-  margin-top:10px;
-  padding:10px 12px;
-  border-radius:14px;
-  border:1px solid rgba(255,255,255,.12);
-  background:rgba(0,0,0,.18);
-  color:#ffdede;
-  font-size:12px;
-  display:none;
-  white-space:pre-wrap;
-  word-break:break-word;
-}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ลงชื่อเข้าร่วมกิจกรรม</title>
+  <style>
+    body{font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;background:#0b0b0b;color:#fff;margin:0;padding:24px}
+    .card{max-width:520px;margin:0 auto;background:#141414;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:18px}
+    h1{font-size:20px;margin:0 0 8px}
+    p{opacity:.85;margin:0 0 14px;line-height:1.55}
+    label{display:block;margin:10px 0 6px;opacity:.9}
+    input{width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0f0f0f;color:#fff;font-size:16px;outline:none}
+    button{width:100%;padding:12px 14px;border-radius:12px;border:0;background:#ff2b2b;color:#fff;font-size:16px;font-weight:700;cursor:pointer;margin-top:12px}
+    button:disabled{opacity:.55;cursor:not-allowed}
+    .msg{margin-top:12px;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);white-space:pre-line}
+    .ok{border-color:rgba(0,255,140,.25)}
+    .err{border-color:rgba(255,60,60,.35)}
+    .small{font-size:12px;opacity:.7;margin-top:10px}
+  </style>
 </head>
-
 <body>
-<div class="wrap">
-  <div class="header">
-    <div class="brand">
-      <div class="logo">
-        <img src="https://i.ibb.co/Yw7rGtj/1735020594.png" alt="logo">
-      </div>
-      <div>
-        <h1>กิจกรรมทายเลข 2 ตัวล่าง ประจำวันที่ 16/12/2568</h1>
-        <p>ร่วมสนุกง่าย ๆ | เลข 00–99</p>
-      </div>
-    </div>
-    <div class="headerRight">
-      <div class="topPill">สถานะ: เปิดรับ</div>
-      <div class="topPill">1 คน / 1 ครั้ง</div>
-      <div class="topPill">2 ตัวล่าง</div>
-    </div>
+  <div class="card">
+    <h1>📌 ลงชื่อก่อนเข้าร่วมกิจกรรม</h1>
+    <p>กรอกเบอร์โทรเพื่อเช็คสิทธิ์ (1 เบอร์ / 1 สิทธิ์) และ 1 อุปกรณ์ / 1 สิทธิ์</p>
+
+    <label for="phone">เบอร์โทรศัพท์</label>
+    <input id="phone" inputmode="numeric" placeholder="เช่น 0991234567" maxlength="14" />
+
+    <button id="btnCheck" type="button">เช็คสิทธิ์</button>
+    <button id="btnJoin" type="button" disabled>ยืนยันเข้าร่วมกิจกรรม</button>
+
+    <div id="msg" class="msg" style="display:none;"></div>
+    <div class="small">* ถ้าเคยเข้าร่วมแล้ว แม้กรอกเบอร์อื่น ระบบจะเตือนและไม่ให้ทำซ้ำ</div>
   </div>
-
-  <div class="grid">
-    <section class="card">
-      <div class="cardHead">
-        <h2>รายละเอียดกิจกรรม</h2>
-        <div class="cardSub">กติกาชัดเจน เข้าใจง่าย</div>
-      </div>
-      <div class="cardBody">
-        <div class="pills">
-          <div class="pill">เลข 00–99</div>
-          <div class="pill">ส่งได้ 1 ครั้ง</div>
-          <div class="pill">ประกาศผลหลังหวยออก</div>
-        </div>
-        <ul class="rules">
-          <li><b>วิธีเล่น:</b> กรอกยูส และเลข 2 ตัวล่างที่เลือก</li>
-          <li><b>สิทธิ์:</b> 1 ยูส ต่อ 1 ครั้ง</li>
-          <li><b>การตัดสิน:</b> ทีมงานเป็นผู้ตัดสินสุดท้าย</li>
-        </ul>
-      </div>
-    </section>
-
-    <aside class="card">
-      <div class="cardHead">
-        <h2>ร่วมทายเลข</h2>
-        <div class="cardSub">กรอกข้อมูลให้ครบก่อนส่ง</div>
-      </div>
-      <div class="cardBody">
-        <div class="row">
-          <div>
-            <label>ยูส</label>
-            <input id="name" class="input" placeholder="กรอกเบอร์โทร">
-          </div>
-          <div>
-            <label>เลขที่ทาย (00–99)</label>
-            <input id="num" class="input" maxlength="2" inputmode="numeric" placeholder="เช่น 44">
-          </div>
-        </div>
-
-        <div class="btnRow">
-          <button class="btn" id="clearBtn" type="button">ล้าง</button>
-          <button class="btn primary" id="sendBtn" type="button">ส่งคำทาย</button>
-        </div>
-
-        <div id="alert" class="alert"></div>
-        <div id="debug" class="debug"></div>
-
-        <div class="preview">
-          <div>เลขที่คุณเลือก</div>
-          <div id="previewNum" class="numberBox">--</div>
-        </div>
-      </div>
-    </aside>
-  </div>
-</div>
 
 <script>
-/** 🔴 ใส่ URL /exec ที่ใช้งานจริงของเก่งตรงนี้ */
-const SHEET_WEBAPP_URL =
-"https://script.google.com/macros/s/AKfycbwJPLwKkOqCVQsOG2OQ-uSyj7RAcmjPQzW1xnSJacDzA725nlHMxeWC3hFCDb4N2sC2/exec";
+  // ✅ ใส่ URL ของ Apps Script Web App
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlyuP4kR3fQwQ5vaIc8o3-tqoyUcbOe9bQvtct0BsKzWEskrom7fwPhLe7s3Tdstnx/exec";
 
-const nameEl = document.getElementById("name");
-const numEl = document.getElementById("num");
-const alertEl = document.getElementById("alert");
-const debugEl = document.getElementById("debug");
-const previewNum = document.getElementById("previewNum");
-const clearBtn = document.getElementById("clearBtn");
-const sendBtn = document.getElementById("sendBtn");
+  // ✅ ถ้าลงชื่อสำเร็จแล้วอยากพาไปหน้ากิจกรรม ใส่ลิงก์ตรงนี้
+  const NEXT_URL = ""; // เช่น "activity.html"
 
-function showMsg(type, text){
-  alertEl.style.display = "block";
-  alertEl.className = "alert " + type;
-  alertEl.textContent = text;
-}
+  // ✅ คีย์ล็อกเครื่อง (localStorage)
+  const DEVICE_JOIN_KEY = "rr365_joined_activity";
+  const DEVICE_ID_KEY   = "rr365_device_id";
 
-function showDebug(text){
-  debugEl.style.display = "block";
-  debugEl.textContent = text;
-}
+  const $phone = document.getElementById("phone");
+  const $msg = document.getElementById("msg");
+  const $btnCheck = document.getElementById("btnCheck");
+  const $btnJoin = document.getElementById("btnJoin");
 
-function hideDebug(){
-  debugEl.style.display = "none";
-  debugEl.textContent = "";
-}
+  function showMsg(text, type="ok"){
+    $msg.style.display = "block";
+    $msg.className = "msg " + (type === "err" ? "err" : "ok");
+    $msg.textContent = text;
+  }
 
-function thaiTimeString(d){
-  return new Intl.DateTimeFormat("th-TH", {
-    timeZone: "Asia/Bangkok",
-    year:"numeric", month:"2-digit", day:"2-digit",
-    hour:"2-digit", minute:"2-digit", second:"2-digit"
-  }).format(d);
-}
+  function onlyDigits(v){ return (v||"").replace(/\D/g,""); }
 
-numEl.addEventListener("input", ()=>{
-  numEl.value = numEl.value.replace(/\D/g,'').slice(0,2);
-  previewNum.textContent = numEl.value.length === 2 ? numEl.value : "--";
-});
+  function normalizePhone(v){
+    let p = onlyDigits(v);
+    if (!p) return "";
+    if (p.startsWith("66")) p = "0" + p.slice(2);
+    if (p.length === 9) p = "0" + p;
+    if (p.length === 10 && p.startsWith("0")) return p;
+    return "";
+  }
 
-clearBtn.addEventListener("click", ()=>{
-  nameEl.value = "";
-  numEl.value = "";
-  previewNum.textContent = "--";
-  alertEl.style.display = "none";
-  hideDebug();
-});
+  function deviceAlreadyJoined(){
+    return localStorage.getItem(DEVICE_JOIN_KEY) === "1";
+  }
+  function markDeviceJoined(){
+    localStorage.setItem(DEVICE_JOIN_KEY, "1");
+  }
 
-sendBtn.addEventListener("click", submitGuess);
+  function getOrCreateDeviceId(){
+    let id = localStorage.getItem(DEVICE_ID_KEY);
+    if (!id){
+      id = "dev_" + Math.random().toString(36).slice(2) + Date.now().toString(36);
+      localStorage.setItem(DEVICE_ID_KEY, id);
+    }
+    return id;
+  }
 
-async function submitGuess(){
-  const user = nameEl.value.trim();
-  const number = numEl.value.trim();
+  // ✅ ถ้าเครื่องนี้เคยร่วมแล้ว เตือนทันที (กันกรอกเบอร์อื่น)
+  if (deviceAlreadyJoined()) {
+    document.body.innerHTML = `
+      <div style="
+        max-width:520px;margin:80px auto;background:#141414;color:#fff;border-radius:16px;
+        padding:24px;text-align:center;font-family:system-ui;border:1px solid rgba(255,60,60,.35)
+      ">
+        <h2 style="margin:0 0 10px">⚠️ แจ้งเตือน</h2>
+        <p style="line-height:1.7;margin:0">
+          อุปกรณ์นี้ได้เข้าร่วมกิจกรรมไปแล้ว<br>
+          ไม่สามารถเข้าร่วมซ้ำได้ แม้จะเปลี่ยนเบอร์โทร
+        </p>
+      </div>
+    `;
+    throw new Error("DEVICE_ALREADY_JOINED");
+  }
 
-  if(!user){ showMsg("error","กรุณากรอกยูส"); return; }
-  if(!/^\d{2}$/.test(number)){ showMsg("error","กรุณากรอกเลข 2 หลัก (00–99)"); return; }
-
-  sendBtn.disabled = true;
-  sendBtn.textContent = "กำลังส่ง...";
-  alertEl.style.display = "none";
-  hideDebug();
-
-  const now = new Date();
-  const timeThai = thaiTimeString(now);
-
-  // ✅ ส่งแบบ Form เพื่อตัดปัญหา CORS/preflight
-  const form = new URLSearchParams();
-  form.append("user", user);
-  form.append("number", number);
-  form.append("time", timeThai);
-  form.append("ts", String(now.getTime()));
-
-  try{
-    const res = await fetch(SHEET_WEBAPP_URL, { method:"POST", body: form });
-
-    const text = await res.text();
-    let out = null;
-    try { out = JSON.parse(text); } catch(_) {}
-
-    // ✅ ต้องได้ ok:true จริงเท่านั้น ถึงนับว่าส่งสำเร็จ
-    if(res.ok && out && out.ok){
-      const info = [];
-      if (out.tab) info.push("แท็บ: " + out.tab);
-      if (out.row) info.push("แถว: " + out.row);
-      if (out.wrote_to) info.push("ไฟล์: " + out.wrote_to);
-      showMsg("ok", `ส่งสำเร็จ ✅ ยูส: ${user} | เลข: ${number}`);
-      if (info.length) showDebug(info.join(" | "));
-    } else {
-      // ถ้ามี error จะโชว์ชัด ๆ
-      const errMsg = (out && out.error) ? out.error : (text || "unknown_error");
-      showMsg("error", "ส่งไม่สำเร็จ: " + errMsg);
-      showDebug("Response:\n" + (text || "(empty)"));
+  async function post(action){
+    const phone = normalizePhone($phone.value);
+    if (!phone){
+      showMsg("กรุณากรอกเบอร์โทรให้ถูกต้อง (ตัวอย่าง 0991234567)", "err");
+      $btnJoin.disabled = true;
+      return null;
     }
 
-  }catch(e){
-    showMsg("error","เชื่อมต่อไม่ได้: ตรวจสอบว่า Deploy เป็น Anyone และ URL /exec ล่าสุด");
-  }finally{
-    sendBtn.disabled = false;
-    sendBtn.textContent = "ส่งคำทาย";
+    $btnCheck.disabled = true;
+    $btnJoin.disabled = true;
+
+    try{
+      const res = await fetch(SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action,
+          phone,
+          userAgent: navigator.userAgent,
+          deviceId: getOrCreateDeviceId()
+        })
+      });
+      return await res.json();
+    }catch(e){
+      showMsg("เชื่อมต่อไม่สำเร็จ กรุณาลองใหม่อีกครั้ง", "err");
+      return null;
+    }finally{
+      $btnCheck.disabled = false;
+    }
   }
-}
+
+  $btnCheck.addEventListener("click", async ()=>{
+    const data = await post("check");
+    if (!data) return;
+
+    if (data.ok && data.exists === false){
+      showMsg("✅ ยังไม่เคยเข้าร่วม สามารถกดยืนยันเข้าร่วมได้เลย");
+      $btnJoin.disabled = false;
+    } else if (data.ok && data.exists === true){
+      showMsg("⚠️ เบอร์นี้เคยเข้าร่วมกิจกรรมแล้ว (ไม่สามารถทำซ้ำได้)", "err");
+      $btnJoin.disabled = true;
+    } else {
+      showMsg(data.msg || "เกิดข้อผิดพลาด", "err");
+      $btnJoin.disabled = true;
+    }
+  });
+
+  $btnJoin.addEventListener("click", async ()=>{
+    const data = await post("register");
+    if (!data) return;
+
+    if (data.ok && data.registered){
+      showMsg("🎉 ลงชื่อสำเร็จ! ระบบบันทึกสิทธิ์แล้ว\nกำลังพาไปหน้ากิจกรรม...", "ok");
+
+      // ✅ ล็อกเครื่องนี้ว่าเคยร่วมแล้ว (กันกรอกเบอร์อื่น)
+      markDeviceJoined();
+
+      $btnJoin.disabled = true;
+
+      if (NEXT_URL){
+        setTimeout(()=> window.location.href = NEXT_URL, 600);
+      }
+    } else if (data.ok && data.exists){
+      showMsg("⚠️ เบอร์นี้ทำกิจกรรมไปแล้ว ไม่สามารถทำซ้ำได้", "err");
+      $btnJoin.disabled = true;
+    } else {
+      showMsg(data.msg || "เกิดข้อผิดพลาด", "err");
+      $btnJoin.disabled = true;
+    }
+  });
+
+  $phone.addEventListener("input", ()=>{ $btnJoin.disabled = true; });
 </script>
 </body>
 </html>
