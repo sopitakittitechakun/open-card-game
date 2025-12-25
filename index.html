@@ -39,7 +39,7 @@
 </div>
 
 <script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyGtkm3t8WpKizvfo23weEh85Wk0TmdSrdsy4mYFG60kOHaqj8y03ElkSgAiY8xLkR4XA/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbynjvaiucyLEDjCeO4Dk1JWS2AQqIU_tMaJFTx_eGunAwisExnfwRRqqRRD4hVlXledWw/exec";
   const DEVICE_ID_KEY = "rr365_device_id";
 
   const $phone = document.getElementById("phone");
@@ -189,7 +189,7 @@
       return;
     }
 
-    // ✅ เครื่อง/FP/UA เคยร่วมแล้ว
+    // ✅ เครื่อง/FP/UA เคยร่วมแล้ว = ทำอะไรไม่ได้
     if(data.device_used){
       show("⚠️ ระบบตรวจพบอุปกรณ์เคยเข้าร่วมแล้ว ไม่สามารถทำซ้ำได้", "err");
       $btnJoin.disabled = true;
