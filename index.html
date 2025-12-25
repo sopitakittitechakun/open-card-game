@@ -11,14 +11,9 @@
   p{opacity:.85;margin:0 0 14px;line-height:1.55}
   label{display:block;margin:10px 0 6px;opacity:.9}
   input{width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0f0f0f;color:#fff;font-size:16px}
-  button{
-    width:100%;padding:12px 14px;border-radius:12px;border:0;background:#ff2b2b;color:#fff;
-    font-size:16px;font-weight:700;cursor:pointer;margin-top:12px;
-    touch-action:manipulation;-webkit-tap-highlight-color:transparent;
-  }
+  button{width:100%;padding:12px 14px;border-radius:12px;border:0;background:#ff2b2b;color:#fff;font-size:16px;font-weight:700;cursor:pointer;margin-top:12px}
   button:disabled{opacity:.55;cursor:not-allowed}
-  .msg{margin-top:12px;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);
-       background:rgba(255,255,255,.04);white-space:pre-line;display:none}
+  .msg{margin-top:12px;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);white-space:pre-line;display:none}
   .ok{border-color:rgba(0,255,140,.25)} .err{border-color:rgba(255,60,60,.35)}
   .small{font-size:12px;opacity:.75;margin-top:10px;line-height:1.5}
 </style>
@@ -39,7 +34,7 @@
 </div>
 
 <script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbynjvaiucyLEDjCeO4Dk1JWS2AQqIU_tMaJFTx_eGunAwisExnfwRRqqRRD4hVlXledWw/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyQOngdRd_YrV0uYRBAuC98U21JTRbvL7dSqkLK0BYeC13SLLAfyc-QKJKMLKDq9Aof-Q/exec";
   const DEVICE_ID_KEY = "rr365_device_id";
 
   const $phone = document.getElementById("phone");
@@ -53,7 +48,6 @@
     $msg.textContent=text;
   }
 
-  // กันพิมพ์มั่ว (ยังยอม +66, ขีด, เว้นวรรค, เลขไทย)
   $phone.addEventListener("input", ()=>{
     $phone.value = $phone.value.replace(/[^\d๐-๙+ -]/g,"");
   });
@@ -182,16 +176,13 @@
       return;
     }
 
-    // ✅ เบอร์เคยร่วมแล้ว = ทำอะไรไม่ได้
     if(data.exists){
-      show("⚠️ เบอร์นี้เคยเข้าร่วมกิจกรรมแล้ว ไม่สามารถทำรายการใด ๆ ซ้ำได้", "err");
+      show("⚠️ เบอร์นี้เคยเข้าร่วมกิจกรรมแล้ว ไม่สามารถทำรายการซ้ำได้", "err");
       $btnJoin.disabled = true;
       return;
     }
-
-    // ✅ เครื่อง/FP/UA เคยร่วมแล้ว = ทำอะไรไม่ได้
     if(data.device_used){
-      show("⚠️ ระบบตรวจพบอุปกรณ์เคยเข้าร่วมแล้ว ไม่สามารถทำซ้ำได้", "err");
+      show("⚠️ อุปกรณ์นี้เคยเข้าร่วมกิจกรรมแล้ว ไม่สามารถทำซ้ำได้", "err");
       $btnJoin.disabled = true;
       return;
     }
@@ -217,7 +208,7 @@
     }
 
     if(data.registered){
-      show("🎉 ลงชื่อสำเร็จ! กรุณาแคปหน้าจอนี้ส่งแอดมินเพื่อรับแพทเทิลกิจกรรม", "ok");
+      show("🎉 ลงชื่อสำเร็จ! กรุณาแคปหน้าจอนี้ส่งแอดมิน", "ok");
       return;
     }
 
