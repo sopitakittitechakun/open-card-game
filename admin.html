@@ -3,131 +3,214 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Admin ตรวจสอบ</title>
+<title>RR365 Admin Dashboard</title>
 <style>
-  body{font-family:system-ui;background:#0b0b0b;color:#fff;padding:20px;margin:0}
-  .wrap{max-width:1100px;margin:0 auto}
-  h1{font-size:20px;margin:0 0 12px}
-  .row{display:flex;gap:10px;flex-wrap:wrap}
-  input,button{border-radius:10px;border:1px solid rgba(255,255,255,.12);background:#101010;color:#fff;padding:10px 12px;font-size:14px}
-  button{border:0;background:#ff2b2b;font-weight:700;cursor:pointer}
-  table{width:100%;border-collapse:collapse;margin-top:14px;background:#141414}
-  th,td{padding:10px;border:1px solid rgba(255,255,255,.1);font-size:13px;vertical-align:top}
-  th{background:#1f1f1f;text-align:left}
-  tr:nth-child(even){background:#101010}
-  .hint{opacity:.8;margin-top:10px}
+  body{font-family:system-ui;background:#0b0b0b;color:#fff;margin:0;padding:18px}
+  .wrap{max-width:1000px;margin:0 auto}
+  .card{background:#141414;border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:14px;margin-bottom:12px}
+  h1{font-size:20px;margin:0 0 10px}
+  input,select{padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0f0f0f;color:#fff}
+  button{padding:10px 14px;border-radius:12px;border:0;background:#ff2b2b;color:#fff;font-weight:700;cursor:pointer}
+  button:disabled{opacity:.55;cursor:not-allowed}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .msg{margin-top:10px;padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,.12);display:none;white-space:pre-line}
+  .ok{border-color:rgba(0,255,140,.25)} .err{border-color:rgba(255,60,60,.35)}
+  table{width:100%;border-collapse:collapse;margin-top:12px}
+  th,td{border-bottom:1px solid rgba(255,255,255,.08);padding:10px;text-align:left;vertical-align:top;font-size:13px}
+  th{opacity:.85}
+  .muted{opacity:.7;font-size:12px}
+  .chip{display:inline-block;padding:2px 8px;border:1px solid rgba(255,255,255,.18);border-radius:999px;font-size:12px;opacity:.9}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>📋 Admin: รายชื่อผู้เข้าร่วมกิจกรรม (สำเร็จ)</h1>
 
-  <div class="row">
-    <input id="key" placeholder="admin_key" style="min-width:220px">
-    <button id="btnLoad" type="button">โหลดข้อมูล</button>
-    <input id="q" placeholder="ค้นหาเบอร์" style="flex:1;min-width:240px">
+  <div class="card">
+    <h1>🛡️ RR365 Admin Dashboard</h1>
+    <div class="row">
+      <label class="muted">SCRIPT /exec</label>
+      <input id="scriptUrl" style="min-width:360px;flex:1" placeholder="https://script.google.com/macros/s/AKfycbzIlBX_qzwM74IG8SEys2m6vS3p6VRno2iEs1uR5t-S6YcZR1iyDOSjvHsCF4B4QDWY/exec">
+      <label class="muted">Admin Key</label>
+      <input id="adminKey" placeholder="รหัสแอดมิน">
+      <select id="type">
+        <option value="participants">participants (ลงทะเบียนสำเร็จ)</option>
+        <option value="logs">logs (ทุกการกด/ซ้ำ)</option>
+      </select>
+      <select id="limit">
+        <option value="30">30 รายการ</option>
+        <option value="50" selected>50 รายการ</option>
+        <option value="100">100 รายการ</option>
+        <option value="200">200 รายการ</option>
+      </select>
+      <button id="btnLoad">โหลดข้อมูล</button>
+    </div>
+    <div id="msg" class="msg"></div>
+    <div class="muted" style="margin-top:8px">
+      *ใส่ SCRIPT_URL ครั้งแรกแล้วระบบจะจำในเครื่องแอดมิน (LocalStorage)
+    </div>
   </div>
 
-  <div id="count" class="hint"></div>
+  <div class="card">
+    <div class="row" style="justify-content:space-between">
+      <div><span class="chip" id="badge">ยังไม่ได้โหลด</span></div>
+      <div class="muted" id="count"></div>
+    </div>
+    <div id="tableWrap"></div>
+  </div>
 
-  <table>
-    <thead>
-      <tr>
-        <th style="width:60px">#</th>
-        <th style="width:190px">เวลา</th>
-        <th style="width:130px">เบอร์</th>
-        <th>อุปกรณ์</th>
-        <th style="width:240px">device_id</th>
-      </tr>
-    </thead>
-    <tbody id="tb"></tbody>
-  </table>
 </div>
 
 <script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyNazYAmQyUxX2y721MMAoKcmDVp3tKkRTmyUKnpHgY9WA5_RzCM_bVcU6L7_NdNcB4/exec";
+  const $scriptUrl = document.getElementById("scriptUrl");
+  const $adminKey  = document.getElementById("adminKey");
+  const $type      = document.getElementById("type");
+  const $limit     = document.getElementById("limit");
+  const $btnLoad   = document.getElementById("btnLoad");
+  const $msg       = document.getElementById("msg");
+  const $tableWrap = document.getElementById("tableWrap");
+  const $badge     = document.getElementById("badge");
+  const $count     = document.getElementById("count");
 
-  const tb = document.getElementById("tb");
-  const count = document.getElementById("count");
-  const q = document.getElementById("q");
-  const key = document.getElementById("key");
-  const btnLoad = document.getElementById("btnLoad");
+  $scriptUrl.value = localStorage.getItem("rr_admin_script") || "";
+  $type.value      = localStorage.getItem("rr_admin_type") || "participants";
+  $limit.value     = localStorage.getItem("rr_admin_limit") || "50";
 
-  let allRows = [];
-
-  function fmt(v){ try{return new Date(v).toLocaleString("th-TH")}catch(e){return String(v||"")} }
-
-  function render(){
-    const kw = (q.value||"").replace(/\D/g,"").trim();
-    const rows = kw ? allRows.filter(r => String(r.phone||"").includes(kw)) : allRows;
-
-    count.textContent = `ทั้งหมด ${allRows.length} รายการ | แสดง ${rows.length} รายการ`;
-
-    if(!rows.length){
-      tb.innerHTML = `<tr><td colspan="5">ไม่พบข้อมูล</td></tr>`;
-      return;
-    }
-
-    tb.innerHTML = rows.map((r,i)=>`
-      <tr>
-        <td>${i+1}</td>
-        <td>${fmt(r.created_at)}</td>
-        <td>${r.phone||""}</td>
-        <td style="word-break:break-word">${r.user_agent||""}</td>
-        <td style="word-break:break-word">${r.device_id||""}</td>
-      </tr>
-    `).join("");
+  function show(text, type="ok"){
+    $msg.style.display="block";
+    $msg.className="msg "+(type==="err"?"err":"ok");
+    $msg.textContent=text;
   }
+  function hideMsg(){ $msg.style.display="none"; }
 
-  function jsonpRequest(params){
+  function jsonp(url, params){
     return new Promise((resolve, reject)=>{
-      const cbName = "cb_" + Math.random().toString(36).slice(2);
+      const cb = "cb_" + Math.random().toString(36).slice(2);
       params.jsonp = "1";
-      params.callback = cbName;
+      params.callback = cb;
+      params._ts = Date.now().toString();
 
-      const qs = new URLSearchParams(params).toString();
-      const url = SCRIPT_URL + "?" + qs;
+      const full = url + "?" + new URLSearchParams(params).toString();
 
-      const script = document.createElement("script");
-      script.src = url;
-      script.async = true;
+      const s = document.createElement("script");
+      s.src = full; s.async = true;
 
-      window[cbName] = (data)=>{ cleanup(); resolve(data); };
-      script.onerror = ()=>{ cleanup(); reject(new Error("JSONP error")); };
+      const t = setTimeout(()=>{ cleanup(); reject(new Error("TIMEOUT")); }, 12000);
+
+      window[cb] = (data)=>{ clearTimeout(t); cleanup(); resolve(data); };
+      s.onerror = ()=>{ clearTimeout(t); cleanup(); reject(new Error("LOAD_ERROR")); };
 
       function cleanup(){
-        try{ delete window[cbName]; }catch(e){ window[cbName]=undefined; }
-        if(script && script.parentNode) script.parentNode.removeChild(script);
+        try{ delete window[cb]; }catch(e){ window[cb]=undefined; }
+        if(s && s.parentNode) s.parentNode.removeChild(s);
       }
 
-      document.body.appendChild(script);
-      setTimeout(()=>{ try{ cleanup(); }catch(e){} reject(new Error("timeout")); }, 12000);
+      document.body.appendChild(s);
     });
   }
 
-  async function loadData(){
-    btnLoad.disabled = true;
-    tb.innerHTML = `<tr><td colspan="5">กำลังโหลด...</td></tr>`;
+  function escapeHtml(v){
+    return String(v??"")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  function renderTable(type, rows){
+    if(!rows || !rows.length){
+      $tableWrap.innerHTML = "<div class='muted' style='padding:12px'>ไม่มีข้อมูล</div>";
+      return;
+    }
+
+    if(type === "participants"){
+      const head = `
+        <table>
+          <thead><tr>
+            <th>เวลา</th><th>เบอร์</th><th>ua_key</th><th>device_id</th><th>fingerprint</th><th>note</th>
+          </tr></thead><tbody>`;
+      const body = rows.map(r=>`
+        <tr>
+          <td>${escapeHtml(r.created_at)}</td>
+          <td><b>${escapeHtml(String(r.phone||""))}</b></td>
+          <td>${escapeHtml(r.ua_key)}</td>
+          <td>${escapeHtml(r.device_id)}</td>
+          <td>${escapeHtml(r.fingerprint)}</td>
+          <td>${escapeHtml(r.note)}</td>
+        </tr>
+      `).join("");
+      $tableWrap.innerHTML = head + body + "</tbody></table>";
+      return;
+    }
+
+    const head = `
+      <table>
+        <thead><tr>
+          <th>เวลา</th><th>action</th><th>phone_raw</th><th>phone_norm</th><th>result</th><th>message</th>
+        </tr></thead><tbody>`;
+    const body = rows.map(r=>`
+      <tr>
+        <td>${escapeHtml(r.ts)}</td>
+        <td>${escapeHtml(r.action)}</td>
+        <td><b>${escapeHtml(r.phone_raw)}</b></td>
+        <td>${escapeHtml(r.phone_normalized)}</td>
+        <td>${escapeHtml(r.result)}</td>
+        <td>${escapeHtml(r.message)}</td>
+      </tr>
+    `).join("");
+    $tableWrap.innerHTML = head + body + "</tbody></table>";
+  }
+
+  $btnLoad.addEventListener("click", async ()=>{
+    hideMsg();
+    $btnLoad.disabled = true;
+
+    const url = $scriptUrl.value.trim();
+    const key = $adminKey.value.trim();
+    const type = $type.value;
+    const limit = $limit.value;
+
+    localStorage.setItem("rr_admin_script", url);
+    localStorage.setItem("rr_admin_type", type);
+    localStorage.setItem("rr_admin_limit", limit);
+
+    if(!/\/exec(\?|$)/.test(url)){
+      show("SCRIPT URL ต้องลงท้าย /exec", "err");
+      $btnLoad.disabled = false;
+      return;
+    }
+    if(!key){
+      show("กรุณาใส่ Admin Key", "err");
+      $btnLoad.disabled = false;
+      return;
+    }
 
     try{
-      const data = await jsonpRequest({ action:"admin_list", admin_key: key.value });
+      const data = await jsonp(url, {
+        action: "admin_list",
+        admin_key: key,
+        type,
+        limit
+      });
 
       if(!data || !data.ok){
-        tb.innerHTML = `<tr><td colspan="5">${(data && data.msg) || "สิทธิ์ไม่ถูกต้อง"}</td></tr>`;
+        show((data && data.msg) ? data.msg : "โหลดไม่สำเร็จ", "err");
+        $badge.textContent = "โหลดไม่สำเร็จ";
+        $btnLoad.disabled = false;
         return;
       }
 
-      allRows = data.rows || [];
-      render();
+      $badge.textContent = "โหลดสำเร็จ: " + type;
+      $count.textContent = "จำนวนรายการ: " + (data.rows ? data.rows.length : 0);
+      renderTable(type, data.rows || []);
+      show("โหลดข้อมูลสำเร็จ", "ok");
     }catch(e){
-      tb.innerHTML = `<tr><td colspan="5">เชื่อมต่อไม่สำเร็จ</td></tr>`;
+      show("เชื่อมต่อไม่สำเร็จ (อาจยังไม่ Anyone / ลิงก์ผิด / Deploy ผิดเวอร์ชัน)", "err");
+      $badge.textContent = "โหลดไม่สำเร็จ";
     }finally{
-      btnLoad.disabled = false;
+      $btnLoad.disabled = false;
     }
-  }
-
-  btnLoad.addEventListener("click", loadData);
-  q.addEventListener("input", render);
+  });
 </script>
 </body>
 </html>
