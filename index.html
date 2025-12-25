@@ -13,11 +13,9 @@
   input{width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0f0f0f;color:#fff;font-size:16px}
   button{width:100%;padding:12px 14px;border-radius:12px;border:0;background:#ff2b2b;color:#fff;font-size:16px;font-weight:700;cursor:pointer;margin-top:12px}
   button:disabled{opacity:.55;cursor:not-allowed}
-  .msg{margin-top:12px;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);
-       background:rgba(255,255,255,.04);white-space:pre-line;display:none}
+  .msg{margin-top:12px;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);white-space:pre-line;display:none}
   .ok{border-color:rgba(0,255,140,.25)} .err{border-color:rgba(255,60,60,.35)}
   .small{font-size:12px;opacity:.75;margin-top:10px;line-height:1.5}
-  .mini{font-size:11px;opacity:.65;margin-top:8px;word-break:break-all}
 </style>
 </head>
 <body>
@@ -32,28 +30,23 @@
   <button id="btnJoin" type="button" disabled>ยืนยันเข้าร่วมกิจกรรม</button>
 
   <div id="msg" class="msg"></div>
-  <div id="debug" class="mini"></div>
-
   <div class="small">*กรอกเบอร์ที่สมัครเข้ามาลงทะเบียนเท่านั้น!!</div>
 </div>
 
 <script>
-  // ⚠️ ต้องเป็น /exec ของ Deployment ที่ตั้ง Anyone แล้ว
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyNazYAmQyUxX2y721MMAoKcmDVp3tKkRTmyUKnpHgY9WA5_RzCM_bVcU6L7_NdNcB4/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzIlBX_qzwM74IG8SEys2m6vS3p6VRno2iEs1uR5t-S6YcZR1iyDOSjvHsCF4B4QDWY/exec"; // ต้องเป็น .../exec
   const DEVICE_ID_KEY = "rr365_device_id";
 
   const $phone = document.getElementById("phone");
   const $btnCheck = document.getElementById("btnCheck");
   const $btnJoin  = document.getElementById("btnJoin");
   const $msg = document.getElementById("msg");
-  const $debug = document.getElementById("debug");
 
   function show(text, type="ok"){
     $msg.style.display="block";
     $msg.className="msg "+(type==="err"?"err":"ok");
     $msg.textContent=text;
   }
-  function debug(text){ $debug.textContent = text || ""; }
 
   function normalizePhone(v){
     let s = String(v||"").trim();
@@ -108,18 +101,14 @@
 
   function jsonpRequest(params){
     return new Promise((resolve, reject)=>{
-      if (!/\/exec(\?|$)/.test(SCRIPT_URL)){
-        reject(new Error("SCRIPT_URL_NOT_EXEC"));
-        return;
-      }
+      if (!/\/exec(\?|$)/.test(SCRIPT_URL)) return reject(new Error("SCRIPT_URL_NOT_EXEC"));
 
       const cbName = "cb_" + Math.random().toString(36).slice(2);
       params.jsonp = "1";
       params.callback = cbName;
-      params._ts = Date.now().toString(); // cache buster
+      params._ts = Date.now().toString();
 
       const url = SCRIPT_URL + "?" + new URLSearchParams(params).toString();
-      debug("DEBUG URL (ก๊อปไปเปิดทดสอบได้): " + url);
 
       const script = document.createElement("script");
       script.src = url;
@@ -141,10 +130,8 @@
 
   async function request(action){
     const p = normalizePhone($phone.value);
-    if(!p){
-      show("กรุณากรอกเบอร์มือถือให้ถูกต้อง (06/08/09 10 หลัก)", "err");
-      return null;
-    }
+    if(!p){ show("กรุณากรอกเบอร์มือถือให้ถูกต้อง (06/08/09 10 หลัก)", "err"); return null; }
+
     try{
       return await jsonpRequest({
         action,
@@ -158,10 +145,8 @@
       const m = String(err.message||"");
       if (m === "SCRIPT_URL_NOT_EXEC"){
         show("ลิงก์สคริปต์ไม่ถูกต้อง: ต้องเป็นลิงก์ลงท้าย /exec เท่านั้น", "err");
-      } else if (m === "TIMEOUT"){
-        show("เชื่อมต่อไม่สำเร็จ (Timeout) — ตรวจสอบ Deploy เป็น Web app และตั้งค่า Anyone แล้ว", "err");
       } else {
-        show("เชื่อมต่อไม่สำเร็จ — สคริปต์โหลดไม่ได้ (อาจยังไม่ Anyone / ลิงก์ผิด / Deploy ผิดเวอร์ชัน)", "err");
+        show("เชื่อมต่อไม่สำเร็จ — ตรวจสอบ Deploy/สิทธิ์ (ต้อง Anyone) และลองใหม่", "err");
       }
       return null;
     }
@@ -169,44 +154,32 @@
 
   $btnCheck.addEventListener("click", async ()=>{
     $btnCheck.disabled = true;
-    $btnJoin.disabled = true;
+    $btnJoin.disabled  = true;
 
     const data = await request("check");
     $btnCheck.disabled = false;
     if(!data) return;
 
-    if(!data.ok){
-      show(data.msg || "เกิดข้อผิดพลาด", "err");
-      return;
-    }
-    if(data.exists){
-      show("⚠️ เบอร์นี้เคยเข้าร่วมกิจกรรมแล้ว ไม่สามารถทำรายการซ้ำได้", "err");
-      return;
-    }
-    if(data.device_used){
-      show("⚠️ อุปกรณ์นี้เคยเข้าร่วมกิจกรรมแล้ว ไม่สามารถทำซ้ำได้", "err");
-      return;
-    }
+    if(!data.ok){ show(data.msg || "เกิดข้อผิดพลาด", "err"); return; }
+
+    if(data.exists){ show("⚠️ เบอร์นี้เคยเข้าร่วมกิจกรรมแล้ว ไม่สามารถทำรายการซ้ำได้", "err"); return; }
+    if(data.device_used){ show("⚠️ อุปกรณ์นี้เคยเข้าร่วมกิจกรรมแล้ว ไม่สามารถทำซ้ำได้", "err"); return; }
+
     show("✅ ยังไม่เคยเข้าร่วม สามารถกดยืนยันเข้าร่วมได้เลย", "ok");
     $btnJoin.disabled = false;
   });
 
   $btnJoin.addEventListener("click", async ()=>{
     $btnCheck.disabled = true;
-    $btnJoin.disabled = true;
+    $btnJoin.disabled  = true;
 
     const data = await request("register");
     $btnCheck.disabled = false;
     if(!data) return;
 
-    if(!data.ok){
-      show(data.msg || "เกิดข้อผิดพลาด", "err");
-      return;
-    }
-    if(data.registered){
-      show("🎉 ลงชื่อสำเร็จ! กรุณาแคปหน้าจอนี้ส่งแอดมิน", "ok");
-      return;
-    }
+    if(!data.ok){ show(data.msg || "เกิดข้อผิดพลาด", "err"); return; }
+    if(data.registered){ show("🎉 ลงชื่อสำเร็จ! กรุณาแคปหน้าจอนี้ส่งแอดมิน", "ok"); return; }
+
     show(data.msg || "ไม่สามารถลงชื่อได้", "err");
   });
 </script>
