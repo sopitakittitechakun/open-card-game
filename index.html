@@ -6,21 +6,21 @@
 <title>ลงชื่อก่อนเข้าร่วมกิจกรรม</title>
 <style>
   body{font-family:system-ui;background:#0b0b0b;color:#fff;margin:0;padding:24px}
-  .card{max-width:560px;margin:0 auto;background:#141414;border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:18px;position:relative}
+  .card{max-width:560px;margin:0 auto;background:#141414;border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:18px}
   h1{font-size:20px;margin:0 0 8px}
   p{opacity:.85;margin:0 0 14px;line-height:1.55}
   label{display:block;margin:10px 0 6px;opacity:.9}
   input{width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0f0f0f;color:#fff;font-size:16px}
   button{
     width:100%;padding:12px 14px;border-radius:12px;border:0;background:#ff2b2b;color:#fff;
-    font-size:16px;font-weight:700;cursor:pointer;margin-top:12px;position:relative;z-index:10;
-    pointer-events:auto;touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+    font-size:16px;font-weight:700;cursor:pointer;margin-top:12px;
+    touch-action:manipulation;-webkit-tap-highlight-color:transparent;
   }
   button:disabled{opacity:.55;cursor:not-allowed}
   .msg{margin-top:12px;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);
        background:rgba(255,255,255,.04);white-space:pre-line;display:none}
   .ok{border-color:rgba(0,255,140,.25)} .err{border-color:rgba(255,60,60,.35)}
-  .small{font-size:12px;opacity:.7;margin-top:10px}
+  .small{font-size:12px;opacity:.75;margin-top:10px;line-height:1.5}
 </style>
 </head>
 <body>
@@ -71,7 +71,44 @@
     return id;
   }
 
-  // JSONP helper (กัน CORS)
+  // ⭐ Fingerprint โหด: เปลี่ยนบราวเซอร์ก็ยังคล้ายเดิม
+  function getFingerprint(){
+    const data = [
+      screen.width, screen.height,
+      window.devicePixelRatio,
+      Intl.DateTimeFormat().resolvedOptions().timeZone || "",
+      navigator.language || "",
+      navigator.platform || "",
+      navigator.hardwareConcurrency || 0,
+      navigator.maxTouchPoints || 0
+    ].join("|");
+
+    let hash = 0;
+    for (let i=0;i<data.length;i++){
+      hash = ((hash<<5)-hash) + data.charCodeAt(i);
+      hash |= 0;
+    }
+    return "fp_" + Math.abs(hash);
+  }
+
+  // ⭐ UA key (ตัดให้สั้นแต่จับคนเดียวกันได้)
+  function getUaKey(){
+    const ua = navigator.userAgent || "";
+    // ดึงเฉพาะส่วนสำคัญลดโอกาสเพี้ยน
+    const key = [
+      ua.includes("Android") ? (ua.match(/Android\s[\d\.]+/)||["Android"])[0] : "NA",
+      (ua.match(/Chrome\/[\d\.]+/)||["Chrome"])[0],
+      ua.includes("wv") ? "WV" : "NWV",
+      ua.includes("Line") ? (ua.match(/Line\/[\d\.]+/)||["Line"])[0] : "NLINE",
+      (ua.match(/Build\/[A-Za-z0-9\.\_]+/)||["Build"])[0]
+    ].join("|");
+
+    // hash สั้น
+    let h=0;
+    for(let i=0;i<key.length;i++){ h=((h<<5)-h)+key.charCodeAt(i); h|=0; }
+    return "ua_" + Math.abs(h);
+  }
+
   function jsonpRequest(params){
     return new Promise((resolve, reject)=>{
       const cbName = "cb_" + Math.random().toString(36).slice(2);
@@ -106,7 +143,9 @@
       action,
       phone: p,
       deviceId: getOrCreateDeviceId(),
-      userAgent: navigator.userAgent
+      fingerprint: getFingerprint(),     // ⭐ เพิ่ม
+      ua_key: getUaKey(),               // ⭐ เพิ่ม
+      userAgent: navigator.userAgent    // (เก็บลง logs)
     };
 
     try{
@@ -124,7 +163,7 @@
     $btnCheck.disabled=false;
 
     if(!data){
-      show("เชื่อมต่อไม่สำเร็จ กรุณาตรวจสอบลิงก์ /exec และการ Deploy", "err");
+      show("เชื่อมต่อไม่สำเร็จ กรุณาลองใหม่อีกครั้ง", "err");
       return;
     }
     if(!data.ok){
@@ -133,7 +172,7 @@
     }
 
     if(data.device_used){
-      show("⚠️ อุปกรณ์นี้เคยเข้าร่วมกิจกรรมแล้ว ไม่สามารถทำซ้ำได้", "err");
+      show("⚠️ ระบบตรวจพบอุปกรณ์เคยเข้าร่วมแล้ว ไม่สามารถทำซ้ำได้", "err");
       return;
     }
     if(data.exists){
@@ -153,7 +192,7 @@
     $btnCheck.disabled=false;
 
     if(!data){
-      show("เชื่อมต่อไม่สำเร็จ กรุณาตรวจสอบลิงก์ /exec และการ Deploy", "err");
+      show("เชื่อมต่อไม่สำเร็จ กรุณาลองใหม่อีกครั้ง", "err");
       return;
     }
     if(!data.ok){
@@ -162,7 +201,7 @@
     }
 
     if(data.registered){
-      show("🎉 ลงชื่อสำเร็จ! ระบบบันทึกสิทธิ์แล้ว", "ok");
+      show("🎉 ลงชื่อสำเร็จ! กรุณาแคปหน้าจอนี้ส่งแอดมินเพื่อรับแพทเทิลกิจกรรม", "ok");
       return;
     }
 
