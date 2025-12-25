@@ -13,7 +13,7 @@
     --shadow:0 18px 60px rgba(0,0,0,.55);
   }
   *{box-sizing:border-box}
-  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;color:var(--txt)}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;color:var(--txt);background:transparent}
   .wrap{padding:14px}
   .hero{
     background:linear-gradient(135deg, rgba(255,43,43,.22), rgba(255,255,255,.06));
@@ -89,7 +89,7 @@
     <div class="row">
       <div>
         <div class="title">🎛️ หน้าแอดมิน RR365</div>
-        <div class="sub">ค้นหา / ปลดล็อก / แบน (ถ้ามี blacklist) — ไม่แก้โค้ด WebApp เดิม</div>
+        <div class="sub">ค้นหา / ปลดล็อก / แบน (ถ้ามี blacklist) — เปิดใน Sidebar เท่านั้น</div>
       </div>
       <div class="pill" id="pill">● กำลังโหลด…</div>
     </div>
@@ -194,7 +194,6 @@ function setPill(text, ok=true){
   el.textContent = (ok ? "● " : "⚠️ ") + text;
   el.style.borderColor = ok ? "rgba(25,255,138,.35)" : "rgba(255,43,43,.35)";
 }
-
 function showMsg(id, text, type="ok"){
   const el = $(id);
   el.style.display="block";
@@ -231,7 +230,7 @@ function renderResult(data){
   if(bl.length){
     html += `<div class="item" style="border-color:rgba(255,43,43,.35)">
       <div class="right"><div class="t">🚫 พบใน Blacklist</div><span class="badge">BLOCK</span></div>
-      <div class="m">${bl.map(x=>`• ${x.type} = ${x.value}\n  เหตุผล: ${x.reason||"-"}\n  โดย: ${x.by||"-"} (${x.createdAt||"-"})`).join("\n\n")}</div>
+      <div class="item m">${bl.map(x=>`• ${x.type} = ${x.value}\n  เหตุผล: ${x.reason||"-"}\n  โดย: ${x.by||"-"} (${x.createdAt||"-"})`).join("\n\n")}</div>
     </div>`;
   }
 
@@ -256,7 +255,7 @@ function renderResult(data){
 
   box.innerHTML = html;
 
-  // เติมค่าไปหน้า manage อัตโนมัติ
+  // เติมค่าไปหน้า Manage ให้อัตโนมัติ
   if(data.normalizedPhone) $("unlockPhone").value = data.normalizedPhone;
   $("blValue").value = data.query;
 }
