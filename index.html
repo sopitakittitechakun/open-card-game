@@ -26,7 +26,7 @@
   <p>กรอกเบอร์เพื่อเช็คสิทธิ์ (1 เบอร์/1 สิทธิ์) และ 1 อุปกรณ์/1 สิทธิ์</p>
 
   <label>เบอร์โทรศัพท์</label>
-  <input id="phone" inputmode="numeric" placeholder="เช่น 0611111111" value=""/>
+  <input id="phone" inputmode="numeric" placeholder="เช่น 0611111111"/>
 
   <button id="btnCheck" type="button">เช็คสิทธิ์</button>
   <button id="btnJoin" type="button" disabled>ยืนยันเข้าร่วมกิจกรรม</button>
@@ -38,8 +38,8 @@
 </div>
 
 <script>
-  // ⚠️ ต้องเป็น /exec เท่านั้น
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxYlmvidC8J8nvyteoOaF2IQJXFG6VQ2QdOrik4ojIae4a9U8OPX1PF4w1GDzCX1KxOmA/exec"; // เช่น https://script.google.com/macros/s/xxxxx/exec
+  // ⚠️ ต้องเป็น /exec ของ Deployment ที่ตั้ง Anyone แล้ว
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzBZpkxwVTAY28gx4b4tOiSUkRBfU4Vtso1gm9KvTiEI8GrE0wvXhYwsSUtQcSJpPsU/exec";
   const DEVICE_ID_KEY = "rr365_device_id";
 
   const $phone = document.getElementById("phone");
@@ -53,9 +53,7 @@
     $msg.className="msg "+(type==="err"?"err":"ok");
     $msg.textContent=text;
   }
-  function debug(text){
-    $debug.textContent = text || "";
-  }
+  function debug(text){ $debug.textContent = text || ""; }
 
   function normalizePhone(v){
     let s = String(v||"").trim();
@@ -120,10 +118,7 @@
       params.callback = cbName;
       params._ts = Date.now().toString(); // cache buster
 
-      const qs = new URLSearchParams(params).toString();
-      const url = SCRIPT_URL + "?" + qs;
-
-      // ✅ โชว์ URL ที่ยิงจริงให้ก๊อปเทส
+      const url = SCRIPT_URL + "?" + new URLSearchParams(params).toString();
       debug("DEBUG URL (ก๊อปไปเปิดทดสอบได้): " + url);
 
       const script = document.createElement("script");
@@ -150,7 +145,6 @@
       show("กรุณากรอกเบอร์มือถือให้ถูกต้อง (06/08/09 10 หลัก)", "err");
       return null;
     }
-
     try{
       return await jsonpRequest({
         action,
@@ -165,7 +159,7 @@
       if (m === "SCRIPT_URL_NOT_EXEC"){
         show("ลิงก์สคริปต์ไม่ถูกต้อง: ต้องเป็นลิงก์ลงท้าย /exec เท่านั้น", "err");
       } else if (m === "TIMEOUT"){
-        show("เชื่อมต่อไม่สำเร็จ (Timeout) — ตรวจสอบ Deploy เป็น Web app และตั้ง Anyone แล้ว", "err");
+        show("เชื่อมต่อไม่สำเร็จ (Timeout) — ตรวจสอบ Deploy เป็น Web app และตั้งค่า Anyone แล้ว", "err");
       } else {
         show("เชื่อมต่อไม่สำเร็จ — สคริปต์โหลดไม่ได้ (อาจยังไม่ Anyone / ลิงก์ผิด / Deploy ผิดเวอร์ชัน)", "err");
       }
@@ -179,8 +173,8 @@
 
     const data = await request("check");
     $btnCheck.disabled = false;
-
     if(!data) return;
+
     if(!data.ok){
       show(data.msg || "เกิดข้อผิดพลาด", "err");
       return;
@@ -193,7 +187,6 @@
       show("⚠️ อุปกรณ์นี้เคยเข้าร่วมกิจกรรมแล้ว ไม่สามารถทำซ้ำได้", "err");
       return;
     }
-
     show("✅ ยังไม่เคยเข้าร่วม สามารถกดยืนยันเข้าร่วมได้เลย", "ok");
     $btnJoin.disabled = false;
   });
@@ -204,8 +197,8 @@
 
     const data = await request("register");
     $btnCheck.disabled = false;
-
     if(!data) return;
+
     if(!data.ok){
       show(data.msg || "เกิดข้อผิดพลาด", "err");
       return;
