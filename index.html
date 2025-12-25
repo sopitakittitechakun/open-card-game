@@ -39,7 +39,7 @@
 </div>
 
 <script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwEZkjDjyQck7J8BumXSryPxGTsUn-4sWMH0ivyAcLcVKLZPhczVEIuEWdx9UeBJQ6Qdw/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzBwn8T-XIHrt85GVe_eEuBPO5dYseLA5VhmZ0MDEt-qOAc7Rq9e3_sTdT2-gQNBWY3ow/exec";
   const DEVICE_ID_KEY = "rr365_device_id";
 
   const $phone = document.getElementById("phone");
@@ -53,13 +53,25 @@
     $msg.textContent=text;
   }
 
+  // กรอง input กันตัวอักษรมั่ว (ยังยอม +66, ขีด, เว้นวรรค, เลขไทย)
+  $phone.addEventListener("input", ()=>{
+    $phone.value = $phone.value.replace(/[^\d๐-๙+ -]/g,"");
+  });
+
   function normalizePhone(v){
-    let p=(v||"").replace(/\D/g,"");
+    let s = String(v||"").trim();
+    const th = "๐๑๒๓๔๕๖๗๘๙";
+    for (let i=0;i<th.length;i++){
+      s = s.replace(new RegExp(th[i],"g"), String(i));
+    }
+    let p = s.replace(/\D/g,"");
     if(!p) return "";
-    if(p.startsWith("66")) p="0"+p.slice(2);
-    if(p.length===9) p="0"+p;
-    if(p.length===10 && p.startsWith("0")) return p;
-    return "";
+    if(p.startsWith("0066")) p = p.slice(2);
+    if(p.startsWith("66")) p = "0"+p.slice(2);
+    if(!p.startsWith("0") && p.length===9) p="0"+p;
+    if(p.length!==10) return "";
+    if(!/^0[689]\d{8}$/.test(p)) return "";
+    return p;
   }
 
   function getOrCreateDeviceId(){
@@ -71,7 +83,6 @@
     return id;
   }
 
-  // ⭐ Fingerprint โหด: เปลี่ยนบราวเซอร์ก็ยังคล้ายเดิม
   function getFingerprint(){
     const data = [
       screen.width, screen.height,
@@ -91,10 +102,8 @@
     return "fp_" + Math.abs(hash);
   }
 
-  // ⭐ UA key (ตัดให้สั้นแต่จับคนเดียวกันได้)
   function getUaKey(){
     const ua = navigator.userAgent || "";
-    // ดึงเฉพาะส่วนสำคัญลดโอกาสเพี้ยน
     const key = [
       ua.includes("Android") ? (ua.match(/Android\s[\d\.]+/)||["Android"])[0] : "NA",
       (ua.match(/Chrome\/[\d\.]+/)||["Chrome"])[0],
@@ -103,7 +112,6 @@
       (ua.match(/Build\/[A-Za-z0-9\.\_]+/)||["Build"])[0]
     ].join("|");
 
-    // hash สั้น
     let h=0;
     for(let i=0;i<key.length;i++){ h=((h<<5)-h)+key.charCodeAt(i); h|=0; }
     return "ua_" + Math.abs(h);
@@ -137,15 +145,15 @@
 
   async function request(action){
     const p = normalizePhone($phone.value);
-    if(!p){ show("กรุณากรอกเบอร์ให้ถูกต้อง (ตัวอย่าง 0611111111)", "err"); return null; }
+    if(!p){ show("กรุณากรอกเบอร์มือถือให้ถูกต้อง (06/08/09 10 หลัก)", "err"); return null; }
 
     const payload = {
       action,
       phone: p,
       deviceId: getOrCreateDeviceId(),
-      fingerprint: getFingerprint(),     // ⭐ เพิ่ม
-      ua_key: getUaKey(),               // ⭐ เพิ่ม
-      userAgent: navigator.userAgent    // (เก็บลง logs)
+      fingerprint: getFingerprint(),
+      ua_key: getUaKey(),
+      userAgent: navigator.userAgent
     };
 
     try{
