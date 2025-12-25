@@ -4,51 +4,55 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
-body{font-family:system-ui;background:#0b0b0b;color:#fff;margin:0}
+body{margin:0;background:#0b0b0b;color:#fff;font-family:system-ui}
 .wrap{padding:14px}
 .card{background:#141414;border-radius:16px;padding:12px;margin-bottom:12px}
-h2{margin:0 0 6px}
-input,button{width:100%;padding:10px;border-radius:10px;border:0;margin-top:6px}
+h2{margin:0 0 6px;font-size:16px}
+input,button{
+  width:100%;padding:10px;border-radius:10px;
+  border:0;margin-top:6px;font-size:14px
+}
 button{background:#ff2b2b;color:#fff;font-weight:700;cursor:pointer}
-.list{white-space:pre-line;font-size:12px;opacity:.9}
+pre{white-space:pre-wrap;font-size:12px;opacity:.9}
 </style>
 </head>
 <body>
+
 <div class="wrap">
 
-<div class="card">
-  <h2>🎛️ RR365 Admin</h2>
-  <div id="stat">กำลังโหลด…</div>
-</div>
+  <div class="card">
+    <h2>🎛️ RR365 Admin</h2>
+    <div id="stat">กำลังโหลด…</div>
+  </div>
 
-<div class="card">
-  <h2>🔎 ค้นหา</h2>
-  <input id="q" placeholder="เบอร์ / deviceId / fp / ua">
-  <button onclick="search()">ค้นหา</button>
-  <div id="result" class="list"></div>
-</div>
+  <div class="card">
+    <h2>🔎 ค้นหา</h2>
+    <input id="q" placeholder="เบอร์ / deviceId / fingerprint / ua_key">
+    <button onclick="search()">ค้นหา</button>
+    <pre id="result"></pre>
+  </div>
 
-<div class="card">
-  <h2>🔓 ปลดล็อกเบอร์</h2>
-  <input id="unlock" placeholder="061xxxxxxx">
-  <button onclick="unlock()">ปลดล็อก</button>
-  <div id="msg"></div>
-</div>
+  <div class="card">
+    <h2>🔓 ปลดล็อกเบอร์</h2>
+    <input id="unlock" placeholder="061xxxxxxx">
+    <button onclick="unlock()">ปลดล็อก</button>
+    <div id="msg"></div>
+  </div>
 
 </div>
 
 <script>
 function load(){
   google.script.run.withSuccessHandler(d=>{
-    document.getElementById("stat").innerText=
-      `ผู้เข้าร่วม ${d.counts.participants} | ผูกอุปกรณ์ ${d.counts.binds}`;
+    document.getElementById("stat").innerText =
+      `ผู้เข้าร่วม: ${d.counts.participants} | ผูกอุปกรณ์: ${d.counts.binds}`;
   }).adminDashboard();
 }
 
 function search(){
   const q=document.getElementById("q").value;
   google.script.run.withSuccessHandler(d=>{
-    document.getElementById("result").innerText=
+    document.getElementById("result").textContent =
       JSON.stringify(d,null,2);
   }).adminSearch(q);
 }
@@ -63,5 +67,6 @@ function unlock(){
 
 load();
 </script>
+
 </body>
 </html>
