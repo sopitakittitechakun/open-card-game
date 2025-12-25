@@ -39,7 +39,7 @@
 </div>
 
 <script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzBwn8T-XIHrt85GVe_eEuBPO5dYseLA5VhmZ0MDEt-qOAc7Rq9e3_sTdT2-gQNBWY3ow/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyGtkm3t8WpKizvfo23weEh85Wk0TmdSrdsy4mYFG60kOHaqj8y03ElkSgAiY8xLkR4XA/exec";
   const DEVICE_ID_KEY = "rr365_device_id";
 
   const $phone = document.getElementById("phone");
@@ -53,7 +53,7 @@
     $msg.textContent=text;
   }
 
-  // กรอง input กันตัวอักษรมั่ว (ยังยอม +66, ขีด, เว้นวรรค, เลขไทย)
+  // กันพิมพ์มั่ว (ยังยอม +66, ขีด, เว้นวรรค, เลขไทย)
   $phone.addEventListener("input", ()=>{
     $phone.value = $phone.value.replace(/[^\d๐-๙+ -]/g,"");
   });
@@ -145,7 +145,10 @@
 
   async function request(action){
     const p = normalizePhone($phone.value);
-    if(!p){ show("กรุณากรอกเบอร์มือถือให้ถูกต้อง (06/08/09 10 หลัก)", "err"); return null; }
+    if(!p){
+      show("กรุณากรอกเบอร์มือถือให้ถูกต้อง (06/08/09 10 หลัก)", "err");
+      return null;
+    }
 
     const payload = {
       action,
@@ -179,12 +182,17 @@
       return;
     }
 
-    if(data.device_used){
-      show("⚠️ ระบบตรวจพบอุปกรณ์เคยเข้าร่วมแล้ว ไม่สามารถทำซ้ำได้", "err");
+    // ✅ เบอร์เคยร่วมแล้ว = ทำอะไรไม่ได้
+    if(data.exists){
+      show("⚠️ เบอร์นี้เคยเข้าร่วมกิจกรรมแล้ว ไม่สามารถทำรายการใด ๆ ซ้ำได้", "err");
+      $btnJoin.disabled = true;
       return;
     }
-    if(data.exists){
-      show("⚠️ เบอร์นี้เคยเข้าร่วมกิจกรรมแล้ว (ไม่สามารถทำซ้ำได้)", "err");
+
+    // ✅ เครื่อง/FP/UA เคยร่วมแล้ว
+    if(data.device_used){
+      show("⚠️ ระบบตรวจพบอุปกรณ์เคยเข้าร่วมแล้ว ไม่สามารถทำซ้ำได้", "err");
+      $btnJoin.disabled = true;
       return;
     }
 
