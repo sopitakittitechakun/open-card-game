@@ -3,16 +3,14 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>เช็คสิทธิ์กิจกรรมเครดิตฟรี 2 แชร์ (RR365)</title>
+<title>เช็คสิทธิ์กิจกรรม เครดิตฟรี 2 แชร์</title>
 <meta name="color-scheme" content="dark" />
 <style>
   :root{
     --bg0:#070102;
     --bg1:#0f0204;
     --card:rgba(255,255,255,.06);
-    --card2:rgba(255,255,255,.04);
     --line:rgba(255,80,80,.20);
-    --line2:rgba(255,80,80,.35);
     --txt:#ffecec;
     --muted:#ffb6b6;
     --accent:#ff2b2b;
@@ -37,12 +35,13 @@
       radial-gradient(900px 700px at 50% 105%, rgba(255,40,40,.16), transparent 60%),
       linear-gradient(180deg, var(--bg0), var(--bg1));
     overflow-x:hidden;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .wrap{
     max-width:720px;
     margin:0 auto;
-    padding:22px 14px 86px;
+    padding:22px 14px 110px; /* เผื่อพื้นที่ปุ่มล่าง */
   }
 
   .hero{
@@ -60,9 +59,7 @@
     flex-wrap:wrap;
   }
 
-  .brand{
-    display:flex; align-items:center; gap:12px;
-  }
+  .brand{display:flex; align-items:center; gap:12px;}
   .logo{
     width:46px; height:46px; border-radius:16px;
     background:
@@ -72,24 +69,12 @@
     box-shadow:0 12px 30px rgba(255,0,0,.25);
     flex:0 0 auto;
   }
-  .title{
-    margin:0;
-    font-size:16px;
-    font-weight:900;
-    letter-spacing:.2px;
-    line-height:1.2;
-  }
-  .sub{
-    margin-top:2px;
-    font-size:12px;
-    color:var(--muted);
-    line-height:1.35;
-  }
+  .title{margin:0;font-size:16px;font-weight:900;letter-spacing:.2px;line-height:1.2}
+  .sub{margin-top:2px;font-size:12px;color:var(--muted);line-height:1.35}
 
   .status{
     display:flex; gap:10px; align-items:center;
-    padding:10px 12px;
-    border-radius:999px;
+    padding:10px 12px;border-radius:999px;
     border:1px solid rgba(255,255,255,.14);
     background:rgba(0,0,0,.25);
     min-height:40px;
@@ -101,26 +86,15 @@
   .status b{font-size:12px}
   .status span{font-size:12px;color:var(--muted)}
 
-  .stepper{
-    margin-top:14px;
-    display:flex; gap:10px; flex-wrap:wrap;
-  }
+  .stepper{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
   .step{
-    flex:1;
-    min-width:190px;
-    padding:10px 12px;
-    border-radius:16px;
+    flex:1;min-width:180px;
+    padding:10px 12px;border-radius:16px;
     border:1px solid rgba(255,255,255,.12);
     background:rgba(0,0,0,.20);
   }
-  .step .k{
-    font-size:12px; color:var(--muted); font-weight:800;
-  }
-  .step .v{
-    margin-top:4px;
-    font-size:13px;
-    font-weight:900;
-  }
+  .step .k{font-size:12px;color:var(--muted);font-weight:900}
+  .step .v{margin-top:4px;font-size:13px;font-weight:900}
   .step.active{
     border-color:rgba(255,80,80,.55);
     background:rgba(255,40,40,.10);
@@ -139,92 +113,59 @@
     padding:14px 16px;
     border-bottom:1px solid var(--line);
     background:linear-gradient(90deg, rgba(255,40,40,.12), transparent);
-    display:flex; align-items:center; justify-content:space-between;
+    display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
   }
-  .card .hd .ttl{
-    font-weight:900;
-    font-size:14px;
-    display:flex; align-items:center; gap:10px;
-  }
+  .card .hd .ttl{font-weight:900;font-size:14px;display:flex;align-items:center;gap:10px}
   .pill{
-    font-size:12px;
-    padding:6px 10px;
-    border-radius:999px;
+    font-size:12px;padding:6px 10px;border-radius:999px;
     border:1px solid rgba(255,255,255,.16);
     background:rgba(0,0,0,.25);
-    color:var(--muted);
-    white-space:nowrap;
+    color:var(--muted);white-space:nowrap;
   }
   .card .bd{padding:16px}
 
-  label{
-    display:block;
-    font-size:12px;
-    color:var(--muted);
-    margin:10px 0 6px;
-  }
+  label{display:block;font-size:12px;color:var(--muted);margin:10px 0 6px}
   input{
-    width:100%;
-    padding:12px 12px;
-    border-radius:16px;
+    width:100%;padding:12px 12px;border-radius:16px;
     border:1px solid rgba(255,255,255,.14);
     background:rgba(0,0,0,.35);
     color:var(--txt);
-    font-size:16px;
-    outline:none;
-    transition:.15s;
+    font-size:16px;outline:none;transition:.15s;
   }
-  input:focus{
-    border-color: rgba(255,80,80,.55);
-    box-shadow:0 0 0 4px rgba(255,40,40,.15);
-  }
+  input:focus{border-color:rgba(255,80,80,.55);box-shadow:0 0 0 4px rgba(255,40,40,.15)}
+  .note{margin-top:10px;font-size:12px;color:rgba(255,255,255,.72);line-height:1.6}
 
   .msg{
-    margin-top:12px;
-    padding:12px 12px;
-    border-radius:16px;
+    margin-top:12px;padding:12px 12px;border-radius:16px;
     border:1px solid rgba(255,255,255,.12);
     background:rgba(0,0,0,.25);
-    white-space:pre-line;
-    display:none;
-    line-height:1.55;
+    white-space:pre-line;display:none;line-height:1.55;
   }
   .msg.ok{border-color:rgba(54,211,153,.35)}
   .msg.err{border-color:rgba(255,90,95,.45)}
   .msg.info{border-color:rgba(255,80,80,.22)}
 
-  .note{
-    margin-top:10px;
-    font-size:12px;
-    color:rgba(255,255,255,.70);
-    line-height:1.55;
-  }
-
-  /* Bottom action bar */
+  /* ✅ แถบปุ่มล่าง: กันเลเยอร์ทับคลิก */
   .bar{
-    position:fixed;
-    left:0; right:0; bottom:0;
+    position:fixed;left:0;right:0;bottom:0;
     padding:12px 14px;
     background:linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,.65) 25%, rgba(0,0,0,.85));
     backdrop-filter: blur(8px);
+    z-index:50;
+    pointer-events:none; /* สำคัญ: ตัว bar ไม่รับคลิก */
   }
   .barInner{
-    max-width:720px;
-    margin:0 auto;
-    display:flex;
-    gap:10px;
+    max-width:720px;margin:0 auto;
+    display:flex;gap:10px;
+    pointer-events:auto; /* แต่ปุ่มข้างในรับคลิก */
   }
+
   button{
-    border:0;
-    cursor:pointer;
-    padding:12px 14px;
-    border-radius:16px;
-    font-weight:900;
-    font-size:15px;
-    letter-spacing:.2px;
-    color:#fff;
-    transition:.15s;
-    flex:1;
+    border:0;cursor:pointer;
+    padding:12px 14px;border-radius:16px;
+    font-weight:900;font-size:15px;letter-spacing:.2px;color:#fff;
+    transition:.15s;flex:1;
+    touch-action: manipulation; /* กันบางเครื่องไม่รับ tap */
   }
   .btnMain{
     background:linear-gradient(135deg, var(--accent), var(--accent2));
@@ -233,19 +174,46 @@
   .btnAlt{
     background:rgba(255,255,255,.10);
     border:1px solid rgba(255,255,255,.14);
-    box-shadow:none;
     color:var(--txt);
   }
   button:disabled{opacity:.55;cursor:not-allowed;transform:none}
   button:hover{transform:translateY(-1px)}
   button:active{transform:translateY(0);opacity:.95}
 
+  /* ✅ Overlay ตอนโหลด: ปกติไม่รับคลิก/ไม่ทับ */
+  .overlay{
+    position:fixed; inset:0;
+    display:none;
+    align-items:center; justify-content:center;
+    background:rgba(0,0,0,.55);
+    z-index:99;
+  }
+  .overlay.show{display:flex}
+  .loader{
+    width:min(420px, 92vw);
+    border:1px solid rgba(255,255,255,.14);
+    background:rgba(10,0,0,.75);
+    border-radius:20px;
+    padding:14px;
+    box-shadow:0 20px 60px rgba(0,0,0,.7);
+  }
+  .loader .row{display:flex;gap:10px;align-items:center}
+  .spin{
+    width:18px;height:18px;border-radius:50%;
+    border:2px solid rgba(255,255,255,.25);
+    border-top-color:rgba(255,43,43,.9);
+    animation: sp 1s linear infinite;
+  }
+  @keyframes sp{to{transform:rotate(360deg)}}
+  .loader b{font-size:13px}
+  .loader span{display:block;color:rgba(255,255,255,.75);font-size:12px;margin-top:4px;line-height:1.4}
+
   .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
 </style>
 </head>
 <body>
-<div class="wrap">
 
+<div class="wrap">
   <div class="hero">
     <div class="top">
       <div class="brand">
@@ -256,7 +224,7 @@
         </div>
       </div>
 
-      <div class="status" id="statusBox">
+      <div class="status">
         <div class="dot warn" id="dot"></div>
         <div>
           <b id="stTitle">พร้อมใช้งาน</b><br>
@@ -266,18 +234,9 @@
     </div>
 
     <div class="stepper">
-      <div class="step active" id="step1">
-        <div class="k">STEP 1</div>
-        <div class="v">เช็คสิทธิ์</div>
-      </div>
-      <div class="step" id="step2">
-        <div class="k">STEP 2</div>
-        <div class="v">ยืนยันเข้าร่วม</div>
-      </div>
-      <div class="step" id="step3">
-        <div class="k">STEP 3</div>
-        <div class="v">แคปหน้าจอส่งแอดมิน</div>
-      </div>
+      <div class="step active" id="step1"><div class="k">STEP 1</div><div class="v">เช็คสิทธิ์</div></div>
+      <div class="step" id="step2"><div class="k">STEP 2</div><div class="v">ยืนยันเข้าร่วม</div></div>
+      <div class="step" id="step3"><div class="k">STEP 3</div><div class="v">แคปหน้าจอส่งแอดมิน</div></div>
     </div>
   </div>
 
@@ -299,24 +258,23 @@
     </div>
   </div>
 
-  <div class="card" style="margin-top:14px;">
+  <div class="card">
     <div class="hd">
       <div class="ttl">🧹 เครื่องมือ</div>
-      <span class="pill">กรณีต้องรีเซ็ตเครื่อง</span>
+      <span class="pill">ใช้เฉพาะทดสอบ/แอดมิน</span>
     </div>
     <div class="bd">
       <div class="note">
-        ปุ่ม “ล้างข้อมูลในเครื่อง” จะลบค่า deviceId ในเครื่องนี้ (ใช้เฉพาะกรณีทดสอบ/เครื่องแอดมิน)<br>
-        <span class="mono">หมายเหตุ: รีเซ็ตแล้วระบบจะมองเป็นอุปกรณ์ใหม่ในฝั่งหน้าเว็บ</span>
+        ปุ่มนี้จะลบค่า <span class="mono">deviceId</span> ในเครื่อง (กรณีทดสอบเท่านั้น)<br>
+        <span class="mono">หมายเหตุ: รีเซ็ตแล้วระบบจะมองเป็นอุปกรณ์ใหม่</span>
       </div>
       <div style="height:10px"></div>
       <button class="btnAlt" id="btnClear" type="button">ล้างข้อมูลในเครื่อง (รีเซ็ตอุปกรณ์)</button>
     </div>
   </div>
-
 </div>
 
-<!-- bottom bar -->
+<!-- ✅ Bottom bar (ไม่ทับคลิกแล้ว) -->
 <div class="bar">
   <div class="barInner">
     <button class="btnAlt" id="btnCheck" type="button">เช็คสิทธิ์</button>
@@ -324,14 +282,30 @@
   </div>
 </div>
 
+<!-- ✅ Loading Overlay -->
+<div class="overlay" id="overlay" aria-hidden="true">
+  <div class="loader">
+    <div class="row">
+      <div class="spin"></div>
+      <div>
+        <b id="ovTitle">กำลังทำรายการ...</b>
+        <span id="ovSub">กรุณารอสักครู่</span>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
-/***********************
-  CONFIG (ใส่ /exec เท่านั้น)
-************************/
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyHsPe2_DRMyqx79_6i91k6Rwhd-S1RpnPaqTUXR5RVT7-DsMqCwZRzw7No0Z1KfGgX/exec";
+/* =========================
+   CONFIG
+========================= */
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxMW9ORJmm8et1x-7b5rZiY-F5DejLe7WOWY7Itp4Vh62MLZ1eLsN837EKmGu6xNrbA/exec";
 const DEVICE_ID_KEY = "rr365_device_id";
 const LAST_PHONE_KEY = "rr365_last_phone";
 
+/* =========================
+   ELEMENTS
+========================= */
 const $phone = document.getElementById("phone");
 const $btnCheck = document.getElementById("btnCheck");
 const $btnJoin  = document.getElementById("btnJoin");
@@ -346,6 +320,13 @@ const $step1 = document.getElementById("step1");
 const $step2 = document.getElementById("step2");
 const $step3 = document.getElementById("step3");
 
+const $overlay = document.getElementById("overlay");
+const $ovTitle = document.getElementById("ovTitle");
+const $ovSub = document.getElementById("ovSub");
+
+/* =========================
+   UI HELPERS
+========================= */
 function setStatus(mode, title, sub){
   $dot.className = "dot " + (mode==="ok" ? "ok" : mode==="bad" ? "bad" : "warn");
   $stTitle.textContent = title || "";
@@ -361,7 +342,7 @@ function setStep(n){
 function show(text, type="info"){
   $msg.style.display="block";
   $msg.className="msg " + (type==="err" ? "err" : type==="ok" ? "ok" : "info");
-  $msg.textContent=text;
+  $msg.textContent = text;
 }
 
 function hideMsg(){
@@ -369,6 +350,21 @@ function hideMsg(){
   $msg.textContent="";
 }
 
+function overlay(on, title, sub){
+  if(on){
+    $ovTitle.textContent = title || "กำลังทำรายการ...";
+    $ovSub.textContent = sub || "กรุณารอสักครู่";
+    $overlay.classList.add("show");
+    $overlay.setAttribute("aria-hidden","false");
+  }else{
+    $overlay.classList.remove("show");
+    $overlay.setAttribute("aria-hidden","true");
+  }
+}
+
+/* =========================
+   NORMALIZE PHONE
+========================= */
 function normalizePhone(v){
   let s = String(v||"").trim();
   const th = "๐๑๒๓๔๕๖๗๘๙";
@@ -383,6 +379,9 @@ function normalizePhone(v){
   return p;
 }
 
+/* =========================
+   DEVICE + FINGERPRINT + UA KEY
+========================= */
 function getOrCreateDeviceId(){
   let id = localStorage.getItem(DEVICE_ID_KEY);
   if(!id){
@@ -403,27 +402,33 @@ function getFingerprint(){
     navigator.maxTouchPoints || 0
   ].join("|");
   let hash = 0;
-  for (let i=0;i<data.length;i++){ hash = ((hash<<5)-hash) + data.charCodeAt(i); hash |= 0; }
+  for (let i=0;i<data.length;i++){
+    hash = ((hash<<5)-hash) + data.charCodeAt(i);
+    hash |= 0;
+  }
   return "fp_" + Math.abs(hash);
 }
 
 function getUaKey(){
   const ua = navigator.userAgent || "";
   const key = [
-    ua.includes("Android") ? (ua.match(/Android\\s[\\d\\.]+/)||["Android"])[0] : "NA",
-    (ua.match(/Chrome\\/[\\d\\.]+/)||["Chrome"])[0],
+    ua.includes("Android") ? (ua.match(/Android\s[\d\.]+/)||["Android"])[0] : "NA",
+    (ua.match(/Chrome\/[\d\.]+/)||["Chrome"])[0],
     ua.includes("wv") ? "WV" : "NWV",
-    ua.includes("Line") ? (ua.match(/Line\\/[\\d\\.]+/)||["Line"])[0] : "NLINE",
-    (ua.match(/Build\\/[A-Za-z0-9\\._]+/)||["Build"])[0]
+    ua.includes("Line") ? (ua.match(/Line\/[\d\.]+/)||["Line"])[0] : "NLINE",
+    (ua.match(/Build\/[A-Za-z0-9\.\_]+/)||["Build"])[0]
   ].join("|");
-  let h=0; for(let i=0;i<key.length;i++){ h=((h<<5)-h)+key.charCodeAt(i); h|=0; }
+  let h=0;
+  for(let i=0;i<key.length;i++){ h=((h<<5)-h)+key.charCodeAt(i); h|=0; }
   return "ua_" + Math.abs(h);
 }
 
-// JSONP
+/* =========================
+   JSONP
+========================= */
 function jsonpRequest(params, timeoutMs=12000){
   return new Promise((resolve, reject)=>{
-    if (!/\\/exec(\\?|$)/.test(SCRIPT_URL)) return reject(new Error("SCRIPT_URL_NOT_EXEC"));
+    if (!/\/exec(\?|$)/.test(SCRIPT_URL)) return reject(new Error("SCRIPT_URL_NOT_EXEC"));
 
     const cbName = "cb_" + Math.random().toString(36).slice(2);
     params.jsonp = "1";
@@ -468,33 +473,53 @@ async function request(action){
     });
   }catch(err){
     const m = String(err.message||"");
-    if (m === "SCRIPT_URL_NOT_EXEC"){
+    if(m==="SCRIPT_URL_NOT_EXEC"){
       show("ลิงก์สคริปต์ไม่ถูกต้อง: ต้องเป็นลิงก์ลงท้าย /exec เท่านั้น", "err");
-    } else if (m === "TIMEOUT"){
+    }else if(m==="TIMEOUT"){
       show("เชื่อมต่อช้าเกินไป (Timeout) — ลองใหม่อีกครั้ง\nถ้ายังเป็นอยู่ให้ตรวจสอบ Deploy: Who has access = Anyone", "err");
-    } else {
+    }else{
       show("เชื่อมต่อไม่สำเร็จ — ตรวจสอบ Deploy/สิทธิ์ (ต้อง Anyone) และลองใหม่", "err");
     }
     return null;
   }
 }
 
-function setBusy(busy, label){
-  $btnCheck.disabled = busy;
-  $btnJoin.disabled  = busy ? true : $btnJoin.disabled;
-  setStatus("warn", label || "กำลังทำรายการ...", "กรุณารอสักครู่");
+/* =========================
+   BUSY STATE (กันปุ่มค้าง)
+========================= */
+let BUSY = false;
+function setBusy(on, ovTitle, ovSub){
+  BUSY = !!on;
+  $btnCheck.disabled = BUSY;
+  $btnClear.disabled = BUSY;
+  $btnJoin.disabled = BUSY ? true : $btnJoin.disabled;
+
+  if(BUSY){
+    overlay(true, ovTitle, ovSub);
+    setStatus("warn", ovTitle || "กำลังทำรายการ...", "กรุณารอสักครู่");
+  }else{
+    overlay(false);
+  }
 }
 
-/***********************
-  EVENTS
-************************/
-$btnCheck.addEventListener("click", async ()=>{
+/* =========================
+   EVENTS (✅ click + touch)
+========================= */
+function bindTap(el, fn){
+  // กันบางเครื่อง tap ไม่ยิง click
+  el.addEventListener("click", fn, { passive:true });
+  el.addEventListener("touchend", (e)=>{ e.preventDefault(); fn(e); }, { passive:false });
+}
+
+bindTap($btnCheck, async ()=>{
+  if(BUSY) return;
   $btnJoin.disabled = true;
   setStep(1);
-  setBusy(true, "กำลังเช็คสิทธิ์...");
+  setBusy(true, "กำลังเช็คสิทธิ์...", "กำลังตรวจสอบเบอร์และอุปกรณ์");
 
   const data = await request("check");
-  setBusy(false, "");
+  setBusy(false);
+
   if(!data){
     setStatus("bad","เช็คไม่สำเร็จ","ลองใหม่อีกครั้ง");
     return;
@@ -502,7 +527,7 @@ $btnCheck.addEventListener("click", async ()=>{
 
   if(!data.ok){
     show(data.msg || "เกิดข้อผิดพลาด", "err");
-    setStatus("bad","ผิดพลาด", "กรุณาลองใหม่");
+    setStatus("bad","ผิดพลาด","กรุณาลองใหม่");
     return;
   }
 
@@ -523,12 +548,14 @@ $btnCheck.addEventListener("click", async ()=>{
   setStatus("ok","ผ่านการตรวจสอบ","กด “ยืนยันเข้าร่วม” เพื่อบันทึก");
 });
 
-$btnJoin.addEventListener("click", async ()=>{
+bindTap($btnJoin, async ()=>{
+  if(BUSY) return;
   setStep(2);
-  setBusy(true, "กำลังลงชื่อเข้าร่วม...");
+  setBusy(true, "กำลังลงชื่อเข้าร่วม...", "กำลังบันทึกข้อมูล");
 
   const data = await request("register");
-  setBusy(false, "");
+  setBusy(false);
+
   if(!data){
     setStatus("bad","ลงชื่อไม่สำเร็จ","ลองใหม่อีกครั้ง");
     return;
@@ -552,15 +579,16 @@ $btnJoin.addEventListener("click", async ()=>{
   setStatus("bad","ไม่สำเร็จ","กรุณาลองใหม่");
 });
 
-$btnClear.addEventListener("click", ()=>{
+bindTap($btnClear, ()=>{
+  if(BUSY) return;
   localStorage.removeItem(DEVICE_ID_KEY);
   show("ล้างข้อมูลในเครื่องแล้ว ✅\n(รีเซ็ต deviceId สำเร็จ)", "ok");
   setStatus("ok","ล้างข้อมูลแล้ว","สามารถทดสอบใหม่ได้");
 });
 
-/***********************
-  INIT
-************************/
+/* =========================
+   INIT
+========================= */
 (function init(){
   const last = localStorage.getItem(LAST_PHONE_KEY);
   if(last) $phone.value = last;
