@@ -7,20 +7,14 @@
 <meta name="color-scheme" content="dark" />
 <style>
   :root{
-    --bg0:#070102;
-    --bg1:#0f0204;
+    --bg0:#070102; --bg1:#0f0204;
     --line:rgba(255,80,80,.20);
-    --txt:#ffecec;
-    --muted:#ffb6b6;
-    --accent:#ff2b2b;
-    --accent2:#b80000;
-    --ok:#36d399;
-    --warn:#fbbf24;
-    --bad:#ff5a5f;
+    --txt:#ffecec; --muted:#ffb6b6;
+    --accent:#ff2b2b; --accent2:#b80000;
+    --ok:#36d399; --warn:#fbbf24; --bad:#ff5a5f;
     --shadow:0 22px 60px rgba(0,0,0,.65);
     --radius:22px;
   }
-
   *{box-sizing:border-box}
   html,body{height:100%}
   body{
@@ -35,13 +29,7 @@
     overflow-x:hidden;
     -webkit-tap-highlight-color: transparent;
   }
-
-  .wrap{
-    max-width:720px;
-    margin:0 auto;
-    padding:22px 14px 120px;
-  }
-
+  .wrap{max-width:720px;margin:0 auto;padding:22px 14px 120px}
   .hero{
     border:1px solid var(--line);
     border-radius:28px;
@@ -51,17 +39,11 @@
     position:sticky; top:12px; z-index:5;
     backdrop-filter: blur(10px);
   }
-
-  .top{
-    display:flex; gap:12px; align-items:center; justify-content:space-between;
-    flex-wrap:wrap;
-  }
-
-  .brand{display:flex; align-items:center; gap:12px;}
+  .top{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:12px}
   .logo{
-    width:46px; height:46px; border-radius:16px;
-    background:
-      radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), transparent 55%),
+    width:46px;height:46px;border-radius:16px;
+    background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), transparent 55%),
       linear-gradient(135deg, var(--accent), var(--accent2));
     border:1px solid rgba(255,255,255,.14);
     box-shadow:0 12px 30px rgba(255,0,0,.25);
@@ -69,9 +51,8 @@
   }
   .title{margin:0;font-size:16px;font-weight:900;letter-spacing:.2px;line-height:1.2}
   .sub{margin-top:2px;font-size:12px;color:var(--muted);line-height:1.35}
-
   .status{
-    display:flex; gap:10px; align-items:center;
+    display:flex;gap:10px;align-items:center;
     padding:10px 12px;border-radius:999px;
     border:1px solid rgba(255,255,255,.14);
     background:rgba(0,0,0,.25);
@@ -83,13 +64,10 @@
   .dot.bad{background:var(--bad);box-shadow:0 0 0 4px rgba(255,90,95,.14)}
   .status b{font-size:12px}
   .status span{font-size:12px;color:var(--muted)}
-
   .stepper{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
   .step{
-    flex:1;min-width:180px;
-    padding:10px 12px;border-radius:16px;
-    border:1px solid rgba(255,255,255,.12);
-    background:rgba(0,0,0,.20);
+    flex:1;min-width:180px;padding:10px 12px;border-radius:16px;
+    border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.20);
   }
   .step .k{font-size:12px;color:var(--muted);font-weight:900}
   .step .v{margin-top:4px;font-size:13px;font-weight:900}
@@ -98,69 +76,46 @@
     background:rgba(255,40,40,.10);
     box-shadow:0 0 0 4px rgba(255,40,40,.10);
   }
-
   .card{
-    margin-top:14px;
-    border:1px solid var(--line);
-    border-radius:var(--radius);
+    margin-top:14px;border:1px solid var(--line);border-radius:var(--radius);
     background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-    box-shadow:0 18px 46px rgba(0,0,0,.55);
-    overflow:hidden;
+    box-shadow:0 18px 46px rgba(0,0,0,.55);overflow:hidden;
   }
   .card .hd{
-    padding:14px 16px;
-    border-bottom:1px solid var(--line);
+    padding:14px 16px;border-bottom:1px solid var(--line);
     background:linear-gradient(90deg, rgba(255,40,40,.12), transparent);
     display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
   }
-  .card .hd .ttl{font-weight:900;font-size:14px;display:flex;align-items:center;gap:10px}
   .pill{
     font-size:12px;padding:6px 10px;border-radius:999px;
     border:1px solid rgba(255,255,255,.16);
-    background:rgba(0,0,0,.25);
-    color:var(--muted);white-space:nowrap;
+    background:rgba(0,0,0,.25);color:var(--muted);white-space:nowrap;
   }
   .card .bd{padding:16px}
-
   label{display:block;font-size:12px;color:var(--muted);margin:10px 0 6px}
   input{
     width:100%;padding:12px 12px;border-radius:16px;
-    border:1px solid rgba(255,255,255,.14);
-    background:rgba(0,0,0,.35);
-    color:var(--txt);
-    font-size:16px;outline:none;transition:.15s;
+    border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.35);
+    color:var(--txt);font-size:16px;outline:none;transition:.15s;
   }
   input:focus{border-color:rgba(255,80,80,.55);box-shadow:0 0 0 4px rgba(255,40,40,.15)}
   .note{margin-top:10px;font-size:12px;color:rgba(255,255,255,.72);line-height:1.6}
-
   .msg{
     margin-top:12px;padding:12px 12px;border-radius:16px;
-    border:1px solid rgba(255,255,255,.12);
-    background:rgba(0,0,0,.25);
+    border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.25);
     white-space:pre-line;display:none;line-height:1.55;
   }
   .msg.ok{border-color:rgba(54,211,153,.35)}
   .msg.err{border-color:rgba(255,90,95,.45)}
   .msg.info{border-color:rgba(255,80,80,.22)}
-
   .mini{
-    margin-top:10px;
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    align-items:center;
-    justify-content:space-between;
-    font-size:12px;
-    color:rgba(255,255,255,.70);
+    margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;
+    font-size:12px;color:rgba(255,255,255,.70);
   }
   .mini .tag{
-    padding:6px 10px;
-    border-radius:999px;
-    border:1px solid rgba(255,255,255,.12);
+    padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);
     background:rgba(0,0,0,.22);
   }
-
-  /* ✅ Bottom bar: ปุ่มกดติดแน่น */
   .bar{
     position:fixed;left:0;right:0;bottom:0;
     padding:12px 14px;
@@ -169,47 +124,28 @@
     z-index:9999;
     pointer-events:auto;
   }
-  .barInner{
-    max-width:720px;margin:0 auto;
-    display:flex;gap:10px;
-  }
-
+  .barInner{max-width:720px;margin:0 auto;display:flex;gap:10px}
   button{
-    border:0;cursor:pointer;
-    padding:12px 14px;border-radius:16px;
-    font-weight:900;font-size:15px;letter-spacing:.2px;color:#fff;
-    transition:.15s;flex:1;
+    border:0;cursor:pointer;padding:12px 14px;border-radius:16px;
+    font-weight:900;font-size:15px;letter-spacing:.2px;color:#fff;transition:.15s;flex:1;
     touch-action: manipulation;
   }
-  .btnMain{
-    background:linear-gradient(135deg, var(--accent), var(--accent2));
-    box-shadow:0 14px 30px rgba(255,0,0,.25);
-  }
-  .btnAlt{
-    background:rgba(255,255,255,.10);
-    border:1px solid rgba(255,255,255,.14);
-    color:var(--txt);
-  }
+  .btnMain{background:linear-gradient(135deg, var(--accent), var(--accent2));box-shadow:0 14px 30px rgba(255,0,0,.25)}
+  .btnAlt{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.14);color:var(--txt)}
   button:disabled{opacity:.55;cursor:not-allowed;transform:none}
   button:hover{transform:translateY(-1px)}
   button:active{transform:translateY(0);opacity:.95}
-
-  /* Loading Overlay */
   .overlay{
-    position:fixed; inset:0;
-    display:none;
-    align-items:center; justify-content:center;
+    position:fixed; inset:0;display:none;align-items:center;justify-content:center;
     background:rgba(0,0,0,.55);
     z-index:99999;
-    pointer-events:auto;
   }
   .overlay.show{display:flex}
   .loader{
     width:min(420px, 92vw);
     border:1px solid rgba(255,255,255,.14);
     background:rgba(10,0,0,.75);
-    border-radius:20px;
-    padding:14px;
+    border-radius:20px;padding:14px;
     box-shadow:0 20px 60px rgba(0,0,0,.7);
   }
   .loader .row{display:flex;gap:10px;align-items:center}
@@ -233,7 +169,7 @@
         <div class="logo"></div>
         <div>
           <div class="title">เช็คสิทธิ์กิจกรรม เครดิตฟรี 2 แชร์</div>
-          <div class="sub">ระบบตรวจสอบสิทธิ์ + กันทำซ้ำ + TOKEN กันยิงตรง</div>
+          <div class="sub">เช็คสิทธิ์ → ยืนยันเข้าร่วม → รับโค้ดอัตโนมัติ</div>
         </div>
       </div>
 
@@ -249,7 +185,7 @@
     <div class="stepper">
       <div class="step active" id="step1"><div class="k">STEP 1</div><div class="v">เช็คสิทธิ์</div></div>
       <div class="step" id="step2"><div class="k">STEP 2</div><div class="v">ยืนยันเข้าร่วม</div></div>
-      <div class="step" id="step3"><div class="k">STEP 3</div><div class="v">แคปหน้าจอส่งแอดมิน</div></div>
+      <div class="step" id="step3"><div class="k">STEP 3</div><div class="v">รับโค้ด + แคปส่งแอดมิน</div></div>
     </div>
   </div>
 
@@ -270,15 +206,13 @@
       </div>
 
       <div class="note">
-        *กรอกเบอร์ที่สมัครเข้ามาลงทะเบียนเท่านั้น<br>
-        *ถ้าเคยร่วมแล้ว / เครื่องเคยร่วมแล้ว จะไม่สามารถทำซ้ำได้<br>
-        *หลังเช็คสิทธิ์ ระบบจะออก TOKEN ชั่วคราวเพื่อกันการยิงตรง
+        *ผ่านการตรวจสอบแล้ว ระบบจะแจกโค้ดให้อัตโนมัติเมื่อกดยืนยัน<br>
+        *โค้ดจะถูกใช้ครั้งเดียว และบันทึกไว้ตรวจสอบย้อนหลังได้
       </div>
     </div>
   </div>
 </div>
 
-<!-- Bottom bar -->
 <div class="bar">
   <div class="barInner">
     <button class="btnAlt" id="btnCheck" type="button">เช็คสิทธิ์</button>
@@ -286,7 +220,6 @@
   </div>
 </div>
 
-<!-- Loading Overlay -->
 <div class="overlay" id="overlay" aria-hidden="true">
   <div class="loader">
     <div class="row">
@@ -301,9 +234,9 @@
 
 <script>
 /* =========================
-   CONFIG
+   CONFIG (แก้แค่ตรงนี้)
 ========================= */
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzxAKf-YwpWrXj3osRaQSmO3DqE1KN3LyAsXRDNpEPcM1I6nlsMWifg7YOVB-pLiEdUWQ/exec"; // ✅ ใส่ของคุณ
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwF6-h_Ip_gJHDbigip7x3oc8fDAHcwcn814k4ufXn4hlJ_lMDdhRsqYM7b40G6lWGLeg/exec"; // ✅ ใส่ลิงก์ .../exec
 const DEVICE_ID_KEY = "rr365_device_id";
 
 /* =========================
@@ -353,10 +286,7 @@ function show(text, type="info"){
   $msg.className="msg " + (type==="err" ? "err" : type==="ok" ? "ok" : "info");
   $msg.textContent = text;
 }
-function hideMsg(){
-  $msg.style.display="none";
-  $msg.textContent="";
-}
+function hideMsg(){ $msg.style.display="none"; $msg.textContent=""; }
 function overlay(on, title, sub){
   if(on){
     $ovTitle.textContent = title || "กำลังทำรายการ...";
@@ -469,7 +399,7 @@ function jsonpRequest(params, timeoutMs=12000){
 }
 
 /* =========================
-   REQUEST (with token on register)
+   REQUEST
 ========================= */
 async function request(action){
   hideMsg();
@@ -488,7 +418,6 @@ async function request(action){
     userAgent: navigator.userAgent
   };
 
-  // ✅ ส่ง token เฉพาะ register
   if(action === "register"){
     if(!SAVED_TOKEN || Date.now() >= TOKEN_EXPIRES_AT){
       show("TOKEN หมดอายุ/ไม่มี TOKEN กรุณากด “เช็คสิทธิ์” ใหม่อีกครั้ง", "err");
@@ -513,7 +442,7 @@ async function request(action){
 }
 
 /* =========================
-   BUSY STATE
+   BUSY
 ========================= */
 let BUSY = false;
 function setBusy(on, ovTitle, ovSub){
@@ -529,7 +458,7 @@ function setBusy(on, ovTitle, ovSub){
 }
 
 /* =========================
-   EVENTS (✅ ใช้ pointerup กันคลิกไม่ติด)
+   EVENTS (กันคลิกไม่ติด)
 ========================= */
 function bindPress(el, fn){
   el.addEventListener("click", fn);
@@ -539,7 +468,6 @@ function bindPress(el, fn){
 bindPress($btnCheck, async ()=>{
   if(BUSY) return;
 
-  // reset token ทุกครั้งที่เช็คใหม่
   SAVED_TOKEN = "";
   TOKEN_EXPIRES_AT = 0;
   setTokenUI();
@@ -555,14 +483,12 @@ bindPress($btnCheck, async ()=>{
     setStatus("bad","เช็คไม่สำเร็จ","ลองใหม่อีกครั้ง");
     return;
   }
-
   if(!data.ok){
     show(data.msg || "เกิดข้อผิดพลาด", "err");
     setStatus("bad","ผิดพลาด","กรุณาลองใหม่");
     return;
   }
 
-  // ✅ เก็บ token
   if(data.token){
     SAVED_TOKEN = data.token;
     const ttl = Number(data.token_ttl_sec || 120);
@@ -584,13 +510,14 @@ bindPress($btnCheck, async ()=>{
   show(data.msg || "✅ ผ่าน! สามารถกดยืนยันเข้าร่วมได้เลย", "ok");
   $btnJoin.disabled = false;
   setStep(2);
-  setStatus("ok","ผ่านการตรวจสอบ","กด “ยืนยันเข้าร่วม” เพื่อบันทึก");
+  setStatus("ok","ผ่านการตรวจสอบ","กด “ยืนยันเข้าร่วม” เพื่อรับโค้ด");
 });
 
 bindPress($btnJoin, async ()=>{
   if(BUSY) return;
+
   setStep(2);
-  setBusy(true, "กำลังลงชื่อเข้าร่วม...", "กำลังบันทึกข้อมูล");
+  setBusy(true, "กำลังลงชื่อเข้าร่วม...", "กำลังแจกโค้ด + บันทึกข้อมูล");
 
   const data = await request("register");
   setBusy(false);
@@ -599,7 +526,6 @@ bindPress($btnJoin, async ()=>{
     setStatus("bad","ลงชื่อไม่สำเร็จ","ลองใหม่อีกครั้ง");
     return;
   }
-
   if(!data.ok){
     show(data.msg || "เกิดข้อผิดพลาด", "err");
     setStatus("bad","ผิดพลาด","กรุณาลองใหม่");
@@ -607,16 +533,16 @@ bindPress($btnJoin, async ()=>{
   }
 
   if(data.registered){
-    show(data.msg || "🎉 ลงชื่อสำเร็จ!\n📌 กรุณาแคปหน้าจอนี้ส่งแอดมิน", "ok");
+    const codeLine = data.promo_code ? ("\n🎁 โค้ดของคุณ: " + data.promo_code) : "";
+    show((data.msg || "🎉 ลงชื่อสำเร็จ!") + codeLine + "\n📌 กรุณาแคปหน้าจอนี้ส่งแอดมิน", "ok");
 
-    // ใช้ครั้งเดียว: reset token ฝั่งหน้าเว็บด้วย
     SAVED_TOKEN = "";
     TOKEN_EXPIRES_AT = 0;
     setTokenUI();
 
     $btnJoin.disabled = true;
     setStep(3);
-    setStatus("ok","สำเร็จ","แคปหน้าจอส่งแอดมินได้เลย");
+    setStatus("ok","สำเร็จ","รับโค้ดแล้ว แคปหน้าจอส่งแอดมินได้เลย");
     return;
   }
 
@@ -624,9 +550,6 @@ bindPress($btnJoin, async ()=>{
   setStatus("bad","ไม่สำเร็จ","กรุณาลองใหม่");
 });
 
-/* =========================
-   INIT
-========================= */
 (function init(){
   setStep(1);
   setStatus("ok","พร้อมใช้งาน","กรอกเบอร์ แล้วกด “เช็คสิทธิ์”");
