@@ -5,178 +5,181 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>เช็คสิทธิ์กิจกรรม | รับโค้ดสุ่ม</title>
 <meta name="color-scheme" content="dark"/>
+
 <style>
-  :root{
-    --bg:#0b0b0b; --card:#141414; --line:rgba(255,255,255,.12);
-    --txt:#fff; --muted:#cfcfcf;
-    --accent:#ff2b2b; --accent2:#b80000;
-    --ok:#36d399; --bad:#ff5a5f;
-    --radius:18px;
-  }
-  *{box-sizing:border-box}
-  body{
-    margin:0;padding:24px;
-    font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;
-    background:radial-gradient(900px 500px at 50% -10%, rgba(255,60,60,.15), transparent 60%), var(--bg);
-    color:var(--txt);
-  }
-  .card{
-    max-width:560px;margin:0 auto;
-    background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-    border:1px solid var(--line); border-radius:24px; padding:18px;
-    box-shadow:0 20px 50px rgba(0,0,0,.6);
-  }
-  h1{font-size:20px;margin:10px 0 6px;text-align:center}
-  p{margin:0 0 14px;color:var(--muted);line-height:1.6;text-align:center}
-  label{display:block;margin:10px 0 6px;color:var(--muted)}
-  input{
-    width:100%;padding:12px 14px;border-radius:14px;
-    border:1px solid var(--line);background:#0f0f0f;color:#fff;font-size:16px;
-  }
-  .row{display:flex;gap:10px;margin-top:12px}
-  button{
-    flex:1;padding:12px 14px;border-radius:14px;border:0;
-    font-size:16px;font-weight:800;color:#fff;cursor:pointer;
-  }
-  .btnAlt{background:#2a2a2a}
-  .btnMain{background:linear-gradient(135deg,var(--accent),var(--accent2))}
-  .btnCopy{
-    background:linear-gradient(135deg,#22c55e,#16a34a);
-    margin-top:10px;
-  }
-  button:disabled{opacity:.55;cursor:not-allowed}
+:root{
+  --bg:#0b0b0b; --card:#141414; --line:rgba(255,255,255,.12);
+  --txt:#fff; --muted:#cfcfcf;
+  --accent:#ff2b2b; --accent2:#b80000;
+  --ok:#36d399; --bad:#ff5a5f;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;padding:24px;
+  font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;
+  background:radial-gradient(900px 500px at 50% -10%, rgba(255,60,60,.15), transparent 60%), var(--bg);
+  color:var(--txt);
+}
+.card{
+  max-width:560px;margin:0 auto;
+  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+  border:1px solid var(--line); border-radius:24px; padding:18px;
+  box-shadow:0 20px 50px rgba(0,0,0,.6);
+}
+h1{text-align:center;font-size:20px;margin:10px 0 6px}
+p{text-align:center;color:var(--muted);margin:0 0 14px}
+label{display:block;margin:10px 0 6px;color:var(--muted)}
+input{
+  width:100%;padding:12px 14px;border-radius:14px;
+  border:1px solid var(--line);background:#0f0f0f;color:#fff;font-size:16px;
+}
+.row{display:flex;gap:10px;margin-top:12px}
+button{
+  flex:1;padding:12px;border-radius:14px;border:0;
+  font-size:16px;font-weight:800;color:#fff;cursor:pointer;
+}
+.btnAlt{background:#2a2a2a}
+.btnMain{background:linear-gradient(135deg,var(--accent),var(--accent2))}
+.btnCopy{background:linear-gradient(135deg,#22c55e,#16a34a);margin-top:10px}
+button:disabled{opacity:.55;cursor:not-allowed}
 
-  .msg{
-    margin-top:12px;padding:12px;border-radius:14px;
-    border:1px solid var(--line);background:rgba(0,0,0,.25);
-    white-space:pre-line;line-height:1.6;
-  }
-  .ok{border-color:rgba(54,211,153,.4)}
-  .err{border-color:rgba(255,90,95,.45)}
+.msg{
+  margin-top:12px;padding:12px;border-radius:14px;
+  border:1px solid var(--line);background:rgba(0,0,0,.25);
+  white-space:pre-line;line-height:1.6;display:none;
+}
+.msg.ok{border-color:rgba(54,211,153,.4)}
+.msg.err{border-color:rgba(255,90,95,.45)}
 
-  .promoBox{
-    margin-top:12px;
-    padding:14px;
-    border-radius:16px;
-    border:1px dashed rgba(255,255,255,.35);
-    background:rgba(0,0,0,.3);
-    text-align:center;
-    display:none;
-  }
-  .promoCode{
-    font-size:22px;
-    font-weight:900;
-    letter-spacing:1px;
-    margin:6px 0 10px;
-    color:#7dd3fc;
-  }
-  .copyMsg{
-    margin-top:8px;
-    font-size:13px;
-    color:#a7f3d0;
-    display:none;
-  }
+.promoBox{
+  margin-top:12px;padding:14px;border-radius:16px;
+  border:1px dashed rgba(255,255,255,.35);
+  background:rgba(0,0,0,.3);text-align:center;display:none;
+}
+.promoCode{
+  font-size:22px;font-weight:900;letter-spacing:1px;
+  margin:6px 0 10px;color:#7dd3fc;
+}
+.copyMsg{font-size:13px;color:#a7f3d0;display:none}
 
-  .linkBox{
-    margin-top:10px;padding:12px;border-radius:14px;
-    border:1px dashed rgba(255,255,255,.25);background:rgba(0,0,0,.25);
-    text-align:center;
-  }
-  .linkBox a{color:#7dd3fc;text-decoration:none;font-weight:800}
+.linkBox{
+  margin-top:12px;padding:12px;border-radius:14px;
+  border:1px dashed rgba(255,255,255,.25);
+  background:rgba(0,0,0,.25);text-align:center;
+}
+.linkBox a{color:#7dd3fc;font-weight:800;text-decoration:none}
 </style>
 </head>
+
 <body>
-
 <div class="card">
-  <img src="https://img2.pic.in.th/photo_--_--0e7826f8427924c9.jpg"
-       style="max-width:100%;border-radius:16px">
 
-  <h1>🎁 ปีใหม่แจกคูปองสูงสุด 38,888 บาท 🎁</h1>
-  <p>ระบบตรวจสอบอัตโนมัติ 1 เบอร์ ต่อ 1 อุปกรณ์</p>
+<img src="https://img2.pic.in.th/photo_--_--0e7826f8427924c9.jpg"
+     style="max-width:100%;border-radius:16px">
 
-  <label>เบอร์โทรศัพท์ที่สมัคร</label>
-  <input id="phone" inputmode="numeric" placeholder="เช่น 0611111111"/>
+<h1>🎁 ปีใหม่แจกคูปองสูงสุด 38,888 บาท 🎁</h1>
+<p>ระบบตรวจสอบอัตโนมัติ 1 เบอร์ ต่อ 1 อุปกรณ์</p>
 
-  <div class="row">
-    <button id="btnCheck" class="btnAlt">เช็คสิทธิ์</button>
-    <button id="btnJoin" class="btnMain" disabled>ยืนยันเข้าร่วม</button>
-  </div>
+<label>เบอร์โทรศัพท์ที่สมัคร</label>
+<input id="phone" inputmode="numeric" placeholder="เช่น 0611111111">
 
-  <div id="msg" class="msg" style="display:none"></div>
+<div class="row">
+  <button id="btnCheck" class="btnAlt">เช็คสิทธิ์</button>
+  <button id="btnJoin" class="btnMain" disabled>ยืนยันเข้าร่วม</button>
+</div>
 
-  <!-- กล่องแสดงโค้ด + ปุ่มคัดลอก -->
-  <div id="promoBox" class="promoBox">
-    <div>🎁 โค้ดของคุณ</div>
-    <div id="promoCode" class="promoCode"></div>
-    <button class="btnCopy" onclick="copyPromo()">📋 คัดลอกโค้ด</button>
-    <div id="copyMsg" class="copyMsg">✅ คัดลอกโค้ดเรียบร้อยแล้ว</div>
-  </div>
+<div id="msg" class="msg"></div>
 
-  <div class="linkBox">
-    👉 กรอกโค้ดรับเครดิตฟรีที่นี่<br>
-    <a href="https://rumruay365.uk/events/free-credit" target="_blank">
-      https://rumruay365.uk/events/free-credit
-    </a>
-  </div>
+<div id="promoBox" class="promoBox">
+  <div>🎁 โค้ดของคุณ</div>
+  <div id="promoCode" class="promoCode"></div>
+  <button id="btnCopy" class="btnCopy">📋 คัดลอกโค้ด</button>
+  <div id="copyMsg" class="copyMsg">✅ คัดลอกโค้ดเรียบร้อยแล้ว</div>
+</div>
+
+<div class="linkBox">
+  👉 กรอกโค้ดรับเครดิตฟรีที่นี่<br>
+  <a href="https://rumruay365.uk/events/free-credit" target="_blank">
+    https://rumruay365.uk/events/free-credit
+  </a>
+</div>
+
 </div>
 
 <script>
-const SCRIPT_URL="https://script.google.com/macros/s/AKfycbwF6-h_Ip_gJHDbigip7x3oc8fDAHcwcn814k4ufXn4hlJ_lMDdhRsqYM7b40G6lWGLeg/exec";
-let SAVED_TOKEN="",TOKEN_EXPIRES_AT=0;
+/* ===== CONFIG ===== */
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwF6-h_Ip_gJHDbigip7x3oc8fDAHcwcn814k4ufXn4hlJ_lMDdhRsqYM7b40G6lWGLeg/exec";
 
-const $phone=phone,$btnCheck=btnCheck,$btnJoin=btnJoin,$msg=msg;
-const $promoBox=promoBox,$promoCode=promoCode,$copyMsg=copyMsg;
+/* ===== ELEMENTS (แก้ปัญหาปุ่มกดไม่ได้) ===== */
+const phone     = document.getElementById("phone");
+const btnCheck  = document.getElementById("btnCheck");
+const btnJoin   = document.getElementById("btnJoin");
+const msg       = document.getElementById("msg");
+const promoBox  = document.getElementById("promoBox");
+const promoCode = document.getElementById("promoCode");
+const btnCopy   = document.getElementById("btnCopy");
+const copyMsg   = document.getElementById("copyMsg");
 
-function show(t,err){
-  $msg.style.display="block";
-  $msg.className="msg "+(err?"err":"ok");
-  $msg.textContent=t;
+/* ===== STATE ===== */
+let SAVED_TOKEN = "";
+let TOKEN_EXPIRES_AT = 0;
+
+/* ===== HELPERS ===== */
+function show(text,type="ok"){
+  msg.style.display="block";
+  msg.className="msg "+type;
+  msg.textContent=text;
 }
-
 function normalizePhone(v){
   let p=v.replace(/\D/g,"");
   if(p.startsWith("66")) p="0"+p.slice(2);
   return /^0[689]\d{8}$/.test(p)?p:"";
 }
-
-function jsonp(p){
-  return new Promise(r=>{
-    const cb="cb"+Math.random();
-    p.jsonp=1;p.callback=cb;
+function jsonp(params){
+  return new Promise(res=>{
+    const cb="cb_"+Math.random().toString(36).slice(2);
+    params.jsonp=1; params.callback=cb;
     const s=document.createElement("script");
-    s.src=SCRIPT_URL+"?"+new URLSearchParams(p);
-    window[cb]=d=>{delete window[cb];s.remove();r(d);}
+    s.src=SCRIPT_URL+"?"+new URLSearchParams(params);
+    window[cb]=d=>{delete window[cb];s.remove();res(d);}
     document.body.appendChild(s);
   });
 }
 
-btnCheck.onclick=async()=>{
-  const p=normalizePhone($phone.value);
-  if(!p) return show("กรุณากรอกเบอร์ให้ถูกต้อง",1);
-  $btnJoin.disabled=true;
+/* ===== EVENTS ===== */
+btnCheck.addEventListener("click", async ()=>{
+  const p=normalizePhone(phone.value);
+  if(!p) return show("กรุณากรอกเบอร์ให้ถูกต้อง","err");
+
+  btnJoin.disabled=true;
+  promoBox.style.display="none";
+
   const d=await jsonp({action:"check",phone:p});
-  if(!d.ok) return show(d.msg,1);
+  if(!d.ok) return show(d.msg||"ไม่ผ่าน","err");
+
   SAVED_TOKEN=d.token;
   TOKEN_EXPIRES_AT=Date.now()+d.token_ttl_sec*1000;
-  show("✅ ผ่านการตรวจสอบ กดยืนยันเพื่อรับโค้ด");
-  $btnJoin.disabled=false;
-}
 
-btnJoin.onclick=async()=>{
-  const p=normalizePhone($phone.value);
+  show("✅ ผ่านการตรวจสอบ กดยืนยันเพื่อรับโค้ด","ok");
+  btnJoin.disabled=false;
+});
+
+btnJoin.addEventListener("click", async ()=>{
+  const p=normalizePhone(phone.value);
   const d=await jsonp({action:"register",phone:p,token:SAVED_TOKEN});
-  if(!d.ok) return show(d.msg,1);
-  show("🎉 รับโค้ดเรียบร้อย");
-  $promoCode.textContent=d.promo_code;
-  $promoBox.style.display="block";
-}
+  if(!d.ok) return show(d.msg||"ผิดพลาด","err");
 
-function copyPromo(){
-  navigator.clipboard.writeText($promoCode.textContent).then(()=>{
-    $copyMsg.style.display="block";
-    setTimeout(()=>$copyMsg.style.display="none",2000);
+  promoCode.textContent=d.promo_code||"";
+  promoBox.style.display="block";
+  show("🎉 รับโค้ดเรียบร้อยแล้ว","ok");
+});
+
+btnCopy.addEventListener("click", ()=>{
+  navigator.clipboard.writeText(promoCode.textContent).then(()=>{
+    copyMsg.style.display="block";
+    setTimeout(()=>copyMsg.style.display="none",2000);
   });
-}
+});
 </script>
 
 </body>
