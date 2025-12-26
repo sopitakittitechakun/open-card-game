@@ -20,7 +20,6 @@
     --bad:#ff5a5f;
     --shadow:0 22px 60px rgba(0,0,0,.65);
     --radius:22px;
-    --radius2:16px;
   }
 
   *{box-sizing:border-box}
@@ -152,12 +151,12 @@
     background:linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,.65) 25%, rgba(0,0,0,.85));
     backdrop-filter: blur(8px);
     z-index:50;
-    pointer-events:none; /* สำคัญ: ตัว bar ไม่รับคลิก */
+    pointer-events:none;
   }
   .barInner{
     max-width:720px;margin:0 auto;
     display:flex;gap:10px;
-    pointer-events:auto; /* แต่ปุ่มข้างในรับคลิก */
+    pointer-events:auto;
   }
 
   button{
@@ -165,7 +164,7 @@
     padding:12px 14px;border-radius:16px;
     font-weight:900;font-size:15px;letter-spacing:.2px;color:#fff;
     transition:.15s;flex:1;
-    touch-action: manipulation; /* กันบางเครื่องไม่รับ tap */
+    touch-action: manipulation;
   }
   .btnMain{
     background:linear-gradient(135deg, var(--accent), var(--accent2));
@@ -180,7 +179,7 @@
   button:hover{transform:translateY(-1px)}
   button:active{transform:translateY(0);opacity:.95}
 
-  /* ✅ Overlay ตอนโหลด: ปกติไม่รับคลิก/ไม่ทับ */
+  /* Loading Overlay */
   .overlay{
     position:fixed; inset:0;
     display:none;
@@ -207,8 +206,6 @@
   @keyframes sp{to{transform:rotate(360deg)}}
   .loader b{font-size:13px}
   .loader span{display:block;color:rgba(255,255,255,.75);font-size:12px;margin-top:4px;line-height:1.4}
-
-  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
 </style>
 </head>
 <body>
@@ -257,24 +254,9 @@
       </div>
     </div>
   </div>
-
-  <div class="card">
-    <div class="hd">
-      <div class="ttl">🧹 เครื่องมือ</div>
-      <span class="pill">ใช้เฉพาะทดสอบ/แอดมิน</span>
-    </div>
-    <div class="bd">
-      <div class="note">
-        ปุ่มนี้จะลบค่า <span class="mono">deviceId</span> ในเครื่อง (กรณีทดสอบเท่านั้น)<br>
-        <span class="mono">หมายเหตุ: รีเซ็ตแล้วระบบจะมองเป็นอุปกรณ์ใหม่</span>
-      </div>
-      <div style="height:10px"></div>
-      <button class="btnAlt" id="btnClear" type="button">ล้างข้อมูลในเครื่อง (รีเซ็ตอุปกรณ์)</button>
-    </div>
-  </div>
 </div>
 
-<!-- ✅ Bottom bar (ไม่ทับคลิกแล้ว) -->
+<!-- Bottom bar -->
 <div class="bar">
   <div class="barInner">
     <button class="btnAlt" id="btnCheck" type="button">เช็คสิทธิ์</button>
@@ -282,7 +264,7 @@
   </div>
 </div>
 
-<!-- ✅ Loading Overlay -->
+<!-- Loading Overlay -->
 <div class="overlay" id="overlay" aria-hidden="true">
   <div class="loader">
     <div class="row">
@@ -301,7 +283,6 @@
 ========================= */
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxMW9ORJmm8et1x-7b5rZiY-F5DejLe7WOWY7Itp4Vh62MLZ1eLsN837EKmGu6xNrbA/exec";
 const DEVICE_ID_KEY = "rr365_device_id";
-const LAST_PHONE_KEY = "rr365_last_phone";
 
 /* =========================
    ELEMENTS
@@ -309,7 +290,6 @@ const LAST_PHONE_KEY = "rr365_last_phone";
 const $phone = document.getElementById("phone");
 const $btnCheck = document.getElementById("btnCheck");
 const $btnJoin  = document.getElementById("btnJoin");
-const $btnClear = document.getElementById("btnClear");
 const $msg = document.getElementById("msg");
 
 const $dot = document.getElementById("dot");
@@ -332,24 +312,20 @@ function setStatus(mode, title, sub){
   $stTitle.textContent = title || "";
   $stSub.textContent = sub || "";
 }
-
 function setStep(n){
   $step1.classList.toggle("active", n===1);
   $step2.classList.toggle("active", n===2);
   $step3.classList.toggle("active", n===3);
 }
-
 function show(text, type="info"){
   $msg.style.display="block";
   $msg.className="msg " + (type==="err" ? "err" : type==="ok" ? "ok" : "info");
   $msg.textContent = text;
 }
-
 function hideMsg(){
   $msg.style.display="none";
   $msg.textContent="";
 }
-
 function overlay(on, title, sub){
   if(on){
     $ovTitle.textContent = title || "กำลังทำรายการ...";
@@ -363,7 +339,7 @@ function overlay(on, title, sub){
 }
 
 /* =========================
-   NORMALIZE PHONE
+   PHONE NORMALIZE
 ========================= */
 function normalizePhone(v){
   let s = String(v||"").trim();
@@ -380,7 +356,7 @@ function normalizePhone(v){
 }
 
 /* =========================
-   DEVICE + FINGERPRINT + UA KEY
+   DEVICE / FINGERPRINT / UAKEY
 ========================= */
 function getOrCreateDeviceId(){
   let id = localStorage.getItem(DEVICE_ID_KEY);
@@ -390,7 +366,6 @@ function getOrCreateDeviceId(){
   }
   return id;
 }
-
 function getFingerprint(){
   const data = [
     screen.width, screen.height,
@@ -408,7 +383,6 @@ function getFingerprint(){
   }
   return "fp_" + Math.abs(hash);
 }
-
 function getUaKey(){
   const ua = navigator.userAgent || "";
   const key = [
@@ -460,8 +434,6 @@ async function request(action){
     show("กรุณากรอกเบอร์มือถือให้ถูกต้อง (06/08/09 10 หลัก)", "err");
     return null;
   }
-  localStorage.setItem(LAST_PHONE_KEY, p);
-
   try{
     return await jsonpRequest({
       action,
@@ -485,15 +457,13 @@ async function request(action){
 }
 
 /* =========================
-   BUSY STATE (กันปุ่มค้าง)
+   BUSY STATE
 ========================= */
 let BUSY = false;
 function setBusy(on, ovTitle, ovSub){
   BUSY = !!on;
   $btnCheck.disabled = BUSY;
-  $btnClear.disabled = BUSY;
-  $btnJoin.disabled = BUSY ? true : $btnJoin.disabled;
-
+  $btnJoin.disabled  = BUSY ? true : $btnJoin.disabled;
   if(BUSY){
     overlay(true, ovTitle, ovSub);
     setStatus("warn", ovTitle || "กำลังทำรายการ...", "กรุณารอสักครู่");
@@ -503,14 +473,16 @@ function setBusy(on, ovTitle, ovSub){
 }
 
 /* =========================
-   EVENTS (✅ click + touch)
+   TAP BIND (กันบางเครื่องไม่ยิง click)
 ========================= */
 function bindTap(el, fn){
-  // กันบางเครื่อง tap ไม่ยิง click
   el.addEventListener("click", fn, { passive:true });
   el.addEventListener("touchend", (e)=>{ e.preventDefault(); fn(e); }, { passive:false });
 }
 
+/* =========================
+   EVENTS
+========================= */
 bindTap($btnCheck, async ()=>{
   if(BUSY) return;
   $btnJoin.disabled = true;
@@ -579,19 +551,10 @@ bindTap($btnJoin, async ()=>{
   setStatus("bad","ไม่สำเร็จ","กรุณาลองใหม่");
 });
 
-bindTap($btnClear, ()=>{
-  if(BUSY) return;
-  localStorage.removeItem(DEVICE_ID_KEY);
-  show("ล้างข้อมูลในเครื่องแล้ว ✅\n(รีเซ็ต deviceId สำเร็จ)", "ok");
-  setStatus("ok","ล้างข้อมูลแล้ว","สามารถทดสอบใหม่ได้");
-});
-
 /* =========================
    INIT
 ========================= */
 (function init(){
-  const last = localStorage.getItem(LAST_PHONE_KEY);
-  if(last) $phone.value = last;
   setStep(1);
   setStatus("ok","พร้อมใช้งาน","กรอกเบอร์ แล้วกด “เช็คสิทธิ์”");
 })();
