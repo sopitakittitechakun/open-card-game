@@ -39,7 +39,7 @@
   .wrap{
     max-width:720px;
     margin:0 auto;
-    padding:22px 14px 110px;
+    padding:22px 14px 120px;
   }
 
   .hero{
@@ -160,19 +160,18 @@
     background:rgba(0,0,0,.22);
   }
 
-  /* ✅ Bottom bar: กันเลเยอร์ทับคลิก */
+  /* ✅ Bottom bar: ปุ่มกดติดแน่น */
   .bar{
     position:fixed;left:0;right:0;bottom:0;
     padding:12px 14px;
     background:linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,.65) 25%, rgba(0,0,0,.85));
     backdrop-filter: blur(8px);
-    z-index:50;
-    pointer-events:none;
+    z-index:9999;
+    pointer-events:auto;
   }
   .barInner{
     max-width:720px;margin:0 auto;
     display:flex;gap:10px;
-    pointer-events:auto;
   }
 
   button{
@@ -201,7 +200,8 @@
     display:none;
     align-items:center; justify-content:center;
     background:rgba(0,0,0,.55);
-    z-index:99;
+    z-index:99999;
+    pointer-events:auto;
   }
   .overlay.show{display:flex}
   .loader{
@@ -222,8 +222,6 @@
   @keyframes sp{to{transform:rotate(360deg)}}
   .loader b{font-size:13px}
   .loader span{display:block;color:rgba(255,255,255,.75);font-size:12px;margin-top:4px;line-height:1.4}
-
-  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
 </style>
 </head>
 <body>
@@ -305,7 +303,7 @@
 /* =========================
    CONFIG
 ========================= */
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwk4YSFO4ALpxNwhdKyWbkpRfY_3FydtbqXumScWxDyfSIGJerrjuT0suYpkPzFFMXnbg/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzxAKf-YwpWrXj3osRaQSmO3DqE1KN3LyAsXRDNpEPcM1I6nlsMWifg7YOVB-pLiEdUWQ/exec"; // ✅ ใส่ของคุณ
 const DEVICE_ID_KEY = "rr365_device_id";
 
 /* =========================
@@ -429,11 +427,11 @@ function getFingerprint(){
 function getUaKey(){
   const ua = navigator.userAgent || "";
   const key = [
-    ua.includes("Android") ? (ua.match(/Android\\s[\\d\\.]+/)||["Android"])[0] : "NA",
-    (ua.match(/Chrome\\/[\\d\\.]+/)||["Chrome"])[0],
+    ua.includes("Android") ? (ua.match(/Android\s[\d\.]+/)||["Android"])[0] : "NA",
+    (ua.match(/Chrome\/[\d\.]+/)||["Chrome"])[0],
     ua.includes("wv") ? "WV" : "NWV",
-    ua.includes("Line") ? (ua.match(/Line\\/[\\d\\.]+/)||["Line"])[0] : "NLINE",
-    (ua.match(/Build\\/[A-Za-z0-9\\._]+/)||["Build"])[0]
+    ua.includes("Line") ? (ua.match(/Line\/[\d\.]+/)||["Line"])[0] : "NLINE",
+    (ua.match(/Build\/[A-Za-z0-9\._]+/)||["Build"])[0]
   ].join("|");
   let h=0;
   for(let i=0;i<key.length;i++){ h=((h<<5)-h)+key.charCodeAt(i); h|=0; }
@@ -445,7 +443,7 @@ function getUaKey(){
 ========================= */
 function jsonpRequest(params, timeoutMs=12000){
   return new Promise((resolve, reject)=>{
-    if (!/\\/exec(\\?|$)/.test(SCRIPT_URL)) return reject(new Error("SCRIPT_URL_NOT_EXEC"));
+    if (!/\/exec(\?|$)/.test(SCRIPT_URL)) return reject(new Error("SCRIPT_URL_NOT_EXEC"));
 
     const cbName = "cb_" + Math.random().toString(36).slice(2);
     params.jsonp = "1";
@@ -492,7 +490,6 @@ async function request(action){
 
   // ✅ ส่ง token เฉพาะ register
   if(action === "register"){
-    // ถ้าหมดอายุ ให้บังคับเช็คใหม่
     if(!SAVED_TOKEN || Date.now() >= TOKEN_EXPIRES_AT){
       show("TOKEN หมดอายุ/ไม่มี TOKEN กรุณากด “เช็คสิทธิ์” ใหม่อีกครั้ง", "err");
       return null;
@@ -532,17 +529,14 @@ function setBusy(on, ovTitle, ovSub){
 }
 
 /* =========================
-   TAP BIND (กันบางเครื่องไม่ยิง click)
+   EVENTS (✅ ใช้ pointerup กันคลิกไม่ติด)
 ========================= */
-function bindTap(el, fn){
-  el.addEventListener("click", fn, { passive:true });
-  el.addEventListener("touchend", (e)=>{ e.preventDefault(); fn(e); }, { passive:false });
+function bindPress(el, fn){
+  el.addEventListener("click", fn);
+  el.addEventListener("pointerup", fn);
 }
 
-/* =========================
-   EVENTS
-========================= */
-bindTap($btnCheck, async ()=>{
+bindPress($btnCheck, async ()=>{
   if(BUSY) return;
 
   // reset token ทุกครั้งที่เช็คใหม่
@@ -568,7 +562,7 @@ bindTap($btnCheck, async ()=>{
     return;
   }
 
-  // ✅ เก็บ token จากฝั่ง Apps Script v2
+  // ✅ เก็บ token
   if(data.token){
     SAVED_TOKEN = data.token;
     const ttl = Number(data.token_ttl_sec || 120);
@@ -593,7 +587,7 @@ bindTap($btnCheck, async ()=>{
   setStatus("ok","ผ่านการตรวจสอบ","กด “ยืนยันเข้าร่วม” เพื่อบันทึก");
 });
 
-bindTap($btnJoin, async ()=>{
+bindPress($btnJoin, async ()=>{
   if(BUSY) return;
   setStep(2);
   setBusy(true, "กำลังลงชื่อเข้าร่วม...", "กำลังบันทึกข้อมูล");
@@ -615,7 +609,7 @@ bindTap($btnJoin, async ()=>{
   if(data.registered){
     show(data.msg || "🎉 ลงชื่อสำเร็จ!\n📌 กรุณาแคปหน้าจอนี้ส่งแอดมิน", "ok");
 
-    // ใช้ครั้งเดียว: เผา token ในฝั่ง server แล้ว ฝั่งนี้ก็ reset
+    // ใช้ครั้งเดียว: reset token ฝั่งหน้าเว็บด้วย
     SAVED_TOKEN = "";
     TOKEN_EXPIRES_AT = 0;
     setTokenUI();
@@ -637,7 +631,7 @@ bindTap($btnJoin, async ()=>{
   setStep(1);
   setStatus("ok","พร้อมใช้งาน","กรอกเบอร์ แล้วกด “เช็คสิทธิ์”");
   setTokenUI();
-  setInterval(setTokenUI, 1000); // อัปเดต TTL ทุก 1 วิ
+  setInterval(setTokenUI, 1000);
 })();
 </script>
 </body>
