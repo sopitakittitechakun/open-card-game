@@ -87,6 +87,81 @@
   .copyBtn.copied{
     background:linear-gradient(135deg,#3b82f6,#2563eb);
   }
+
+  /* ===== POPUP MODAL ===== */
+  .modal{
+    position:fixed; inset:0;
+    background:rgba(0,0,0,.65);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:18px;
+    z-index:9999;
+  }
+  .modal.show{ display:flex; }
+
+  .modalCard{
+    width:min(520px, 100%);
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,.14);
+    background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+    box-shadow:0 20px 60px rgba(0,0,0,.75);
+    padding:16px;
+  }
+  .modalTitle{
+    font-weight:900;
+    font-size:18px;
+    margin-bottom:10px;
+  }
+  .modalText{
+    color:#e9e9e9;
+    line-height:1.7;
+    margin-bottom:12px;
+  }
+  .modalCodeRow{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    margin:10px 0 12px;
+    padding:10px;
+    border-radius:14px;
+    border:1px dashed rgba(255,255,255,.22);
+    background:rgba(0,0,0,.28);
+  }
+  .modalCode{
+    flex:1;
+    font-weight:900;
+    letter-spacing:1px;
+    user-select:all;
+  }
+  .modalCopy{
+    padding:10px 12px;
+    border-radius:12px;
+    border:0;
+    cursor:pointer;
+    font-weight:900;
+    color:#fff;
+    background:linear-gradient(135deg,#22c55e,#16a34a);
+    white-space:nowrap;
+  }
+  .modalBtns{
+    display:flex;
+    gap:10px;
+    margin-top:8px;
+  }
+  .modalBtnAlt, .modalBtnMain{
+    flex:1;
+    padding:12px 14px;
+    border-radius:14px;
+    border:0;
+    font-weight:900;
+    cursor:pointer;
+    text-align:center;
+    text-decoration:none;
+    color:#fff;
+  }
+  .modalBtnAlt{ background:#2a2a2a; }
+  .modalBtnMain{ background:linear-gradient(135deg,var(--accent),var(--accent2)); }
 </style>
 </head>
 <body>
@@ -118,7 +193,7 @@
   </div>
 
   <div class="hint">
-    *โค้ดที่ได้รับลูกค้าต้องมียอดฝากสะสมของวันที่รับ 365 บาทก่อนค่อนสามารถกรอกโค้ดได้ 
+    *โค้ดที่ได้รับลูกค้าต้องมียอดฝากสะสมของวันที่รับ 365 บาทก่อนค่อนสามารถกรอกโค้ดได้
   </div>
 
   <div class="linkBox">
@@ -126,6 +201,29 @@
     <a href="https://rumruay365.uk/events/free-credit" target="_blank" rel="noopener">
       https://rumruay365.uk/events/free-credit
     </a>
+  </div>
+</div>
+
+<!-- ===== POPUP เงื่อนไขก่อนใช้โค้ด ===== -->
+<div id="ruleModal" class="modal" aria-hidden="true">
+  <div class="modalCard" role="dialog" aria-modal="true" aria-labelledby="ruleTitle">
+    <div class="modalTitle" id="ruleTitle">📌 เงื่อนไขก่อนกรอกโค้ด</div>
+    <div class="modalText" id="ruleText">
+      ลูกค้าต้องมียอดฝากสะสม “ของวันที่รับ” ครบ 365 บาทก่อน
+      จึงจะสามารถนำโค้ดไปกรอกได้ค่ะ
+    </div>
+
+    <div class="modalCodeRow" id="modalCodeRow" style="display:none;">
+      <div class="modalCode" id="modalCode">RRXXXXXXXX</div>
+      <button class="modalCopy" id="modalCopyBtn" type="button">คัดลอกโค้ด</button>
+    </div>
+
+    <div class="modalBtns">
+      <button class="modalBtnAlt" id="modalCloseBtn" type="button">รับทราบ</button>
+      <a class="modalBtnMain" id="modalGoBtn" href="https://rumruay365.uk/events/free-credit" target="_blank" rel="noopener">
+        ไปกรอกโค้ด
+      </a>
+    </div>
   </div>
 </div>
 
@@ -148,6 +246,57 @@ const $msg = document.getElementById("msg");
 const $copyWrap = document.getElementById("copyWrap");
 const $promoCode = document.getElementById("promoCode");
 const $btnCopy = document.getElementById("btnCopy");
+
+/* ===== MODAL ELS ===== */
+const $ruleModal = document.getElementById("ruleModal");
+const $modalCodeRow = document.getElementById("modalCodeRow");
+const $modalCode = document.getElementById("modalCode");
+const $modalCopyBtn = document.getElementById("modalCopyBtn");
+const $modalCloseBtn = document.getElementById("modalCloseBtn");
+
+function openRuleModal(promoCode=""){
+  if(promoCode){
+    $modalCode.textContent = promoCode;
+    $modalCodeRow.style.display = "flex";
+    $modalCopyBtn.textContent = "คัดลอกโค้ด";
+  }else{
+    $modalCodeRow.style.display = "none";
+  }
+  $ruleModal.classList.add("show");
+  $ruleModal.setAttribute("aria-hidden","false");
+}
+function closeRuleModal(){
+  $ruleModal.classList.remove("show");
+  $ruleModal.setAttribute("aria-hidden","true");
+}
+
+/* ปิดเมื่อกดพื้นหลัง */
+$ruleModal.addEventListener("click", (e)=>{
+  if(e.target === $ruleModal) closeRuleModal();
+});
+$modalCloseBtn.addEventListener("click", closeRuleModal);
+
+/* คัดลอกโค้ดใน Modal */
+$modalCopyBtn.addEventListener("click", async ()=>{
+  try{
+    const txt = ($modalCode.textContent || "").trim();
+    if(!txt) return;
+
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      await navigator.clipboard.writeText(txt);
+    }else{
+      const ta=document.createElement("textarea");
+      ta.value=txt; ta.style.position="fixed"; ta.style.left="-9999px";
+      document.body.appendChild(ta); ta.focus(); ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+    }
+    $modalCopyBtn.textContent = "คัดลอกแล้ว ✓";
+    setTimeout(()=> $modalCopyBtn.textContent="คัดลอกโค้ด", 1200);
+  }catch(_){
+    alert("ไม่สามารถคัดลอกได้ กรุณาคัดลอกด้วยตนเอง");
+  }
+});
 
 /* ================= UI ================= */
 function show(text, type="ok"){
@@ -316,6 +465,9 @@ $btnJoin.addEventListener("click", async ()=>{
       $promoCode.textContent=data.promo_code;
       $copyWrap.style.display="flex";
     }
+
+    /* ✅ เปิดป๊อปอัพเงื่อนไข “ตอนให้โค้ด” */
+    openRuleModal(data.promo_code || "");
 
     SAVED_TOKEN=""; TOKEN_EXPIRES_AT=0;
   }else{
