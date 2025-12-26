@@ -3,313 +3,216 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>RR365 Admin Dashboard</title>
 <style>
-  :root{
-    --txt:#fff; --muted:rgba(255,255,255,.72);
-    --line:rgba(255,255,255,.12); --line2:rgba(255,43,43,.28);
-    --red:#ff2b2b; --red2:#b80000;
-    --bg1:rgba(255,43,43,.18); --bg2:rgba(255,255,255,.06);
-    --r:18px; --r2:22px;
-    --shadow:0 18px 60px rgba(0,0,0,.55);
-    --shadow2:0 14px 40px rgba(0,0,0,.50);
-  }
-  *{box-sizing:border-box}
-  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;color:var(--txt);background:transparent}
-  .wrap{padding:14px}
-  .hero{border-radius:var(--r2);padding:14px;border:1px solid var(--line);
-    background:linear-gradient(135deg,var(--bg1),var(--bg2));
-    box-shadow:var(--shadow);position:relative;overflow:hidden}
-  .hero:before{content:"";position:absolute;inset:-1px;
-    background:radial-gradient(520px 190px at 25% 0%, rgba(255,43,43,.30), transparent 60%);
-    opacity:.85;pointer-events:none}
-  .row{display:flex;gap:10px;align-items:center;justify-content:space-between;position:relative}
-  .brand{display:flex;gap:10px;align-items:flex-start}
-  .logo{width:38px;height:38px;border-radius:14px;background:linear-gradient(135deg,var(--red),var(--red2));
-    border:1px solid rgba(255,255,255,.16);display:grid;place-items:center;font-weight:1000}
-  .h1{font-weight:1000;font-size:15px;margin:0}
-  .sub{color:var(--muted);font-size:12px;margin-top:3px;line-height:1.45}
-  .pill{display:flex;gap:8px;align-items:center;padding:8px 10px;border-radius:999px;border:1px solid var(--line);
-    background:rgba(0,0,0,.22);color:var(--muted);font-size:12px;white-space:nowrap}
-  .dot{width:8px;height:8px;border-radius:999px;background:#19ff8a;box-shadow:0 0 0 4px rgba(25,255,138,.12)}
-  .dot.err{background:var(--red);box-shadow:0 0 0 4px rgba(255,43,43,.12)}
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-  .box{padding:12px;border-radius:var(--r);border:1px solid var(--line);background:rgba(0,0,0,.18);box-shadow:var(--shadow2)}
-  .k{color:var(--muted);font-size:12px}
-  .n{font-size:22px;font-weight:1000;margin-top:6px}
-  .tabs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}
-  .tab{padding:10px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.05);
-    color:rgba(255,255,255,.80);font-weight:1000;font-size:12px;cursor:pointer}
-  .tab.active{color:#fff;border-color:var(--line2);
-    background:linear-gradient(135deg,rgba(255,43,43,.22),rgba(0,0,0,.22))}
-  .panel{margin-top:12px;border-radius:var(--r2);border:1px solid var(--line);background:rgba(0,0,0,.26);
-    box-shadow:var(--shadow);overflow:hidden}
-  .ph{padding:12px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:space-between}
-  .pt{font-weight:1000;font-size:13px}
-  .chip{font-size:11px;font-weight:1000;color:rgba(255,255,255,.78);border:1px solid var(--line);
-    padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.06)}
-  .pb{padding:12px}
-  label{display:block;margin:10px 0 6px;font-size:12px;color:var(--muted)}
-  input{width:100%;padding:12px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.42);color:#fff;outline:none}
-  .btns{display:flex;gap:10px;margin-top:10px}
-  button{width:100%;padding:12px;border-radius:14px;border:0;font-weight:1000;cursor:pointer}
-  .p{background:linear-gradient(135deg,var(--red),var(--red2));color:#fff}
-  .g{background:rgba(255,255,255,.08);color:#fff;border:1px solid var(--line)}
-  .w{background:linear-gradient(135deg,rgba(255,204,102,.18),rgba(0,0,0,.20));color:#fff;border:1px solid rgba(255,204,102,.35)}
-  .msg{display:none;margin-top:10px;padding:12px;border-radius:14px;border:1px solid var(--line);
-    background:rgba(255,255,255,.06);white-space:pre-line;font-size:12px;line-height:1.55}
-  .msg.ok{border-color:rgba(25,255,138,.28)}
-  .msg.err{border-color:rgba(255,43,43,.32)}
-  .card{margin-top:10px;padding:12px;border-radius:var(--r);border:1px solid var(--line);background:rgba(0,0,0,.18)}
-  .ct{display:flex;align-items:center;justify-content:space-between;gap:10px}
-  .ttl{font-weight:1000;font-size:12px}
-  .bdg{font-size:11px;font-weight:1000;padding:4px 8px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.06);color:rgba(255,255,255,.78)}
-  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
-  .lines{margin-top:8px;color:var(--muted);font-size:12px;white-space:pre-line;line-height:1.55}
-  .raw{margin-top:10px;padding:10px;border-radius:14px;border:1px dashed rgba(255,255,255,.18);
-    background:rgba(0,0,0,.25);color:rgba(255,255,255,.75);font-size:11px;white-space:pre-wrap}
+  body{font-family:system-ui;background:#0b0b0b;color:#fff;margin:0;padding:18px}
+  .wrap{max-width:1000px;margin:0 auto}
+  .card{background:#141414;border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:14px;margin-bottom:12px}
+  h1{font-size:20px;margin:0 0 10px}
+  input,select{padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0f0f0f;color:#fff}
+  button{padding:10px 14px;border-radius:12px;border:0;background:#ff2b2b;color:#fff;font-weight:700;cursor:pointer}
+  button:disabled{opacity:.55;cursor:not-allowed}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .msg{margin-top:10px;padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,.12);display:none;white-space:pre-line}
+  .ok{border-color:rgba(0,255,140,.25)} .err{border-color:rgba(255,60,60,.35)}
+  table{width:100%;border-collapse:collapse;margin-top:12px}
+  th,td{border-bottom:1px solid rgba(255,255,255,.08);padding:10px;text-align:left;vertical-align:top;font-size:13px}
+  th{opacity:.85}
+  .muted{opacity:.7;font-size:12px}
+  .chip{display:inline-block;padding:2px 8px;border:1px solid rgba(255,255,255,.18);border-radius:999px;font-size:12px;opacity:.9}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="hero">
+
+  <div class="card">
+    <h1>🛡️ RR365 Admin Dashboard</h1>
     <div class="row">
-      <div class="brand">
-        <div class="logo">R</div>
-        <div>
-          <div class="h1">หน้าแอดมิน RR365</div>
-          <div class="sub">ค้นหา / ดูรายการ / ปลดล็อก (participants + logs)</div>
-        </div>
-      </div>
-      <div class="pill"><span class="dot" id="dot"></span><span id="st">กำลังเชื่อมต่อ…</span></div>
+      <label class="muted">SCRIPT /exec</label>
+      <input id="scriptUrl" style="min-width:360px;flex:1" placeholder="https://script.google.com/macros/s/AKfycbzIlBX_qzwM74IG8SEys2m6vS3p6VRno2iEs1uR5t-S6YcZR1iyDOSjvHsCF4B4QDWY/exec">
+      <label class="muted">Admin Key</label>
+      <input id="adminKey" placeholder="รหัสแอดมิน">
+      <select id="type">
+        <option value="participants">participants (ลงทะเบียนสำเร็จ)</option>
+        <option value="logs">logs (ทุกการกด/ซ้ำ)</option>
+      </select>
+      <select id="limit">
+        <option value="30">30 รายการ</option>
+        <option value="50" selected>50 รายการ</option>
+        <option value="100">100 รายการ</option>
+        <option value="200">200 รายการ</option>
+      </select>
+      <button id="btnLoad">โหลดข้อมูล</button>
     </div>
-
-    <div class="grid">
-      <div class="box"><div class="k">participants (ที่โหลดมา)</div><div class="n" id="cP">-</div></div>
-      <div class="box"><div class="k">logs (ที่โหลดมา)</div><div class="n" id="cL">-</div></div>
-    </div>
-
-    <div class="tabs">
-      <button class="tab active" data-tab="p">👥 ผู้เข้าร่วม</button>
-      <button class="tab" data-tab="l">🧾 logs</button>
-      <button class="tab" data-tab="u">🔓 ปลดล็อก</button>
-    </div>
-  </div>
-
-  <div class="panel" id="panel-p">
-    <div class="ph"><div class="pt">👥 รายการผู้เข้าร่วม</div><span class="chip">LIST</span></div>
-    <div class="pb">
-      <label>ADMIN_KEY</label>
-      <input id="key1" value="RR365">
-
-      <label>ค้นหา (ไม่บังคับ): เบอร์ / ua_key / device_id / fingerprint</label>
-      <input id="q1" placeholder="เช่น 0611111111 หรือ ua_xxx หรือ dev_xxx หรือ fp_xxx">
-
-      <label>จำนวนรายการ</label>
-      <input id="limit1" value="50" inputmode="numeric">
-
-      <div class="btns">
-        <button class="p" id="btnP">โหลด/ค้นหา</button>
-        <button class="g" id="btnPClear">ล้าง</button>
-      </div>
-
-      <div class="btns">
-        <button class="g" id="btnPing">ทดสอบเชื่อมต่อ (PING)</button>
-        <button class="g" id="btnTest">ทดสอบ LIST ดิบ</button>
-      </div>
-
-      <div class="msg" id="msgP"></div>
-      <div id="listP"></div>
-      <div class="raw" id="rawP" style="display:none"></div>
+    <div id="msg" class="msg"></div>
+    <div class="muted" style="margin-top:8px">
+      *ใส่ SCRIPT_URL ครั้งแรกแล้วระบบจะจำในเครื่องแอดมิน (LocalStorage)
     </div>
   </div>
 
-  <div class="panel" id="panel-l" style="display:none">
-    <div class="ph"><div class="pt">🧾 logs</div><span class="chip">LIST</span></div>
-    <div class="pb">
-      <label>ADMIN_KEY</label>
-      <input id="key2" value="RR365">
-
-      <label>ค้นหา (ไม่บังคับ): เบอร์ / fp / ua_key / action / result</label>
-      <input id="q2" placeholder="เช่น 0611111111 หรือ fp_xxx หรือ RATE_LIMIT">
-
-      <label>จำนวนรายการ</label>
-      <input id="limit2" value="50" inputmode="numeric">
-
-      <div class="btns">
-        <button class="p" id="btnL">โหลด/ค้นหา</button>
-        <button class="g" id="btnLClear">ล้าง</button>
-      </div>
-
-      <div class="msg" id="msgL"></div>
-      <div id="listL"></div>
-      <div class="raw" id="rawL" style="display:none"></div>
+  <div class="card">
+    <div class="row" style="justify-content:space-between">
+      <div><span class="chip" id="badge">ยังไม่ได้โหลด</span></div>
+      <div class="muted" id="count"></div>
     </div>
+    <div id="tableWrap"></div>
   </div>
 
-  <div class="panel" id="panel-u" style="display:none">
-    <div class="ph"><div class="pt">🔓 ปลดล็อก (ลบแถวใน participants)</div><span class="chip">UNLOCK</span></div>
-    <div class="pb">
-      <label>ADMIN_KEY</label>
-      <input id="key3" value="RR365">
-
-      <label>เบอร์โทรที่จะปลดล็อก</label>
-      <input id="uphone" placeholder="0611111111" inputmode="numeric">
-
-      <label>หมายเหตุ (ไม่บังคับ)</label>
-      <input id="unote" placeholder="เช่น ปลดให้ลูกค้า / เคสพิเศษ">
-
-      <div class="btns">
-        <button class="w" id="btnU">ปลดล็อก</button>
-        <button class="g" id="btnUClear">ล้าง</button>
-      </div>
-
-      <div class="msg" id="msgU"></div>
-    </div>
-  </div>
 </div>
 
 <script>
-  function $(id){ return document.getElementById(id); }
-  function setStatus(t, ok){
-    $("st").textContent = t;
-    $("dot").className = "dot" + (ok ? "" : " err");
-  }
-  function showMsg(id, t, type){
-    const el=$(id); el.style.display="block";
-    el.className="msg " + (type==="err" ? "err":"ok");
-    el.textContent=t;
-  }
-  function hideMsg(id){ const el=$(id); el.style.display="none"; el.textContent=""; }
-  function showRaw(id, obj){
-    const el=$(id);
-    el.style.display="block";
-    el.textContent = "RAW RESPONSE:\n" + (obj===undefined ? "undefined" : JSON.stringify(obj, null, 2));
-  }
-  function hideRaw(id){ const el=$(id); el.style.display="none"; el.textContent=""; }
-  function esc(s){
-    s = (s===null || s===undefined) ? "" : String(s);
-    return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-  }
-  function card(title, badge, lines){
-    return '<div class="card"><div class="ct"><div class="ttl">'+esc(title)+'</div><span class="bdg">'+esc(badge)+'</span></div><div class="lines mono">'+esc(lines||"")+'</div></div>';
-  }
+  const $scriptUrl = document.getElementById("scriptUrl");
+  const $adminKey  = document.getElementById("adminKey");
+  const $type      = document.getElementById("type");
+  const $limit     = document.getElementById("limit");
+  const $btnLoad   = document.getElementById("btnLoad");
+  const $msg       = document.getElementById("msg");
+  const $tableWrap = document.getElementById("tableWrap");
+  const $badge     = document.getElementById("badge");
+  const $count     = document.getElementById("count");
 
-  Array.prototype.forEach.call(document.querySelectorAll(".tab"), function(b){
-    b.addEventListener("click", function(){
-      Array.prototype.forEach.call(document.querySelectorAll(".tab"), x=>x.classList.remove("active"));
-      b.classList.add("active");
-      const t=b.getAttribute("data-tab");
-      $("panel-p").style.display = (t==="p") ? "" : "none";
-      $("panel-l").style.display = (t==="l") ? "" : "none";
-      $("panel-u").style.display = (t==="u") ? "" : "none";
+  $scriptUrl.value = localStorage.getItem("rr_admin_script") || "";
+  $type.value      = localStorage.getItem("rr_admin_type") || "participants";
+  $limit.value     = localStorage.getItem("rr_admin_limit") || "50";
+
+  function show(text, type="ok"){
+    $msg.style.display="block";
+    $msg.className="msg "+(type==="err"?"err":"ok");
+    $msg.textContent=text;
+  }
+  function hideMsg(){ $msg.style.display="none"; }
+
+  function jsonp(url, params){
+    return new Promise((resolve, reject)=>{
+      const cb = "cb_" + Math.random().toString(36).slice(2);
+      params.jsonp = "1";
+      params.callback = cb;
+      params._ts = Date.now().toString();
+
+      const full = url + "?" + new URLSearchParams(params).toString();
+
+      const s = document.createElement("script");
+      s.src = full; s.async = true;
+
+      const t = setTimeout(()=>{ cleanup(); reject(new Error("TIMEOUT")); }, 12000);
+
+      window[cb] = (data)=>{ clearTimeout(t); cleanup(); resolve(data); };
+      s.onerror = ()=>{ clearTimeout(t); cleanup(); reject(new Error("LOAD_ERROR")); };
+
+      function cleanup(){
+        try{ delete window[cb]; }catch(e){ window[cb]=undefined; }
+        if(s && s.parentNode) s.parentNode.removeChild(s);
+      }
+
+      document.body.appendChild(s);
     });
+  }
+
+  function escapeHtml(v){
+    return String(v??"")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  function renderTable(type, rows){
+    if(!rows || !rows.length){
+      $tableWrap.innerHTML = "<div class='muted' style='padding:12px'>ไม่มีข้อมูล</div>";
+      return;
+    }
+
+    if(type === "participants"){
+      const head = `
+        <table>
+          <thead><tr>
+            <th>เวลา</th><th>เบอร์</th><th>ua_key</th><th>device_id</th><th>fingerprint</th><th>note</th>
+          </tr></thead><tbody>`;
+      const body = rows.map(r=>`
+        <tr>
+          <td>${escapeHtml(r.created_at)}</td>
+          <td><b>${escapeHtml(String(r.phone||""))}</b></td>
+          <td>${escapeHtml(r.ua_key)}</td>
+          <td>${escapeHtml(r.device_id)}</td>
+          <td>${escapeHtml(r.fingerprint)}</td>
+          <td>${escapeHtml(r.note)}</td>
+        </tr>
+      `).join("");
+      $tableWrap.innerHTML = head + body + "</tbody></table>";
+      return;
+    }
+
+    const head = `
+      <table>
+        <thead><tr>
+          <th>เวลา</th><th>action</th><th>phone_raw</th><th>phone_norm</th><th>result</th><th>message</th>
+        </tr></thead><tbody>`;
+    const body = rows.map(r=>`
+      <tr>
+        <td>${escapeHtml(r.ts)}</td>
+        <td>${escapeHtml(r.action)}</td>
+        <td><b>${escapeHtml(r.phone_raw)}</b></td>
+        <td>${escapeHtml(r.phone_normalized)}</td>
+        <td>${escapeHtml(r.result)}</td>
+        <td>${escapeHtml(r.message)}</td>
+      </tr>
+    `).join("");
+    $tableWrap.innerHTML = head + body + "</tbody></table>";
+  }
+
+  $btnLoad.addEventListener("click", async ()=>{
+    hideMsg();
+    $btnLoad.disabled = true;
+
+    const url = $scriptUrl.value.trim();
+    const key = $adminKey.value.trim();
+    const type = $type.value;
+    const limit = $limit.value;
+
+    localStorage.setItem("rr_admin_script", url);
+    localStorage.setItem("rr_admin_type", type);
+    localStorage.setItem("rr_admin_limit", limit);
+
+    if(!/\/exec(\?|$)/.test(url)){
+      show("SCRIPT URL ต้องลงท้าย /exec", "err");
+      $btnLoad.disabled = false;
+      return;
+    }
+    if(!key){
+      show("กรุณาใส่ Admin Key", "err");
+      $btnLoad.disabled = false;
+      return;
+    }
+
+    try{
+      const data = await jsonp(url, {
+        action: "admin_list",
+        admin_key: key,
+        type,
+        limit
+      });
+
+      if(!data || !data.ok){
+        show((data && data.msg) ? data.msg : "โหลดไม่สำเร็จ", "err");
+        $badge.textContent = "โหลดไม่สำเร็จ";
+        $btnLoad.disabled = false;
+        return;
+      }
+
+      $badge.textContent = "โหลดสำเร็จ: " + type;
+      $count.textContent = "จำนวนรายการ: " + (data.rows ? data.rows.length : 0);
+      renderTable(type, data.rows || []);
+      show("โหลดข้อมูลสำเร็จ", "ok");
+    }catch(e){
+      show("เชื่อมต่อไม่สำเร็จ (อาจยังไม่ Anyone / ลิงก์ผิด / Deploy ผิดเวอร์ชัน)", "err");
+      $badge.textContent = "โหลดไม่สำเร็จ";
+    }finally{
+      $btnLoad.disabled = false;
+    }
   });
-
-  function keyAll(){
-    const k = $("key1").value || $("key2").value || $("key3").value || "";
-    $("key1").value = k; $("key2").value = k; $("key3").value = k;
-    return k.trim();
-  }
-
-  function ping(){
-    hideMsg("msgP"); hideRaw("rawP");
-    setStatus("กำลังเชื่อมต่อ…", true);
-    google.script.run
-      .withSuccessHandler(function(res){
-        showRaw("rawP", res);
-        if(!res || !res.ok){
-          setStatus("เชื่อมต่อไม่สำเร็จ", false);
-          showMsg("msgP", (res && res.msg) ? res.msg : "PING: res ว่าง/undefined", "err");
-          return;
-        }
-        setStatus("พร้อม", true);
-        showMsg("msgP", "PING_OK\nparticipants: "+res.counts.participants+"\nlogs: "+res.counts.logs, "ok");
-      })
-      .withFailureHandler(function(err){
-        setStatus("เชื่อมต่อไม่สำเร็จ", false);
-        showMsg("msgP", "PING CALL FAIL: " + (err && err.message ? err.message : err), "err");
-      })
-      .rr365Admin_ping();
-  }
-
-  function loadParticipants(){
-    hideMsg("msgP"); hideRaw("rawP");
-    const key = keyAll();
-    const q = $("q1").value.trim();
-    const limit = parseInt($("limit1").value||"50",10) || 50;
-
-    setStatus("กำลังโหลด…", true);
-    google.script.run
-      .withSuccessHandler(function(res){
-        showRaw("rawP", res);
-
-        if(!res){
-          showMsg("msgP", "LIST: res = undefined/null (ฝั่ง server ไม่คืนค่า)", "err");
-          setStatus("พร้อม", true);
-          return;
-        }
-        if(!res.ok){
-          showMsg("msgP", res.msg ? res.msg : ("LIST_FAIL\n"+JSON.stringify(res,null,2)), "err");
-          setStatus("พร้อม", true);
-          return;
-        }
-
-        const rows = res.rows || [];
-        $("cP").textContent = String(rows.length);
-
-        const box = $("listP");
-        if(!rows.length){
-          box.innerHTML = card("ไม่พบข้อมูล", "EMPTY", "—");
-          setStatus("พร้อม", true);
-          return;
-        }
-
-        let html = "";
-        for(const r of rows){
-          const lines =
-            "created_at : "+(r.created_at||"-")+"\n"+
-            "phone      : "+(r.phone||"-")+"\n"+
-            "ua_key     : "+(r.ua_key||"-")+"\n"+
-            "device_id  : "+(r.device_id||"-")+"\n"+
-            "fingerprint: "+(r.fingerprint||"-")+"\n"+
-            "note       : "+(r.note||"-");
-          html += card("ผู้เข้าร่วม", r.phone||"-", lines);
-        }
-        box.innerHTML = html;
-        setStatus("พร้อม", true);
-      })
-      .withFailureHandler(function(err){
-        showMsg("msgP", "LIST CALL FAIL: " + (err && err.message ? err.message : err), "err");
-        setStatus("พร้อม", true);
-      })
-      .rr365Admin_list("participants", limit, key, q);
-  }
-
-  function testListRaw(){
-    hideMsg("msgP"); hideRaw("rawP");
-    const key = keyAll();
-    setStatus("ทดสอบ LIST…", true);
-    google.script.run
-      .withSuccessHandler(function(res){
-        showRaw("rawP", res);
-        showMsg("msgP", "ดู RAW RESPONSE ด้านล่าง", (res && res.ok) ? "ok" : "err");
-        setStatus("พร้อม", true);
-      })
-      .withFailureHandler(function(err){
-        showMsg("msgP", "TEST CALL FAIL: " + (err && err.message ? err.message : err), "err");
-        setStatus("พร้อม", true);
-      })
-      .rr365Admin_list("participants", 5, key, "");
-  }
-
-  $("btnP").addEventListener("click", loadParticipants);
-  $("btnPing").addEventListener("click", ping);
-  $("btnTest").addEventListener("click", testListRaw);
-  $("btnPClear").addEventListener("click", function(){
-    $("q1").value=""; hideMsg("msgP"); hideRaw("rawP"); $("listP").innerHTML="";
-  });
-
-  ping();
 </script>
 </body>
 </html>
+
+
