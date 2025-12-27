@@ -65,7 +65,6 @@
     background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;white-space:nowrap;
   }
 
-  /* modal บังคับอ่าน */
   .modal{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;padding:18px;z-index:9999;}
   .modal.show{display:flex;}
   .modalCard{width:min(560px,100%);border-radius:18px;border:1px solid rgba(255,255,255,.14);background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.04));box-shadow:0 20px 60px rgba(0,0,0,.75);padding:16px;}
@@ -130,22 +129,9 @@
 </div>
 
 <script>
-/* ================= CONFIG =================
-   ✅ โหมด A: เปิดจาก Apps Script /exec -> ไม่ต้องแก้ SCRIPT_URL
-   ✅ โหมด B: เอาไปวางโฮสเอง -> ใส่ SCRIPT_URL เป็น https://script.google.com/macros/s/XXXX/exec
-*/
-let SCRIPT_URL = window.location.href; // โหมด A อัตโนมัติ
- SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyM5gqgZdZRAi2clNJhbRhhLiacHYmOWWcbQJFtR98ZaXVvyuWfCIKc4RD61EQicx6e/exec"; // โหมด B (ปลดคอมเมนต์แล้วใส่ของจริง)
+/* ✅ โหมด A: เปิดจาก /exec -> ยิง JSONP กลับ URL เดิม */
+let SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzVP19BlRA_E1t5JSnaxpRWMc0dvqilrp_ACmw2TZzg5NSEFregVwNcXm2J3_hTESs/exec";
 
-/* กัน URL แปลก: ถ้าไม่ใช่ /exec ให้บังคับเป็น /exec เมื่อเปิดจาก GAS */
-if (/script\.google\.com\/macros\/s\/.+\/(dev|userCodeAppPanel)/.test(SCRIPT_URL)) {
-  // ไม่ควรเกิดในหน้า /exec แต่เผื่อไว้
-}
-
-const DEVICE_ID_KEY="rr365_device_id";
-
-let S={token:"",nonce:"",issued_at:0,captcha_id:"",captcha_q:"",min_delay_ms:6000,max_delay_ms:45000};
-let READY_AT=0, TIMER=null;
 
 const $phone=document.getElementById("phone");
 const $btnCheck=document.getElementById("btnCheck");
@@ -157,8 +143,8 @@ const $captchaA=document.getElementById("captchaA");
 const $copyWrap=document.getElementById("copyWrap");
 const $promoCode=document.getElementById("promoCode");
 const $btnCopy=document.getElementById("btnCopy");
-
 const $ruleModal=document.getElementById("ruleModal");
+
 document.getElementById("modalAck").onclick=()=>{ $ruleModal.classList.remove("show"); };
 
 function openModal(){ $ruleModal.classList.add("show"); }
@@ -176,48 +162,26 @@ function normalizePhone(v){
   if(!/^0[689]\d{8}$/.test(p)) return "";
   return p;
 }
-function getOrCreateDeviceId(){
-  let id=localStorage.getItem(DEVICE_ID_KEY);
-  if(!id){
-    id="dev_"+Math.random().toString(36).slice(2)+Date.now().toString(36);
-    localStorage.setItem(DEVICE_ID_KEY,id);
-  }
-  return id;
-}
 function getFingerprint(){
   const data=[screen.width,screen.height,devicePixelRatio,navigator.language||"",navigator.platform||""].join("|");
   let h=0; for(let i=0;i<data.length;i++){ h=((h<<5)-h)+data.charCodeAt(i); h|=0; }
   return "fp_"+Math.abs(h);
 }
-function getUaKey(){
-  const ua=navigator.userAgent||"";
-  let h=0; for(let i=0;i<ua.length;i++){ h=((h<<5)-h)+ua.charCodeAt(i); h|=0; }
-  return "ua_"+Math.abs(h);
-}
 
 /* JSONP */
 function jsonp(params){
   return new Promise((resolve,reject)=>{
-    // ต้องเป็น /exec เท่านั้น
     if(!/\/exec(\?|$)/.test(SCRIPT_URL)){
-      show("SCRIPT_URL ต้องลงท้ายด้วย /exec เท่านั้น","err");
+      show("SCRIPT_URL ต้องลงท้ายด้วย /exec","err");
       return reject(new Error("BAD_EXEC_URL"));
     }
-
     const cb="cb_"+Math.random().toString(36).slice(2);
     params.jsonp="1"; params.callback=cb; params._ts=Date.now();
     const s=document.createElement("script");
     window[cb]=(d)=>{ cleanup(); resolve(d); };
     s.onerror=()=>{
       cleanup();
-      show(
-        "เชื่อมต่อไม่สำเร็จ (โหลด SCRIPT_URL ไม่ได้)\n"+
-        "- เช็คว่าเป็นลิงก์ /exec\n"+
-        "- Deploy เป็น Anyone\n"+
-        "- ลองปิด Adblock/Extension\n"+
-        "- ถ้าเอา HTML ไปวางโฮส บางที่บล็อก script.google.com",
-        "err"
-      );
+      show("เชื่อมต่อไม่สำเร็จ\n- เช็ค Deploy เป็น Anyone\n- ลองปิด Adblock/Extension","err");
       reject(new Error("LOAD_ERR"));
     };
     function cleanup(){ try{delete window[cb];}catch(_){ } if(s.parentNode) s.parentNode.removeChild(s); }
@@ -226,27 +190,16 @@ function jsonp(params){
   });
 }
 
-async function call(action){
+async function call(action, extra={}){
   const phone=normalizePhone($phone.value);
   if(!phone){ show("กรุณากรอกเบอร์ให้ถูกต้อง","err"); return null; }
-
-  const base={
-    action, phone,
-    deviceId:getOrCreateDeviceId(),
-    fingerprint:getFingerprint(),
-    ua_key:getUaKey(),
-    userAgent:navigator.userAgent
-  };
-
-  if(action==="register"){
-    base.token=S.token; base.nonce=S.nonce; base.issued_at=S.issued_at;
-    base.captcha_id=S.captcha_id; base.captcha_a=($captchaA.value||"").trim();
-  }
+  const base={ action, phone, fingerprint:getFingerprint(), ...extra };
   return await jsonp(base);
 }
 
+let READY_AT=0, TIMER=null;
+
 function resetSession(){
-  S={token:"",nonce:"",issued_at:0,captcha_id:"",captcha_q:"",min_delay_ms:6000,max_delay_ms:45000};
   READY_AT=0;
   if(TIMER){clearInterval(TIMER);TIMER=null;}
   $btnJoin.disabled=true;
@@ -260,9 +213,7 @@ $btnCheck.onclick=async ()=>{
   const d=await call("check").catch(()=>null);
   if(!d) return;
   if(!d.ok){ show(d.msg||"ผิดพลาด","err"); return; }
-
   show(d.msg||"ผ่านแล้ว","ok");
-  // ถ้าผ่านแล้วให้กดขอสิทธิ์ (จะไปติด WAIT_APPROVAL ถ้ายังไม่ APPROVED)
   $btnIssue.disabled=false;
 };
 
@@ -273,17 +224,14 @@ $btnIssue.onclick=async ()=>{
   if(!d) return;
   if(!d.ok){ show(d.msg||"ผิดพลาด","err"); return; }
 
-  S.token=d.token; S.nonce=d.nonce; S.issued_at=Number(d.issued_at||0);
-  S.captcha_id=d.captcha_id; S.captcha_q=d.captcha_q;
-  S.min_delay_ms=Number(d.min_delay_ms||6000);
-  S.max_delay_ms=Number(d.max_delay_ms||45000);
-
   $capLabel.style.display="block";
   $captchaA.style.display="block";
-  $capLabel.textContent=S.captcha_q||"คำถามยืนยันตัวตน";
+  $capLabel.textContent=d.captcha_q || "คำถามยืนยันตัวตน";
   $captchaA.value="";
 
-  READY_AT=Date.now()+S.min_delay_ms;
+  const minDelay = Number(d.min_delay_ms||6000);
+  READY_AT = Date.now()+minDelay;
+
   show("ตอบคำถาม แล้วรอ 6 วินาที จากนั้นกดยืนยันรับโค้ด","ok");
 
   TIMER=setInterval(()=>{
@@ -300,12 +248,13 @@ $btnJoin.onclick=async ()=>{
     show("กรุณารออีก "+left+" วินาที (กันบอท)","err");
     return;
   }
-  if(!$captchaA.value.trim()){
+  const cap = ($captchaA.value||"").trim();
+  if(!cap){
     show("กรุณาตอบคำถามยืนยันตัวตนก่อน","err");
     return;
   }
 
-  const d=await call("register").catch(()=>null);
+  const d=await call("register",{captcha_a:cap}).catch(()=>null);
   if(!d) return;
   if(!d.ok){ show(d.msg||"ผิดพลาด","err"); return; }
 
@@ -324,12 +273,8 @@ $btnJoin.onclick=async ()=>{
 
 $btnCopy.onclick=async ()=>{
   const txt=($promoCode.textContent||"").trim();
-  try{
-    await navigator.clipboard.writeText(txt);
-    show("คัดลอกแล้ว ✓","ok");
-  }catch(_){
-    show("คัดลอกไม่สำเร็จ กรุณาคัดลอกเอง","err");
-  }
+  try{ await navigator.clipboard.writeText(txt); show("คัดลอกแล้ว ✓","ok"); }
+  catch(_){ show("คัดลอกไม่สำเร็จ กรุณาคัดลอกเอง","err"); }
 };
 </script>
 </body>
