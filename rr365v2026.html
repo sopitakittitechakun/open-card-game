@@ -125,7 +125,7 @@
   >
 
   <h1>🎁 ปีใหม่เเจกคูปองสูงสุด 38,888 บาท 🎁</h1>
-  <p>เช็คสิทธิ์ให้เรียบร้อยก่อน — โค้ดจะออกต่อเมื่อแอดมินอนุมัติ</p>
+  <p>ระบบส่งโค้ดเครดิตฟรีสุ่มอัตโนมัติ (ลุ้นขั้นต่ำ 50 เครดิต)</p>
 
   <label>เบอร์โทรศัพท์ที่สมัคร</label>
   <input id="phone" inputmode="numeric" placeholder="เช่น 0611111111"/>
@@ -135,8 +135,13 @@
 
   <div class="row">
     <button id="btnCheck" class="btnAlt" type="button">เช็คสิทธิ์</button>
-    <button id="btnJoin" class="btnMain" type="button" disabled>ยืนยันเข้าร่วม/รับโค้ด</button>
+    <button id="btnJoin" class="btnMain" type="button" disabled>ยืนยันเข้าร่วม</button>
   </div>
+
+  <!-- ✅ เพิ่มปุ่มเช็คสถานะ/รับโค้ด -->
+  <button id="btnPoll" class="btnAlt" type="button" style="margin-top:10px; width:100%;">
+    เช็คสถานะ / รับโค้ด
+  </button>
 
   <div id="msg" class="msg"></div>
 
@@ -147,7 +152,8 @@
 
   <div class="hint">
     *โค้ดที่ได้รับ ลูกค้าต้องมียอดฝากสะสม “ของวันที่รับ” ครบ 365 บาทก่อน จึงจะสามารถนำโค้ดไปกรอกได้ค่ะ<br>
-    *ทำยอด 10 เท่า ถอนได้ 10 เท่า
+    *ทำยอด 10 เท่า ถอนได้ 10 เท่า<br>
+    *โค้ดจะถูกปล่อยหลังแอดมินอนุมัติเท่านั้น
   </div>
 
   <div class="linkBox">
@@ -165,7 +171,8 @@
     <div class="modalText" id="ruleText">
       1) ลูกค้าต้องมียอดฝากสะสม “ของวันที่รับ” ครบ 365 บาทก่อน จึงจะกรอกโค้ดได้<br>
       2) โค้ดที่ได้รับทำยอด 10 เท่า ถอนได้ 10 เท่า<br>
-      3) 1 คน / 1 ยูสเซอร์ เข้าร่วมได้ครั้งเดียว ระบบป้องกันบอทอัตโนมัติ
+      3) 1 คน / 1 ยูสเซอร์ เข้าร่วมได้ครั้งเดียว ระบบป้องกันบอทอัตโนมัติ<br>
+      4) โค้ดจะถูกปล่อยหลังแอดมินอนุมัติเท่านั้น
     </div>
     <div class="modalBtns">
       <button class="modalBtnMain" id="modalAcknowledge" type="button">รับทราบ</button>
@@ -175,7 +182,7 @@
 
 <script>
 /* ================= CONFIG ================= */
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzqVAtuos1TTxYZXZVb6tXElwrSVRf7MTkzPQ8PpXLaOhjKhJPnHTNCeQNIJWcDVg2f/exec"; // ✅ ใส่ลิงก์ .../exec ของพี่
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxz9h8j1lgw03w_8l6aw5DUvLvHvP6k3fZ9Neb40rmXJTVyRPxa8XZnszs-rGlxYCgn/exec"; // ✅ ใส่ลิงก์ .../exec ของพี่
 const DEVICE_ID_KEY = "rr365_device_id";
 
 /* ================= STATE ================= */
@@ -191,12 +198,12 @@ let SAVED = {
 };
 let READY_AT = 0;
 let READY_TIMER = null;
-let STEP = "NONE"; // NONE | PENDING | ISSUED
 
 /* ================= ELS ================= */
 const $phone = document.getElementById("phone");
 const $btnCheck = document.getElementById("btnCheck");
 const $btnJoin  = document.getElementById("btnJoin");
+const $btnPoll  = document.getElementById("btnPoll");
 const $msg = document.getElementById("msg");
 
 const $copyWrap = document.getElementById("copyWrap");
@@ -209,7 +216,7 @@ const $captchaA = document.getElementById("captchaA");
 const $ruleModal = document.getElementById("ruleModal");
 const $modalAck = document.getElementById("modalAcknowledge");
 
-/* ================= Modal ================= */
+/* ================= Modal: บังคับอ่าน ================= */
 function openRuleModal(){
   $ruleModal.classList.add("show");
   $ruleModal.setAttribute("aria-hidden","false");
@@ -336,31 +343,36 @@ async function request(action){
     userAgent:navigator.userAgent
   };
 
-  // register ต้องมี session จาก issue
   if(action==="register"){
     if(!SAVED.token || !SAVED.nonce || !SAVED.issued_at){
-      show("กรุณากด “ยืนยันเข้าร่วม/รับโค้ด” เพื่อเริ่มการยืนยันก่อนค่ะ","err");
+      show("กรุณากดเช็คสิทธิ์ก่อน แล้วค่อยยืนยันเข้าร่วม","err");
       return null;
     }
+
     if(Date.now() < READY_AT){
       const left = Math.ceil((READY_AT - Date.now())/1000);
       show(`กรุณารออีก ${left} วินาที (ระบบป้องกันบอท)`,"err");
       return null;
     }
     if(Date.now() - SAVED.issued_at > SAVED.max_delay_ms){
-      show("หมดเวลา กรุณากด “ยืนยันเข้าร่วม/รับโค้ด” ใหม่อีกครั้ง","err");
+      show("หมดเวลา กรุณากดเช็คสิทธิ์ใหม่อีกครั้ง","err");
       return null;
     }
+
     const capA = ($captchaA.value||"").trim();
     if(!capA){
-      show("กรุณาตอบคำถามยืนยันตัวตนก่อนยืนยันรับโค้ด","err");
+      show("กรุณาตอบคำถามยืนยันตัวตนก่อนยืนยันเข้าร่วม","err");
       return null;
     }
 
     show("⏳ กำลังยืนยันความเป็นมนุษย์... (ป้องกันบอท)","ok");
-    let pow=null;
-    try{ pow = await solvePow(p, SAVED.nonce, SAVED.pow_prefix || "0000"); }
-    catch(_){ show("ยืนยันไม่สำเร็จ กรุณาลองใหม่ (ป้องกันบอท)","err"); return null; }
+    let pow = null;
+    try{
+      pow = await solvePow(p, SAVED.nonce, SAVED.pow_prefix || "0000");
+    }catch(_){
+      show("ยืนยันไม่สำเร็จ กรุณาลองใหม่ (ป้องกันบอท)","err");
+      return null;
+    }
 
     payload.token = SAVED.token;
     payload.nonce = SAVED.nonce;
@@ -399,15 +411,13 @@ $btnCopy.addEventListener("click", async ()=>{
   }
 });
 
-/* ================= SESSION ================= */
+/* ================= EVENTS ================= */
 function resetSession(){
   SAVED = { token:"", nonce:"", issued_at:0, captcha_id:"", captcha_q:"", pow_prefix:"0000", min_delay_ms:6000, max_delay_ms:45000 };
   READY_AT = 0;
-  STEP = "NONE";
   if(READY_TIMER){ clearInterval(READY_TIMER); READY_TIMER=null; }
 }
 
-/* ================= EVENTS ================= */
 $btnCheck.addEventListener("click", async ()=>{
   $btnCheck.disabled=true; $btnJoin.disabled=true;
   resetSession();
@@ -416,72 +426,38 @@ $btnCheck.addEventListener("click", async ()=>{
   const data=await request("check").catch(()=>null);
 
   $btnCheck.disabled=false;
-
   if(!data){ show("เชื่อมต่อไม่สำเร็จ","err"); return; }
   if(!data.ok){ show(data.msg||"ผิดพลาด","err"); return; }
   if(data.exists){ show(data.msg||"เบอร์เคยร่วมแล้ว","err"); return; }
   if(data.device_used){ show(data.msg||"อุปกรณ์เคยร่วมแล้ว","err"); return; }
 
-  // ✅ โหมดแอดมิน: check จะได้ pending
-  if(data.pending){
-    STEP = "PENDING";
-    show(data.msg || "ผ่านการตรวจสอบแล้ว รอแอดมินอนุมัติ","ok");
-    $btnJoin.disabled=false; // ให้ลูกค้ากดมาลองรับโค้ดหลังอนุมัติได้เลย
-    return;
-  }
+  SAVED.token = data.token || "";
+  SAVED.nonce = data.nonce || "";
+  SAVED.issued_at = Number(data.issued_at || 0);
+  SAVED.captcha_id = data.captcha_id || "";
+  SAVED.captcha_q = data.captcha_q || "";
+  SAVED.pow_prefix = data.pow_prefix || "0000";
+  SAVED.min_delay_ms = Number(data.min_delay_ms || 6000);
+  SAVED.max_delay_ms = Number(data.max_delay_ms || 45000);
 
-  // เผื่อปิดโหมดแอดมิน
-  STEP = "PENDING";
-  show("✅ ผ่านการตรวจสอบแล้ว สามารถกดยืนยันเข้าร่วม/รับโค้ดได้","ok");
-  $btnJoin.disabled=false;
+  showCaptcha(SAVED.captcha_q || "ยืนยันว่าเป็นคนจริง");
+
+  READY_AT = Date.now() + SAVED.min_delay_ms;
+  show(`✅ ผ่านการตรวจสอบ\n\nกรุณาตอบคำถามยืนยันตัวตน แล้วรอ ${Math.ceil(SAVED.min_delay_ms/1000)} วินาที จากนั้นกดยืนยันเพื่อส่งคำขอ (รอแอดมินอนุมัติ)`,"ok");
+
+  READY_TIMER = setInterval(()=>{
+    const now = Date.now();
+    if(now >= READY_AT){
+      $btnJoin.disabled=false;
+      clearInterval(READY_TIMER);
+      READY_TIMER=null;
+    }
+  }, 250);
 });
 
 $btnJoin.addEventListener("click", async ()=>{
-  hideCopy();
-
-  // ถ้ายังไม่ issue -> ไปขอ issue ก่อน (ต้อง approved แล้ว)
-  if(STEP !== "ISSUED"){
-    $btnCheck.disabled=true; $btnJoin.disabled=true;
-    hideCaptcha();
-
-    const data=await request("issue").catch(()=>null);
-
-    $btnCheck.disabled=false;
-
-    if(!data){ show("เชื่อมต่อไม่สำเร็จ","err"); $btnJoin.disabled=false; return; }
-    if(!data.ok){ show(data.msg||"ยังไม่อนุมัติ","err"); $btnJoin.disabled=false; return; }
-
-    // save session จาก issue
-    SAVED.token = data.token || "";
-    SAVED.nonce = data.nonce || "";
-    SAVED.issued_at = Number(data.issued_at || 0);
-    SAVED.captcha_id = data.captcha_id || "";
-    SAVED.captcha_q = data.captcha_q || "";
-    SAVED.pow_prefix = data.pow_prefix || "0000";
-    SAVED.min_delay_ms = Number(data.min_delay_ms || 6000);
-    SAVED.max_delay_ms = Number(data.max_delay_ms || 45000);
-
-    STEP = "ISSUED";
-
-    showCaptcha(SAVED.captcha_q || "ยืนยันว่าเป็นคนจริง");
-
-    READY_AT = Date.now() + SAVED.min_delay_ms;
-    show(`✅ อนุมัติแล้ว\n\nกรุณาตอบคำถามยืนยันตัวตน แล้วรอ ${Math.ceil(SAVED.min_delay_ms/1000)} วินาที\nจากนั้นกดปุ่มเดิมอีกครั้งเพื่อ “รับโค้ด”`,"ok");
-
-    READY_TIMER = setInterval(()=>{
-      const now = Date.now();
-      if(now >= READY_AT){
-        $btnJoin.disabled=false;
-        clearInterval(READY_TIMER);
-        READY_TIMER=null;
-      }
-    }, 250);
-
-    return;
-  }
-
-  // STEP=ISSUED -> กดอีกครั้งเพื่อ register รับโค้ด
   $btnCheck.disabled=true; $btnJoin.disabled=true;
+  hideCopy();
 
   const data=await request("register").catch(()=>null);
 
@@ -490,27 +466,57 @@ $btnJoin.addEventListener("click", async ()=>{
   if(!data){ show("เชื่อมต่อไม่สำเร็จ","err"); $btnJoin.disabled=false; return; }
   if(!data.ok){ show(data.msg||"ผิดพลาด","err"); $btnJoin.disabled=false; return; }
 
-  if(data.registered){
+  // ✅ ใหม่: ลงชื่อแล้ว "รอแอดมินอนุมัติ" (ยังไม่ปล่อยโค้ด)
+  if(data.pending){
     show(
-      "🎉 ลงชื่อสำเร็จ!\n\n" +
-      (data.promo_code ? ("🎁 โค้ดของคุณ: "+data.promo_code+"\n\n") : "") +
-      "👉 เครดิตฟรีสุ่มสูงสุด 38,888 บาท\n" +
-      "ทำยอด 10 เท่า ถอนได้ 10 เท่า\n\n" +
-      "⚠️ หมายเหตุ: โค้ดที่สุ่มได้ลูกค้าต้องมียอดฝากของวันครบ 365บาท ค่อยสามารถกรอกโค้ดได้",
+      "⏳ ลงชื่อสำเร็จแล้ว!\n\n" +
+      "ระบบรับคำขอเรียบร้อย อยู่ระหว่างรอแอดมินอนุมัติ\n\n" +
+      "📌 กดปุ่ม “เช็คสถานะ / รับโค้ด” เพื่อรับโค้ดเมื่ออนุมัติแล้ว",
       "ok"
     );
-
-    if(data.promo_code){
-      $promoCode.textContent=data.promo_code;
-      $copyWrap.style.display="flex";
-    }
-
     openRuleModal();
     resetSession();
-  }else{
-    show(data.msg||"ไม่สามารถลงชื่อได้","err");
-    $btnJoin.disabled=false;
+    return;
   }
+
+  show(data.msg||"ทำรายการสำเร็จ","ok");
+  resetSession();
+});
+
+// ✅ ปุ่มเช็คสถานะ/รับโค้ด
+$btnPoll.addEventListener("click", async ()=>{
+  hideCopy(); hideMsg();
+  const data=await request("poll_code").catch(()=>null);
+
+  if(!data){ show("เชื่อมต่อไม่สำเร็จ","err"); return; }
+  if(!data.ok){ show(data.msg||"ผิดพลาด","err"); return; }
+
+  if(data.status === "PENDING"){
+    show("⏳ ยังรอแอดมินอนุมัติอยู่ค่ะ\nกรุณารอสักครู่แล้วกดเช็คใหม่", "ok");
+    return;
+  }
+  if(data.status === "APPROVED"){
+    const code = (data.promo_code || "").trim();
+    if(!code || code === "NO_CODE"){
+      show("✅ อนุมัติแล้ว แต่โค้ดหมด\nกรุณาติดต่อแอดมิน", "err");
+      return;
+    }
+    show("🎉 อนุมัติแล้ว! โค้ดของคุณคือ: " + code, "ok");
+    $promoCode.textContent = code;
+    $copyWrap.style.display = "flex";
+    openRuleModal();
+    return;
+  }
+  if(data.status === "REJECTED"){
+    show("❌ ไม่ผ่านการอนุมัติ กรุณาติดต่อแอดมิน", "err");
+    return;
+  }
+  if(data.status === "USED"){
+    show("⚠️ รายการนี้ถูกใช้ไปแล้ว", "err");
+    return;
+  }
+
+  show(data.msg || "กำลังตรวจสอบ", "ok");
 });
 </script>
 </body>
