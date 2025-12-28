@@ -8,329 +8,167 @@
 
 <style>
 :root{
-  --bg:#0b0b0b;
-  --card:#141414;
-  --line:rgba(255,255,255,.12);
-  --txt:#fff;
-  --muted:#cfcfcf;
-
-  --accent:#ff2b2b;
-  --accent2:#b80000;
-
-  --ok:#36d399;
-  --bad:#ff5a5f;
-
-  --radius:24px;
-  --radius2:16px;
-
-  --shadow: 0 22px 60px rgba(0,0,0,.70);
-  --shadow2: 0 14px 40px rgba(0,0,0,.55);
-
-  --glow: 0 0 0 1px rgba(255,255,255,.10), 0 0 30px rgba(255,43,43,.18);
+  --bg:#0b0b0b; --card:#141414; --line:rgba(255,255,255,.12);
+  --txt:#fff; --muted:#cfcfcf;
+  --accent:#ff2b2b; --accent2:#b80000;
+  --ok:#36d399; --bad:#ff5a5f;
 }
-
 *{box-sizing:border-box}
-html,body{height:100%}
 body{
-  margin:0;
-  padding:24px;
+  margin:0;padding:24px;
   font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;
+  background:radial-gradient(900px 500px at 50% -10%, rgba(255,60,60,.15), transparent 60%), var(--bg);
   color:var(--txt);
-  background:
-    radial-gradient(900px 540px at 50% -10%, rgba(255,60,60,.16), transparent 60%),
-    radial-gradient(900px 540px at 20% 110%, rgba(255,60,60,.08), transparent 60%),
-    linear-gradient(180deg, #0a0a0a, #070707 45%, #0b0b0b);
 }
-
 .card{
-  max-width:560px;
-  margin:0 auto;
-  border-radius:var(--radius);
-  padding:18px;
-  border:1px solid var(--line);
-  background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
-  box-shadow: var(--shadow);
-  position:relative;
-  overflow:hidden;
-}
-.card:before{
-  content:"";
-  position:absolute; inset:-2px;
-  background:
-    radial-gradient(500px 200px at 20% 0%, rgba(255,43,43,.16), transparent 60%),
-    radial-gradient(500px 200px at 80% 0%, rgba(255,43,43,.08), transparent 60%);
-  pointer-events:none;
-  filter: blur(0px);
-  opacity:.9;
+  max-width:560px;margin:0 auto;
+  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+  border:1px solid var(--line); border-radius:24px; padding:18px;
+  box-shadow:0 20px 50px rgba(0,0,0,.6);
 }
 
-.hero{
-  width:100%;
-  border-radius:var(--radius2);
-  display:block;
+/* ✅ รูปใหญ่ขึ้น + สวยขึ้น + คลิกดูเต็มได้ */
+.heroWrap{
+  position:relative;
+  border-radius:18px;
+  overflow:hidden;
   border:1px solid rgba(255,255,255,.12);
   background:rgba(0,0,0,.25);
-  box-shadow: var(--shadow2);
-  transform: translateZ(0);
-  transition: transform .25s ease, filter .25s ease, opacity .25s ease;
 }
-.hero:hover{ transform: translateY(-1px) scale(1.003); filter: saturate(1.05); }
-
-h1{
-  font-size:20px;
-  margin:12px 0 6px;
-  letter-spacing:.2px;
-}
-p{
-  margin:0 0 14px;
-  color:var(--muted);
-  line-height:1.65;
-}
-label{
-  display:block;
-  margin:10px 0 6px;
-  color:var(--muted);
-  font-size:14px;
-}
-
-input{
+.hero{
   width:100%;
-  padding:12px 14px;
-  border-radius:14px;
+  height:320px;                 /* ✅ ปรับความสูงรูปใหญ่ขึ้น */
+  object-fit:cover;
+  display:block;
+  transform:scale(1.02);
+  filter:saturate(1.05) contrast(1.02);
+}
+.heroHint{
+  position:absolute; left:12px; bottom:12px;
+  font-size:12px; color:#fff;
+  padding:8px 10px; border-radius:12px;
+  background:rgba(0,0,0,.45);
   border:1px solid rgba(255,255,255,.14);
-  background:rgba(8,8,8,.9);
-  color:#fff;
-  font-size:16px;
+  backdrop-filter: blur(6px);
+}
+
+/* ✅ ปุ่มสวยขึ้น + กดแล้วเด้ง + โหลดมีสปินเนอร์ */
+h1{font-size:20px;margin:12px 0 6px}
+p{margin:0 0 14px;color:var(--muted);line-height:1.6}
+label{display:block;margin:10px 0 6px;color:var(--muted)}
+input{
+  width:100%;padding:12px 14px;border-radius:14px;
+  border:1px solid var(--line);background:#0f0f0f;color:#fff;font-size:16px;
   outline:none;
-  transition: border-color .2s ease, box-shadow .2s ease, transform .15s ease;
+  transition: border-color .15s ease, transform .08s ease, box-shadow .2s ease;
 }
 input:focus{
   border-color: rgba(255,43,43,.55);
-  box-shadow: var(--glow);
+  box-shadow: 0 0 0 4px rgba(255,43,43,.12);
 }
-input::placeholder{ color: rgba(255,255,255,.35); }
 
-.row{display:flex; gap:10px; margin-top:12px}
-
-/* =========================
-   Buttons (สวยขึ้น + มี Loading)
-========================= */
+.row{display:flex;gap:10px;margin-top:12px}
 button{
-  -webkit-tap-highlight-color: transparent;
-  flex:1;
-  padding:12px 14px;
-  border-radius:14px;
-  border:1px solid rgba(255,255,255,.10);
-  font-size:16px;
-  font-weight:900;
-  color:#fff;
-  cursor:pointer;
+  flex:1;padding:12px 14px;border-radius:14px;border:0;
+  font-size:16px;font-weight:900;color:#fff;cursor:pointer;
+  transition: transform .08s ease, filter .15s ease, opacity .15s ease;
   position:relative;
-  overflow:hidden;
-  transform: translateZ(0);
-  transition: transform .14s ease, box-shadow .18s ease, filter .18s ease, border-color .18s ease, opacity .18s ease;
 }
-button:focus{ outline:none; }
-button:focus-visible{
-  box-shadow: 0 0 0 3px rgba(255,43,43,.35), 0 0 0 1px rgba(255,255,255,.15);
-}
-
-button:before{
-  content:"";
-  position:absolute; inset:0;
-  background: linear-gradient(120deg, transparent, rgba(255,255,255,.18), transparent);
-  transform: translateX(-120%);
-  transition: transform .65s ease;
-  pointer-events:none;
-}
-button:hover:before{ transform: translateX(120%); }
-button:hover{
-  transform: translateY(-1px);
-  filter: saturate(1.05);
-  box-shadow: 0 14px 36px rgba(0,0,0,.45);
-  border-color: rgba(255,255,255,.18);
-}
-button:active{
-  transform: translateY(0px) scale(.99);
-  box-shadow: 0 10px 26px rgba(0,0,0,.35);
-}
-
+button:hover{filter:brightness(1.06)}
+button:active{transform:translateY(1px) scale(.99)}
 .btnAlt{
-  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));
+  background:linear-gradient(180deg,#2b2b2b,#1f1f1f);
+  border:1px solid rgba(255,255,255,.10);
 }
 .btnMain{
-  border-color: rgba(255,43,43,.35);
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  box-shadow: 0 16px 42px rgba(255,43,43,.14), 0 16px 42px rgba(0,0,0,.45);
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  box-shadow: 0 10px 24px rgba(255,43,43,.20);
 }
-.btnMain:hover{
-  box-shadow: 0 20px 56px rgba(255,43,43,.18), 0 18px 48px rgba(0,0,0,.45);
-}
+button:disabled{opacity:.55;cursor:not-allowed;transform:none}
 
-/* Disabled */
-button:disabled{
-  opacity:.55;
-  cursor:not-allowed;
-  transform:none;
-  box-shadow:none;
-}
-button:disabled:before{ display:none; }
-
-/* Loading state */
-.btnLoading{
+/* โหลดดิ้งในปุ่ม */
+.isLoading{
   pointer-events:none;
-  opacity:.92;
+  filter:saturate(.95);
 }
-.btnLoading .btnText{ opacity:0; }
-.btnSpinner{
-  position:absolute;
-  left:50%; top:50%;
-  width:18px; height:18px;
-  margin:-9px 0 0 -9px;
-  border-radius:50%;
-  border:2px solid rgba(255,255,255,.25);
+.isLoading::after{
+  content:"";
+  width:18px;height:18px;
+  border-radius:999px;
+  border:2px solid rgba(255,255,255,.35);
   border-top-color: rgba(255,255,255,.95);
-  animation: spin .7s linear infinite;
-  display:none;
+  position:absolute;
+  right:12px; top:50%;
+  transform:translateY(-50%);
+  animation:spin .8s linear infinite;
 }
-.btnLoading .btnSpinner{ display:block; }
+@keyframes spin{to{transform:translateY(-50%) rotate(360deg)}}
 
-@keyframes spin{
-  to{ transform: rotate(360deg); }
-}
-
-/* =========================
-   Message (เด้งสวย)
-========================= */
 .msg{
-  margin-top:12px;
-  padding:12px;
-  border-radius:14px;
-  border:1px solid var(--line);
-  background:rgba(0,0,0,.25);
-  white-space:pre-line;
-  display:none;
-  line-height:1.7;
-  transform: translateY(6px);
-  opacity:0;
-  animation: pop .18s ease forwards;
+  margin-top:12px;padding:12px;border-radius:14px;
+  border:1px solid var(--line);background:rgba(0,0,0,.25);
+  white-space:pre-line;display:none;line-height:1.6;
 }
-@keyframes pop{
-  to{ transform: translateY(0); opacity:1; }
-}
-.ok{
-  border-color: rgba(54,211,153,.45);
-  box-shadow: 0 0 0 1px rgba(54,211,153,.12) inset;
-}
-.err{
-  border-color: rgba(255,90,95,.50);
-  box-shadow: 0 0 0 1px rgba(255,90,95,.14) inset;
-}
+.ok{border-color:rgba(54,211,153,.4)}
+.err{border-color:rgba(255,90,95,.45)}
+.hint{font-size:12px;color:#bfbfbf;margin-top:10px;line-height:1.6}
 
-.hint{
-  font-size:12px;
-  color:#bfbfbf;
-  margin-top:10px;
-  line-height:1.7;
-}
-
-/* =========================
-   Copy box (สวยขึ้น)
-========================= */
 .copyBox{
-  margin-top:12px;
-  padding:12px;
-  border-radius:14px;
-  border:1px dashed rgba(255,255,255,.25);
-  background:rgba(0,0,0,.25);
-  display:none;
-  align-items:center;
-  gap:10px;
-  animation: pop .18s ease forwards;
+  margin-top:12px;padding:12px;border-radius:14px;
+  border:1px dashed rgba(255,255,255,.25);background:rgba(0,0,0,.25);
+  display:none;align-items:center;gap:10px;
 }
-.copyCode{
-  flex:1;
-  font-weight:1000;
-  font-size:16px;
-  letter-spacing:1px;
-  user-select:all;
-}
+.copyCode{flex:1;font-weight:900;font-size:16px;letter-spacing:1px;user-select:all}
 .copyBtn{
-  padding:10px 14px;
-  border-radius:12px;
-  border:1px solid rgba(255,255,255,.10);
-  cursor:pointer;
-  font-weight:1000;
-  color:#fff;
-  background: linear-gradient(135deg,#22c55e,#16a34a);
+  padding:10px 14px;border-radius:12px;border:0;cursor:pointer;
+  font-weight:900;color:#fff;background:linear-gradient(135deg,#22c55e,#16a34a);
+  transition: transform .08s ease, filter .15s ease;
 }
-.copyBtn:hover{ transform: translateY(-1px); }
-.copyBtn.copied{
-  background:linear-gradient(135deg,#3b82f6,#2563eb);
-}
+.copyBtn:active{transform:translateY(1px) scale(.99)}
+.copyBtn.copied{background:linear-gradient(135deg,#3b82f6,#2563eb)}
 
-/* =========================
-   Modal (เนียนขึ้น)
-========================= */
 .modal{
-  position:fixed; inset:0;
-  background: rgba(0,0,0,.72);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:18px;
-  z-index:9999;
-  backdrop-filter: blur(6px);
+  position:fixed; inset:0; background:rgba(0,0,0,.70);
+  display:none; align-items:center; justify-content:center; padding:18px; z-index:9999;
 }
 .modal.show{display:flex}
 .modalCard{
-  width:min(560px, 100%);
-  border-radius:18px;
-  padding:16px;
+  width:min(560px, 100%); border-radius:18px; padding:16px;
   border:1px solid rgba(255,255,255,.14);
-  background:linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.04));
-  box-shadow:0 22px 70px rgba(0,0,0,.78);
-  transform: translateY(10px);
-  opacity:0;
-  animation: modalIn .18s ease forwards;
+  background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+  box-shadow:0 20px 60px rgba(0,0,0,.75);
 }
-@keyframes modalIn{
-  to{ transform: translateY(0); opacity:1; }
-}
-.modalTitle{font-weight:1000;font-size:18px;margin-bottom:10px}
-.modalText{color:#e9e9e9;line-height:1.75;margin-bottom:12px}
+.modalTitle{font-weight:900;font-size:18px;margin-bottom:10px}
+.modalText{color:#e9e9e9;line-height:1.7;margin-bottom:12px}
 .modalBtnMain{
-  width:100%;
-  padding:12px 14px;
-  border-radius:14px;
-  border:1px solid rgba(255,255,255,.10);
-  font-weight:1000;
-  cursor:pointer;
-  color:#fff;
+  width:100%; padding:12px 14px; border-radius:14px; border:0;
+  font-weight:900; cursor:pointer; color:#fff;
   background:linear-gradient(135deg,var(--accent),var(--accent2));
 }
-.modalBtnMain:hover{ transform: translateY(-1px); }
-.modalBtnMain:active{ transform: translateY(0) scale(.99); }
 
-/* ลดโมชั่นสำหรับเครื่องที่ตั้งค่า reduce motion */
-@media (prefers-reduced-motion: reduce){
-  *{ animation:none!important; transition:none!important; }
-}
+/* ✅ โมดัลดูรูปเต็ม */
+.imgModal .modalCard{padding:0; overflow:hidden}
+.imgModal img{width:100%; display:block}
+.imgModal .modalBtnMain{border-radius:0}
+
 </style>
 </head>
 
 <body>
 <div class="card">
 
-<!-- เปลี่ยนรูปได้ -->
-<img
-  id="heroImg"
-  class="hero"
-  src="https://img5.pic.in.th/file/secure-sv1/photo_--_--2bb7d3a2870ef8d6.jpg"
-  alt="กิจกรรมรับเครดิตฟรี"
-  loading="eager"
-  decoding="async"
-/>
+<!-- ✅ รูปใหญ่ + คลิกดูเต็ม -->
+<div class="heroWrap" id="heroWrap" role="button" tabindex="0" aria-label="แตะเพื่อดูรูปเต็ม">
+  <img
+    id="heroImg"
+    class="hero"
+    src="https://img5.pic.in.th/file/secure-sv1/photo_--_--2bb7d3a2870ef8d6.jpg"
+    alt="กิจกรรมรับเครดิตฟรี"
+    loading="eager"
+    decoding="async"
+  />
+  <div class="heroHint">แตะรูปเพื่อดูเต็ม</div>
+</div>
 
 <h1>🎁 ปีใหม่แจกคูปองสูงสุด 38,888 บาท 🎁</h1>
 <p>ระบบลงทะเบียนและรับโค้ด (ปล่อยโค้ดหลังแอดมินอนุมัติ)</p>
@@ -339,20 +177,12 @@ button:disabled:before{ display:none; }
 <input id="phone" inputmode="numeric" placeholder="เช่น 0611111111"/>
 
 <div class="row">
-  <button id="btnCheck" class="btnAlt" type="button">
-    <span class="btnText">เช็คสิทธิ์</span>
-    <span class="btnSpinner" aria-hidden="true"></span>
-  </button>
-
-  <button id="btnJoin" class="btnMain" type="button" disabled>
-    <span class="btnText">ยืนยันเข้าร่วม</span>
-    <span class="btnSpinner" aria-hidden="true"></span>
-  </button>
+  <button id="btnCheck" class="btnAlt" type="button">เช็คสิทธิ์</button>
+  <button id="btnJoin" class="btnMain" type="button" disabled>ยืนยันเข้าร่วม</button>
 </div>
 
 <button id="btnPoll" class="btnAlt" type="button" style="margin-top:10px;width:100%">
-  <span class="btnText">เช็คสถานะ / รับโค้ด</span>
-  <span class="btnSpinner" aria-hidden="true"></span>
+  เช็คสถานะ / รับโค้ด
 </button>
 
 <div id="msg" class="msg"></div>
@@ -369,6 +199,7 @@ button:disabled:before{ display:none; }
 
 </div>
 
+<!-- เงื่อนไข (บังคับอ่าน) -->
 <div id="ruleModal" class="modal" aria-hidden="true">
   <div class="modalCard" role="dialog" aria-modal="true">
     <div class="modalTitle">📌 เงื่อนไขก่อนกรอกโค้ด (บังคับอ่าน)</div>
@@ -382,9 +213,30 @@ button:disabled:before{ display:none; }
   </div>
 </div>
 
+<!-- ✅ โมดัลรูปเต็ม -->
+<div id="imgModal" class="modal imgModal" aria-hidden="true">
+  <div class="modalCard" role="dialog" aria-modal="true">
+    <img id="imgModalPic" alt="ดูรูปเต็ม" />
+    <button class="modalBtnMain" id="imgModalClose" type="button">ปิด</button>
+  </div>
+</div>
+
 <script>
 /* 🔴 ใส่ลิงก์ exec ของ Google Apps Script (Deploy Web App) */
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwvj6_Lb6cHdMgjXaxNhjPaiWgS7vYBckyLAbYl7UgfxUAHj42ePmENuPU0gkstg9dSmA/exec";
+
+/* ✅ 1 คน / 1 เครื่อง (แบบสุ่ม device_id เก็บในเครื่อง ไม่ใช่ fingerprint) */
+const DEVICE_KEY = "RR365_DEVICE_ID_V1";
+function getDeviceId(){
+  let v = localStorage.getItem(DEVICE_KEY);
+  if(v) return v;
+  // สุ่ม id แบบสั้นพอ (ไม่เอาข้อมูลส่วนตัว)
+  const rand = () => Math.random().toString(36).slice(2);
+  v = "dv_" + rand() + rand();
+  localStorage.setItem(DEVICE_KEY, v);
+  return v;
+}
+const DEVICE_ID = getDeviceId();
 
 const $phone=document.getElementById("phone");
 const $btnCheck=document.getElementById("btnCheck");
@@ -397,35 +249,35 @@ const $btnCopy=document.getElementById("btnCopy");
 const $ruleModal=document.getElementById("ruleModal");
 const $modalAck=document.getElementById("modalAcknowledge");
 
+/* รูปเต็ม */
+const $heroWrap = document.getElementById("heroWrap");
+const $heroImg  = document.getElementById("heroImg");
+const $imgModal = document.getElementById("imgModal");
+const $imgModalPic = document.getElementById("imgModalPic");
+const $imgModalClose = document.getElementById("imgModalClose");
+
 function openRule(){ $ruleModal.classList.add("show"); document.body.style.overflow="hidden"; }
 function closeRule(){ $ruleModal.classList.remove("show"); document.body.style.overflow=""; }
 $modalAck.onclick=closeRule;
 
-/* ===== Loading UI helpers ===== */
-function setBtnLoading(btn, isLoading){
-  if(!btn) return;
-  if(isLoading){
-    btn.classList.add("btnLoading");
-    btn.setAttribute("aria-busy","true");
-    btn.dataset.prevDisabled = btn.disabled ? "1" : "0";
-    btn.disabled = true; // กันกดซ้ำตอนโหลด
-  }else{
-    btn.classList.remove("btnLoading");
-    btn.removeAttribute("aria-busy");
-    // คืน disabled เฉพาะปุ่มที่เดิมไม่ได้ disabled
-    const prev = btn.dataset.prevDisabled === "1";
-    delete btn.dataset.prevDisabled;
-    if(!prev) btn.disabled = false;
-  }
+function openImg(){
+  $imgModalPic.src = $heroImg.src;
+  $imgModal.classList.add("show");
+  document.body.style.overflow="hidden";
 }
+function closeImg(){
+  $imgModal.classList.remove("show");
+  document.body.style.overflow="";
+}
+$heroWrap.addEventListener("click", openImg);
+$heroWrap.addEventListener("keydown", (e)=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); openImg(); }});
+$imgModalClose.onclick = closeImg;
+$imgModal.addEventListener("click", (e)=>{ if(e.target===$imgModal) closeImg(); });
 
-/* รวมปุ่มทั้งหมดตอนกำลังยิง request */
-function setAllLoading(on){
-  setBtnLoading($btnCheck, on);
-  setBtnLoading($btnPoll, on);
-  // btnJoin มีเงื่อนไข เปิด/ปิดเอง: ตอนโหลดให้ล็อกไว้ แต่ตอนปล่อยโหลดแล้วค่อยกลับไปตามสถานะจริง
-  if(on) setBtnLoading($btnJoin, true);
-}
+/* fallback รูปถ้าโหลดไม่ได้ */
+$heroImg.addEventListener("error", ()=>{
+  $heroImg.src = "https://dummyimage.com/1200x800/111/fff.png&text=Image+Not+Found";
+});
 
 function show(t,type="ok"){
   $msg.style.display="block";
@@ -445,11 +297,13 @@ function normalizePhone(v){
   return /^0[689]\d{8}$/.test(p)?p:"";
 }
 
+/* ✅ JSONP (กัน CORS) */
 function jsonp(params){
   return new Promise((res,rej)=>{
     const cb="cb_"+Math.random().toString(36).slice(2);
     params.callback=cb;
     params._ts=Date.now();
+    params.device_id = DEVICE_ID; // ✅ ส่ง device_id ไปให้ฝั่ง Apps Script เก็บ/กันซ้ำได้
 
     const s=document.createElement("script");
     s.src = SCRIPT_URL + "?" + new URLSearchParams(params).toString();
@@ -461,37 +315,47 @@ function jsonp(params){
   });
 }
 
+function setLoading(btn, on){
+  if(on){ btn.classList.add("isLoading"); btn.disabled=true; }
+  else { btn.classList.remove("isLoading"); btn.disabled=false; }
+}
+
 $btnCopy.onclick=async()=>{
   const t=$promoCode.textContent.trim(); if(!t) return;
-  await navigator.clipboard.writeText(t);
-  $btnCopy.classList.add("copied");
-  setTimeout(()=>$btnCopy.classList.remove("copied"),1200);
+  try{
+    await navigator.clipboard.writeText(t);
+    $btnCopy.classList.add("copied");
+    setTimeout(()=>$btnCopy.classList.remove("copied"),1200);
+  }catch(_){
+    show("❌ คัดลอกไม่สำเร็จ (เบราว์เซอร์บล็อก)","err");
+  }
 };
 
 $btnCheck.onclick=async()=>{
-  hideMsg(); hideCopy();
-  $btnJoin.disabled=true;
+  hideMsg(); hideCopy(); $btnJoin.disabled=true;
 
   const p=normalizePhone($phone.value);
   if(!p){ show("กรุณากรอกเบอร์ให้ถูกต้อง","err"); return; }
 
-  setAllLoading(true);
-  show("⏳ กำลังตรวจสอบสิทธิ์...");
-  const d=await jsonp({action:"check",phone:p}).catch(()=>null);
-  setAllLoading(false);
+  setLoading($btnCheck,true);
+  try{
+    show("⏳ กำลังตรวจสอบสิทธิ์...");
+    const d=await jsonp({action:"check",phone:p});
+    if(!d){ show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err"); return; }
 
-  // คืนสถานะ btnJoin หลังโหลด
-  $btnJoin.disabled = true;
+    if(!d.ok){
+      show(d.msg || "ไม่ผ่านเงื่อนไข","err");
+      return;
+    }
 
-  if(!d){ show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err"); return; }
+    show(d.msg || "✅ ผ่านการตรวจสอบ กดยืนยันเข้าร่วมได้","ok");
+    $btnJoin.disabled=false;
 
-  if(!d.ok){
-    show(d.msg || "ไม่ผ่านเงื่อนไข","err");
-    return;
+  }catch(_){
+    show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err");
+  }finally{
+    setLoading($btnCheck,false);
   }
-
-  show(d.msg || "✅ ผ่านการตรวจสอบ กดยืนยันเข้าร่วมได้","ok");
-  $btnJoin.disabled=false;
 };
 
 $btnJoin.onclick=async()=>{
@@ -500,29 +364,25 @@ $btnJoin.onclick=async()=>{
   const p=normalizePhone($phone.value);
   if(!p){ show("กรุณากรอกเบอร์ให้ถูกต้อง","err"); return; }
 
-  setBtnLoading($btnJoin,true);
-  setBtnLoading($btnCheck,true);
-  setBtnLoading($btnPoll,true);
+  setLoading($btnJoin,true);
+  try{
+    show("⏳ กำลังลงชื่อเข้าร่วม...");
+    const d=await jsonp({action:"register",phone:p});
+    if(!d){ show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err"); return; }
 
-  show("⏳ กำลังลงชื่อเข้าร่วม...");
-  const d=await jsonp({action:"register",phone:p}).catch(()=>null);
+    if(!d.ok){
+      show(d.msg || "ยืนยันไม่สำเร็จ","err");
+      return;
+    }
 
-  setBtnLoading($btnJoin,false);
-  setBtnLoading($btnCheck,false);
-  setBtnLoading($btnPoll,false);
+    show(d.msg || "✅ ลงชื่อแล้ว รอแอดมินอนุมัติ","ok");
+    openRule();
 
-  // หลังลงชื่อแล้ว: ปิดปุ่ม join กันกดซ้ำ
-  $btnJoin.disabled = true;
-
-  if(!d){ show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err"); return; }
-
-  if(!d.ok){
-    show(d.msg || "ยืนยันไม่สำเร็จ","err");
-    return;
+  }catch(_){
+    show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err");
+  }finally{
+    setLoading($btnJoin,false);
   }
-
-  show(d.msg || "✅ ลงชื่อแล้ว รอแอดมินอนุมัติ","ok");
-  openRule();
 };
 
 $btnPoll.onclick=async()=>{
@@ -531,41 +391,36 @@ $btnPoll.onclick=async()=>{
   const p=normalizePhone($phone.value);
   if(!p){ show("กรุณากรอกเบอร์ให้ถูกต้อง","err"); return; }
 
-  setBtnLoading($btnPoll,true);
-  setBtnLoading($btnCheck,true);
-  // join อย่าให้กดซ้อนตอนเช็ค
-  setBtnLoading($btnJoin,true);
+  setLoading($btnPoll,true);
+  try{
+    show("⏳ กำลังเช็คสถานะ...");
+    const d=await jsonp({action:"poll",phone:p});
+    if(!d){ show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err"); return; }
 
-  show("⏳ กำลังเช็คสถานะ...");
-  const d=await jsonp({action:"poll",phone:p}).catch(()=>null);
+    if(!d.ok){
+      show(d.msg || "ยังไม่พร้อม","err");
+      return;
+    }
 
-  setBtnLoading($btnPoll,false);
-  setBtnLoading($btnCheck,false);
-  setBtnLoading($btnJoin,false);
+    if(d.status==="APPROVED" && d.promo_code){
+      $promoCode.textContent=d.promo_code;
+      $copyWrap.style.display="flex";
+      show("🎉 อนุมัติแล้ว รับโค้ดได้เลย","ok");
+      openRule();
+      return;
+    }
 
-  // คืน join ตามสถานะเดิม (ถ้ายังผ่าน check แล้วอยากให้กดได้อีก ให้ไปกดเช็คสิทธิ์ใหม่)
-  $btnJoin.disabled = true;
+    if(d.status==="PENDING"){ show("⏳ รอการอนุมัติจากแอดมิน","ok"); return; }
+    if(d.status==="REJECTED"){ show("❌ ไม่ผ่านการอนุมัติ กรุณาติดต่อแอดมิน","err"); return; }
+    if(d.status==="USED"){ show("⚠️ รายการนี้ถูกใช้ไปแล้ว","err"); return; }
 
-  if(!d){ show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err"); return; }
+    show(d.msg || ("สถานะ: "+(d.status||"UNKNOWN")),"ok");
 
-  if(!d.ok){
-    show(d.msg || "ยังไม่พร้อม","err");
-    return;
+  }catch(_){
+    show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err");
+  }finally{
+    setLoading($btnPoll,false);
   }
-
-  if(d.status==="APPROVED" && d.promo_code){
-    $promoCode.textContent=d.promo_code;
-    $copyWrap.style.display="flex";
-    show("🎉 อนุมัติแล้ว รับโค้ดได้เลย","ok");
-    openRule();
-    return;
-  }
-
-  if(d.status==="PENDING"){ show("⏳ รอการอนุมัติจากแอดมิน","ok"); return; }
-  if(d.status==="REJECTED"){ show("❌ ไม่ผ่านการอนุมัติ กรุณาติดต่อแอดมิน","err"); return; }
-  if(d.status==="USED"){ show("⚠️ รายการนี้ถูกใช้ไปแล้ว","err"); return; }
-
-  show(d.msg || ("สถานะ: "+(d.status||"UNKNOWN")),"ok");
 };
 </script>
 </body>
