@@ -3,159 +3,264 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>RR365 Admin | อนุมัติ (สคริปต์แยก)</title>
+<title>RR365 Admin | อนุมัติ / ปล่อยโค้ด</title>
 <meta name="color-scheme" content="dark"/>
 <style>
-:root{--bg:#0b0b0b;--card:#141414;--line:rgba(255,255,255,.12);--txt:#fff;--muted:#cfcfcf;--a:#ff2b2b;--a2:#b80000;--ok:#36d399;--bad:#ff5a5f}
+:root{
+  --bg:#0b0b0b; --card:#141414; --line:rgba(255,255,255,.12);
+  --txt:#fff; --muted:#cfcfcf;
+  --accent:#ff2b2b; --accent2:#b80000;
+  --ok:#36d399; --bad:#ff5a5f;
+}
 *{box-sizing:border-box}
-body{margin:0;padding:22px;font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;background:radial-gradient(900px 520px at 50% -10%, rgba(255,60,60,.16), transparent 60%),var(--bg);color:var(--txt)}
-.wrap{max-width:900px;margin:0 auto;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:22px;padding:16px;box-shadow:0 20px 50px rgba(0,0,0,.6)}
-h1{margin:0 0 10px;font-size:20px}
-p{margin:0 0 14px;color:var(--muted);line-height:1.6}
-.box{background:rgba(0,0,0,.22);border:1px solid var(--line);border-radius:18px;padding:14px}
-label{display:block;margin:10px 0 6px;color:var(--muted)}
-input,select{width:100%;padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:#0f0f0f;color:#fff;font-size:16px}
-.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-button{padding:12px 14px;border-radius:14px;border:0;font-weight:900;color:#fff;cursor:pointer}
-.main{background:linear-gradient(135deg,var(--a),var(--a2))}
-.alt{background:#2a2a2a}
-.msg{margin-top:12px;padding:12px;border-radius:14px;border:1px solid var(--line);background:rgba(0,0,0,.25);white-space:pre-line;display:none}
-.ok{border-color:rgba(54,211,153,.45)} .err{border-color:rgba(255,90,95,.55)}
-table{width:100%;border-collapse:collapse;margin-top:10px}
-th,td{border-bottom:1px solid rgba(255,255,255,.10);padding:10px;text-align:left;font-size:14px}
-small{color:var(--muted)}
+body{
+  margin:0;padding:18px;
+  font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;
+  background:radial-gradient(900px 500px at 50% -10%, rgba(255,60,60,.15), transparent 60%), var(--bg);
+  color:var(--txt);
+}
+.card{
+  max-width:980px;margin:0 auto;
+  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+  border:1px solid var(--line); border-radius:22px; padding:16px;
+  box-shadow:0 20px 50px rgba(0,0,0,.6);
+}
+h1{font-size:18px;margin:0 0 10px}
+.top{
+  display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+  margin-bottom:12px;
+}
+input, select, textarea{
+  background:#0f0f0f; color:#fff; border:1px solid var(--line);
+  border-radius:14px; padding:10px 12px; outline:none;
+}
+.btn{
+  border:0; border-radius:14px; padding:10px 12px;
+  font-weight:900; color:#fff; cursor:pointer;
+}
+.btnMain{background:linear-gradient(135deg,var(--accent),var(--accent2))}
+.btnAlt{background:#2a2a2a}
+.btnOk{background:linear-gradient(135deg,#22c55e,#16a34a)}
+.btnBad{background:linear-gradient(135deg,#ff5a5f,#b91c1c)}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.msg{
+  margin:10px 0 12px; padding:10px 12px; border-radius:14px;
+  border:1px solid var(--line); background:rgba(0,0,0,.25); display:none;
+  white-space:pre-line;
+}
+.msg.ok{border-color:rgba(54,211,153,.4)}
+.msg.err{border-color:rgba(255,90,95,.45)}
+table{width:100%; border-collapse:separate; border-spacing:0 10px;}
+th{color:var(--muted); text-align:left; font-size:12px; font-weight:800; padding:0 10px;}
+tr{
+  background:rgba(0,0,0,.25);
+  border:1px solid var(--line);
+}
+td{
+  padding:12px 10px; border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+}
+tr td:first-child{border-left:1px solid var(--line); border-radius:14px 0 0 14px;}
+tr td:last-child{border-right:1px solid var(--line); border-radius:0 14px 14px 0;}
+.badge{
+  font-size:12px; font-weight:900; padding:6px 10px; border-radius:999px;
+  display:inline-block; border:1px solid var(--line);
+}
+.PENDING{background:rgba(255,255,255,.06)}
+.APPROVED{background:rgba(54,211,153,.16); border-color:rgba(54,211,153,.35)}
+.REJECTED{background:rgba(255,90,95,.16); border-color:rgba(255,90,95,.35)}
+.USED{background:rgba(59,130,246,.16); border-color:rgba(59,130,246,.35)}
+.small{font-size:12px;color:var(--muted)}
+.actions{display:flex; gap:8px; flex-wrap:wrap}
+textarea{width:100%; min-height:80px; resize:vertical}
+hr{border:0;border-top:1px solid var(--line); margin:14px 0}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <h1>🛡️ RR365 Admin (อนุมัติได้จากหน้านี้)</h1>
-  <p>หน้านี้คุยกับ “สคริปต์แยก” เพื่ออัปเดตสถานะในชีทโดยตรง (ไม่แตะสคริปเดิม)</p>
+<div class="card">
+  <h1>🛡️ RR365 Admin (แยก) — อนุมัติ/ปฏิเสธ/USED/เพิ่มโค้ด</h1>
 
-  <div class="box">
-    <label>เบอร์โทร</label>
-    <input id="phone" placeholder="เช่น 0611111111" inputmode="numeric"/>
+  <div class="top">
+    <input id="key" placeholder="ADMIN KEY" style="min-width:260px"/>
+    <select id="status">
+      <option value="PENDING">PENDING</option>
+      <option value="APPROVED">APPROVED</option>
+      <option value="REJECTED">REJECTED</option>
+      <option value="USED">USED</option>
+      <option value="ALL">ALL</option>
+    </select>
+    <input id="q" placeholder="ค้นหาเบอร์บางส่วน เช่น 061" />
+    <button class="btn btnMain" id="btnLoad" type="button">โหลดรายการ</button>
+    <button class="btn btnAlt" id="btnRefresh" type="button">รีเฟรช</button>
+  </div>
 
-    <label>หมายเหตุ (ไม่ใส่ก็ได้)</label>
-    <input id="note" placeholder="เช่น ผ่านยอดฝากแล้ว / เอกสารครบ"/>
+  <div id="msg" class="msg"></div>
 
-    <div class="row">
-      <button class="main" id="btnApprove">✅ อนุมัติ</button>
-      <button class="alt"  id="btnReject">❌ ปฏิเสธ</button>
-      <button class="alt"  id="btnUsed">♻️ ตั้งเป็น USED</button>
-      <button class="alt"  id="btnGet">🔎 ดูข้อมูล</button>
-    </div>
+  <table>
+    <thead>
+      <tr>
+        <th>เวลา</th>
+        <th>เบอร์</th>
+        <th>สถานะ</th>
+        <th>โค้ด</th>
+        <th>หมายเหตุ</th>
+        <th>จัดการ</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
 
-    <hr style="border:0;border-top:1px solid rgba(255,255,255,.12);margin:14px 0">
+  <hr>
 
-    <div class="row">
-      <select id="status">
-        <option value="PENDING">PENDING</option>
-        <option value="APPROVED">APPROVED</option>
-        <option value="REJECTED">REJECTED</option>
-        <option value="USED">USED</option>
-      </select>
-      <button class="alt" id="btnList">📄 โหลดรายการ</button>
-    </div>
-
-    <div id="msg" class="msg"></div>
-
-    <div id="listBox" style="display:none">
-      <table>
-        <thead><tr><th>เบอร์</th><th>สถานะ</th><th>โค้ด</th><th>อัปเดต</th><th></th></tr></thead>
-        <tbody id="tbody"></tbody>
-      </table>
-      <small>กด “เติมเบอร์” เพื่อเอาเบอร์เข้าช่องด้านบน แล้วกดอนุมัติได้เลย</small>
+  <h1 style="margin:0 0 10px">➕ เพิ่มโค้ดเข้าชีท codes</h1>
+  <div class="small">วางโค้ดหลายบรรทัด (1 บรรทัด = 1 โค้ด) แล้วกด “เพิ่มโค้ด”</div>
+  <div style="margin-top:10px">
+    <textarea id="codes"></textarea>
+    <div style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap">
+      <button class="btn btnOk" id="btnAddCodes" type="button">เพิ่มโค้ด</button>
+      <button class="btn btnAlt" id="btnClearCodes" type="button">ล้างช่อง</button>
     </div>
   </div>
 </div>
 
 <script>
-/** ✅ ใส่ลิงก์ /exec ของ “สคริปต์แยก” **/
-const ADMIN_API_URL = "https://script.google.com/macros/s/AKfycby-l4O3BN70RtNMmGEJNRtNWFnsj-gkScr2MHwrd486IrhBjaV1Jt3p-3FHNjDC3Rpt1g/exec";
-/** ✅ ต้องตรงกับ ADMIN_TOKEN ใน Code.gs **/
-const ADMIN_TOKEN   = "PUT_A_LONG_RANDOM_TOKEN";
+/* 🔴 ใส่ลิงก์ WebApp ของ "สคริปแอดมินโปรเจกต์ใหม่" */
+const ADMIN_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwbM-jL7lKFuJTQyoVc7u_LKPkBhiBAxnKNi0gWxtgwhVdUQvQKCuCDEiBHMW2bZ-3MSg/exec";
 
-const $ = (id)=>document.getElementById(id);
-const msgBox = $("msg");
-const listBox = $("listBox");
-const tbody = $("tbody");
+const $key = document.getElementById("key");
+const $status = document.getElementById("status");
+const $q = document.getElementById("q");
+const $btnLoad = document.getElementById("btnLoad");
+const $btnRefresh = document.getElementById("btnRefresh");
+const $tbody = document.getElementById("tbody");
+const $msg = document.getElementById("msg");
+const $codes = document.getElementById("codes");
+const $btnAddCodes = document.getElementById("btnAddCodes");
+const $btnClearCodes = document.getElementById("btnClearCodes");
 
-function show(text, ok=true){
-  msgBox.style.display="block";
-  msgBox.className = "msg " + (ok ? "ok" : "err");
-  msgBox.textContent = text;
+function showMsg(t, type="ok"){
+  $msg.style.display="block";
+  $msg.className="msg "+(type==="err"?"err":"ok");
+  $msg.textContent=t;
 }
+function hideMsg(){ $msg.style.display="none"; $msg.textContent=""; }
 
-function normPhone(v){
-  let s=String(v||"").trim();
-  const th="๐๑๒๓๔๕๖๗๘๙";
-  for(let i=0;i<th.length;i++) s=s.replace(new RegExp(th[i],"g"),String(i));
-  let p=s.replace(/\D/g,"");
-  if(p.startsWith("0066")) p=p.slice(2);
-  if(p.startsWith("66")) p="0"+p.slice(2);
-  if(!p.startsWith("0") && p.length===9) p="0"+p;
-  return /^0[689]\d{8}$/.test(p) ? p : "";
-}
-
-async function callApi(payload){
-  const res = await fetch(ADMIN_API_URL, {
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
-    body: JSON.stringify(payload)
+function jsonp(params){
+  return new Promise((res, rej)=>{
+    const cb="cb_"+Math.random().toString(36).slice(2);
+    params.callback = cb;
+    params._ts = Date.now();
+    const s=document.createElement("script");
+    s.src = ADMIN_SCRIPT_URL + "?" + new URLSearchParams(params).toString();
+    window[cb]=(d)=>{ try{ delete window[cb]; }catch(_){ window[cb]=undefined; } s.remove(); res(d); };
+    s.onerror=()=>{ try{ delete window[cb]; }catch(_){ window[cb]=undefined; } s.remove(); rej(new Error("JSONP_ERROR")); };
+    document.body.appendChild(s);
   });
-  return await res.json();
 }
 
-async function act(action){
-  const phone = normPhone($("phone").value);
-  const note  = ($("note").value||"").trim();
-  if(!phone){ show("กรุณากรอกเบอร์ให้ถูกต้อง", false); return; }
-  show("⏳ กำลังทำรายการ...");
-  const d = await callApi({ action, token: ADMIN_TOKEN, phone, note }).catch(()=>null);
-  if(!d){ show("❌ เชื่อมต่อไม่ได้ (เช็ค ADMIN_API_URL / Deploy)", false); return; }
-  show(JSON.stringify(d, null, 2), !!d.ok);
+function fmtTime(iso){
+  if(!iso) return "-";
+  try{
+    const d = new Date(iso);
+    return d.toLocaleString("th-TH");
+  }catch(_){ return iso; }
 }
 
-$("btnApprove").onclick = ()=>act("approve");
-$("btnReject").onclick  = ()=>act("reject");
-$("btnUsed").onclick    = ()=>act("used");
+function rowHtml(r){
+  const st = r.status || "UNKNOWN";
+  const code = r.promo_code || "";
+  const note = r.note || "";
+  return `
+  <tr>
+    <td>${fmtTime(r.created_at)}</td>
+    <td><b>${r.phone || ""}</b></td>
+    <td><span class="badge ${st}">${st}</span></td>
+    <td>${code ? `<b>${code}</b>` : "-"}</td>
+    <td class="small">${note ? note : "-"}</td>
+    <td>
+      <div class="actions">
+        <button class="btn btnOk" data-act="approve" data-phone="${r.phone}">อนุมัติ</button>
+        <button class="btn btnBad" data-act="reject" data-phone="${r.phone}">ปฏิเสธ</button>
+        <button class="btn btnAlt" data-act="used" data-phone="${r.phone}">ตั้ง USED</button>
+      </div>
+    </td>
+  </tr>`;
+}
 
-$("btnGet").onclick = async ()=>{
-  const phone = normPhone($("phone").value);
-  if(!phone){ show("กรุณากรอกเบอร์ให้ถูกต้อง", false); return; }
-  show("⏳ กำลังดึงข้อมูล...");
-  const d = await callApi({ action:"get", token: ADMIN_TOKEN, phone }).catch(()=>null);
-  if(!d){ show("❌ เชื่อมต่อไม่ได้", false); return; }
-  show(JSON.stringify(d, null, 2), !!d.ok);
+async function loadList(){
+  hideMsg();
+  $tbody.innerHTML = "";
+  const key = $key.value.trim();
+  if(!key){ showMsg("กรุณาใส่ ADMIN KEY", "err"); return; }
+
+  showMsg("⏳ กำลังโหลดรายการ...");
+  const d = await jsonp({
+    action:"list",
+    key,
+    status:$status.value,
+    q:$q.value.trim()
+  }).catch(()=>null);
+
+  if(!d || !d.ok){
+    showMsg((d && d.msg) ? d.msg : "❌ โหลดไม่สำเร็จ (เช็ค ADMIN_SCRIPT_URL/Deploy)", "err");
+    return;
+  }
+
+  const rows = d.rows || [];
+  if(!rows.length){
+    showMsg("ไม่มีรายการตามเงื่อนไข", "ok");
+    return;
+  }
+
+  $tbody.innerHTML = rows.map(rowHtml).join("");
+  showMsg("✅ โหลดแล้ว: " + rows.length + " รายการ", "ok");
+}
+
+async function act(phone, action){
+  hideMsg();
+  const key = $key.value.trim();
+  if(!key){ showMsg("กรุณาใส่ ADMIN KEY", "err"); return; }
+
+  if(action==="reject"){
+    const reason = prompt("เหตุผลปฏิเสธ (ใส่ได้/เว้นว่างได้):","ฝากไม่ถึง / ซ้ำ / ไม่ตรงเงื่อนไข");
+    const d = await jsonp({action:"reject", key, phone, reason: reason || ""}).catch(()=>null);
+    if(!d || !d.ok){ showMsg((d&&d.msg)||"❌ ปฏิเสธไม่สำเร็จ","err"); return; }
+    showMsg("✅ " + (d.msg||"ปฏิเสธแล้ว"), "ok");
+    await loadList();
+    return;
+  }
+
+  const d = await jsonp({action, key, phone}).catch(()=>null);
+  if(!d || !d.ok){ showMsg((d&&d.msg)||"❌ ทำรายการไม่สำเร็จ","err"); return; }
+  showMsg("✅ " + (d.msg||"สำเร็จ") + (d.promo_code?("\nโค้ด: "+d.promo_code):""), "ok");
+  await loadList();
+}
+
+document.addEventListener("click",(e)=>{
+  const btn = e.target.closest("button[data-act]");
+  if(!btn) return;
+  const action = btn.getAttribute("data-act");
+  const phone  = btn.getAttribute("data-phone");
+  act(phone, action);
+});
+
+$btnLoad.onclick = loadList;
+$btnRefresh.onclick = loadList;
+
+$btnAddCodes.onclick = async()=>{
+  hideMsg();
+  const key = $key.value.trim();
+  if(!key){ showMsg("กรุณาใส่ ADMIN KEY", "err"); return; }
+  const text = $codes.value.trim();
+  if(!text){ showMsg("กรุณาวางโค้ดก่อน", "err"); return; }
+
+  showMsg("⏳ กำลังเพิ่มโค้ด...");
+  const d = await jsonp({action:"addCodes", key, codes:text}).catch(()=>null);
+  if(!d || !d.ok){ showMsg((d&&d.msg)||"❌ เพิ่มโค้ดไม่สำเร็จ","err"); return; }
+  showMsg("✅ " + (d.msg||"เพิ่มโค้ดแล้ว"), "ok");
+  $codes.value = "";
 };
 
-$("btnList").onclick = async ()=>{
-  const status = $("status").value;
-  show("⏳ กำลังโหลดรายการ " + status + " ...");
-  const d = await callApi({ action:"list", token: ADMIN_TOKEN, status, limit: 80 }).catch(()=>null);
-  if(!d){ show("❌ เชื่อมต่อไม่ได้", false); return; }
-  if(!d.ok){ show(JSON.stringify(d,null,2), false); return; }
-
-  tbody.innerHTML = "";
-  (d.items||[]).forEach(it=>{
-    const tr=document.createElement("tr");
-    tr.innerHTML = `
-      <td>${it.phone||""}</td>
-      <td>${it.status||""}</td>
-      <td>${it.promo_code||""}</td>
-      <td>${it.updated_at||""}</td>
-      <td><button class="alt" type="button">เติมเบอร์</button></td>
-    `;
-    tr.querySelector("button").onclick = ()=>{
-      $("phone").value = it.phone||"";
-      window.scrollTo({top:0, behavior:"smooth"});
-    };
-    tbody.appendChild(tr);
-  });
-
-  listBox.style.display = "block";
-  show("✅ โหลดรายการสำเร็จ: " + (d.count||0) + " รายการ", true);
-};
+$btnClearCodes.onclick = ()=>{ $codes.value=""; };
 </script>
 </body>
 </html>
