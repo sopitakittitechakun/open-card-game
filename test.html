@@ -3,231 +3,159 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>หลังบ้านแอดมิน RR365 (กดอนุมัติได้)</title>
+<title>RR365 Admin | อนุมัติ (สคริปต์แยก)</title>
 <meta name="color-scheme" content="dark"/>
 <style>
-:root{--bg:#0b0b0b;--line:rgba(255,255,255,.12);--txt:#fff;--muted:#cfcfcf;--accent:#ff2b2b;--accent2:#b80000}
+:root{--bg:#0b0b0b;--card:#141414;--line:rgba(255,255,255,.12);--txt:#fff;--muted:#cfcfcf;--a:#ff2b2b;--a2:#b80000;--ok:#36d399;--bad:#ff5a5f}
 *{box-sizing:border-box}
-body{margin:0;padding:18px;font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;background:radial-gradient(900px 500px at 50% -10%, rgba(255,60,60,.15), transparent 60%), var(--bg);color:var(--txt)}
-.card{max-width:1200px;margin:0 auto;background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));border:1px solid var(--line);border-radius:18px;padding:14px;box-shadow:0 20px 50px rgba(0,0,0,.6)}
-h1{margin:0 0 10px;font-size:18px}
-.row{display:flex;gap:10px;flex-wrap:wrap;align-items:end}
-input,select,textarea{background:#0f0f0f;border:1px solid var(--line);border-radius:12px;padding:10px 12px;color:#fff;font-size:14px}
-textarea{width:100%;min-height:110px;resize:vertical}
-.btn{padding:10px 12px;border:0;border-radius:12px;cursor:pointer;font-weight:900;color:#fff}
-.btnMain{background:linear-gradient(135deg,var(--accent),var(--accent2))}
-.btnAlt{background:#2a2a2a}
-.btnOk{background:linear-gradient(135deg,#22c55e,#16a34a)}
-.btnBlue{background:linear-gradient(135deg,#3b82f6,#2563eb)}
-.btnWarn{background:linear-gradient(135deg,#f59e0b,#d97706)}
-.small{color:var(--muted);font-size:12px;line-height:1.6}
-.hr{height:1px;background:var(--line);margin:12px 0}
-.table{width:100%;border-collapse:separate;border-spacing:0 8px}
-th{color:#ddd;font-size:12px;text-align:left;padding:0 10px}
-tr{background:rgba(0,0,0,.25)}
-td{padding:10px;border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);vertical-align:top}
-td:first-child{border-left:1px solid rgba(255,255,255,.06);border-radius:12px 0 0 12px}
-td:last-child{border-right:1px solid rgba(255,255,255,.06);border-radius:0 12px 12px 0}
-.badge{display:inline-block;padding:4px 8px;border-radius:999px;font-size:12px;font-weight:900;border:1px solid rgba(255,255,255,.15)}
-.code{font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:900;letter-spacing:.5px}
-.msg{margin-top:10px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,.25);white-space:pre-line;display:none;line-height:1.6}
-.actions{display:flex;gap:8px;flex-wrap:wrap}
+body{margin:0;padding:22px;font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;background:radial-gradient(900px 520px at 50% -10%, rgba(255,60,60,.16), transparent 60%),var(--bg);color:var(--txt)}
+.wrap{max-width:900px;margin:0 auto;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:22px;padding:16px;box-shadow:0 20px 50px rgba(0,0,0,.6)}
+h1{margin:0 0 10px;font-size:20px}
+p{margin:0 0 14px;color:var(--muted);line-height:1.6}
+.box{background:rgba(0,0,0,.22);border:1px solid var(--line);border-radius:18px;padding:14px}
+label{display:block;margin:10px 0 6px;color:var(--muted)}
+input,select{width:100%;padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:#0f0f0f;color:#fff;font-size:16px}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+button{padding:12px 14px;border-radius:14px;border:0;font-weight:900;color:#fff;cursor:pointer}
+.main{background:linear-gradient(135deg,var(--a),var(--a2))}
+.alt{background:#2a2a2a}
+.msg{margin-top:12px;padding:12px;border-radius:14px;border:1px solid var(--line);background:rgba(0,0,0,.25);white-space:pre-line;display:none}
+.ok{border-color:rgba(54,211,153,.45)} .err{border-color:rgba(255,90,95,.55)}
+table{width:100%;border-collapse:collapse;margin-top:10px}
+th,td{border-bottom:1px solid rgba(255,255,255,.10);padding:10px;text-align:left;font-size:14px}
+small{color:var(--muted)}
 </style>
 </head>
 <body>
-<div class="card">
-  <h1>🛡️ หลังบ้านแอดมิน RR365 (กดอนุมัติได้)</h1>
+<div class="wrap">
+  <h1>🛡️ RR365 Admin (อนุมัติได้จากหน้านี้)</h1>
+  <p>หน้านี้คุยกับ “สคริปต์แยก” เพื่ออัปเดตสถานะในชีทโดยตรง (ไม่แตะสคริปเดิม)</p>
 
-  <div class="row">
-    <div style="flex:2;min-width:360px">
-      <div class="small">SCRIPT_URL (ลิงก์ /exec ของ Web App)</div>
-      <input id="scriptUrl" style="width:100%" placeholder="https://script.google.com/macros/s/AKfycbwjoy-R5BSxkM5FbwQRnF_dv95gM3CRPejckWx5vrued5SS9WIXKZzZ1iV6NFKHeJWHxg/exec">
-    </div>
-    <div style="flex:1;min-width:280px">
-      <div class="small">ADMIN_TOKEN (ต้องตรงกับ Code.gs)</div>
-      <input id="token" style="width:100%" placeholder="RR365-ADMIN-CHANGE-ME-2026">
-    </div>
-    <button class="btn btnMain" id="btnSave">บันทึก</button>
-    <button class="btn btnAlt" id="btnLoad">โหลดรายการ</button>
-    <button class="btn btnAlt" id="btnRefresh">รีเฟรช</button>
-  </div>
+  <div class="box">
+    <label>เบอร์โทร</label>
+    <input id="phone" placeholder="เช่น 0611111111" inputmode="numeric"/>
 
-  <div class="row" style="margin-top:10px">
-    <div>
-      <div class="small">สถานะที่ต้องการโหลด</div>
+    <label>หมายเหตุ (ไม่ใส่ก็ได้)</label>
+    <input id="note" placeholder="เช่น ผ่านยอดฝากแล้ว / เอกสารครบ"/>
+
+    <div class="row">
+      <button class="main" id="btnApprove">✅ อนุมัติ</button>
+      <button class="alt"  id="btnReject">❌ ปฏิเสธ</button>
+      <button class="alt"  id="btnUsed">♻️ ตั้งเป็น USED</button>
+      <button class="alt"  id="btnGet">🔎 ดูข้อมูล</button>
+    </div>
+
+    <hr style="border:0;border-top:1px solid rgba(255,255,255,.12);margin:14px 0">
+
+    <div class="row">
       <select id="status">
-        <option value="PENDING" selected>PENDING (รออนุมัติ)</option>
+        <option value="PENDING">PENDING</option>
         <option value="APPROVED">APPROVED</option>
         <option value="REJECTED">REJECTED</option>
         <option value="USED">USED</option>
-        <option value="">ทั้งหมด</option>
       </select>
+      <button class="alt" id="btnList">📄 โหลดรายการ</button>
     </div>
-    <div style="flex:1;min-width:260px">
-      <div class="small">ค้นหาเบอร์ (บางส่วน)</div>
-      <input id="q" style="width:100%" placeholder="เช่น 0611 หรือ 9999">
+
+    <div id="msg" class="msg"></div>
+
+    <div id="listBox" style="display:none">
+      <table>
+        <thead><tr><th>เบอร์</th><th>สถานะ</th><th>โค้ด</th><th>อัปเดต</th><th></th></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+      <small>กด “เติมเบอร์” เพื่อเอาเบอร์เข้าช่องด้านบน แล้วกดอนุมัติได้เลย</small>
     </div>
-    <div style="min-width:260px">
-      <div class="small">จัดการรายคน (ใส่เบอร์เต็ม)</div>
-      <input id="phone" style="width:100%" placeholder="0611111111">
-    </div>
-    <button class="btn btnOk" id="btnApproveOne">อนุมัติ</button>
-    <button class="btn btnAlt" id="btnRejectOne">ปฏิเสธ</button>
-    <button class="btn btnWarn" id="btnUsedOne">ตั้ง USED</button>
-    <button class="btn btnBlue" id="btnResetOne">ปลดเป็น PENDING</button>
-  </div>
-
-  <div id="msg" class="msg"></div>
-
-  <div class="hr"></div>
-
-  <table class="table">
-    <thead>
-      <tr>
-        <th>#</th><th>เวลา</th><th>เบอร์</th><th>สถานะ</th><th>โค้ด</th><th>หมายเหตุ</th><th>จัดการ</th>
-      </tr>
-    </thead>
-    <tbody id="tbody"></tbody>
-  </table>
-
-  <div class="hr"></div>
-  <div class="small">➕ เพิ่มโค้ดเข้า codes (1 บรรทัด = 1 โค้ด) — ระบบกันซ้ำให้</div>
-  <textarea id="codes" placeholder="RR1234&#10;RR5678&#10;RR9999"></textarea>
-  <div class="row" style="margin-top:10px">
-    <button class="btn btnOk" id="btnAddCodes">เพิ่มโค้ด</button>
-    <label class="small" style="display:flex;align-items:center;gap:8px">
-      <input id="clearCode" type="checkbox" style="width:auto"> ตอน “ปลดเป็น PENDING” ให้ล้างโค้ดด้วย
-    </label>
-  </div>
-
-  <div class="small" style="margin-top:10px">
-    * เก็บไฟล์ admin.html เป็นความลับ (มี token)<br>
-    * ถ้าจะเปลี่ยน token ให้เปลี่ยนทั้ง Code.gs และหน้าแอดมิน
   </div>
 </div>
 
 <script>
-const LS="RR365_ADMIN_API_V1";
-const $=id=>document.getElementById(id);
+/** ✅ ใส่ลิงก์ /exec ของ “สคริปต์แยก” **/
+const ADMIN_API_URL = "https://script.google.com/macros/s/AKfycby-l4O3BN70RtNMmGEJNRtNWFnsj-gkScr2MHwrd486IrhBjaV1Jt3p-3FHNjDC3Rpt1g/exec";
+/** ✅ ต้องตรงกับ ADMIN_TOKEN ใน Code.gs **/
+const ADMIN_TOKEN   = "PUT_A_LONG_RANDOM_TOKEN";
 
-let SCRIPT_URL="";
+const $ = (id)=>document.getElementById(id);
+const msgBox = $("msg");
+const listBox = $("listBox");
+const tbody = $("tbody");
 
-function save(){
-  localStorage.setItem(LS, JSON.stringify({
-    scriptUrl:$("scriptUrl").value.trim(),
-    token:$("token").value.trim()
-  }));
-  show("บันทึกแล้ว ✅");
+function show(text, ok=true){
+  msgBox.style.display="block";
+  msgBox.className = "msg " + (ok ? "ok" : "err");
+  msgBox.textContent = text;
 }
-function load(){
-  const raw=localStorage.getItem(LS);
-  if(!raw) return;
-  try{
-    const o=JSON.parse(raw);
-    if(o.scriptUrl) $("scriptUrl").value=o.scriptUrl;
-    if(o.token) $("token").value=o.token;
-  }catch(_){}
-}
-load();
 
-function show(t){ $("msg").style.display="block"; $("msg").textContent=t; }
-function hide(){ $("msg").style.display="none"; $("msg").textContent=""; }
-
-function normalizePhone(v){
-  let s=String(v||"").trim(); const th="๐๑๒๓๔๕๖๗๘๙";
+function normPhone(v){
+  let s=String(v||"").trim();
+  const th="๐๑๒๓๔๕๖๗๘๙";
   for(let i=0;i<th.length;i++) s=s.replace(new RegExp(th[i],"g"),String(i));
   let p=s.replace(/\D/g,"");
   if(p.startsWith("0066")) p=p.slice(2);
   if(p.startsWith("66")) p="0"+p.slice(2);
   if(!p.startsWith("0") && p.length===9) p="0"+p;
-  return /^0[689]\d{8}$/.test(p)?p:"";
+  return /^0[689]\d{8}$/.test(p) ? p : "";
 }
 
-function jsonp(params){
-  return new Promise((res,rej)=>{
-    const cb="cb_"+Math.random().toString(36).slice(2);
-    params.callback=cb;
-    params._ts=Date.now();
-
-    const s=document.createElement("script");
-    s.src = SCRIPT_URL + "?" + new URLSearchParams(params).toString();
-
-    window[cb]=(d)=>{ try{ delete window[cb]; }catch(_){ window[cb]=undefined; } s.remove(); res(d); };
-    s.onerror=()=>{ try{ delete window[cb]; }catch(_){ window[cb]=undefined; } s.remove(); rej(new Error("JSONP_ERROR")); };
-
-    document.body.appendChild(s);
+async function callApi(payload){
+  const res = await fetch(ADMIN_API_URL, {
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify(payload)
   });
+  return await res.json();
 }
 
-function mask(p){
-  p=String(p||""); if(p.length<10) return "0XXXXXXXXX";
-  return p.slice(0,3)+"XXXX"+p.slice(-3);
-}
-
-async function loadList(){
-  hide();
-  SCRIPT_URL=$("scriptUrl").value.trim();
-  const token=$("token").value.trim();
-  const status=$("status").value.trim();
-  const q=$("q").value.trim();
-
-  if(!SCRIPT_URL || !token){ show("กรุณาใส่ SCRIPT_URL และ ADMIN_TOKEN"); return; }
-
-  show("⏳ กำลังโหลด...");
-  const d=await jsonp({action:"admin_list", token, status, q}).catch(()=>null);
-  if(!d){ show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค Deploy /exec)"); return; }
-  if(!d.ok){ show(d.msg || "โหลดไม่สำเร็จ"); return; }
-
-  const items=d.items||[];
-  if(!items.length){ show("✅ โหลดสำเร็จ แต่ไม่มีรายการในเงื่อนไขนี้"); $("tbody").innerHTML=""; return; }
-  hide();
-
-  $("tbody").innerHTML = items.map((x,i)=>`
-    <tr>
-      <td>${i+1}</td>
-      <td>${x.created_at||"-"}</td>
-      <td title="${x.phone}">${mask(x.phone)}</td>
-      <td><span class="badge">${x.status||"-"}</span></td>
-      <td><span class="code">${x.promo_code||"-"}</span></td>
-      <td>${(x.note||"")}</td>
-      <td>
-        <div class="actions">
-          <button class="btn btnOk"   onclick="act('admin_approve','${x.phone}')">อนุมัติ</button>
-          <button class="btn btnAlt"  onclick="act('admin_reject','${x.phone}')">ปฏิเสธ</button>
-          <button class="btn btnWarn" onclick="act('admin_mark_used','${x.phone}')">USED</button>
-          <button class="btn btnBlue" onclick="act('admin_reset','${x.phone}')">ปลด</button>
-        </div>
-      </td>
-    </tr>
-  `).join("");
-}
-
-async function act(action, phone){
-  SCRIPT_URL=$("scriptUrl").value.trim();
-  const token=$("token").value.trim();
-  if(!SCRIPT_URL || !token){ show("กรุณาใส่ SCRIPT_URL และ ADMIN_TOKEN"); return; }
-
-  const p=normalizePhone(phone);
-  if(!p){ show("กรุณาใส่เบอร์ให้ถูกต้อง"); return; }
-
-  const clear_code = $("clearCode").checked ? "1" : "0";
+async function act(action){
+  const phone = normPhone($("phone").value);
+  const note  = ($("note").value||"").trim();
+  if(!phone){ show("กรุณากรอกเบอร์ให้ถูกต้อง", false); return; }
   show("⏳ กำลังทำรายการ...");
-  const d=await jsonp({action, token, phone:p, clear_code, codes:$("codes").value}).catch(()=>null);
-  if(!d){ show("❌ เชื่อมต่อไม่สำเร็จ"); return; }
-  show(d.msg || "สำเร็จ");
-  await loadList();
+  const d = await callApi({ action, token: ADMIN_TOKEN, phone, note }).catch(()=>null);
+  if(!d){ show("❌ เชื่อมต่อไม่ได้ (เช็ค ADMIN_API_URL / Deploy)", false); return; }
+  show(JSON.stringify(d, null, 2), !!d.ok);
 }
 
-$("btnSave").onclick=save;
-$("btnLoad").onclick=loadList;
-$("btnRefresh").onclick=loadList;
+$("btnApprove").onclick = ()=>act("approve");
+$("btnReject").onclick  = ()=>act("reject");
+$("btnUsed").onclick    = ()=>act("used");
 
-$("btnApproveOne").onclick=()=>act("admin_approve",$("phone").value);
-$("btnRejectOne").onclick =()=>act("admin_reject",$("phone").value);
-$("btnUsedOne").onclick   =()=>act("admin_mark_used",$("phone").value);
-$("btnResetOne").onclick  =()=>act("admin_reset",$("phone").value);
+$("btnGet").onclick = async ()=>{
+  const phone = normPhone($("phone").value);
+  if(!phone){ show("กรุณากรอกเบอร์ให้ถูกต้อง", false); return; }
+  show("⏳ กำลังดึงข้อมูล...");
+  const d = await callApi({ action:"get", token: ADMIN_TOKEN, phone }).catch(()=>null);
+  if(!d){ show("❌ เชื่อมต่อไม่ได้", false); return; }
+  show(JSON.stringify(d, null, 2), !!d.ok);
+};
 
-$("btnAddCodes").onclick  =()=>act("admin_add_codes", $("phone").value || "0611111111"); // phone ต้องส่งมาให้ผ่าน normalize (ใช้ dummy ได้)
+$("btnList").onclick = async ()=>{
+  const status = $("status").value;
+  show("⏳ กำลังโหลดรายการ " + status + " ...");
+  const d = await callApi({ action:"list", token: ADMIN_TOKEN, status, limit: 80 }).catch(()=>null);
+  if(!d){ show("❌ เชื่อมต่อไม่ได้", false); return; }
+  if(!d.ok){ show(JSON.stringify(d,null,2), false); return; }
+
+  tbody.innerHTML = "";
+  (d.items||[]).forEach(it=>{
+    const tr=document.createElement("tr");
+    tr.innerHTML = `
+      <td>${it.phone||""}</td>
+      <td>${it.status||""}</td>
+      <td>${it.promo_code||""}</td>
+      <td>${it.updated_at||""}</td>
+      <td><button class="alt" type="button">เติมเบอร์</button></td>
+    `;
+    tr.querySelector("button").onclick = ()=>{
+      $("phone").value = it.phone||"";
+      window.scrollTo({top:0, behavior:"smooth"});
+    };
+    tbody.appendChild(tr);
+  });
+
+  listBox.style.display = "block";
+  show("✅ โหลดรายการสำเร็จ: " + (d.count||0) + " รายการ", true);
+};
 </script>
 </body>
 </html>
