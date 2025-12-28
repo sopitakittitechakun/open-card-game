@@ -1,13 +1,13 @@
 <?php
 /**
- * RR365 Shortcode (WP-safe) - JSONP + 1 คน 1 เครื่อง
+ * RR365 Shortcode (WP-safe) - JSONP + 1 คน 1 เครื่อง + HARD BLOCK รองรับจากฝั่ง GAS
  * ใช้ shortcode: [rr365]
- * แก้ SCRIPT_URL เป็น /exec ของ Google Apps Script
+ * SCRIPT_URL ใส่เรียบร้อยแล้ว
  */
 
 add_shortcode('rr365', function () {
 
-  // ✅ แก้เป็นลิงก์ Web App ของ GAS ที่ลงท้าย /exec
+  // ✅ ใส่ /exec ตัวจริงของพี่แล้ว
   $SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyZyKbLFIkCpeVE2FSq7U1oIkcwyn_Kq8pQFSD4woUfe56jVjWhJE1811nG8rGWYw7z-Q/exec";
 
   ob_start(); ?>
@@ -24,7 +24,7 @@ add_shortcode('rr365', function () {
     font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;
     background:radial-gradient(900px 500px at 50% -10%, rgba(255,60,60,.15), transparent 60%), var(--bg);
     color:var(--txt);
-    position:relative; z-index:999999; /* กันธีมทับคลิก */
+    position:relative; z-index:999999; /* กันธีม/ปลั๊กอินทับคลิก */
   }
   .rr365 .card{
     max-width:560px;margin:0 auto;
@@ -100,7 +100,7 @@ add_shortcode('rr365', function () {
       <img
         class="hero"
         src="https://img5.pic.in.th/file/secure-sv1/photo_--_--2bb7d3a2870ef8d6.jpg"
-        alt="กิจกรรมรับเครดิตฟรี"
+        alt="กิจกรรมรับคูปอง"
         loading="eager"
         decoding="async"
       />
@@ -207,6 +207,8 @@ add_shortcode('rr365', function () {
           const cb="cb_"+Math.random().toString(36).slice(2);
           params.callback=cb;
           params._ts=Date.now();
+
+          // ✅ ส่งข้อมูลเครื่องทุกครั้ง (1 คน 1 เครื่อง)
           params.device_id = DEVICE_ID;
           params.ua = UA;
           params.tz = TZ;
@@ -238,7 +240,7 @@ add_shortcode('rr365', function () {
         const p=normalizePhone(phone.value);
         if(!p){ show("กรุณากรอกเบอร์ให้ถูกต้อง","err"); return; }
         if(!SCRIPT_URL || SCRIPT_URL.indexOf("/exec") === -1){
-          show("❌ ยังไม่ได้ใส่ SCRIPT_URL (/exec)","err"); return;
+          show("❌ ระบบยังไม่พร้อม (SCRIPT_URL ผิด)","err"); return;
         }
 
         show("⏳ กำลังตรวจสอบสิทธิ์...");
