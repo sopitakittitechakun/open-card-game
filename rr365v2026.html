@@ -54,11 +54,6 @@ button:disabled{opacity:.55;cursor:not-allowed}
 .ok{border-color:rgba(54,211,153,.4)}
 .err{border-color:rgba(255,90,95,.45)}
 .hint{font-size:12px;color:#bfbfbf;margin-top:10px;line-height:1.6}
-.linkBox{
-  margin-top:10px;padding:12px;border-radius:14px;
-  border:1px dashed rgba(255,255,255,.25);background:rgba(0,0,0,.25);
-}
-.linkBox a{color:#7dd3fc;text-decoration:none}
 .copyBox{
   margin-top:12px;padding:12px;border-radius:14px;
   border:1px dashed rgba(255,255,255,.25);background:rgba(0,0,0,.25);
@@ -94,7 +89,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 <body>
 <div class="card">
 
-<!-- 🔴 เปลี่ยน IMAGE_URL เป็นรูปของคุณเอง (imgbb / postimg / โฮสตัวเอง) -->
+<!-- เปลี่ยนรูปได้ -->
 <img
   id="heroImg"
   class="hero"
@@ -102,17 +97,13 @@ button:disabled{opacity:.55;cursor:not-allowed}
   alt="กิจกรรมรับเครดิตฟรี"
   loading="eager"
   decoding="async"
-  onerror="this.onerror=null; this.src='https://img5.pic.in.th/file/secure-sv1/photo_--_--2bb7d3a2870ef8d6.jpg';"
 />
 
 <h1>🎁 ปีใหม่แจกคูปองสูงสุด 38,888 บาท 🎁</h1>
-<p>ระบบส่งโค้ดเครดิตฟรีสุ่มอัตโนมัติ (ลุ้นขั้นต่ำ 50 เครดิต)</p>
+<p>ระบบลงทะเบียนและรับโค้ด (ปล่อยโค้ดหลังแอดมินอนุมัติ)</p>
 
 <label>เบอร์โทรศัพท์ที่สมัคร</label>
 <input id="phone" inputmode="numeric" placeholder="เช่น 0611111111"/>
-
-<label id="capLabel" style="display:none;">คำถามยืนยันตัวตน</label>
-<input id="captchaA" placeholder="ตอบคำถามด้านบน" style="display:none;"/>
 
 <div class="row">
   <button id="btnCheck" class="btnAlt" type="button">เช็คสิทธิ์</button>
@@ -135,12 +126,6 @@ button:disabled{opacity:.55;cursor:not-allowed}
 * ทำยอด 10 เท่า ถอนได้ 10 เท่า
 </div>
 
-<div class="linkBox">
-👉 กรอกโค้ดรับเครดิตฟรีที่นี่:<br>
-<a href="https://rumruay365.uk/events/free-credit" target="_blank" rel="noopener">
-https://rumruay365.uk/events/free-credit
-</a>
-</div>
 </div>
 
 <div id="ruleModal" class="modal" aria-hidden="true">
@@ -157,12 +142,8 @@ https://rumruay365.uk/events/free-credit
 </div>
 
 <script>
-/* 🔴 ใส่ลิงก์ exec ของ Google Apps Script */
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzQDO5cnGCIHOWKTBZg1WEup-4U93Jh8P4jOD_6iwafSUOOOZMntNmKhgk2mQSGlTAI1A/exec";
-const DEVICE_ID_KEY = "rr365_device_id";
-
-let SAVED={token:"",nonce:"",issued_at:0,captcha_id:"",captcha_q:"",pow_prefix:"0000",min_delay_ms:6000,max_delay_ms:45000};
-let READY_AT=0, READY_TIMER=null;
+/* 🔴 ใส่ลิงก์ exec ของ Google Apps Script (Deploy Web App) */
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwvj6_Lb6cHdMgjXaxNhjPaiWgS7vYBckyLAbYl7UgfxUAHj42ePmENuPU0gkstg9dSmA/exec";
 
 const $phone=document.getElementById("phone");
 const $btnCheck=document.getElementById("btnCheck");
@@ -172,19 +153,20 @@ const $msg=document.getElementById("msg");
 const $copyWrap=document.getElementById("copyWrap");
 const $promoCode=document.getElementById("promoCode");
 const $btnCopy=document.getElementById("btnCopy");
-const $capLabel=document.getElementById("capLabel");
-const $captchaA=document.getElementById("captchaA");
 const $ruleModal=document.getElementById("ruleModal");
 const $modalAck=document.getElementById("modalAcknowledge");
 
-function show(t,type="ok"){ $msg.style.display="block"; $msg.className="msg "+(type==="err"?"err":"ok"); $msg.textContent=t; }
-function hideMsg(){ $msg.style.display="none"; $msg.textContent=""; }
-function hideCopy(){ $copyWrap.style.display="none"; $promoCode.textContent="RRXXXXXXXX"; }
-function showCaptcha(q){ $capLabel.style.display="block"; $captchaA.style.display="block"; $capLabel.textContent=q||"ยืนยันตัวตน"; $captchaA.value=""; }
-function hideCaptcha(){ $capLabel.style.display="none"; $captchaA.style.display="none"; $captchaA.value=""; }
 function openRule(){ $ruleModal.classList.add("show"); document.body.style.overflow="hidden"; }
 function closeRule(){ $ruleModal.classList.remove("show"); document.body.style.overflow=""; }
 $modalAck.onclick=closeRule;
+
+function show(t,type="ok"){
+  $msg.style.display="block";
+  $msg.className="msg "+(type==="err"?"err":"ok");
+  $msg.textContent=t;
+}
+function hideMsg(){ $msg.style.display="none"; $msg.textContent=""; }
+function hideCopy(){ $copyWrap.style.display="none"; $promoCode.textContent="RRXXXXXXXX"; }
 
 function normalizePhone(v){
   let s=String(v||"").trim(); const th="๐๑๒๓๔๕๖๗๘๙";
@@ -195,19 +177,19 @@ function normalizePhone(v){
   if(!p.startsWith("0") && p.length===9) p="0"+p;
   return /^0[689]\d{8}$/.test(p)?p:"";
 }
-function getOrCreateDeviceId(){
-  let id=localStorage.getItem(DEVICE_ID_KEY);
-  if(!id){ id="dev_"+Math.random().toString(36).slice(2)+Date.now().toString(36); localStorage.setItem(DEVICE_ID_KEY,id); }
-  return id;
-}
+
 function jsonp(params){
   return new Promise((res,rej)=>{
     const cb="cb_"+Math.random().toString(36).slice(2);
-    params.callback=cb; params._ts=Date.now();
+    params.callback=cb;
+    params._ts=Date.now();
+
     const s=document.createElement("script");
-    s.src=SCRIPT_URL+"?"+new URLSearchParams(params).toString();
-    window[cb]=(d)=>{ delete window[cb]; s.remove(); res(d); };
-    s.onerror=()=>{ s.remove(); rej(); };
+    s.src = SCRIPT_URL + "?" + new URLSearchParams(params).toString();
+
+    window[cb]=(d)=>{ try{ delete window[cb]; }catch(_){ window[cb]=undefined; } s.remove(); res(d); };
+    s.onerror=()=>{ try{ delete window[cb]; }catch(_){ window[cb]=undefined; } s.remove(); rej(new Error("JSONP_ERROR")); };
+
     document.body.appendChild(s);
   });
 }
@@ -215,37 +197,74 @@ function jsonp(params){
 $btnCopy.onclick=async()=>{
   const t=$promoCode.textContent.trim(); if(!t) return;
   await navigator.clipboard.writeText(t);
-  $btnCopy.classList.add("copied"); setTimeout(()=>$btnCopy.classList.remove("copied"),1200);
+  $btnCopy.classList.add("copied");
+  setTimeout(()=>$btnCopy.classList.remove("copied"),1200);
 };
 
 $btnCheck.onclick=async()=>{
   hideMsg(); hideCopy(); $btnJoin.disabled=true;
-  const p=normalizePhone($phone.value); if(!p){ show("กรุณากรอกเบอร์ให้ถูกต้อง","err"); return; }
+  const p=normalizePhone($phone.value);
+  if(!p){ show("กรุณากรอกเบอร์ให้ถูกต้อง","err"); return; }
+
   show("⏳ กำลังตรวจสอบสิทธิ์...");
-  const d=await jsonp({action:"check",phone:p,deviceId:getOrCreateDeviceId()}).catch(()=>null);
-  if(!d||!d.ok){ show("ไม่ผ่านเงื่อนไข","err"); return; }
-  SAVED=d; showCaptcha(d.captcha_q);
-  READY_AT=Date.now()+(d.min_delay_ms||6000);
-  READY_TIMER=setInterval(()=>{ if(Date.now()>=READY_AT){ $btnJoin.disabled=false; clearInterval(READY_TIMER); } },250);
-  show("✅ ผ่านการตรวจสอบ ตอบคำถามและรอเวลาที่กำหนดแล้วกดยืนยัน","ok");
+  const d=await jsonp({action:"check",phone:p}).catch(()=>null);
+  if(!d){ show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err"); return; }
+
+  if(!d.ok){
+    show(d.msg || "ไม่ผ่านเงื่อนไข","err");
+    return;
+  }
+
+  // ผ่าน
+  show(d.msg || "✅ ผ่านการตรวจสอบ กดยืนยันเข้าร่วมได้","ok");
+  $btnJoin.disabled=false;
 };
 
 $btnJoin.onclick=async()=>{
-  const p=normalizePhone($phone.value); if(!p){ show("กรุณากรอกเบอร์","err"); return; }
-  if(!$captchaA.value.trim()){ show("กรุณาตอบคำถามยืนยันตัวตน","err"); return; }
-  show("⏳ ลงชื่อแล้ว รอแอดมินอนุมัติ","ok"); openRule();
+  hideMsg(); hideCopy();
+  const p=normalizePhone($phone.value);
+  if(!p){ show("กรุณากรอกเบอร์ให้ถูกต้อง","err"); return; }
+
+  show("⏳ กำลังลงชื่อเข้าร่วม...");
+  const d=await jsonp({action:"register",phone:p}).catch(()=>null);
+  if(!d){ show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err"); return; }
+
+  if(!d.ok){
+    show(d.msg || "ยืนยันไม่สำเร็จ","err");
+    return;
+  }
+
+  show(d.msg || "✅ ลงชื่อแล้ว รอแอดมินอนุมัติ","ok");
+  openRule();
 };
 
 $btnPoll.onclick=async()=>{
   hideMsg(); hideCopy();
-  const p=normalizePhone($phone.value); if(!p){ show("กรุณากรอกเบอร์","err"); return; }
-  const d=await jsonp({action:"poll_code",phone:p,deviceId:getOrCreateDeviceId()}).catch(()=>null);
-  if(!d||!d.ok){ show("ยังไม่พร้อม","err"); return; }
+  const p=normalizePhone($phone.value);
+  if(!p){ show("กรุณากรอกเบอร์ให้ถูกต้อง","err"); return; }
+
+  show("⏳ กำลังเช็คสถานะ...");
+  const d=await jsonp({action:"poll",phone:p}).catch(()=>null);
+  if(!d){ show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err"); return; }
+
+  if(!d.ok){
+    show(d.msg || "ยังไม่พร้อม","err");
+    return;
+  }
+
   if(d.status==="APPROVED" && d.promo_code){
-    $promoCode.textContent=d.promo_code; $copyWrap.style.display="flex";
-    show("🎉 อนุมัติแล้ว รับโค้ดได้เลย","ok"); openRule();
-  }else if(d.status==="PENDING"){ show("⏳ รอการอนุมัติจากแอดมิน","ok"); }
-  else{ show("❌ ไม่ผ่านการอนุมัติ","err"); }
+    $promoCode.textContent=d.promo_code;
+    $copyWrap.style.display="flex";
+    show("🎉 อนุมัติแล้ว รับโค้ดได้เลย","ok");
+    openRule();
+    return;
+  }
+
+  if(d.status==="PENDING"){ show("⏳ รอการอนุมัติจากแอดมิน","ok"); return; }
+  if(d.status==="REJECTED"){ show("❌ ไม่ผ่านการอนุมัติ กรุณาติดต่อแอดมิน","err"); return; }
+  if(d.status==="USED"){ show("⚠️ รายการนี้ถูกใช้ไปแล้ว","err"); return; }
+
+  show(d.msg || ("สถานะ: "+(d.status||"UNKNOWN")),"ok");
 };
 </script>
 </body>
