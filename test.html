@@ -11,7 +11,6 @@
   --bg:#0b0b0b; --card:#141414; --line:rgba(255,255,255,.12);
   --txt:#fff; --muted:#cfcfcf;
   --accent:#ff2b2b; --accent2:#b80000;
-  --ok:#36d399; --bad:#ff5a5f;
 }
 *{box-sizing:border-box}
 body{
@@ -32,8 +31,8 @@ body{
   background:rgba(0,0,0,.25);
 }
 h1{font-size:20px;margin:12px 0 6px}
-p{margin:0 0 14px;color:var(--muted);line-height:1.6}
-label{display:block;margin:10px 0 6px;color:var(--muted)}
+p{margin:0 0 14px;color:#cfcfcf;line-height:1.6}
+label{display:block;margin:10px 0 6px;color:#cfcfcf}
 input{
   width:100%;padding:12px 14px;border-radius:14px;
   border:1px solid var(--line);background:#0f0f0f;color:#fff;font-size:16px;
@@ -51,9 +50,6 @@ button:disabled{opacity:.55;cursor:not-allowed}
   border:1px solid var(--line);background:rgba(0,0,0,.25);
   white-space:pre-line;display:none;line-height:1.6;
 }
-.ok{border-color:rgba(54,211,153,.4)}
-.err{border-color:rgba(255,90,95,.45)}
-.hint{font-size:12px;color:#bfbfbf;margin-top:10px;line-height:1.6}
 .copyBox{
   margin-top:12px;padding:12px;border-radius:14px;
   border:1px dashed rgba(255,255,255,.25);background:rgba(0,0,0,.25);
@@ -65,6 +61,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
   font-weight:900;color:#fff;background:linear-gradient(135deg,#22c55e,#16a34a);
 }
 .copyBtn.copied{background:linear-gradient(135deg,#3b82f6,#2563eb)}
+.hint{font-size:12px;color:#bfbfbf;margin-top:10px;line-height:1.6}
 .modal{
   position:fixed; inset:0; background:rgba(0,0,0,.70);
   display:none; align-items:center; justify-content:center; padding:18px; z-index:9999;
@@ -83,24 +80,13 @@ button:disabled{opacity:.55;cursor:not-allowed}
   font-weight:900; cursor:pointer; color:#fff;
   background:linear-gradient(135deg,var(--accent),var(--accent2));
 }
-
-/* (ไม่จำเป็น) แถบแสดง device id แบบจางๆ */
-.deviceHint{
-  margin-top:10px;
-  font-size:11px;
-  color:#9a9a9a;
-  opacity:.9;
-  word-break:break-all;
-}
 </style>
 </head>
 
 <body>
 <div class="card">
 
-<!-- เปลี่ยนรูปได้ -->
 <img
-  id="heroImg"
   class="hero"
   src="https://img5.pic.in.th/file/secure-sv1/photo_--_--2bb7d3a2870ef8d6.jpg"
   alt="กิจกรรมรับเครดิตฟรี"
@@ -135,9 +121,6 @@ button:disabled{opacity:.55;cursor:not-allowed}
 * ทำยอด 10 เท่า ถอนได้ 10 เท่า
 </div>
 
-<!-- (ไม่จำเป็น) โชว์ device id เพื่อ debug -->
-<div id="deviceHint" class="deviceHint"></div>
-
 </div>
 
 <div id="ruleModal" class="modal" aria-hidden="true">
@@ -155,23 +138,16 @@ button:disabled{opacity:.55;cursor:not-allowed}
 
 <script>
 /* 🔴 ใส่ลิงก์ exec ของ Google Apps Script (Deploy Web App) */
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxyv3eUVDckqSXv2cowyqfBnHOyxTf64dkuPmJD-UQgs0rP2AJ49Ph3xzC9a3FFzODFzA/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwLULKd3AFPUDdj6c_GWs_nFJh391SePNHIMmlL7LSNFzEeOdqa1GyPC8D4VQx9WBANww/exec";
 
-/* =======================
-   HARD: 1 เครื่อง (device_id)
-   - สร้าง device_id ครั้งแรก แล้วเก็บใน localStorage
-   - ถ้าล้างเว็บ/เปลี่ยนเบราว์เซอร์/โหมดไม่จำ = device_id เปลี่ยน (ถือว่าเครื่องใหม่)
-======================= */
+/* ===== device_id (ผูกเครื่อง) ===== */
 const DEVICE_KEY = "RR365_DEVICE_ID_V1";
-
 function uuidLike(){
-  // สุ่มแบบ uuid-ish ไม่พึ่ง lib
   const a = new Uint8Array(16);
   crypto.getRandomValues(a);
   const hex = [...a].map(b=>b.toString(16).padStart(2,"0")).join("");
   return `rr-${hex.slice(0,8)}-${hex.slice(8,12)}-${hex.slice(12,16)}-${hex.slice(16,20)}-${hex.slice(20)}`;
 }
-
 function getDeviceId(){
   try{
     let id = localStorage.getItem(DEVICE_KEY);
@@ -181,11 +157,9 @@ function getDeviceId(){
     }
     return id;
   }catch(_){
-    // ถ้า localStorage ใช้ไม่ได้ (บางเว็บ/บางโหมด) ให้ใช้ session แทน
     return "rr-session-" + Math.random().toString(36).slice(2) + Date.now().toString(36);
   }
 }
-
 const DEVICE_ID = getDeviceId();
 
 const $phone=document.getElementById("phone");
@@ -198,9 +172,6 @@ const $promoCode=document.getElementById("promoCode");
 const $btnCopy=document.getElementById("btnCopy");
 const $ruleModal=document.getElementById("ruleModal");
 const $modalAck=document.getElementById("modalAcknowledge");
-const $deviceHint=document.getElementById("deviceHint");
-
-if($deviceHint) $deviceHint.textContent = "device_id: " + DEVICE_ID;
 
 function openRule(){ $ruleModal.classList.add("show"); document.body.style.overflow="hidden"; }
 function closeRule(){ $ruleModal.classList.remove("show"); document.body.style.overflow=""; }
@@ -229,9 +200,7 @@ function jsonp(params){
     const cb="cb_"+Math.random().toString(36).slice(2);
     params.callback=cb;
     params._ts=Date.now();
-
-    // ✅ ส่ง device_id ทุกครั้ง (กันซ้ำ 1 เครื่อง)
-    params.device_id = DEVICE_ID;
+    params.device_id = DEVICE_ID; // ✅ ส่งทุกครั้ง
 
     const s=document.createElement("script");
     s.src = SCRIPT_URL + "?" + new URLSearchParams(params).toString();
