@@ -3,172 +3,141 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>เช็คสิทธิ์กิจกรรม | รับโค้ด</title>
+<title>RR365 Admin — Approve Codes</title>
 <meta name="color-scheme" content="dark"/>
 <style>
   :root{
     --bg0:#070102; --bg1:#0f0204; --card:rgba(255,255,255,.06); --line:rgba(255,80,80,.20);
     --txt:#ffecec; --muted:#ffb6b6; --accent:#ff2b2b; --accent2:#b80000;
-    --ok:#36d399; --warn:#fbbf24; --bad:#ff5a5f; --shadow:0 22px 60px rgba(0,0,0,.65); --radius:22px;
+    --ok:#36d399; --warn:#fbbf24; --bad:#ff5a5f; --shadow:0 22px 60px rgba(0,0,0,.65); --radius:20px;
   }
   *{box-sizing:border-box}
-  html,body{height:100%}
   body{
-    margin:0;
+    margin:0; color:var(--txt);
     font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;
-    color:var(--txt);
     background:
-      radial-gradient(1200px 700px at 18% 8%, rgba(255,60,60,.20), transparent 60%),
-      radial-gradient(900px 600px at 85% 12%, rgba(255,120,120,.10), transparent 55%),
-      radial-gradient(900px 700px at 50% 105%, rgba(255,40,40,.16), transparent 60%),
+      radial-gradient(1200px 700px at 18% 10%, rgba(255,60,60,.20), transparent 60%),
+      radial-gradient(900px 600px at 85% 15%, rgba(255,120,120,.10), transparent 55%),
+      radial-gradient(900px 700px at 50% 100%, rgba(255,40,40,.16), transparent 60%),
       linear-gradient(180deg, var(--bg0), var(--bg1));
     overflow-x:hidden;
-    -webkit-tap-highlight-color: transparent;
   }
-  .wrap{max-width:720px;margin:0 auto;padding:22px 14px 110px}
-  .hero{
-    border:1px solid var(--line); border-radius:28px; padding:16px;
+  .wrap{max-width:1100px;margin:0 auto;padding:26px 14px 60px}
+  .topbar{
+    display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;
+    padding:18px;border:1px solid var(--line);border-radius:24px;
     background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
-    box-shadow:var(--shadow); position:sticky; top:12px; z-index:5; backdrop-filter: blur(10px);
+    box-shadow:var(--shadow);position:sticky;top:10px;z-index:10;backdrop-filter: blur(10px);
   }
-  .top{display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap;}
-  .brand{display:flex; align-items:center; gap:12px;}
-  .logo{width:46px;height:46px;border-radius:16px;background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), transparent 55%),linear-gradient(135deg,var(--accent),var(--accent2));border:1px solid rgba(255,255,255,.14);box-shadow:0 12px 30px rgba(255,0,0,.25)}
-  .title{margin:0;font-size:16px;font-weight:900;line-height:1.2}
-  .sub{margin-top:2px;font-size:12px;color:var(--muted);line-height:1.35}
-  .status{display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.25);min-height:40px}
-  .dot{width:10px;height:10px;border-radius:999px;background:rgba(255,255,255,.25);box-shadow:0 0 0 4px rgba(255,255,255,.06)}
-  .dot.ok{background:var(--ok);box-shadow:0 0 0 4px rgba(54,211,153,.15)}
-  .dot.warn{background:var(--warn);box-shadow:0 0 0 4px rgba(251,191,36,.12)}
-  .dot.bad{background:var(--bad);box-shadow:0 0 0 4px rgba(255,90,95,.14)}
-  .status b{font-size:12px}
-  .status span{font-size:12px;color:var(--muted)}
+  .brand{display:flex;gap:12px;align-items:center}
+  .logo{width:46px;height:46px;border-radius:16px;background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), transparent 52%),linear-gradient(135deg,var(--accent),var(--accent2));border:1px solid rgba(255,255,255,.15)}
+  h1{font-size:16px;margin:0}
+  .sub{font-size:12px;color:var(--muted);margin-top:2px}
   .card{margin-top:14px;border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));box-shadow:0 18px 46px rgba(0,0,0,.55);overflow:hidden}
-  .card .hd{padding:14px 16px;border-bottom:1px solid var(--line);background:linear-gradient(90deg, rgba(255,40,40,.12), transparent);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
-  .card .hd .ttl{font-weight:900;font-size:14px;display:flex;align-items:center;gap:10px}
-  .pill{font-size:12px;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(0,0,0,.25);color:var(--muted);white-space:nowrap}
-  .card .bd{padding:16px}
+  .hd{padding:14px 16px;border-bottom:1px solid var(--line);background:linear-gradient(90deg, rgba(255,40,40,.12), transparent);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+  .bd{padding:16px}
   label{display:block;font-size:12px;color:var(--muted);margin:10px 0 6px}
-  input{width:100%;padding:12px 12px;border-radius:16px;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.35);color:var(--txt);font-size:16px;outline:none}
-  input:focus{border-color:rgba(255,80,80,.55);box-shadow:0 0 0 4px rgba(255,40,40,.15)}
-  .msg{margin-top:12px;padding:12px 12px;border-radius:16px;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.25);white-space:pre-line;display:none;line-height:1.55}
-  .msg.ok{border-color:rgba(54,211,153,.35)} .msg.err{border-color:rgba(255,90,95,.45)} .msg.info{border-color:rgba(255,80,80,.22)}
-  .bar{position:fixed;left:0;right:0;bottom:0;padding:12px 14px;background:linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,.65) 25%, rgba(0,0,0,.85));backdrop-filter: blur(8px);z-index:50;pointer-events:none}
-  .barInner{max-width:720px;margin:0 auto;display:flex;gap:10px;pointer-events:auto}
-  button{border:0;cursor:pointer;padding:12px 14px;border-radius:16px;font-weight:900;font-size:15px;color:#fff;transition:.15s;flex:1;touch-action:manipulation}
-  .btnMain{background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 14px 30px rgba(255,0,0,.25)}
-  .btnAlt{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.14);color:var(--txt)}
-  button:disabled{opacity:.55;cursor:not-allowed}
-  .copyWrap{display:none;gap:10px;align-items:center;margin-top:12px}
-  .codeBox{flex:1;padding:10px 12px;border-radius:14px;border:1px dashed rgba(255,255,255,.18);background:rgba(0,0,0,.25);font-weight:900}
-  .btnCopy{padding:10px 12px;border-radius:14px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.10);font-weight:900}
-  .btnCopy.copied{border-color:rgba(54,211,153,.35)}
+  input,select{width:100%;padding:11px 12px;border-radius:14px;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.35);color:var(--txt);outline:none}
+  .row{display:flex;gap:10px;flex-wrap:wrap}
+  .field{flex:1;min-width:240px}
+  .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+  button{
+    border:none;cursor:pointer;padding:11px 14px;border-radius:14px;font-weight:900;color:#fff;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 14px 30px rgba(255,0,0,.25);
+  }
+  button.secondary{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);box-shadow:none}
+  .msg{margin-top:12px;padding:12px 12px;border-radius:16px;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.25);white-space:pre-line;display:none}
+  .msg.ok{border-color:rgba(54,211,153,.35)} .msg.err{border-color:rgba(255,90,95,.45)}
+  .tableWrap{margin-top:14px;border:1px solid var(--line);border-radius:18px;overflow:auto;background:rgba(0,0,0,.22);max-height:560px}
+  table{width:100%;border-collapse:collapse;font-size:12px;min-width:980px}
+  thead th{position:sticky;top:0;z-index:2;text-align:left;padding:12px 10px;color:#fff;border-bottom:1px solid rgba(255,255,255,.08);background:linear-gradient(90deg, rgba(255,40,40,.16), rgba(0,0,0,.05));white-space:nowrap}
+  tbody td{padding:10px 10px;border-bottom:1px solid rgba(255,255,255,.06);word-break:break-word}
 </style>
 </head>
 <body>
-
 <div class="wrap">
-  <div class="hero">
-    <div class="top">
-      <div class="brand">
-        <div class="logo"></div>
-        <div>
-          <div class="title">เช็คสิทธิ์กิจกรรม | รับโค้ด</div>
-          <div class="sub">ต้องผ่านตรวจสอบ และรอแอดมินอนุมัติก่อนปล่อยโค้ด</div>
-        </div>
-      </div>
-      <div class="status">
-        <div class="dot warn" id="dot"></div>
-        <div>
-          <b id="stTitle">พร้อมใช้งาน</b><br/>
-          <span id="stSub">กรอกเบอร์ แล้วกดเช็คสิทธิ์</span>
-        </div>
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo"></div>
+      <div>
+        <h1>RR365 Admin — Approve Codes</h1>
+        <div class="sub">แอดมินกดอนุมัติแล้วค่อยปล่อยโค้ด</div>
       </div>
     </div>
   </div>
 
   <div class="card">
+    <div class="hd"><b>⚙️ ตั้งค่า + อนุมัติ</b></div>
+    <div class="bd">
+      <div class="row">
+        <div class="field">
+          <label>Web App URL (ลงท้าย /exec)</label>
+          <input id="apiUrl" value="PUT_YOUR_WEBAPP_EXEC_URL_HERE"/>
+        </div>
+        <div class="field">
+          <label>ADMIN_KEY</label>
+          <input id="adminKey" value="RR365_ADMIN_2026_CHANGE_ME"/>
+        </div>
+        <div class="field">
+          <label>เบอร์ลูกค้า (target_phone)</label>
+          <input id="targetPhone" placeholder="06xxxxxxxx"/>
+        </div>
+        <div class="field">
+          <label>การกระทำ</label>
+          <select id="act">
+            <option value="approve">✅ approve (อนุมัติปล่อยโค้ด)</option>
+            <option value="reject">❌ reject (ปฏิเสธ)</option>
+            <option value="used">♻️ used (ตั้งเป็น USED)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="btns">
+        <button id="btnDo">ทำรายการ</button>
+        <button class="secondary" id="btnReload">โหลดรายชื่อล่าสุด</button>
+      </div>
+
+      <div class="msg" id="msg"></div>
+    </div>
+  </div>
+
+  <div class="card">
     <div class="hd">
-      <div class="ttl">📌 กรอกข้อมูล</div>
-      <span class="pill">JSONP ✓</span>
+      <b>👥 Participants ล่าสุด</b>
+      <span style="color:var(--muted);font-size:12px">โหลดแบบ JSONP ไม่ติด CORS</span>
     </div>
     <div class="bd">
-      <label>เบอร์มือถือ</label>
-      <input id="phone" inputmode="numeric" placeholder="06xxxxxxxx" maxlength="12"/>
-
-      <div id="captchaWrap" style="display:none;">
-        <label id="captchaQ">คำถามยืนยันตัวตน</label>
-        <input id="captchaA" inputmode="numeric" placeholder="พิมพ์คำตอบ"/>
-      </div>
-
-      <div class="msg info" id="msg"></div>
-
-      <div class="copyWrap" id="copyWrap">
-        <div class="codeBox" id="promoCode">-</div>
-        <button class="btnCopy" id="btnCopy" type="button">คัดลอก</button>
+      <div class="tableWrap">
+        <table>
+          <thead>
+            <tr>
+              <th>created_at</th><th>phone</th><th>status</th><th>promo_code</th>
+              <th>ua_key</th><th>device_id</th><th>fingerprint</th><th>updated_at</th><th>note</th>
+            </tr>
+          </thead>
+          <tbody id="tb"></tbody>
+        </table>
       </div>
     </div>
   </div>
-</div>
 
-<div class="bar">
-  <div class="barInner">
-    <button class="btnAlt" id="btnCheck" type="button">✅ เช็คสิทธิ์</button>
-    <button class="btnMain" id="btnJoin" type="button" disabled>📝 ยืนยันเข้าร่วม</button>
-    <button class="btnAlt" id="btnPoll" type="button">🔎 เช็คสถานะ/รับโค้ด</button>
-  </div>
 </div>
 
 <script>
-/* ====== เปลี่ยนลิงก์ /exec ตรงนี้ ====== */
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyYkkY_ZJLAj03XaF0ycIQO5CLi5ntekJhwmot5D9TBZldjiPqLUDVGHXJg1s6YlbD1/exec";
+const $=(id)=>document.getElementById(id);
+const $msg=$("msg"), $tb=$("tb");
 
-/* ============ UI helpers ============ */
-const $ = (id)=>document.getElementById(id);
-const $phone=$("phone"), $msg=$("msg"), $dot=$("dot"), $stTitle=$("stTitle"), $stSub=$("stSub");
-const $btnCheck=$("btnCheck"), $btnJoin=$("btnJoin"), $btnPoll=$("btnPoll");
-const $captchaWrap=$("captchaWrap"), $captchaQ=$("captchaQ"), $captchaA=$("captchaA");
-const $copyWrap=$("copyWrap"), $promoCode=$("promoCode"), $btnCopy=$("btnCopy");
-
-function setStatus(kind, title, sub){
-  $dot.className = "dot " + (kind||"warn");
-  $stTitle.textContent = title || "";
-  $stSub.textContent = sub || "";
-}
-function show(text, kind){
+function showMsg(t, ok){
   $msg.style.display="block";
-  $msg.className = "msg " + (kind||"info");
-  $msg.textContent = text || "";
-}
-function hideMsg(){ $msg.style.display="none"; }
-function showCaptcha(q){
-  $captchaWrap.style.display="block";
-  $captchaQ.textContent = q || "คำถามยืนยันตัวตน";
-}
-function hideCaptcha(){
-  $captchaWrap.style.display="none";
-  $captchaA.value="";
-}
-function showCopy(code){
-  $promoCode.textContent = code || "-";
-  $copyWrap.style.display="flex";
-}
-function hideCopy(){
-  $promoCode.textContent="-";
-  $copyWrap.style.display="none";
+  $msg.className="msg "+(ok?"ok":"err");
+  $msg.textContent=t||"";
 }
 
-function bindTap(el, fn){
-  el.addEventListener("click", fn, { passive:true });
-  el.addEventListener("touchend", (e)=>{ e.preventDefault(); fn(e); }, { passive:false });
-}
-
-/* ============ identifiers ============ */
 function normalizePhone(x){
   const s=String(x||"").replace(/[^\d๐๑๒๓๔๕๖๗๘๙]/g,"");
   const th="๐๑๒๓๔๕๖๗๘๙";
-  let t=s;
-  for(let i=0;i<th.length;i++) t=t.replaceAll(th[i], String(i));
+  let t=s; for(let i=0;i<th.length;i++) t=t.replaceAll(th[i], String(i));
   let p=t.replace(/\D/g,"");
   if(p.startsWith("0066")) p=p.slice(2);
   if(p.startsWith("66")) p="0"+p.slice(2);
@@ -176,284 +145,100 @@ function normalizePhone(x){
   if(!/^0[689]\d{8}$/.test(p)) return "";
   return p;
 }
-function getOrCreateDeviceId(){
-  const k="rr365_device_id";
-  let v=localStorage.getItem(k);
-  if(!v){
-    v="d_"+Math.random().toString(36).slice(2)+Date.now().toString(36);
-    localStorage.setItem(k,v);
-  }
-  return v;
-}
-function getUaKey(){
-  const k="rr365_ua_key";
-  let v=localStorage.getItem(k);
-  if(!v){
-    v="u_"+Math.random().toString(36).slice(2);
-    localStorage.setItem(k,v);
-  }
-  return v;
-}
-function getFingerprint(){
-  // fingerprint แบบเบาๆ (พอผูกเครื่อง) — ถ้าพี่มีของเดิม ใช้ของเดิมได้
-  const k="rr365_fp";
-  let v=localStorage.getItem(k);
-  if(!v){
-    const seed = [
-      navigator.userAgent,
-      screen.width+"x"+screen.height,
-      Intl.DateTimeFormat().resolvedOptions().timeZone || "",
-      navigator.language || ""
-    ].join("|");
-    v="fp_"+btoa(unescape(encodeURIComponent(seed))).slice(0,40);
-    localStorage.setItem(k,v);
-  }
-  return v;
-}
 
-/* ============ JSONP ============ */
-function jsonpRequest(params, timeoutMs=12000){
+function jsonp(url, timeoutMs=12000){
   return new Promise((resolve,reject)=>{
-    if(!/\/exec(\?|$)/.test(SCRIPT_URL)) return reject(new Error("SCRIPT_URL_NOT_EXEC"));
-    const cbName="cb_"+Math.random().toString(36).slice(2);
-    params.jsonp="1";
-    params.callback=cbName;
-    params._ts=Date.now();
-
-    const url = SCRIPT_URL + "?" + new URLSearchParams(params).toString();
+    const cb="cb_"+Math.random().toString(36).slice(2);
     const script=document.createElement("script");
-    script.src=url;
-    script.async=true;
-
     const t=setTimeout(()=>{ cleanup(); reject(new Error("TIMEOUT")); }, timeoutMs);
-    window[cbName]=(data)=>{ clearTimeout(t); cleanup(); resolve(data); };
+
+    window[cb]=(data)=>{ clearTimeout(t); cleanup(); resolve(data); };
     script.onerror=()=>{ clearTimeout(t); cleanup(); reject(new Error("SCRIPT_LOAD_ERROR")); };
 
     function cleanup(){
-      try{ delete window[cbName]; }catch(e){ window[cbName]=undefined; }
+      try{ delete window[cb]; }catch(e){ window[cb]=undefined; }
       if(script && script.parentNode) script.parentNode.removeChild(script);
     }
+
+    script.src = url + (url.includes("?")?"&":"?") + "callback=" + cb;
     document.body.appendChild(script);
   });
 }
 
-/* ============ PoW (client) ============ */
-async function sha256hex(text){
-  const enc=new TextEncoder().encode(text);
-  const buf=await crypto.subtle.digest("SHA-256", enc);
-  const arr=Array.from(new Uint8Array(buf));
-  return arr.map(b=>b.toString(16).padStart(2,"0")).join("");
-}
-async function solvePow(phone, serverNonce, prefix){
-  const powNonce="pn_"+Math.random().toString(36).slice(2)+Date.now().toString(36);
-  let sol=0;
-  while(sol<200000){
-    const key=[phone, serverNonce, powNonce, String(sol)].join("|");
-    const hex=await sha256hex(key);
-    if(hex.startsWith(prefix)) return { pow_nonce:powNonce, pow_sol:String(sol) };
-    sol++;
-    if(sol%800===0) await new Promise(r=>setTimeout(r,0));
-  }
-  throw new Error("POW_FAIL");
+function buildUrl(baseExec, params){
+  if(!/\/exec(\?|$)/.test(baseExec)) throw new Error("ต้องเป็นลิงก์ /exec เท่านั้น");
+  const u=new URL(baseExec);
+  u.searchParams.set("jsonp","1");
+  Object.keys(params).forEach(k=>u.searchParams.set(k, String(params[k])));
+  return u.toString();
 }
 
-/* ============ session ============ */
-let SAVED = { token:"", nonce:"", issued_at:0, captcha_id:"", captcha_q:"", pow_prefix:"0000", min_delay_ms:6000, max_delay_ms:45000 };
-let READY_AT = 0;
-let READY_TIMER = null;
-
-function resetSession(){
-  SAVED = { token:"", nonce:"", issued_at:0, captcha_id:"", captcha_q:"", pow_prefix:"0000", min_delay_ms:6000, max_delay_ms:45000 };
-  READY_AT = 0;
-  if(READY_TIMER){ clearInterval(READY_TIMER); READY_TIMER=null; }
-}
-function startCountdown(){
-  READY_AT = Date.now() + (SAVED.min_delay_ms||6000);
-  if(READY_TIMER) clearInterval(READY_TIMER);
-  READY_TIMER=setInterval(()=>{
-    const left = Math.ceil((READY_AT - Date.now())/1000);
-    if(left<=0){
-      clearInterval(READY_TIMER); READY_TIMER=null;
-      $btnJoin.disabled=false;
-      setStatus("ok","พร้อมยืนยัน","กด “ยืนยันเข้าร่วม” ได้เลย");
-    }else{
-      $btnJoin.disabled=true;
-      setStatus("warn","รอเวลาเพื่อความปลอดภัย", `กรุณารออีก ${left} วินาที`);
-    }
-  }, 300);
-}
-
-/* ============ request wrapper ============ */
-async function request(action){
-  hideMsg();
-  const p = normalizePhone($phone.value);
-  if(!p){ show("กรุณากรอกเบอร์มือถือให้ถูกต้อง (06/08/09 10 หลัก)","err"); return null; }
-
-  const payload = {
-    action, phone:p,
-    deviceId:getOrCreateDeviceId(),
-    fingerprint:getFingerprint(),
-    ua_key:getUaKey(),
-    userAgent:navigator.userAgent
-  };
-
-  if(action==="register"){
-    if(!SAVED.token || !SAVED.nonce || !SAVED.issued_at){
-      show("กรุณากดเช็คสิทธิ์ก่อน แล้วค่อยยืนยันเข้าร่วม","err");
-      return null;
-    }
-    if(Date.now() < READY_AT){
-      const left = Math.ceil((READY_AT - Date.now())/1000);
-      show(`กรุณารออีก ${left} วินาที (ระบบป้องกันบอท)`,"err");
-      return null;
-    }
-    if(Date.now() - SAVED.issued_at > SAVED.max_delay_ms){
-      show("หมดเวลา กรุณากดเช็คสิทธิ์ใหม่อีกครั้ง","err");
-      return null;
-    }
-    const capA = ($captchaA.value||"").trim();
-    if(!capA){
-      show("กรุณาตอบคำถามยืนยันตัวตนก่อนยืนยันเข้าร่วม","err");
-      return null;
-    }
-
-    show("⏳ กำลังยืนยันความเป็นมนุษย์ (ป้องกันบอท)","ok");
-    const pow = await solvePow(p, SAVED.nonce, SAVED.pow_prefix || "0000").catch(()=>null);
-    if(!pow){
-      show("ยืนยันไม่สำเร็จ กรุณาลองใหม่ (ป้องกันบอท)","err");
-      return null;
-    }
-    payload.token = SAVED.token;
-    payload.nonce = SAVED.nonce;
-    payload.issued_at = SAVED.issued_at;
-    payload.captcha_id = SAVED.captcha_id;
-    payload.captcha_a  = capA;
-    payload.pow_nonce  = pow.pow_nonce;
-    payload.pow_sol    = pow.pow_sol;
-  }
-
-  return await jsonpRequest(payload);
+async function loadParticipants(){
+  const url=$("apiUrl").value.trim();
+  const key=$("adminKey").value.trim();
+  const u=buildUrl(url,{
+    action:"admin_list",
+    admin_key:key,
+    type:"participants",
+    limit:"80"
+  });
+  const data=await jsonp(u);
+  if(!data || data.ok!==true) throw new Error(data && (data.msg||data.code) ? (data.msg||data.code) : "โหลดไม่สำเร็จ");
+  const rows=Array.isArray(data.rows)?data.rows:[];
+  $tb.innerHTML = rows.map(r=>`
+    <tr>
+      <td>${esc(r.created_at)}</td>
+      <td>${esc(r.phone)}</td>
+      <td>${esc(r.status)}</td>
+      <td>${esc(r.promo_code)}</td>
+      <td>${esc(r.ua_key)}</td>
+      <td>${esc(r.device_id)}</td>
+      <td>${esc(r.fingerprint)}</td>
+      <td>${esc(r.updated_at)}</td>
+      <td>${esc(r.note)}</td>
+    </tr>
+  `).join("");
 }
 
-/* ============ events ============ */
-bindTap($btnCheck, async ()=>{
-  resetSession();
-  hideCopy(); hideCaptcha(); hideMsg();
-  setStatus("warn","กำลังตรวจสอบ","รอสักครู่...");
+function esc(x){
+  return String(x??"").replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m]));
+}
 
-  const data = await request("check").catch(()=>null);
-  if(!data){ setStatus("bad","เชื่อมต่อไม่สำเร็จ","ตรวจสอบลิงก์ /exec และ Deploy"); show("เชื่อมต่อไม่สำเร็จ","err"); return; }
-  if(!data.ok){ setStatus("bad","ตรวจสอบไม่ผ่าน", data.msg||"ผิดพลาด"); show(data.msg||"ผิดพลาด","err"); return; }
-
-  // ถ้ามีรายการอยู่แล้ว ให้ไป poll_code
-  if(data.exists){
-    setStatus("warn","มีรายการอยู่แล้ว","กด “เช็คสถานะ/รับโค้ด”");
-    show(data.msg || "มีรายการอยู่แล้ว กรุณากดเช็คสถานะ/รับโค้ด", "ok");
-    return;
-  }
-
-  if(data.device_used){
-    setStatus("bad","อุปกรณ์ถูกจำกัด","ไม่สามารถทำรายการได้");
-    show(data.msg||"อุปกรณ์ถูกจำกัด","err");
-    return;
-  }
-
-  // store session
-  SAVED.token = data.token || "";
-  SAVED.nonce = data.nonce || "";
-  SAVED.issued_at = Number(data.issued_at||0);
-  SAVED.captcha_id = data.captcha_id || "";
-  SAVED.captcha_q  = data.captcha_q || "";
-  SAVED.pow_prefix = data.pow_prefix || "0000";
-  SAVED.min_delay_ms = Number(data.min_delay_ms||6000);
-  SAVED.max_delay_ms = Number(data.max_delay_ms||45000);
-
-  showCaptcha(SAVED.captcha_q);
-  show(data.msg || "ผ่านการตรวจสอบแล้ว", "ok");
-  startCountdown();
+$("btnReload").addEventListener("click", async ()=>{
+  try{ await loadParticipants(); showMsg("โหลดรายชื่อสำเร็จ ✅", true); }
+  catch(e){ showMsg("โหลดไม่สำเร็จ: "+String(e.message||e), false); }
 });
 
-bindTap($btnJoin, async ()=>{
-  hideCopy(); hideMsg();
-  setStatus("warn","กำลังยืนยันเข้าร่วม","รอสักครู่...");
-
-  const data = await request("register").catch(()=>null);
-  if(!data){ setStatus("bad","เชื่อมต่อไม่สำเร็จ","ลองใหม่อีกครั้ง"); show("เชื่อมต่อไม่สำเร็จ","err"); return; }
-  if(!data.ok){ setStatus("bad","ยืนยันไม่ผ่าน", data.msg||"ผิดพลาด"); show(data.msg||"ผิดพลาด","err"); return; }
-
-  if(data.pending){
-    setStatus("warn","ส่งคำขอแล้ว","รอแอดมินอนุมัติ");
-    show("⏳ ลงชื่อสำเร็จแล้ว!\nระบบรับคำขอเรียบร้อย อยู่ระหว่างรอแอดมินอนุมัติ\n\n👉 ให้กด “เช็คสถานะ/รับโค้ด” เพื่อเช็คอีกครั้ง", "ok");
-    resetSession();
-    return;
-  }
-
-  // fallback
-  setStatus("ok","สำเร็จ","กดเช็คสถานะ/รับโค้ด");
-  show(data.msg || "ทำรายการสำเร็จ", "ok");
-  resetSession();
-});
-
-bindTap($btnPoll, async ()=>{
-  hideCopy(); hideMsg();
-  setStatus("warn","กำลังเช็คสถานะ","รอสักครู่...");
-
-  const data = await request("poll_code").catch(()=>null);
-  if(!data){ setStatus("bad","เชื่อมต่อไม่สำเร็จ","ลองใหม่/ตรวจสอบ Deploy"); show("เชื่อมต่อไม่สำเร็จ","err"); return; }
-  if(!data.ok){ setStatus("bad","ผิดพลาด", data.msg||""); show(data.msg||"ผิดพลาด","err"); return; }
-
-  if(data.status==="PENDING"){
-    setStatus("warn","รออนุมัติ","แอดมินกำลังตรวจสอบ");
-    show("⏳ ยังรอแอดมินอนุมัติอยู่ค่ะ\nกรุณารอสักครู่แล้วกดเช็คใหม่", "ok");
-    return;
-  }
-  if(data.status==="APPROVED"){
-    const code=(data.promo_code||"").trim();
-    if(!code || code==="NO_CODE"){
-      setStatus("bad","อนุมัติแล้วแต่โค้ดหมด","ติดต่อแอดมิน");
-      show("✅ อนุมัติแล้ว แต่โค้ดหมด\nกรุณาติดต่อแอดมิน", "err");
-      return;
-    }
-    setStatus("ok","อนุมัติแล้ว","รับโค้ดได้เลย");
-    show("🎉 อนุมัติแล้ว! โค้ดของคุณคือ: " + code, "ok");
-    showCopy(code);
-    return;
-  }
-  if(data.status==="REJECTED"){
-    setStatus("bad","ไม่ผ่านการอนุมัติ","ติดต่อแอดมิน");
-    show("❌ ไม่ผ่านการอนุมัติ กรุณาติดต่อแอดมิน", "err");
-    return;
-  }
-  if(data.status==="USED"){
-    setStatus("bad","รายการถูกใช้แล้ว","ไม่สามารถรับซ้ำ");
-    show("⚠️ รายการนี้ถูกใช้ไปแล้ว", "err");
-    return;
-  }
-
-  show("กำลังตรวจสอบ...", "ok");
-});
-
-/* copy */
-bindTap($btnCopy, async ()=>{
+$("btnDo").addEventListener("click", async ()=>{
   try{
-    const txt = ($promoCode.textContent||"").trim();
-    if(!txt) return;
-    if(navigator.clipboard && navigator.clipboard.writeText){
-      await navigator.clipboard.writeText(txt);
+    const url=$("apiUrl").value.trim();
+    const key=$("adminKey").value.trim();
+    const act=$("act").value;
+    const phone=normalizePhone($("targetPhone").value);
+    if(!phone) return showMsg("เบอร์ไม่ถูกต้อง", false);
+
+    const u=buildUrl(url,{
+      action:"admin_action",
+      admin_key:key,
+      act:act,
+      target_phone:phone
+    });
+    const data=await jsonp(u);
+    if(!data || data.ok!==true) throw new Error(data && (data.msg||data.code) ? (data.msg||data.code) : "ทำรายการไม่สำเร็จ");
+
+    if(data.status==="APPROVED"){
+      showMsg("อนุมัติสำเร็จ ✅\nโค้ด: "+String(data.promo_code||"NO_CODE"), true);
     }else{
-      const ta=document.createElement("textarea");
-      ta.value=txt; ta.style.position="fixed"; ta.style.left="-9999px";
-      document.body.appendChild(ta); ta.focus(); ta.select();
-      document.execCommand("copy");
-      document.body.removeChild(ta);
+      showMsg("สำเร็จ ✅\nสถานะ: "+String(data.status||""), true);
     }
-    $btnCopy.textContent="คัดลอกแล้ว ✓";
-    $btnCopy.classList.add("copied");
-    setTimeout(()=>{ $btnCopy.textContent="คัดลอก"; $btnCopy.classList.remove("copied"); }, 1500);
-  }catch(_){
-    alert("ไม่สามารถคัดลอกได้ กรุณาคัดลอกด้วยตนเอง");
+    await loadParticipants();
+  }catch(e){
+    showMsg("ทำรายการไม่สำเร็จ: "+String(e.message||e), false);
   }
 });
+
+// auto load
+loadParticipants().catch(()=>{});
 </script>
 </body>
 </html>
