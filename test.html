@@ -26,84 +26,26 @@ body{
   border:1px solid var(--line); border-radius:24px; padding:18px;
   box-shadow:0 20px 50px rgba(0,0,0,.6);
 }
-
-/* ✅ รูปใหญ่ขึ้น + สวยขึ้น + คลิกดูเต็มได้ */
-.heroWrap{
-  position:relative;
-  border-radius:18px;
-  overflow:hidden;
+.hero{
+  width:100%; border-radius:16px; display:block;
   border:1px solid rgba(255,255,255,.12);
   background:rgba(0,0,0,.25);
 }
-.hero{
-  width:100%;
-  height:320px;                 /* ✅ ปรับความสูงรูปใหญ่ขึ้น */
-  object-fit:cover;
-  display:block;
-  transform:scale(1.02);
-  filter:saturate(1.05) contrast(1.02);
-}
-.heroHint{
-  position:absolute; left:12px; bottom:12px;
-  font-size:12px; color:#fff;
-  padding:8px 10px; border-radius:12px;
-  background:rgba(0,0,0,.45);
-  border:1px solid rgba(255,255,255,.14);
-  backdrop-filter: blur(6px);
-}
-
-/* ✅ ปุ่มสวยขึ้น + กดแล้วเด้ง + โหลดมีสปินเนอร์ */
 h1{font-size:20px;margin:12px 0 6px}
 p{margin:0 0 14px;color:var(--muted);line-height:1.6}
 label{display:block;margin:10px 0 6px;color:var(--muted)}
 input{
   width:100%;padding:12px 14px;border-radius:14px;
   border:1px solid var(--line);background:#0f0f0f;color:#fff;font-size:16px;
-  outline:none;
-  transition: border-color .15s ease, transform .08s ease, box-shadow .2s ease;
 }
-input:focus{
-  border-color: rgba(255,43,43,.55);
-  box-shadow: 0 0 0 4px rgba(255,43,43,.12);
-}
-
 .row{display:flex;gap:10px;margin-top:12px}
 button{
   flex:1;padding:12px 14px;border-radius:14px;border:0;
-  font-size:16px;font-weight:900;color:#fff;cursor:pointer;
-  transition: transform .08s ease, filter .15s ease, opacity .15s ease;
-  position:relative;
+  font-size:16px;font-weight:800;color:#fff;cursor:pointer;
 }
-button:hover{filter:brightness(1.06)}
-button:active{transform:translateY(1px) scale(.99)}
-.btnAlt{
-  background:linear-gradient(180deg,#2b2b2b,#1f1f1f);
-  border:1px solid rgba(255,255,255,.10);
-}
-.btnMain{
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  box-shadow: 0 10px 24px rgba(255,43,43,.20);
-}
-button:disabled{opacity:.55;cursor:not-allowed;transform:none}
-
-/* โหลดดิ้งในปุ่ม */
-.isLoading{
-  pointer-events:none;
-  filter:saturate(.95);
-}
-.isLoading::after{
-  content:"";
-  width:18px;height:18px;
-  border-radius:999px;
-  border:2px solid rgba(255,255,255,.35);
-  border-top-color: rgba(255,255,255,.95);
-  position:absolute;
-  right:12px; top:50%;
-  transform:translateY(-50%);
-  animation:spin .8s linear infinite;
-}
-@keyframes spin{to{transform:translateY(-50%) rotate(360deg)}}
-
+.btnAlt{background:#2a2a2a}
+.btnMain{background:linear-gradient(135deg,var(--accent),var(--accent2))}
+button:disabled{opacity:.55;cursor:not-allowed}
 .msg{
   margin-top:12px;padding:12px;border-radius:14px;
   border:1px solid var(--line);background:rgba(0,0,0,.25);
@@ -112,7 +54,6 @@ button:disabled{opacity:.55;cursor:not-allowed;transform:none}
 .ok{border-color:rgba(54,211,153,.4)}
 .err{border-color:rgba(255,90,95,.45)}
 .hint{font-size:12px;color:#bfbfbf;margin-top:10px;line-height:1.6}
-
 .copyBox{
   margin-top:12px;padding:12px;border-radius:14px;
   border:1px dashed rgba(255,255,255,.25);background:rgba(0,0,0,.25);
@@ -122,11 +63,8 @@ button:disabled{opacity:.55;cursor:not-allowed;transform:none}
 .copyBtn{
   padding:10px 14px;border-radius:12px;border:0;cursor:pointer;
   font-weight:900;color:#fff;background:linear-gradient(135deg,#22c55e,#16a34a);
-  transition: transform .08s ease, filter .15s ease;
 }
-.copyBtn:active{transform:translateY(1px) scale(.99)}
 .copyBtn.copied{background:linear-gradient(135deg,#3b82f6,#2563eb)}
-
 .modal{
   position:fixed; inset:0; background:rgba(0,0,0,.70);
   display:none; align-items:center; justify-content:center; padding:18px; z-index:9999;
@@ -146,29 +84,29 @@ button:disabled{opacity:.55;cursor:not-allowed;transform:none}
   background:linear-gradient(135deg,var(--accent),var(--accent2));
 }
 
-/* ✅ โมดัลดูรูปเต็ม */
-.imgModal .modalCard{padding:0; overflow:hidden}
-.imgModal img{width:100%; display:block}
-.imgModal .modalBtnMain{border-radius:0}
-
+/* (ไม่จำเป็น) แถบแสดง device id แบบจางๆ */
+.deviceHint{
+  margin-top:10px;
+  font-size:11px;
+  color:#9a9a9a;
+  opacity:.9;
+  word-break:break-all;
+}
 </style>
 </head>
 
 <body>
 <div class="card">
 
-<!-- ✅ รูปใหญ่ + คลิกดูเต็ม -->
-<div class="heroWrap" id="heroWrap" role="button" tabindex="0" aria-label="แตะเพื่อดูรูปเต็ม">
-  <img
-    id="heroImg"
-    class="hero"
-    src="https://img5.pic.in.th/file/secure-sv1/photo_--_--2bb7d3a2870ef8d6.jpg"
-    alt="กิจกรรมรับเครดิตฟรี"
-    loading="eager"
-    decoding="async"
-  />
-  <div class="heroHint">แตะรูปเพื่อดูเต็ม</div>
-</div>
+<!-- เปลี่ยนรูปได้ -->
+<img
+  id="heroImg"
+  class="hero"
+  src="https://img5.pic.in.th/file/secure-sv1/photo_--_--2bb7d3a2870ef8d6.jpg"
+  alt="กิจกรรมรับเครดิตฟรี"
+  loading="eager"
+  decoding="async"
+/>
 
 <h1>🎁 ปีใหม่แจกคูปองสูงสุด 38,888 บาท 🎁</h1>
 <p>ระบบลงทะเบียนและรับโค้ด (ปล่อยโค้ดหลังแอดมินอนุมัติ)</p>
@@ -197,9 +135,11 @@ button:disabled{opacity:.55;cursor:not-allowed;transform:none}
 * ทำยอด 10 เท่า ถอนได้ 10 เท่า
 </div>
 
+<!-- (ไม่จำเป็น) โชว์ device id เพื่อ debug -->
+<div id="deviceHint" class="deviceHint"></div>
+
 </div>
 
-<!-- เงื่อนไข (บังคับอ่าน) -->
 <div id="ruleModal" class="modal" aria-hidden="true">
   <div class="modalCard" role="dialog" aria-modal="true">
     <div class="modalTitle">📌 เงื่อนไขก่อนกรอกโค้ด (บังคับอ่าน)</div>
@@ -213,29 +153,39 @@ button:disabled{opacity:.55;cursor:not-allowed;transform:none}
   </div>
 </div>
 
-<!-- ✅ โมดัลรูปเต็ม -->
-<div id="imgModal" class="modal imgModal" aria-hidden="true">
-  <div class="modalCard" role="dialog" aria-modal="true">
-    <img id="imgModalPic" alt="ดูรูปเต็ม" />
-    <button class="modalBtnMain" id="imgModalClose" type="button">ปิด</button>
-  </div>
-</div>
-
 <script>
 /* 🔴 ใส่ลิงก์ exec ของ Google Apps Script (Deploy Web App) */
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwvj6_Lb6cHdMgjXaxNhjPaiWgS7vYBckyLAbYl7UgfxUAHj42ePmENuPU0gkstg9dSmA/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxyv3eUVDckqSXv2cowyqfBnHOyxTf64dkuPmJD-UQgs0rP2AJ49Ph3xzC9a3FFzODFzA/exec";
 
-/* ✅ 1 คน / 1 เครื่อง (แบบสุ่ม device_id เก็บในเครื่อง ไม่ใช่ fingerprint) */
+/* =======================
+   HARD: 1 เครื่อง (device_id)
+   - สร้าง device_id ครั้งแรก แล้วเก็บใน localStorage
+   - ถ้าล้างเว็บ/เปลี่ยนเบราว์เซอร์/โหมดไม่จำ = device_id เปลี่ยน (ถือว่าเครื่องใหม่)
+======================= */
 const DEVICE_KEY = "RR365_DEVICE_ID_V1";
-function getDeviceId(){
-  let v = localStorage.getItem(DEVICE_KEY);
-  if(v) return v;
-  // สุ่ม id แบบสั้นพอ (ไม่เอาข้อมูลส่วนตัว)
-  const rand = () => Math.random().toString(36).slice(2);
-  v = "dv_" + rand() + rand();
-  localStorage.setItem(DEVICE_KEY, v);
-  return v;
+
+function uuidLike(){
+  // สุ่มแบบ uuid-ish ไม่พึ่ง lib
+  const a = new Uint8Array(16);
+  crypto.getRandomValues(a);
+  const hex = [...a].map(b=>b.toString(16).padStart(2,"0")).join("");
+  return `rr-${hex.slice(0,8)}-${hex.slice(8,12)}-${hex.slice(12,16)}-${hex.slice(16,20)}-${hex.slice(20)}`;
 }
+
+function getDeviceId(){
+  try{
+    let id = localStorage.getItem(DEVICE_KEY);
+    if(!id){
+      id = uuidLike();
+      localStorage.setItem(DEVICE_KEY, id);
+    }
+    return id;
+  }catch(_){
+    // ถ้า localStorage ใช้ไม่ได้ (บางเว็บ/บางโหมด) ให้ใช้ session แทน
+    return "rr-session-" + Math.random().toString(36).slice(2) + Date.now().toString(36);
+  }
+}
+
 const DEVICE_ID = getDeviceId();
 
 const $phone=document.getElementById("phone");
@@ -248,36 +198,13 @@ const $promoCode=document.getElementById("promoCode");
 const $btnCopy=document.getElementById("btnCopy");
 const $ruleModal=document.getElementById("ruleModal");
 const $modalAck=document.getElementById("modalAcknowledge");
+const $deviceHint=document.getElementById("deviceHint");
 
-/* รูปเต็ม */
-const $heroWrap = document.getElementById("heroWrap");
-const $heroImg  = document.getElementById("heroImg");
-const $imgModal = document.getElementById("imgModal");
-const $imgModalPic = document.getElementById("imgModalPic");
-const $imgModalClose = document.getElementById("imgModalClose");
+if($deviceHint) $deviceHint.textContent = "device_id: " + DEVICE_ID;
 
 function openRule(){ $ruleModal.classList.add("show"); document.body.style.overflow="hidden"; }
 function closeRule(){ $ruleModal.classList.remove("show"); document.body.style.overflow=""; }
 $modalAck.onclick=closeRule;
-
-function openImg(){
-  $imgModalPic.src = $heroImg.src;
-  $imgModal.classList.add("show");
-  document.body.style.overflow="hidden";
-}
-function closeImg(){
-  $imgModal.classList.remove("show");
-  document.body.style.overflow="";
-}
-$heroWrap.addEventListener("click", openImg);
-$heroWrap.addEventListener("keydown", (e)=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); openImg(); }});
-$imgModalClose.onclick = closeImg;
-$imgModal.addEventListener("click", (e)=>{ if(e.target===$imgModal) closeImg(); });
-
-/* fallback รูปถ้าโหลดไม่ได้ */
-$heroImg.addEventListener("error", ()=>{
-  $heroImg.src = "https://dummyimage.com/1200x800/111/fff.png&text=Image+Not+Found";
-});
 
 function show(t,type="ok"){
   $msg.style.display="block";
@@ -297,13 +224,14 @@ function normalizePhone(v){
   return /^0[689]\d{8}$/.test(p)?p:"";
 }
 
-/* ✅ JSONP (กัน CORS) */
 function jsonp(params){
   return new Promise((res,rej)=>{
     const cb="cb_"+Math.random().toString(36).slice(2);
     params.callback=cb;
     params._ts=Date.now();
-    params.device_id = DEVICE_ID; // ✅ ส่ง device_id ไปให้ฝั่ง Apps Script เก็บ/กันซ้ำได้
+
+    // ✅ ส่ง device_id ทุกครั้ง (กันซ้ำ 1 เครื่อง)
+    params.device_id = DEVICE_ID;
 
     const s=document.createElement("script");
     s.src = SCRIPT_URL + "?" + new URLSearchParams(params).toString();
@@ -315,112 +243,76 @@ function jsonp(params){
   });
 }
 
-function setLoading(btn, on){
-  if(on){ btn.classList.add("isLoading"); btn.disabled=true; }
-  else { btn.classList.remove("isLoading"); btn.disabled=false; }
-}
-
 $btnCopy.onclick=async()=>{
   const t=$promoCode.textContent.trim(); if(!t) return;
-  try{
-    await navigator.clipboard.writeText(t);
-    $btnCopy.classList.add("copied");
-    setTimeout(()=>$btnCopy.classList.remove("copied"),1200);
-  }catch(_){
-    show("❌ คัดลอกไม่สำเร็จ (เบราว์เซอร์บล็อก)","err");
-  }
+  await navigator.clipboard.writeText(t);
+  $btnCopy.classList.add("copied");
+  setTimeout(()=>$btnCopy.classList.remove("copied"),1200);
 };
 
 $btnCheck.onclick=async()=>{
   hideMsg(); hideCopy(); $btnJoin.disabled=true;
-
   const p=normalizePhone($phone.value);
   if(!p){ show("กรุณากรอกเบอร์ให้ถูกต้อง","err"); return; }
 
-  setLoading($btnCheck,true);
-  try{
-    show("⏳ กำลังตรวจสอบสิทธิ์...");
-    const d=await jsonp({action:"check",phone:p});
-    if(!d){ show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err"); return; }
+  show("⏳ กำลังตรวจสอบสิทธิ์...");
+  const d=await jsonp({action:"check",phone:p}).catch(()=>null);
+  if(!d){ show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err"); return; }
 
-    if(!d.ok){
-      show(d.msg || "ไม่ผ่านเงื่อนไข","err");
-      return;
-    }
-
-    show(d.msg || "✅ ผ่านการตรวจสอบ กดยืนยันเข้าร่วมได้","ok");
-    $btnJoin.disabled=false;
-
-  }catch(_){
-    show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err");
-  }finally{
-    setLoading($btnCheck,false);
+  if(!d.ok){
+    show(d.msg || "ไม่ผ่านเงื่อนไข","err");
+    return;
   }
+
+  show(d.msg || "✅ ผ่านการตรวจสอบ กดยืนยันเข้าร่วมได้","ok");
+  $btnJoin.disabled=false;
 };
 
 $btnJoin.onclick=async()=>{
   hideMsg(); hideCopy();
-
   const p=normalizePhone($phone.value);
   if(!p){ show("กรุณากรอกเบอร์ให้ถูกต้อง","err"); return; }
 
-  setLoading($btnJoin,true);
-  try{
-    show("⏳ กำลังลงชื่อเข้าร่วม...");
-    const d=await jsonp({action:"register",phone:p});
-    if(!d){ show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err"); return; }
+  show("⏳ กำลังลงชื่อเข้าร่วม...");
+  const d=await jsonp({action:"register",phone:p}).catch(()=>null);
+  if(!d){ show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err"); return; }
 
-    if(!d.ok){
-      show(d.msg || "ยืนยันไม่สำเร็จ","err");
-      return;
-    }
-
-    show(d.msg || "✅ ลงชื่อแล้ว รอแอดมินอนุมัติ","ok");
-    openRule();
-
-  }catch(_){
-    show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err");
-  }finally{
-    setLoading($btnJoin,false);
+  if(!d.ok){
+    show(d.msg || "ยืนยันไม่สำเร็จ","err");
+    return;
   }
+
+  show(d.msg || "✅ ลงชื่อแล้ว รอแอดมินอนุมัติ","ok");
+  openRule();
 };
 
 $btnPoll.onclick=async()=>{
   hideMsg(); hideCopy();
-
   const p=normalizePhone($phone.value);
   if(!p){ show("กรุณากรอกเบอร์ให้ถูกต้อง","err"); return; }
 
-  setLoading($btnPoll,true);
-  try{
-    show("⏳ กำลังเช็คสถานะ...");
-    const d=await jsonp({action:"poll",phone:p});
-    if(!d){ show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err"); return; }
+  show("⏳ กำลังเช็คสถานะ...");
+  const d=await jsonp({action:"poll",phone:p}).catch(()=>null);
+  if(!d){ show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err"); return; }
 
-    if(!d.ok){
-      show(d.msg || "ยังไม่พร้อม","err");
-      return;
-    }
-
-    if(d.status==="APPROVED" && d.promo_code){
-      $promoCode.textContent=d.promo_code;
-      $copyWrap.style.display="flex";
-      show("🎉 อนุมัติแล้ว รับโค้ดได้เลย","ok");
-      openRule();
-      return;
-    }
-
-    if(d.status==="PENDING"){ show("⏳ รอการอนุมัติจากแอดมิน","ok"); return; }
-    if(d.status==="REJECTED"){ show("❌ ไม่ผ่านการอนุมัติ กรุณาติดต่อแอดมิน","err"); return; }
-    if(d.status==="USED"){ show("⚠️ รายการนี้ถูกใช้ไปแล้ว","err"); return; }
-
-    show(d.msg || ("สถานะ: "+(d.status||"UNKNOWN")),"ok");
-
-  }catch(_){
-    show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err");
-  }finally{
-    setLoading($btnPoll,false);
+  if(!d.ok){
+    show(d.msg || "ยังไม่พร้อม","err");
+    return;
   }
+
+  if(d.status==="APPROVED" && d.promo_code){
+    $promoCode.textContent=d.promo_code;
+    $copyWrap.style.display="flex";
+    show("🎉 อนุมัติแล้ว รับโค้ดได้เลย","ok");
+    openRule();
+    return;
+  }
+
+  if(d.status==="PENDING"){ show("⏳ รอการอนุมัติจากแอดมิน","ok"); return; }
+  if(d.status==="REJECTED"){ show("❌ ไม่ผ่านการอนุมัติ กรุณาติดต่อแอดมิน","err"); return; }
+  if(d.status==="USED"){ show("⚠️ รายการนี้ถูกใช้ไปแล้ว","err"); return; }
+
+  show(d.msg || ("สถานะ: "+(d.status||"UNKNOWN")),"ok");
 };
 </script>
 </body>
