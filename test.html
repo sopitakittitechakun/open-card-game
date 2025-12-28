@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>สวัสดีปีใหม่ | รับโค้ดสุ่ม</title>
 <meta name="color-scheme" content="dark"/>
-
 <style>
 :root{
   --bg:#0b0b0b; --card:#141414; --line:rgba(255,255,255,.12);
@@ -31,8 +30,8 @@ body{
   background:rgba(0,0,0,.25);
 }
 h1{font-size:20px;margin:12px 0 6px}
-p{margin:0 0 14px;color:#cfcfcf;line-height:1.6}
-label{display:block;margin:10px 0 6px;color:#cfcfcf}
+p{margin:0 0 14px;color:var(--muted);line-height:1.6}
+label{display:block;margin:10px 0 6px;color:var(--muted)}
 input{
   width:100%;padding:12px 14px;border-radius:14px;
   border:1px solid var(--line);background:#0f0f0f;color:#fff;font-size:16px;
@@ -118,7 +117,8 @@ button:disabled{opacity:.55;cursor:not-allowed}
 
 <div class="hint">
 * โค้ดที่ได้รับ ต้องมียอดฝากของวันที่รับครบ 365 บาทก่อนจึงกรอกได้<br>
-* ทำยอด 10 เท่า ถอนได้ 10 เท่า
+* ทำยอด 10 เท่า ถอนได้ 10 เท่า<br>
+* 1 คน / 1 เครื่อง (หากต้องการเปลี่ยนเครื่องให้ติดต่อแอดมิน)
 </div>
 
 </div>
@@ -130,15 +130,16 @@ button:disabled{opacity:.55;cursor:not-allowed}
       1) ต้องมียอดฝากของวันที่รับครบ 365 บาท<br>
       2) ทำยอด 10 เท่า ถอนได้ 10 เท่า<br>
       3) 1 คน / 1 ยูสเซอร์ เท่านั้น<br>
-      4) โค้ดปล่อยหลังแอดมินอนุมัติ
+      4) 1 คน / 1 เครื่อง เท่านั้น<br>
+      5) โค้ดปล่อยหลังแอดมินอนุมัติ
     </div>
     <button class="modalBtnMain" id="modalAcknowledge" type="button">รับทราบ</button>
   </div>
 </div>
 
 <script>
-/* 🔴 ใส่ลิงก์ exec ของ Google Apps Script (Deploy Web App) */
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwLULKd3AFPUDdj6c_GWs_nFJh391SePNHIMmlL7LSNFzEeOdqa1GyPC8D4VQx9WBANww/exec";
+/* 🔴 ใส่ลิงก์ exec ของ Google Apps Script */
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyjyGDDOzFyoe16xyr07yQzTVEB8qCZcrShA5-o1w6AUbDg1aGIlaxJLVNGyUe2aB9jdQ/exec";
 
 /* ===== device_id (ผูกเครื่อง) ===== */
 const DEVICE_KEY = "RR365_DEVICE_ID_V1";
@@ -200,7 +201,7 @@ function jsonp(params){
     const cb="cb_"+Math.random().toString(36).slice(2);
     params.callback=cb;
     params._ts=Date.now();
-    params.device_id = DEVICE_ID; // ✅ ส่งทุกครั้ง
+    params.device_id = DEVICE_ID; // ✅ ส่งทุกครั้ง (ผูกเครื่อง)
 
     const s=document.createElement("script");
     s.src = SCRIPT_URL + "?" + new URLSearchParams(params).toString();
@@ -228,10 +229,7 @@ $btnCheck.onclick=async()=>{
   const d=await jsonp({action:"check",phone:p}).catch(()=>null);
   if(!d){ show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err"); return; }
 
-  if(!d.ok){
-    show(d.msg || "ไม่ผ่านเงื่อนไข","err");
-    return;
-  }
+  if(!d.ok){ show(d.msg || "ไม่ผ่านเงื่อนไข","err"); return; }
 
   show(d.msg || "✅ ผ่านการตรวจสอบ กดยืนยันเข้าร่วมได้","ok");
   $btnJoin.disabled=false;
@@ -246,10 +244,7 @@ $btnJoin.onclick=async()=>{
   const d=await jsonp({action:"register",phone:p}).catch(()=>null);
   if(!d){ show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err"); return; }
 
-  if(!d.ok){
-    show(d.msg || "ยืนยันไม่สำเร็จ","err");
-    return;
-  }
+  if(!d.ok){ show(d.msg || "ยืนยันไม่สำเร็จ","err"); return; }
 
   show(d.msg || "✅ ลงชื่อแล้ว รอแอดมินอนุมัติ","ok");
   openRule();
@@ -264,10 +259,7 @@ $btnPoll.onclick=async()=>{
   const d=await jsonp({action:"poll",phone:p}).catch(()=>null);
   if(!d){ show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err"); return; }
 
-  if(!d.ok){
-    show(d.msg || "ยังไม่พร้อม","err");
-    return;
-  }
+  if(!d.ok){ show(d.msg || "ยังไม่พร้อม","err"); return; }
 
   if(d.status==="APPROVED" && d.promo_code){
     $promoCode.textContent=d.promo_code;
