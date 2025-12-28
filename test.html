@@ -8,82 +8,313 @@
 
 <style>
 :root{
-  --bg:#0b0b0b; --card:#141414; --line:rgba(255,255,255,.12);
-  --txt:#fff; --muted:#cfcfcf;
-  --accent:#ff2b2b; --accent2:#b80000;
-  --ok:#36d399; --bad:#ff5a5f;
+  --bg:#0b0b0b;
+  --card:#141414;
+  --line:rgba(255,255,255,.12);
+  --txt:#fff;
+  --muted:#cfcfcf;
+
+  --accent:#ff2b2b;
+  --accent2:#b80000;
+
+  --ok:#36d399;
+  --bad:#ff5a5f;
+
+  --radius:24px;
+  --radius2:16px;
+
+  --shadow: 0 22px 60px rgba(0,0,0,.70);
+  --shadow2: 0 14px 40px rgba(0,0,0,.55);
+
+  --glow: 0 0 0 1px rgba(255,255,255,.10), 0 0 30px rgba(255,43,43,.18);
 }
+
 *{box-sizing:border-box}
+html,body{height:100%}
 body{
-  margin:0;padding:24px;
+  margin:0;
+  padding:24px;
   font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;
-  background:radial-gradient(900px 500px at 50% -10%, rgba(255,60,60,.15), transparent 60%), var(--bg);
   color:var(--txt);
+  background:
+    radial-gradient(900px 540px at 50% -10%, rgba(255,60,60,.16), transparent 60%),
+    radial-gradient(900px 540px at 20% 110%, rgba(255,60,60,.08), transparent 60%),
+    linear-gradient(180deg, #0a0a0a, #070707 45%, #0b0b0b);
 }
+
 .card{
-  max-width:560px;margin:0 auto;
-  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-  border:1px solid var(--line); border-radius:24px; padding:18px;
-  box-shadow:0 20px 50px rgba(0,0,0,.6);
+  max-width:560px;
+  margin:0 auto;
+  border-radius:var(--radius);
+  padding:18px;
+  border:1px solid var(--line);
+  background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+  box-shadow: var(--shadow);
+  position:relative;
+  overflow:hidden;
 }
+.card:before{
+  content:"";
+  position:absolute; inset:-2px;
+  background:
+    radial-gradient(500px 200px at 20% 0%, rgba(255,43,43,.16), transparent 60%),
+    radial-gradient(500px 200px at 80% 0%, rgba(255,43,43,.08), transparent 60%);
+  pointer-events:none;
+  filter: blur(0px);
+  opacity:.9;
+}
+
 .hero{
-  width:100%; border-radius:16px; display:block;
+  width:100%;
+  border-radius:var(--radius2);
+  display:block;
   border:1px solid rgba(255,255,255,.12);
   background:rgba(0,0,0,.25);
+  box-shadow: var(--shadow2);
+  transform: translateZ(0);
+  transition: transform .25s ease, filter .25s ease, opacity .25s ease;
 }
-h1{font-size:20px;margin:12px 0 6px}
-p{margin:0 0 14px;color:var(--muted);line-height:1.6}
-label{display:block;margin:10px 0 6px;color:var(--muted)}
+.hero:hover{ transform: translateY(-1px) scale(1.003); filter: saturate(1.05); }
+
+h1{
+  font-size:20px;
+  margin:12px 0 6px;
+  letter-spacing:.2px;
+}
+p{
+  margin:0 0 14px;
+  color:var(--muted);
+  line-height:1.65;
+}
+label{
+  display:block;
+  margin:10px 0 6px;
+  color:var(--muted);
+  font-size:14px;
+}
+
 input{
-  width:100%;padding:12px 14px;border-radius:14px;
-  border:1px solid var(--line);background:#0f0f0f;color:#fff;font-size:16px;
+  width:100%;
+  padding:12px 14px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(8,8,8,.9);
+  color:#fff;
+  font-size:16px;
+  outline:none;
+  transition: border-color .2s ease, box-shadow .2s ease, transform .15s ease;
 }
-.row{display:flex;gap:10px;margin-top:12px}
+input:focus{
+  border-color: rgba(255,43,43,.55);
+  box-shadow: var(--glow);
+}
+input::placeholder{ color: rgba(255,255,255,.35); }
+
+.row{display:flex; gap:10px; margin-top:12px}
+
+/* =========================
+   Buttons (สวยขึ้น + มี Loading)
+========================= */
 button{
-  flex:1;padding:12px 14px;border-radius:14px;border:0;
-  font-size:16px;font-weight:800;color:#fff;cursor:pointer;
-  pointer-events:auto !important; /* กันโดนทับคลิก */
-  position:relative; z-index:999999;
+  -webkit-tap-highlight-color: transparent;
+  flex:1;
+  padding:12px 14px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.10);
+  font-size:16px;
+  font-weight:900;
+  color:#fff;
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+  transform: translateZ(0);
+  transition: transform .14s ease, box-shadow .18s ease, filter .18s ease, border-color .18s ease, opacity .18s ease;
 }
-.btnAlt{background:#2a2a2a}
-.btnMain{background:linear-gradient(135deg,var(--accent),var(--accent2))}
-button:disabled{opacity:.55;cursor:not-allowed}
+button:focus{ outline:none; }
+button:focus-visible{
+  box-shadow: 0 0 0 3px rgba(255,43,43,.35), 0 0 0 1px rgba(255,255,255,.15);
+}
+
+button:before{
+  content:"";
+  position:absolute; inset:0;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,.18), transparent);
+  transform: translateX(-120%);
+  transition: transform .65s ease;
+  pointer-events:none;
+}
+button:hover:before{ transform: translateX(120%); }
+button:hover{
+  transform: translateY(-1px);
+  filter: saturate(1.05);
+  box-shadow: 0 14px 36px rgba(0,0,0,.45);
+  border-color: rgba(255,255,255,.18);
+}
+button:active{
+  transform: translateY(0px) scale(.99);
+  box-shadow: 0 10px 26px rgba(0,0,0,.35);
+}
+
+.btnAlt{
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));
+}
+.btnMain{
+  border-color: rgba(255,43,43,.35);
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  box-shadow: 0 16px 42px rgba(255,43,43,.14), 0 16px 42px rgba(0,0,0,.45);
+}
+.btnMain:hover{
+  box-shadow: 0 20px 56px rgba(255,43,43,.18), 0 18px 48px rgba(0,0,0,.45);
+}
+
+/* Disabled */
+button:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+  transform:none;
+  box-shadow:none;
+}
+button:disabled:before{ display:none; }
+
+/* Loading state */
+.btnLoading{
+  pointer-events:none;
+  opacity:.92;
+}
+.btnLoading .btnText{ opacity:0; }
+.btnSpinner{
+  position:absolute;
+  left:50%; top:50%;
+  width:18px; height:18px;
+  margin:-9px 0 0 -9px;
+  border-radius:50%;
+  border:2px solid rgba(255,255,255,.25);
+  border-top-color: rgba(255,255,255,.95);
+  animation: spin .7s linear infinite;
+  display:none;
+}
+.btnLoading .btnSpinner{ display:block; }
+
+@keyframes spin{
+  to{ transform: rotate(360deg); }
+}
+
+/* =========================
+   Message (เด้งสวย)
+========================= */
 .msg{
-  margin-top:12px;padding:12px;border-radius:14px;
-  border:1px solid var(--line);background:rgba(0,0,0,.25);
-  white-space:pre-line;display:none;line-height:1.6;
+  margin-top:12px;
+  padding:12px;
+  border-radius:14px;
+  border:1px solid var(--line);
+  background:rgba(0,0,0,.25);
+  white-space:pre-line;
+  display:none;
+  line-height:1.7;
+  transform: translateY(6px);
+  opacity:0;
+  animation: pop .18s ease forwards;
 }
-.ok{border-color:rgba(54,211,153,.4)}
-.err{border-color:rgba(255,90,95,.45)}
-.hint{font-size:12px;color:#bfbfbf;margin-top:10px;line-height:1.6}
+@keyframes pop{
+  to{ transform: translateY(0); opacity:1; }
+}
+.ok{
+  border-color: rgba(54,211,153,.45);
+  box-shadow: 0 0 0 1px rgba(54,211,153,.12) inset;
+}
+.err{
+  border-color: rgba(255,90,95,.50);
+  box-shadow: 0 0 0 1px rgba(255,90,95,.14) inset;
+}
+
+.hint{
+  font-size:12px;
+  color:#bfbfbf;
+  margin-top:10px;
+  line-height:1.7;
+}
+
+/* =========================
+   Copy box (สวยขึ้น)
+========================= */
 .copyBox{
-  margin-top:12px;padding:12px;border-radius:14px;
-  border:1px dashed rgba(255,255,255,.25);background:rgba(0,0,0,.25);
-  display:none;align-items:center;gap:10px;
+  margin-top:12px;
+  padding:12px;
+  border-radius:14px;
+  border:1px dashed rgba(255,255,255,.25);
+  background:rgba(0,0,0,.25);
+  display:none;
+  align-items:center;
+  gap:10px;
+  animation: pop .18s ease forwards;
 }
-.copyCode{flex:1;font-weight:900;font-size:16px;letter-spacing:1px;user-select:all}
+.copyCode{
+  flex:1;
+  font-weight:1000;
+  font-size:16px;
+  letter-spacing:1px;
+  user-select:all;
+}
 .copyBtn{
-  padding:10px 14px;border-radius:12px;border:0;cursor:pointer;
-  font-weight:900;color:#fff;background:linear-gradient(135deg,#22c55e,#16a34a);
+  padding:10px 14px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.10);
+  cursor:pointer;
+  font-weight:1000;
+  color:#fff;
+  background: linear-gradient(135deg,#22c55e,#16a34a);
 }
-.copyBtn.copied{background:linear-gradient(135deg,#3b82f6,#2563eb)}
+.copyBtn:hover{ transform: translateY(-1px); }
+.copyBtn.copied{
+  background:linear-gradient(135deg,#3b82f6,#2563eb);
+}
+
+/* =========================
+   Modal (เนียนขึ้น)
+========================= */
 .modal{
-  position:fixed; inset:0; background:rgba(0,0,0,.70);
-  display:none; align-items:center; justify-content:center; padding:18px; z-index:9999;
+  position:fixed; inset:0;
+  background: rgba(0,0,0,.72);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  z-index:9999;
+  backdrop-filter: blur(6px);
 }
 .modal.show{display:flex}
 .modalCard{
-  width:min(560px, 100%); border-radius:18px; padding:16px;
+  width:min(560px, 100%);
+  border-radius:18px;
+  padding:16px;
   border:1px solid rgba(255,255,255,.14);
-  background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
-  box-shadow:0 20px 60px rgba(0,0,0,.75);
+  background:linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.04));
+  box-shadow:0 22px 70px rgba(0,0,0,.78);
+  transform: translateY(10px);
+  opacity:0;
+  animation: modalIn .18s ease forwards;
 }
-.modalTitle{font-weight:900;font-size:18px;margin-bottom:10px}
-.modalText{color:#e9e9e9;line-height:1.7;margin-bottom:12px}
+@keyframes modalIn{
+  to{ transform: translateY(0); opacity:1; }
+}
+.modalTitle{font-weight:1000;font-size:18px;margin-bottom:10px}
+.modalText{color:#e9e9e9;line-height:1.75;margin-bottom:12px}
 .modalBtnMain{
-  width:100%; padding:12px 14px; border-radius:14px; border:0;
-  font-weight:900; cursor:pointer; color:#fff;
+  width:100%;
+  padding:12px 14px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.10);
+  font-weight:1000;
+  cursor:pointer;
+  color:#fff;
   background:linear-gradient(135deg,var(--accent),var(--accent2));
+}
+.modalBtnMain:hover{ transform: translateY(-1px); }
+.modalBtnMain:active{ transform: translateY(0) scale(.99); }
+
+/* ลดโมชั่นสำหรับเครื่องที่ตั้งค่า reduce motion */
+@media (prefers-reduced-motion: reduce){
+  *{ animation:none!important; transition:none!important; }
 }
 </style>
 </head>
@@ -91,6 +322,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 <body>
 <div class="card">
 
+<!-- เปลี่ยนรูปได้ -->
 <img
   id="heroImg"
   class="hero"
@@ -107,12 +339,20 @@ button:disabled{opacity:.55;cursor:not-allowed}
 <input id="phone" inputmode="numeric" placeholder="เช่น 0611111111"/>
 
 <div class="row">
-  <button id="btnCheck" class="btnAlt" type="button">เช็คสิทธิ์</button>
-  <button id="btnJoin" class="btnMain" type="button" disabled>ยืนยันเข้าร่วม</button>
+  <button id="btnCheck" class="btnAlt" type="button">
+    <span class="btnText">เช็คสิทธิ์</span>
+    <span class="btnSpinner" aria-hidden="true"></span>
+  </button>
+
+  <button id="btnJoin" class="btnMain" type="button" disabled>
+    <span class="btnText">ยืนยันเข้าร่วม</span>
+    <span class="btnSpinner" aria-hidden="true"></span>
+  </button>
 </div>
 
 <button id="btnPoll" class="btnAlt" type="button" style="margin-top:10px;width:100%">
-  เช็คสถานะ / รับโค้ด
+  <span class="btnText">เช็คสถานะ / รับโค้ด</span>
+  <span class="btnSpinner" aria-hidden="true"></span>
 </button>
 
 <div id="msg" class="msg"></div>
@@ -124,8 +364,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 
 <div class="hint">
 * โค้ดที่ได้รับ ต้องมียอดฝากของวันที่รับครบ 365 บาทก่อนจึงกรอกได้<br>
-* ทำยอด 10 เท่า ถอนได้ 10 เท่า<br>
-* 1 คน / 1 เครื่อง เท่านั้น (ระบบตรวจเครื่องอัตโนมัติ)
+* ทำยอด 10 เท่า ถอนได้ 10 เท่า
 </div>
 
 </div>
@@ -137,16 +376,15 @@ button:disabled{opacity:.55;cursor:not-allowed}
       1) ต้องมียอดฝากของวันที่รับครบ 365 บาท<br>
       2) ทำยอด 10 เท่า ถอนได้ 10 เท่า<br>
       3) 1 คน / 1 ยูสเซอร์ เท่านั้น<br>
-      4) โค้ดปล่อยหลังแอดมินอนุมัติ<br>
-      5) 1 คน / 1 เครื่อง เท่านั้น
+      4) โค้ดปล่อยหลังแอดมินอนุมัติ
     </div>
     <button class="modalBtnMain" id="modalAcknowledge" type="button">รับทราบ</button>
   </div>
 </div>
 
 <script>
-/* ✅ ใส่ลิงก์ exec ของพี่ (ตัวใหม่) */
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyZyKbLFIkCpeVE2FSq7U1oIkcwyn_Kq8pQFSD4woUfe56jVjWhJE1811nG8rGWYw7z-Q/exec";
+/* 🔴 ใส่ลิงก์ exec ของ Google Apps Script (Deploy Web App) */
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwvj6_Lb6cHdMgjXaxNhjPaiWgS7vYBckyLAbYl7UgfxUAHj42ePmENuPU0gkstg9dSmA/exec";
 
 const $phone=document.getElementById("phone");
 const $btnCheck=document.getElementById("btnCheck");
@@ -162,6 +400,32 @@ const $modalAck=document.getElementById("modalAcknowledge");
 function openRule(){ $ruleModal.classList.add("show"); document.body.style.overflow="hidden"; }
 function closeRule(){ $ruleModal.classList.remove("show"); document.body.style.overflow=""; }
 $modalAck.onclick=closeRule;
+
+/* ===== Loading UI helpers ===== */
+function setBtnLoading(btn, isLoading){
+  if(!btn) return;
+  if(isLoading){
+    btn.classList.add("btnLoading");
+    btn.setAttribute("aria-busy","true");
+    btn.dataset.prevDisabled = btn.disabled ? "1" : "0";
+    btn.disabled = true; // กันกดซ้ำตอนโหลด
+  }else{
+    btn.classList.remove("btnLoading");
+    btn.removeAttribute("aria-busy");
+    // คืน disabled เฉพาะปุ่มที่เดิมไม่ได้ disabled
+    const prev = btn.dataset.prevDisabled === "1";
+    delete btn.dataset.prevDisabled;
+    if(!prev) btn.disabled = false;
+  }
+}
+
+/* รวมปุ่มทั้งหมดตอนกำลังยิง request */
+function setAllLoading(on){
+  setBtnLoading($btnCheck, on);
+  setBtnLoading($btnPoll, on);
+  // btnJoin มีเงื่อนไข เปิด/ปิดเอง: ตอนโหลดให้ล็อกไว้ แต่ตอนปล่อยโหลดแล้วค่อยกลับไปตามสถานะจริง
+  if(on) setBtnLoading($btnJoin, true);
+}
 
 function show(t,type="ok"){
   $msg.style.display="block";
@@ -181,38 +445,11 @@ function normalizePhone(v){
   return /^0[689]\d{8}$/.test(p)?p:"";
 }
 
-/* =========================
-   ✅ 1 คน 1 เครื่อง (Device ID)
-========================= */
-function getDeviceId(){
-  const KEY="rr365_device_id_v1";
-  let id=localStorage.getItem(KEY);
-  if(!id){
-    if (window.crypto && crypto.randomUUID) id = crypto.randomUUID();
-    else id = "d_" + Math.random().toString(36).slice(2) + Date.now().toString(36);
-    localStorage.setItem(KEY, id);
-  }
-  return id;
-}
-const DEVICE_ID = getDeviceId();
-const UA  = navigator.userAgent || "";
-const TZ  = (Intl.DateTimeFormat().resolvedOptions().timeZone || "unknown");
-const SCR = (screen && screen.width && screen.height) ? (screen.width+"x"+screen.height) : "na";
-
-/* =========================
-   JSONP (ส่งข้อมูลเครื่องทุกครั้ง)
-========================= */
 function jsonp(params){
   return new Promise((res,rej)=>{
     const cb="cb_"+Math.random().toString(36).slice(2);
     params.callback=cb;
     params._ts=Date.now();
-
-    // ✅ ส่งข้อมูลเครื่องไป GAS ทุกครั้ง
-    params.device_id = DEVICE_ID;
-    params.ua = UA;
-    params.tz = TZ;
-    params.scr = SCR;
 
     const s=document.createElement("script");
     s.src = SCRIPT_URL + "?" + new URLSearchParams(params).toString();
@@ -232,12 +469,20 @@ $btnCopy.onclick=async()=>{
 };
 
 $btnCheck.onclick=async()=>{
-  hideMsg(); hideCopy(); $btnJoin.disabled=true;
+  hideMsg(); hideCopy();
+  $btnJoin.disabled=true;
+
   const p=normalizePhone($phone.value);
   if(!p){ show("กรุณากรอกเบอร์ให้ถูกต้อง","err"); return; }
 
+  setAllLoading(true);
   show("⏳ กำลังตรวจสอบสิทธิ์...");
   const d=await jsonp({action:"check",phone:p}).catch(()=>null);
+  setAllLoading(false);
+
+  // คืนสถานะ btnJoin หลังโหลด
+  $btnJoin.disabled = true;
+
   if(!d){ show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err"); return; }
 
   if(!d.ok){
@@ -251,11 +496,24 @@ $btnCheck.onclick=async()=>{
 
 $btnJoin.onclick=async()=>{
   hideMsg(); hideCopy();
+
   const p=normalizePhone($phone.value);
   if(!p){ show("กรุณากรอกเบอร์ให้ถูกต้อง","err"); return; }
 
+  setBtnLoading($btnJoin,true);
+  setBtnLoading($btnCheck,true);
+  setBtnLoading($btnPoll,true);
+
   show("⏳ กำลังลงชื่อเข้าร่วม...");
   const d=await jsonp({action:"register",phone:p}).catch(()=>null);
+
+  setBtnLoading($btnJoin,false);
+  setBtnLoading($btnCheck,false);
+  setBtnLoading($btnPoll,false);
+
+  // หลังลงชื่อแล้ว: ปิดปุ่ม join กันกดซ้ำ
+  $btnJoin.disabled = true;
+
   if(!d){ show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err"); return; }
 
   if(!d.ok){
@@ -269,11 +527,25 @@ $btnJoin.onclick=async()=>{
 
 $btnPoll.onclick=async()=>{
   hideMsg(); hideCopy();
+
   const p=normalizePhone($phone.value);
   if(!p){ show("กรุณากรอกเบอร์ให้ถูกต้อง","err"); return; }
 
+  setBtnLoading($btnPoll,true);
+  setBtnLoading($btnCheck,true);
+  // join อย่าให้กดซ้อนตอนเช็ค
+  setBtnLoading($btnJoin,true);
+
   show("⏳ กำลังเช็คสถานะ...");
   const d=await jsonp({action:"poll",phone:p}).catch(()=>null);
+
+  setBtnLoading($btnPoll,false);
+  setBtnLoading($btnCheck,false);
+  setBtnLoading($btnJoin,false);
+
+  // คืน join ตามสถานะเดิม (ถ้ายังผ่าน check แล้วอยากให้กดได้อีก ให้ไปกดเช็คสิทธิ์ใหม่)
+  $btnJoin.disabled = true;
+
   if(!d){ show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err"); return; }
 
   if(!d.ok){
