@@ -5,499 +5,248 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>สวัสดีปีใหม่ | รับโค้ดสุ่ม</title>
 <meta name="color-scheme" content="dark"/>
+
 <style>
-  :root{
-    --bg:#0b0b0b; --card:#141414; --line:rgba(255,255,255,.12);
-    --txt:#fff; --muted:#cfcfcf;
-    --accent:#ff2b2b; --accent2:#b80000;
-    --ok:#36d399; --bad:#ff5a5f;
-    --radius:18px;
-  }
-  *{box-sizing:border-box}
-  body{
-    margin:0;padding:24px;
-    font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;
-    background:radial-gradient(900px 500px at 50% -10%, rgba(255,60,60,.15), transparent 60%), var(--bg);
-    color:var(--txt);
-  }
-  .card{
-    max-width:560px;margin:0 auto;
-    background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-    border:1px solid var(--line); border-radius:24px; padding:18px;
-    box-shadow:0 20px 50px rgba(0,0,0,.6);
-  }
-  h1{font-size:20px;margin:12px 0 6px}
-  p{margin:0 0 14px;color:var(--muted);line-height:1.6}
-  label{display:block;margin:10px 0 6px;color:var(--muted)}
-  input{
-    width:100%;padding:12px 14px;border-radius:14px;
-    border:1px solid var(--line);background:#0f0f0f;color:#fff;font-size:16px;
-  }
-  .row{display:flex;gap:10px;margin-top:12px}
-  button{
-    flex:1;padding:12px 14px;border-radius:14px;border:0;
-    font-size:16px;font-weight:800;color:#fff;cursor:pointer;
-  }
-  .btnAlt{background:#2a2a2a}
-  .btnMain{background:linear-gradient(135deg,var(--accent),var(--accent2))}
-  button:disabled{opacity:.55;cursor:not-allowed}
-  .msg{
-    margin-top:12px;padding:12px;border-radius:14px;
-    border:1px solid var(--line);background:rgba(0,0,0,.25);
-    white-space:pre-line;display:none;line-height:1.6;
-  }
-  .ok{border-color:rgba(54,211,153,.4)}
-  .err{border-color:rgba(255,90,95,.45)}
-  .hint{font-size:12px;color:#bfbfbf;margin-top:10px;line-height:1.6}
-
-  .linkBox{
-    margin-top:10px;padding:12px;border-radius:14px;
-    border:1px dashed rgba(255,255,255,.25);background:rgba(0,0,0,.25);
-  }
-  .linkBox a{color:#7dd3fc;text-decoration:none}
-  .linkBox a:hover{text-decoration:underline}
-
-  .copyBox{
-    margin-top:12px;
-    padding:12px;
-    border-radius:14px;
-    border:1px dashed rgba(255,255,255,.25);
-    background:rgba(0,0,0,.25);
-    display:none;
-    align-items:center;
-    gap:10px;
-  }
-  .copyCode{
-    flex:1;
-    font-weight:900;
-    font-size:16px;
-    letter-spacing:1px;
-    color:#fff;
-    user-select:all;
-  }
-  .copyBtn{
-    padding:10px 14px;
-    border-radius:12px;
-    border:0;
-    cursor:pointer;
-    font-weight:900;
-    color:#fff;
-    background:linear-gradient(135deg,#22c55e,#16a34a);
-    white-space:nowrap;
-  }
-  .copyBtn.copied{ background:linear-gradient(135deg,#3b82f6,#2563eb); }
-
-  .modal{
-    position:fixed; inset:0;
-    background:rgba(0,0,0,.70);
-    display:none;
-    align-items:center;
-    justify-content:center;
-    padding:18px;
-    z-index:9999;
-  }
-  .modal.show{ display:flex; }
-  .modalCard{
-    width:min(560px, 100%);
-    border-radius:18px;
-    border:1px solid rgba(255,255,255,.14);
-    background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
-    box-shadow:0 20px 60px rgba(0,0,0,.75);
-    padding:16px;
-  }
-  .modalTitle{ font-weight:900; font-size:18px; margin-bottom:10px; }
-  .modalText{ color:#e9e9e9; line-height:1.7; margin-bottom:12px; }
-  .modalBtns{ display:flex; gap:10px; margin-top:8px; }
-  .modalBtnMain{
-    flex:1; padding:12px 14px; border-radius:14px; border:0;
-    font-weight:900; cursor:pointer; text-align:center; color:#fff;
-    background:linear-gradient(135deg,var(--accent),var(--accent2));
-  }
-
-  .hero{
-    width:100%;
-    border-radius:16px;
-    display:block;
-    border:1px solid rgba(255,255,255,.12);
-    background:rgba(0,0,0,.25);
-  }
+:root{
+  --bg:#0b0b0b; --card:#141414; --line:rgba(255,255,255,.12);
+  --txt:#fff; --muted:#cfcfcf;
+  --accent:#ff2b2b; --accent2:#b80000;
+  --ok:#36d399; --bad:#ff5a5f;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;padding:24px;
+  font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;
+  background:radial-gradient(900px 500px at 50% -10%, rgba(255,60,60,.15), transparent 60%), var(--bg);
+  color:var(--txt);
+}
+.card{
+  max-width:560px;margin:0 auto;
+  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+  border:1px solid var(--line); border-radius:24px; padding:18px;
+  box-shadow:0 20px 50px rgba(0,0,0,.6);
+}
+.hero{
+  width:100%; border-radius:16px; display:block;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(0,0,0,.25);
+}
+h1{font-size:20px;margin:12px 0 6px}
+p{margin:0 0 14px;color:var(--muted);line-height:1.6}
+label{display:block;margin:10px 0 6px;color:var(--muted)}
+input{
+  width:100%;padding:12px 14px;border-radius:14px;
+  border:1px solid var(--line);background:#0f0f0f;color:#fff;font-size:16px;
+}
+.row{display:flex;gap:10px;margin-top:12px}
+button{
+  flex:1;padding:12px 14px;border-radius:14px;border:0;
+  font-size:16px;font-weight:800;color:#fff;cursor:pointer;
+}
+.btnAlt{background:#2a2a2a}
+.btnMain{background:linear-gradient(135deg,var(--accent),var(--accent2))}
+button:disabled{opacity:.55;cursor:not-allowed}
+.msg{
+  margin-top:12px;padding:12px;border-radius:14px;
+  border:1px solid var(--line);background:rgba(0,0,0,.25);
+  white-space:pre-line;display:none;line-height:1.6;
+}
+.ok{border-color:rgba(54,211,153,.4)}
+.err{border-color:rgba(255,90,95,.45)}
+.hint{font-size:12px;color:#bfbfbf;margin-top:10px;line-height:1.6}
+.linkBox{
+  margin-top:10px;padding:12px;border-radius:14px;
+  border:1px dashed rgba(255,255,255,.25);background:rgba(0,0,0,.25);
+}
+.linkBox a{color:#7dd3fc;text-decoration:none}
+.copyBox{
+  margin-top:12px;padding:12px;border-radius:14px;
+  border:1px dashed rgba(255,255,255,.25);background:rgba(0,0,0,.25);
+  display:none;align-items:center;gap:10px;
+}
+.copyCode{flex:1;font-weight:900;font-size:16px;letter-spacing:1px;user-select:all}
+.copyBtn{
+  padding:10px 14px;border-radius:12px;border:0;cursor:pointer;
+  font-weight:900;color:#fff;background:linear-gradient(135deg,#22c55e,#16a34a);
+}
+.copyBtn.copied{background:linear-gradient(135deg,#3b82f6,#2563eb)}
+.modal{
+  position:fixed; inset:0; background:rgba(0,0,0,.70);
+  display:none; align-items:center; justify-content:center; padding:18px; z-index:9999;
+}
+.modal.show{display:flex}
+.modalCard{
+  width:min(560px, 100%); border-radius:18px; padding:16px;
+  border:1px solid rgba(255,255,255,.14);
+  background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+  box-shadow:0 20px 60px rgba(0,0,0,.75);
+}
+.modalTitle{font-weight:900;font-size:18px;margin-bottom:10px}
+.modalText{color:#e9e9e9;line-height:1.7;margin-bottom:12px}
+.modalBtnMain{
+  width:100%; padding:12px 14px; border-radius:14px; border:0;
+  font-weight:900; cursor:pointer; color:#fff;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+}
 </style>
 </head>
+
 <body>
-
 <div class="card">
-  <!-- ✅ รูปหลัก: อัปเดตเป็นลิงก์ใหม่ + กัน hotlink/referrer + รูปสำรอง -->
-  <img
-    id="heroImg"
-    class="hero"
-    src="https://img5.pic.in.th/file/secure-sv1/photo_--_--2bb7d3a2870ef8d6.jpg"
-    alt="กิจกรรมรับเครดิตฟรี"
-    loading="eager"
-    decoding="async"
-    referrerpolicy="no-referrer"
-    crossorigin="anonymous"
-    onerror="this.onerror=null; this.src='https://img5.pic.in.th/file/secure-sv1/photo_--_--2bb7d3a2870ef8d6.jpg';"
-  >
 
-  <h1>🎁 ปีใหม่เเจกคูปองสูงสุด 38,888 บาท 🎁</h1>
-  <p>ระบบส่งโค้ดเครดิตฟรีสุ่มอัตโนมัติ (ลุ้นขั้นต่ำ 50 เครดิต)</p>
+<!-- 🔴 เปลี่ยน IMAGE_URL เป็นรูปของคุณเอง (imgbb / postimg / โฮสตัวเอง) -->
+<img
+  id="heroImg"
+  class="hero"
+  src="https://img5.pic.in.th/file/secure-sv1/photo_--_--2bb7d3a2870ef8d6.jpg"
+  alt="กิจกรรมรับเครดิตฟรี"
+  loading="eager"
+  decoding="async"
+  onerror="this.onerror=null; this.src='https://img5.pic.in.th/file/secure-sv1/photo_--_--2bb7d3a2870ef8d6.jpg';"
+/>
 
-  <label>เบอร์โทรศัพท์ที่สมัคร</label>
-  <input id="phone" inputmode="numeric" placeholder="เช่น 0611111111"/>
+<h1>🎁 ปีใหม่แจกคูปองสูงสุด 38,888 บาท 🎁</h1>
+<p>ระบบส่งโค้ดเครดิตฟรีสุ่มอัตโนมัติ (ลุ้นขั้นต่ำ 50 เครดิต)</p>
 
-  <label id="capLabel" style="display:none;">คำถามยืนยันตัวตน</label>
-  <input id="captchaA" placeholder="ตอบคำถามด้านบน" style="display:none;"/>
+<label>เบอร์โทรศัพท์ที่สมัคร</label>
+<input id="phone" inputmode="numeric" placeholder="เช่น 0611111111"/>
 
-  <div class="row">
-    <button id="btnCheck" class="btnAlt" type="button">เช็คสิทธิ์</button>
-    <button id="btnJoin" class="btnMain" type="button" disabled>ยืนยันเข้าร่วม</button>
-  </div>
+<label id="capLabel" style="display:none;">คำถามยืนยันตัวตน</label>
+<input id="captchaA" placeholder="ตอบคำถามด้านบน" style="display:none;"/>
 
-  <button id="btnPoll" class="btnAlt" type="button" style="margin-top:10px; width:100%;">
-    เช็คสถานะ / รับโค้ด
-  </button>
+<div class="row">
+  <button id="btnCheck" class="btnAlt" type="button">เช็คสิทธิ์</button>
+  <button id="btnJoin" class="btnMain" type="button" disabled>ยืนยันเข้าร่วม</button>
+</div>
 
-  <div id="msg" class="msg"></div>
+<button id="btnPoll" class="btnAlt" type="button" style="margin-top:10px;width:100%">
+  เช็คสถานะ / รับโค้ด
+</button>
 
-  <div id="copyWrap" class="copyBox">
-    <div id="promoCode" class="copyCode">RRXXXXXXXX</div>
-    <button id="btnCopy" class="copyBtn" type="button">คัดลอก</button>
-  </div>
+<div id="msg" class="msg"></div>
 
-  <div class="hint">
-    *โค้ดที่ได้รับ ลูกค้าต้องมียอดฝากสะสม “ของวันที่รับ” ครบ 365 บาทก่อน จึงจะสามารถนำโค้ดไปกรอกได้ค่ะ<br>
-    *ทำยอด 10 เท่า ถอนได้ 10 เท่า
-  </div>
+<div id="copyWrap" class="copyBox">
+  <div id="promoCode" class="copyCode">RRXXXXXXXX</div>
+  <button id="btnCopy" class="copyBtn" type="button">คัดลอก</button>
+</div>
 
-  <div class="linkBox">
-    👉 กรอกโค้ดรับเครดิตฟรีที่นี่:<br>
-    <a href="https://rumruay365.uk/events/free-credit" target="_blank" rel="noopener">
-      https://rumruay365.uk/events/free-credit
-    </a>
-  </div>
+<div class="hint">
+* โค้ดที่ได้รับ ต้องมียอดฝากของวันที่รับครบ 365 บาทก่อนจึงกรอกได้<br>
+* ทำยอด 10 เท่า ถอนได้ 10 เท่า
+</div>
+
+<div class="linkBox">
+👉 กรอกโค้ดรับเครดิตฟรีที่นี่:<br>
+<a href="https://rumruay365.uk/events/free-credit" target="_blank" rel="noopener">
+https://rumruay365.uk/events/free-credit
+</a>
+</div>
 </div>
 
 <div id="ruleModal" class="modal" aria-hidden="true">
   <div class="modalCard" role="dialog" aria-modal="true">
     <div class="modalTitle">📌 เงื่อนไขก่อนกรอกโค้ด (บังคับอ่าน)</div>
-    <div class="modalText" id="ruleText">
-      1) ลูกค้าต้องมียอดฝากสะสม “ของวันที่รับ” ครบ 365 บาทก่อน จึงจะกรอกโค้ดได้<br>
-      2) โค้ดที่ได้รับทำยอด 10 เท่า ถอนได้ 10 เท่า<br>
-      3) 1 คน / 1 ยูสเซอร์ เข้าร่วมได้ครั้งเดียว ระบบป้องกันบอทอัตโนมัติ<br>
-      4) โค้ดจะถูกปล่อยหลังแอดมินอนุมัติเท่านั้น
+    <div class="modalText">
+      1) ต้องมียอดฝากของวันที่รับครบ 365 บาท<br>
+      2) ทำยอด 10 เท่า ถอนได้ 10 เท่า<br>
+      3) 1 คน / 1 ยูสเซอร์ เท่านั้น<br>
+      4) โค้ดปล่อยหลังแอดมินอนุมัติ
     </div>
-    <div class="modalBtns">
-      <button class="modalBtnMain" id="modalAcknowledge" type="button">รับทราบ</button>
-    </div>
+    <button class="modalBtnMain" id="modalAcknowledge" type="button">รับทราบ</button>
   </div>
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx_Leb9H9sxRDobxA8gcmtK1TFWRSr87A02gE345UWHywWhROmQm9QpLtsZ6IsPI70/exec";
+/* 🔴 ใส่ลิงก์ exec ของ Google Apps Script */
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwc0zF947am6vRehL7rfHlq4XfEnRp7QrbLJV9v2Z286Ory_t-sx1oR5lYB2ROmbohb/exec";
 const DEVICE_ID_KEY = "rr365_device_id";
 
-let SAVED = { token:"", nonce:"", issued_at:0, captcha_id:"", captcha_q:"", pow_prefix:"0000", min_delay_ms:6000, max_delay_ms:45000 };
-let READY_AT = 0;
-let READY_TIMER = null;
+let SAVED={token:"",nonce:"",issued_at:0,captcha_id:"",captcha_q:"",pow_prefix:"0000",min_delay_ms:6000,max_delay_ms:45000};
+let READY_AT=0, READY_TIMER=null;
 
-const $phone = document.getElementById("phone");
-const $btnCheck = document.getElementById("btnCheck");
-const $btnJoin  = document.getElementById("btnJoin");
-const $btnPoll  = document.getElementById("btnPoll");
-const $msg = document.getElementById("msg");
+const $phone=document.getElementById("phone");
+const $btnCheck=document.getElementById("btnCheck");
+const $btnJoin=document.getElementById("btnJoin");
+const $btnPoll=document.getElementById("btnPoll");
+const $msg=document.getElementById("msg");
+const $copyWrap=document.getElementById("copyWrap");
+const $promoCode=document.getElementById("promoCode");
+const $btnCopy=document.getElementById("btnCopy");
+const $capLabel=document.getElementById("capLabel");
+const $captchaA=document.getElementById("captchaA");
+const $ruleModal=document.getElementById("ruleModal");
+const $modalAck=document.getElementById("modalAcknowledge");
 
-const $copyWrap = document.getElementById("copyWrap");
-const $promoCode = document.getElementById("promoCode");
-const $btnCopy = document.getElementById("btnCopy");
-
-const $capLabel = document.getElementById("capLabel");
-const $captchaA = document.getElementById("captchaA");
-
-const $ruleModal = document.getElementById("ruleModal");
-const $modalAck = document.getElementById("modalAcknowledge");
-
-function show(text, type="ok"){
-  $msg.style.display="block";
-  $msg.className="msg " + (type==="err"?"err":"ok");
-  $msg.textContent=text;
-}
+function show(t,type="ok"){ $msg.style.display="block"; $msg.className="msg "+(type==="err"?"err":"ok"); $msg.textContent=t; }
 function hideMsg(){ $msg.style.display="none"; $msg.textContent=""; }
-function hideCopy(){
-  $copyWrap.style.display="none";
-  $promoCode.textContent="RRXXXXXXXX";
-  $btnCopy.textContent="คัดลอก";
-  $btnCopy.classList.remove("copied");
-}
-function showCaptcha(q){
-  $capLabel.style.display="block";
-  $captchaA.style.display="block";
-  $capLabel.textContent=q || "คำถามยืนยันตัวตน";
-  $captchaA.value="";
-}
-function hideCaptcha(){
-  $capLabel.style.display="none";
-  $captchaA.style.display="none";
-  $captchaA.value="";
-}
-
-function openRuleModal(){
-  $ruleModal.classList.add("show");
-  $ruleModal.setAttribute("aria-hidden","false");
-  document.body.style.overflow="hidden";
-}
-function closeRuleModal(){
-  $ruleModal.classList.remove("show");
-  $ruleModal.setAttribute("aria-hidden","true");
-  document.body.style.overflow="";
-}
-$modalAck.addEventListener("click", closeRuleModal);
-$ruleModal.addEventListener("click", (e)=>{ if(e.target === $ruleModal){} });
-document.addEventListener("keydown", (e)=>{
-  if(e.key === "Escape" && $ruleModal.classList.contains("show")){
-    e.preventDefault();
-  }
-});
+function hideCopy(){ $copyWrap.style.display="none"; $promoCode.textContent="RRXXXXXXXX"; }
+function showCaptcha(q){ $capLabel.style.display="block"; $captchaA.style.display="block"; $capLabel.textContent=q||"ยืนยันตัวตน"; $captchaA.value=""; }
+function hideCaptcha(){ $capLabel.style.display="none"; $captchaA.style.display="none"; $captchaA.value=""; }
+function openRule(){ $ruleModal.classList.add("show"); document.body.style.overflow="hidden"; }
+function closeRule(){ $ruleModal.classList.remove("show"); document.body.style.overflow=""; }
+$modalAck.onclick=closeRule;
 
 function normalizePhone(v){
-  let s=String(v||"").trim();
-  const th="๐๑๒๓๔๕๖๗๘๙";
+  let s=String(v||"").trim(); const th="๐๑๒๓๔๕๖๗๘๙";
   for(let i=0;i<th.length;i++) s=s.replace(new RegExp(th[i],"g"),String(i));
   let p=s.replace(/\D/g,"");
   if(p.startsWith("0066")) p=p.slice(2);
   if(p.startsWith("66")) p="0"+p.slice(2);
   if(!p.startsWith("0") && p.length===9) p="0"+p;
-  if(!/^0[689]\d{8}$/.test(p)) return "";
-  return p;
+  return /^0[689]\d{8}$/.test(p)?p:"";
 }
 function getOrCreateDeviceId(){
   let id=localStorage.getItem(DEVICE_ID_KEY);
-  if(!id){
-    id="dev_"+Math.random().toString(36).slice(2)+Date.now().toString(36);
-    localStorage.setItem(DEVICE_ID_KEY,id);
-  }
+  if(!id){ id="dev_"+Math.random().toString(36).slice(2)+Date.now().toString(36); localStorage.setItem(DEVICE_ID_KEY,id); }
   return id;
 }
-function getFingerprint(){
-  const data=[screen.width,screen.height,devicePixelRatio,navigator.language||"",navigator.platform||""].join("|");
-  let h=0; for(let i=0;i<data.length;i++){ h=((h<<5)-h)+data.charCodeAt(i); h|=0; }
-  return "fp_"+Math.abs(h);
-}
-function getUaKey(){
-  const ua=navigator.userAgent||"";
-  let h=0; for(let i=0;i<ua.length;i++){ h=((h<<5)-h)+ua.charCodeAt(i); h|=0; }
-  return "ua_"+Math.abs(h);
-}
-
-function jsonpRequest(params){
-  return new Promise((resolve,reject)=>{
-    if(!/\/exec(\?|$)/.test(SCRIPT_URL)) return reject(new Error("BAD_EXEC_URL"));
+function jsonp(params){
+  return new Promise((res,rej)=>{
     const cb="cb_"+Math.random().toString(36).slice(2);
-    params.jsonp="1"; params.callback=cb; params._ts=Date.now();
-
+    params.callback=cb; params._ts=Date.now();
     const s=document.createElement("script");
     s.src=SCRIPT_URL+"?"+new URLSearchParams(params).toString();
-
-    window[cb]=(d)=>{ cleanup(); resolve(d); };
-    s.onerror=()=>{ cleanup(); reject(new Error("LOAD_ERR")); };
-
-    function cleanup(){
-      try{ delete window[cb]; }catch(_){}
-      if(s.parentNode) s.parentNode.removeChild(s);
-    }
+    window[cb]=(d)=>{ delete window[cb]; s.remove(); res(d); };
+    s.onerror=()=>{ s.remove(); rej(); };
     document.body.appendChild(s);
   });
 }
 
-async function sha256hex(text){
-  const enc = new TextEncoder().encode(text);
-  const buf = await crypto.subtle.digest("SHA-256", enc);
-  const arr = Array.from(new Uint8Array(buf));
-  return arr.map(b=>b.toString(16).padStart(2,"0")).join("");
-}
-async function solvePow(phone, serverNonce, prefix){
-  const powNonce = "pn_"+Math.random().toString(36).slice(2)+Date.now().toString(36);
-  let sol = 0;
-  while(sol < 200000){
-    const key = [phone, serverNonce, powNonce, String(sol)].join("|");
-    const hex = await sha256hex(key);
-    if(hex.startsWith(prefix)) return { pow_nonce: powNonce, pow_sol: String(sol) };
-    sol++;
-    if(sol % 800 === 0) await new Promise(r=>setTimeout(r,0));
-  }
-  throw new Error("POW_FAIL");
-}
+$btnCopy.onclick=async()=>{
+  const t=$promoCode.textContent.trim(); if(!t) return;
+  await navigator.clipboard.writeText(t);
+  $btnCopy.classList.add("copied"); setTimeout(()=>$btnCopy.classList.remove("copied"),1200);
+};
 
-function resetSession(){
-  SAVED = { token:"", nonce:"", issued_at:0, captcha_id:"", captcha_q:"", pow_prefix:"0000", min_delay_ms:6000, max_delay_ms:45000 };
-  READY_AT = 0;
-  if(READY_TIMER){ clearInterval(READY_TIMER); READY_TIMER=null; }
-  hideCaptcha();
-}
+$btnCheck.onclick=async()=>{
+  hideMsg(); hideCopy(); $btnJoin.disabled=true;
+  const p=normalizePhone($phone.value); if(!p){ show("กรุณากรอกเบอร์ให้ถูกต้อง","err"); return; }
+  show("⏳ กำลังตรวจสอบสิทธิ์...");
+  const d=await jsonp({action:"check",phone:p,deviceId:getOrCreateDeviceId()}).catch(()=>null);
+  if(!d||!d.ok){ show("ไม่ผ่านเงื่อนไข","err"); return; }
+  SAVED=d; showCaptcha(d.captcha_q);
+  READY_AT=Date.now()+(d.min_delay_ms||6000);
+  READY_TIMER=setInterval(()=>{ if(Date.now()>=READY_AT){ $btnJoin.disabled=false; clearInterval(READY_TIMER); } },250);
+  show("✅ ผ่านการตรวจสอบ ตอบคำถามและรอเวลาที่กำหนดแล้วกดยืนยัน","ok");
+};
 
-async function request(action){
-  hideMsg();
-  const p=normalizePhone($phone.value);
-  if(!p){ show("กรุณากรอกเบอร์มือถือให้ถูกต้อง","err"); return null; }
+$btnJoin.onclick=async()=>{
+  const p=normalizePhone($phone.value); if(!p){ show("กรุณากรอกเบอร์","err"); return; }
+  if(!$captchaA.value.trim()){ show("กรุณาตอบคำถามยืนยันตัวตน","err"); return; }
+  show("⏳ ลงชื่อแล้ว รอแอดมินอนุมัติ","ok"); openRule();
+};
 
-  const payload={
-    action, phone:p,
-    deviceId:getOrCreateDeviceId(),
-    fingerprint:getFingerprint(),
-    ua_key:getUaKey(),
-    userAgent:navigator.userAgent
-  };
-
-  if(action==="register"){
-    if(!SAVED.token || !SAVED.nonce || !SAVED.issued_at){
-      show("กรุณากดเช็คสิทธิ์ก่อน แล้วค่อยยืนยันเข้าร่วม","err");
-      return null;
-    }
-    if(Date.now() < READY_AT){
-      const left = Math.ceil((READY_AT - Date.now())/1000);
-      show(`กรุณารออีก ${left} วินาที (ระบบป้องกันบอท)`,"err");
-      return null;
-    }
-    if(Date.now() - SAVED.issued_at > SAVED.max_delay_ms){
-      show("หมดเวลา กรุณากดเช็คสิทธิ์ใหม่อีกครั้ง","err");
-      return null;
-    }
-
-    const capA = ($captchaA.value||"").trim();
-    if(!capA){
-      show("กรุณาตอบคำถามยืนยันตัวตนก่อนยืนยันเข้าร่วม","err");
-      return null;
-    }
-
-    show("⏳ กำลังยืนยันความเป็นมนุษย์... (ป้องกันบอท)","ok");
-    let pow=null;
-    try{ pow = await solvePow(p, SAVED.nonce, SAVED.pow_prefix || "0000"); }
-    catch(_){ show("ยืนยันไม่สำเร็จ กรุณาลองใหม่ (ป้องกันบอท)","err"); return null; }
-
-    payload.token = SAVED.token;
-    payload.nonce = SAVED.nonce;
-    payload.issued_at = SAVED.issued_at;
-    payload.captcha_id = SAVED.captcha_id;
-    payload.captcha_a  = capA;
-    payload.pow_nonce = pow.pow_nonce;
-    payload.pow_sol   = pow.pow_sol;
-  }
-
-  return await jsonpRequest(payload);
-}
-
-$btnCopy.addEventListener("click", async ()=>{
-  try{
-    const txt = ($promoCode.textContent || "").trim();
-    if(!txt) return;
-    if(navigator.clipboard && navigator.clipboard.writeText){
-      await navigator.clipboard.writeText(txt);
-    }else{
-      const ta=document.createElement("textarea");
-      ta.value=txt; ta.style.position="fixed"; ta.style.left="-9999px";
-      document.body.appendChild(ta); ta.focus(); ta.select();
-      document.execCommand("copy");
-      document.body.removeChild(ta);
-    }
-    $btnCopy.textContent="คัดลอกแล้ว ✓";
-    $btnCopy.classList.add("copied");
-    setTimeout(()=>{
-      $btnCopy.textContent="คัดลอก";
-      $btnCopy.classList.remove("copied");
-    },1500);
-  }catch(_){
-    alert("ไม่สามารถคัดลอกได้ กรุณาคัดลอกด้วยตนเอง");
-  }
-});
-
-$btnCheck.addEventListener("click", async ()=>{
-  $btnCheck.disabled=true; $btnJoin.disabled=true;
-  resetSession(); hideCopy();
-
-  const data=await request("check").catch(()=>null);
-  $btnCheck.disabled=false;
-
-  if(!data){ show("เชื่อมต่อไม่สำเร็จ","err"); return; }
-  if(!data.ok){ show(data.msg||"ผิดพลาด","err"); return; }
-  if(data.exists){ show(data.msg||"เบอร์เคยร่วมแล้ว","err"); return; }
-  if(data.device_used){ show(data.msg||"อุปกรณ์เคยร่วมแล้ว","err"); return; }
-
-  SAVED.token = data.token || "";
-  SAVED.nonce = data.nonce || "";
-  SAVED.issued_at = Number(data.issued_at || 0);
-  SAVED.captcha_id = data.captcha_id || "";
-  SAVED.captcha_q = data.captcha_q || "";
-  SAVED.pow_prefix = data.pow_prefix || "0000";
-  SAVED.min_delay_ms = Number(data.min_delay_ms || 6000);
-  SAVED.max_delay_ms = Number(data.max_delay_ms || 45000);
-
-  showCaptcha(SAVED.captcha_q || "ยืนยันว่าเป็นคนจริง");
-
-  READY_AT = Date.now() + SAVED.min_delay_ms;
-  show(`✅ ผ่านการตรวจสอบ\n\nกรุณาตอบคำถามยืนยันตัวตน แล้วรอ ${Math.ceil(SAVED.min_delay_ms/1000)} วินาที จากนั้นกดยืนยันเข้าร่วม\n\n⚠️ โค้ดจะถูกปล่อยหลังแอดมินอนุมัติเท่านั้น`,"ok");
-
-  READY_TIMER = setInterval(()=>{
-    if(Date.now() >= READY_AT){
-      $btnJoin.disabled=false;
-      clearInterval(READY_TIMER);
-      READY_TIMER=null;
-    }
-  }, 250);
-});
-
-$btnJoin.addEventListener("click", async ()=>{
-  $btnCheck.disabled=true; $btnJoin.disabled=true;
-  hideCopy();
-
-  const data=await request("register").catch(()=>null);
-  $btnCheck.disabled=false;
-
-  if(!data){ show("เชื่อมต่อไม่สำเร็จ","err"); $btnJoin.disabled=false; return; }
-  if(!data.ok){ show(data.msg||"ผิดพลาด","err"); $btnJoin.disabled=false; return; }
-
-  if(data.pending){
-    show("⏳ ลงชื่อสำเร็จแล้ว\nรอแอดมินอนุมัติจึงจะได้รับโค้ด\n\n👉 กด “เช็คสถานะ / รับโค้ด” เพื่อรับโค้ดหลังอนุมัติ","ok");
-    openRuleModal();
-    resetSession();
-    return;
-  }
-
-  show(data.msg||"ทำรายการสำเร็จ","ok");
-  resetSession();
-});
-
-$btnPoll.addEventListener("click", async ()=>{
-  hideCopy(); hideMsg();
-  const data=await request("poll_code").catch(()=>null);
-
-  if(!data){ show("เชื่อมต่อไม่สำเร็จ","err"); return; }
-  if(!data.ok){ show(data.msg||"ผิดพลาด","err"); return; }
-
-  if(data.status === "PENDING"){
-    show("⏳ ยังรอแอดมินอนุมัติอยู่ค่ะ\nกรุณารอสักครู่แล้วกดเช็คใหม่", "ok");
-    return;
-  }
-  if(data.status === "APPROVED"){
-    const code = (data.promo_code || "").trim();
-    if(!code || code === "NO_CODE"){
-      show("✅ อนุมัติแล้ว แต่โค้ดหมด\nกรุณาติดต่อแอดมิน", "err");
-      return;
-    }
-    show("🎉 อนุมัติแล้ว! โค้ดของคุณคือ: " + code, "ok");
-    $promoCode.textContent = code;
-    $copyWrap.style.display = "flex";
-    openRuleModal();
-    return;
-  }
-  if(data.status === "REJECTED"){
-    show("❌ ไม่ผ่านการอนุมัติ กรุณาติดต่อแอดมิน", "err");
-    return;
-  }
-  if(data.status === "USED"){
-    show("⚠️ รายการนี้ถูกใช้ไปแล้ว", "err");
-    return;
-  }
-  show(data.msg || "กำลังตรวจสอบ", "ok");
-});
+$btnPoll.onclick=async()=>{
+  hideMsg(); hideCopy();
+  const p=normalizePhone($phone.value); if(!p){ show("กรุณากรอกเบอร์","err"); return; }
+  const d=await jsonp({action:"poll_code",phone:p,deviceId:getOrCreateDeviceId()}).catch(()=>null);
+  if(!d||!d.ok){ show("ยังไม่พร้อม","err"); return; }
+  if(d.status==="APPROVED" && d.promo_code){
+    $promoCode.textContent=d.promo_code; $copyWrap.style.display="flex";
+    show("🎉 อนุมัติแล้ว รับโค้ดได้เลย","ok"); openRule();
+  }else if(d.status==="PENDING"){ show("⏳ รอการอนุมัติจากแอดมิน","ok"); }
+  else{ show("❌ ไม่ผ่านการอนุมัติ","err"); }
+};
 </script>
 </body>
 </html>
