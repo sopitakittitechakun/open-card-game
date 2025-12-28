@@ -40,7 +40,7 @@ td:last-child{border-right:1px solid rgba(255,255,255,.06);border-radius:0 12px 
   <div class="row">
     <div style="flex:2;min-width:280px">
       <div class="small">SCRIPT_URL (ลิงก์ /exec ของโปรเจกต์ใหม่)</div>
-      <input id="scriptUrl" style="width:100%" placeholder="https://script.google.com/macros/s/.../exec">
+      <input id="scriptUrl" style="width:100%" />
     </div>
     <div style="flex:1;min-width:220px">
       <div class="small">ADMIN_TOKEN (ต้องตรงกับใน Code.gs)</div>
@@ -100,6 +100,9 @@ const $q=$("q");
 const $tbody=$("tbody");
 const $msg=$("msg");
 const $codes=$("codes");
+
+// ✅ ใส่ SCRIPT_URL ให้แล้วตามที่เก่งส่งมา
+const DEFAULT_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwVM8_xLF1iNxnNbs3idWluXuB8k7ygu_pvYMpbnYfB2LXKdVMnJReqaYaMRB61A4wqug/exec";
 
 function showMsg(t){ $msg.style.display="block"; $msg.textContent=t; }
 function hideMsg(){ $msg.style.display="none"; $msg.textContent=""; }
@@ -194,8 +197,9 @@ $("btnAddCodes").onclick=async()=>{
 };
 
 function loadCfg(){
-  $scriptUrl.value=localStorage.getItem(LS_URL)||"";
-  $adminToken.value=localStorage.getItem(LS_TOK)||"";
+  // ถ้าเคยบันทึกไว้ จะใช้ค่าที่บันทึก
+  $scriptUrl.value = localStorage.getItem(LS_URL) || DEFAULT_SCRIPT_URL;
+  $adminToken.value= localStorage.getItem(LS_TOK) || "";
 }
 loadCfg();
 </script>
