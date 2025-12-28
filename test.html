@@ -3,205 +3,346 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>หลังบ้านแอดมิน | RR365</title>
+<title>หลังบ้านแอดมิน RR365 | อนุมัติ/ปลดแบน/เพิ่มโค้ด</title>
 <meta name="color-scheme" content="dark"/>
 <style>
-:root{--bg:#0b0b0b;--line:rgba(255,255,255,.12);--txt:#fff;--muted:#cfcfcf;--accent:#ff2b2b;--accent2:#b80000}
+:root{
+  --bg:#0b0b0b; --card:#141414; --line:rgba(255,255,255,.12);
+  --txt:#fff; --muted:#cfcfcf;
+  --accent:#ff2b2b; --accent2:#b80000;
+  --ok:#36d399; --bad:#ff5a5f;
+}
 *{box-sizing:border-box}
-body{margin:0;padding:18px;font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;background:radial-gradient(900px 500px at 50% -10%, rgba(255,60,60,.15), transparent 60%), var(--bg);color:var(--txt)}
-.card{max-width:1100px;margin:0 auto;background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));border:1px solid var(--line);border-radius:18px;padding:14px;box-shadow:0 20px 50px rgba(0,0,0,.6)}
-h1{margin:0 0 10px;font-size:18px}
-.row{display:flex;gap:10px;flex-wrap:wrap;align-items:end}
-input,select,textarea{background:#0f0f0f;border:1px solid var(--line);border-radius:12px;padding:10px 12px;color:#fff;font-size:14px}
-textarea{width:100%;min-height:110px;resize:vertical}
-.btn{padding:10px 12px;border:0;border-radius:12px;cursor:pointer;font-weight:900;color:#fff}
-.btnMain{background:linear-gradient(135deg,var(--accent),var(--accent2))}
+body{
+  margin:0;padding:22px;
+  font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;
+  background:radial-gradient(900px 500px at 50% -10%, rgba(255,60,60,.15), transparent 60%), var(--bg);
+  color:var(--txt);
+}
+.card{
+  max-width:1100px;margin:0 auto;
+  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+  border:1px solid var(--line); border-radius:22px; padding:16px;
+  box-shadow:0 18px 48px rgba(0,0,0,.65);
+}
+h1{margin:0 0 12px;font-size:18px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:860px){ .grid{grid-template-columns:1fr} }
+label{display:block;margin:8px 0 6px;color:var(--muted);font-size:13px}
+input,select,textarea{
+  width:100%;padding:12px 12px;border-radius:14px;
+  border:1px solid var(--line);background:#0f0f0f;color:#fff;font-size:14px;
+}
+textarea{min-height:120px;resize:vertical}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+button{
+  padding:11px 14px;border-radius:14px;border:0;
+  font-size:14px;font-weight:900;color:#fff;cursor:pointer;
+}
 .btnAlt{background:#2a2a2a}
-.btnOk{background:linear-gradient(135deg,#22c55e,#16a34a)}
-.btnBad{background:linear-gradient(135deg,#ff5a5f,#c81e1e)}
-.btnWarn{background:linear-gradient(135deg,#f59e0b,#d97706)}
-.small{color:var(--muted);font-size:12px;line-height:1.6}
-.hr{height:1px;background:var(--line);margin:12px 0}
-.table{width:100%;border-collapse:separate;border-spacing:0 8px}
-th{color:#ddd;font-size:12px;text-align:left;padding:0 10px}
-tr{background:rgba(0,0,0,.25)}
-td{padding:10px;border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06)}
-td:first-child{border-left:1px solid rgba(255,255,255,.06);border-radius:12px 0 0 12px}
-td:last-child{border-right:1px solid rgba(255,255,255,.06);border-radius:0 12px 12px 0}
-.badge{display:inline-block;padding:4px 8px;border-radius:999px;font-size:12px;font-weight:900;border:1px solid rgba(255,255,255,.15)}
-.code{font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:900;letter-spacing:.5px}
-.msg{margin-top:10px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,.25);white-space:pre-line;display:none;line-height:1.6}
+.btnMain{background:linear-gradient(135deg,var(--accent),var(--accent2))}
+.btnGood{background:linear-gradient(135deg,#22c55e,#16a34a)}
+.btnBlue{background:linear-gradient(135deg,#3b82f6,#2563eb)}
+button:disabled{opacity:.55;cursor:not-allowed}
+.msg{
+  margin-top:10px;padding:12px;border-radius:14px;
+  border:1px solid var(--line);background:rgba(0,0,0,.25);
+  white-space:pre-line;display:none;line-height:1.6;font-size:14px;
+}
+.ok{border-color:rgba(54,211,153,.4)}
+.err{border-color:rgba(255,90,95,.45)}
+hr{border:0;border-top:1px solid rgba(255,255,255,.10);margin:14px 0}
+.tableWrap{
+  margin-top:12px;border:1px solid rgba(255,255,255,.12);
+  border-radius:16px; overflow:hidden;
+}
+table{width:100%;border-collapse:collapse;background:rgba(0,0,0,.25)}
+th,td{padding:10px 10px;border-bottom:1px solid rgba(255,255,255,.08);font-size:13px;vertical-align:top}
+th{background:rgba(255,255,255,.06);text-align:left;color:#eaeaea}
+td small{color:#bfbfbf}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.pill{display:inline-block;padding:2px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.16);font-size:12px}
+.pPENDING{border-color:rgba(255,255,255,.22)}
+.pAPPROVED{border-color:rgba(54,211,153,.55)}
+.pREJECTED{border-color:rgba(255,90,95,.55)}
+.pUSED{border-color:rgba(59,130,246,.55)}
+.hint{color:#bfbfbf;font-size:12px;line-height:1.6}
+kbd{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);padding:2px 6px;border-radius:8px}
 </style>
 </head>
 <body>
 <div class="card">
   <h1>🛡️ หลังบ้านแอดมิน RR365</h1>
 
-  <div class="row">
-    <div style="flex:2;min-width:280px">
-      <div class="small">SCRIPT_URL (ลิงก์ /exec ของโปรเจกต์ใหม่)</div>
-      <input id="scriptUrl" style="width:100%" />
+  <div class="grid">
+    <div>
+      <label>SCRIPT_URL (ลิงก์ /exec ของโปรเจกต์ “สคริปต์ใหม่ตัวโหด”)</label>
+      <input id="scriptUrl" placeholder="https://script.google.com/macros/s/.../exec"/>
     </div>
-    <div style="flex:1;min-width:220px">
-      <div class="small">ADMIN_TOKEN (ต้องตรงกับใน Code.gs)</div>
-      <input id="adminToken" style="width:100%" placeholder="ใส่รหัสลับแอดมิน">
+    <div>
+      <label>ADMIN_TOKEN (ต้องตรงกับใน Code.gs)</label>
+      <input id="adminToken" placeholder="RR365-ADMIN-CHANGE-ME-2026"/>
     </div>
-    <button class="btn btnMain" id="btnSave">บันทึก</button>
-    <button class="btn btnAlt" id="btnLoad">โหลดรายการ</button>
   </div>
 
-  <div class="row" style="margin-top:10px;align-items:center">
+  <div class="grid" style="margin-top:6px">
     <div>
-      <div class="small">สถานะ</div>
-      <select id="statusFilter">
-        <option value="PENDING" selected>PENDING</option>
-        <option value="APPROVED">APPROVED</option>
-        <option value="REJECTED">REJECTED</option>
-        <option value="USED">USED</option>
+      <label>สถานะที่ต้องการโหลด</label>
+      <select id="status">
+        <option value="PENDING">PENDING (รออนุมัติ)</option>
+        <option value="APPROVED">APPROVED (อนุมัติแล้ว)</option>
+        <option value="REJECTED">REJECTED (ปฏิเสธ)</option>
+        <option value="USED">USED (ใช้แล้ว)</option>
       </select>
     </div>
-    <div style="flex:1;min-width:240px">
-      <div class="small">ค้นหาเบอร์ (บางส่วน)</div>
-      <input id="q" style="width:100%" placeholder="เช่น 0611 หรือ 9999">
+    <div>
+      <label>ค้นหาเบอร์ (พิมพ์บางส่วนก็ได้)</label>
+      <input id="q" placeholder="เช่น 0611 หรือ 9999"/>
     </div>
-    <button class="btn btnAlt" id="btnRefresh">รีเฟรช</button>
+  </div>
+
+  <div class="row">
+    <button id="btnSave" class="btnMain" type="button">บันทึก</button>
+    <button id="btnLoad" class="btnAlt" type="button">โหลดรายการ</button>
+    <button id="btnRefresh" class="btnBlue" type="button">รีเฟรช</button>
   </div>
 
   <div id="msg" class="msg"></div>
-  <div class="hr"></div>
 
-  <table class="table">
-    <thead>
-      <tr>
-        <th>#</th><th>เวลา</th><th>เบอร์</th><th>สถานะ</th><th>โค้ด</th><th>จัดการ</th>
-      </tr>
-    </thead>
-    <tbody id="tbody"></tbody>
-  </table>
+  <hr>
 
-  <div class="hr"></div>
-  <div class="small">➕ เพิ่มโค้ด (วางหลายบรรทัด 1 บรรทัด = 1 โค้ด)</div>
-  <textarea id="codes"></textarea>
-  <div class="row" style="margin-top:10px">
-    <button class="btn btnOk" id="btnAddCodes">เพิ่มโค้ดเข้า codes</button>
-    <div class="small" style="flex:1">* หน้า admin ควรเก็บเป็นส่วนตัว</div>
+  <div class="grid">
+    <div>
+      <div class="hint">
+        ✅ ปุ่มสำคัญ:
+        <br>• <kbd>อนุมัติ</kbd> = ปล่อยโค้ดให้แถวนี้ (ถ้ามีโค้ดใน pool)
+        <br>• <kbd>ปฏิเสธ</kbd> = REJECTED
+        <br>• <kbd>USED</kbd> = ตั้งเป็นใช้แล้ว
+        <br>• <kbd>ปลดผูก/ปลดแบน</kbd> = เคลียร์ bind + เคลียร์ blacklist (ตามที่สคริปต์ใหม่รองรับ)
+      </div>
+    </div>
+    <div>
+      <label>เพิ่มโค้ดเข้า pool (1 บรรทัด = 1 โค้ด)</label>
+      <textarea id="codes" placeholder="RR1234&#10;RR5678&#10;RR9999"></textarea>
+      <div class="row">
+        <button id="btnAddCodes" class="btnGood" type="button">เพิ่มโค้ดเข้า codes</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="tableWrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:70px">#row</th>
+          <th>เวลา</th>
+          <th>เบอร์</th>
+          <th>สถานะ</th>
+          <th>โค้ด</th>
+          <th style="width:360px">จัดการ</th>
+        </tr>
+      </thead>
+      <tbody id="tbody">
+        <tr><td colspan="6"><small>ยังไม่มีข้อมูล กด “โหลดรายการ”</small></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="hint" style="margin-top:10px">
+    * หน้า admin ควรเก็บเป็นการส่วนตัว
   </div>
 </div>
 
 <script>
-const LS_URL="RR365_NEW_ADMIN_SCRIPT_URL";
-const LS_TOK="RR365_NEW_ADMIN_TOKEN";
-const $=id=>document.getElementById(id);
+/* ====== ตั้งค่าเริ่มต้น ====== */
+const DEFAULT_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxw9tzFhtaXMIhWpuhGUYorzLPn6sLuZj41b9T4fiYxAp4t8LHMjvhJHKVLsRcY7mJmIQ/exec";
+const DEFAULT_ADMIN_TOKEN = "RR365-ADMIN-CHANGE-ME-2026";
 
-const $scriptUrl=$("scriptUrl");
-const $adminToken=$("adminToken");
-const $status=$("statusFilter");
-const $q=$("q");
-const $tbody=$("tbody");
-const $msg=$("msg");
-const $codes=$("codes");
+/* ====== UI ====== */
+const $scriptUrl = document.getElementById("scriptUrl");
+const $adminToken = document.getElementById("adminToken");
+const $status = document.getElementById("status");
+const $q = document.getElementById("q");
+const $msg = document.getElementById("msg");
+const $tbody = document.getElementById("tbody");
+const $codes = document.getElementById("codes");
 
-// ✅ ใส่ SCRIPT_URL ให้แล้วตามที่เก่งส่งมา
-const DEFAULT_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsNskp6cdsFoNdAP1qz2Bho8HoaNMrFHqJpXQLFGDJNZBWhucJuiDVFZ7u5Ysq42RDKg/exec";
+const $btnSave = document.getElementById("btnSave");
+const $btnLoad = document.getElementById("btnLoad");
+const $btnRefresh = document.getElementById("btnRefresh");
+const $btnAddCodes = document.getElementById("btnAddCodes");
 
-function showMsg(t){ $msg.style.display="block"; $msg.textContent=t; }
+function show(t,type="ok"){
+  $msg.style.display="block";
+  $msg.className="msg "+(type==="err"?"err":"ok");
+  $msg.textContent=t;
+}
 function hideMsg(){ $msg.style.display="none"; $msg.textContent=""; }
 
+function saveLocal(){
+  localStorage.setItem("RR365_ADMIN_SCRIPT_URL", $scriptUrl.value.trim());
+  localStorage.setItem("RR365_ADMIN_TOKEN", $adminToken.value.trim());
+  show("✅ บันทึกค่าแล้ว","ok");
+}
+function loadLocal(){
+  $scriptUrl.value = localStorage.getItem("RR365_ADMIN_SCRIPT_URL") || DEFAULT_SCRIPT_URL;
+  $adminToken.value = localStorage.getItem("RR365_ADMIN_TOKEN") || DEFAULT_ADMIN_TOKEN;
+}
+loadLocal();
+
+/* ====== JSONP ====== */
 function jsonp(url, params){
   return new Promise((res,rej)=>{
     const cb="cb_"+Math.random().toString(36).slice(2);
-    params.callback=cb; params._ts=Date.now();
+    params.callback=cb;
+    params._ts=Date.now();
+
     const s=document.createElement("script");
-    s.src=url+"?"+new URLSearchParams(params).toString();
-    window[cb]=(d)=>{ try{delete window[cb];}catch(_){window[cb]=undefined;} s.remove(); res(d); };
-    s.onerror=()=>{ try{delete window[cb];}catch(_){window[cb]=undefined;} s.remove(); rej(new Error("JSONP")); };
+    s.src = url + "?" + new URLSearchParams(params).toString();
+
+    window[cb]=(d)=>{ try{ delete window[cb]; }catch(_){ window[cb]=undefined; } s.remove(); res(d); };
+    s.onerror=()=>{ try{ delete window[cb]; }catch(_){ window[cb]=undefined; } s.remove(); rej(new Error("JSONP_ERROR")); };
+
     document.body.appendChild(s);
   });
 }
 
-function cfg(){
-  const url=$scriptUrl.value.trim();
-  const tok=$adminToken.value.trim();
-  if(!url) throw new Error("กรุณาใส่ SCRIPT_URL");
-  if(!tok) throw new Error("กรุณาใส่ ADMIN_TOKEN");
-  return {url,tok};
+function getCfg(){
+  const url = $scriptUrl.value.trim();
+  const token = $adminToken.value.trim();
+  if(!url) throw new Error("กรุณาใส่ SCRIPT_URL (/exec)");
+  if(!token) throw new Error("กรุณาใส่ ADMIN_TOKEN");
+  return { url, token };
 }
-function mask(p){
-  p=String(p||""); if(p.length<10) return "0XXXXXXXXX";
-  return p.slice(0,3)+"XXXX"+p.slice(-3);
+
+function pill(status){
+  const s = String(status||"").toUpperCase();
+  return `<span class="pill p${s}">${s}</span>`;
+}
+
+function esc(s){
+  return String(s ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 }
 
 async function loadList(){
-  hideMsg(); $tbody.innerHTML="";
-  let c; try{c=cfg();}catch(e){showMsg(e.message);return;}
-  showMsg("⏳ กำลังโหลด...");
-  const d=await jsonp(c.url,{action:"admin_list",admin_token:c.tok,status:$status.value}).catch(()=>null);
-  if(!d){showMsg("❌ โหลดไม่สำเร็จ");return;}
-  if(!d.ok){showMsg(d.msg||"❌ ไม่ผ่านสิทธิ์");return;}
-  let items=Array.isArray(d.items)?d.items:[];
-  const q=($q.value||"").trim();
-  if(q) items=items.filter(x=>String(x.phone||"").includes(q));
-  if(!items.length){showMsg("ไม่มีรายการ");return;}
   hideMsg();
+  $tbody.innerHTML = `<tr><td colspan="6"><small>⏳ กำลังโหลด...</small></td></tr>`;
+  let cfg;
+  try{ cfg = getCfg(); }catch(e){
+    $tbody.innerHTML = `<tr><td colspan="6"><small>ยังไม่ได้ตั้งค่า</small></td></tr>`;
+    show(e.message,"err"); return;
+  }
 
-  $tbody.innerHTML=items.map((x,i)=>{
-    const t=x.created_at?new Date(x.created_at).toLocaleString("th-TH"):"-";
-    const promo=x.promo_code?`<span class="code">${x.promo_code}</span>`:"-";
+  const d = await jsonp(cfg.url, {
+    action:"admin_list",
+    admin_token: cfg.token,
+    status: $status.value
+  }).catch(()=>null);
+
+  if(!d){ show("❌ โหลดไม่สำเร็จ (เช็ค Deploy / SCRIPT_URL / สิทธิ์ Anyone)","err"); $tbody.innerHTML=`<tr><td colspan="6"><small>โหลดไม่สำเร็จ</small></td></tr>`; return; }
+  if(!d.ok){ show("❌ "+(d.msg||"ADMIN_DENY"),"err"); $tbody.innerHTML=`<tr><td colspan="6"><small>ไม่ผ่านสิทธิ์</small></td></tr>`; return; }
+
+  const query = $q.value.trim();
+  let items = Array.isArray(d.items) ? d.items : [];
+  if(query){
+    items = items.filter(x => String(x.phone||"").includes(query));
+  }
+
+  if(!items.length){
+    $tbody.innerHTML = `<tr><td colspan="6"><small>ไม่พบรายการ</small></td></tr>`;
+    show("✅ โหลดสำเร็จ แต่ไม่มีรายการในสถานะนี้","ok");
+    return;
+  }
+
+  $tbody.innerHTML = items.map(x=>{
+    const row = Number(x.row||0);
+    const created = x.created_at ? new Date(x.created_at).toLocaleString() : "-";
+    const phone = esc(x.phone||"");
+    const status = String(x.status||"").toUpperCase();
+    const code = esc(x.promo_code||"");
+
+    const btnApprove = `<button class="btnGood" type="button" data-act="admin_approve" data-row="${row}">อนุมัติ</button>`;
+    const btnReject  = `<button class="btnMain" type="button" data-act="admin_reject" data-row="${row}">ปฏิเสธ</button>`;
+    const btnUsed    = `<button class="btnBlue" type="button" data-act="admin_used" data-row="${row}">USED</button>`;
+    const btnClear   = `<button class="btnAlt" type="button" data-act="admin_clear" data-row="${row}">ปลดผูก/ปลดแบน</button>`;
+
     return `
       <tr>
-        <td>${i+1}</td>
-        <td>${t}</td>
-        <td title="${x.phone}">${mask(x.phone)}</td>
-        <td><span class="badge">${x.status}</span></td>
-        <td>${promo}</td>
+        <td><b>${row}</b></td>
+        <td>${esc(created)}</td>
+        <td><b>${phone}</b></td>
+        <td>${pill(status)}</td>
+        <td><b>${code || "-"}</b></td>
         <td>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <button class="btn btnOk" onclick="approve(${x.row})">อนุมัติ</button>
-            <button class="btn btnBad" onclick="reject(${x.row})">ปฏิเสธ</button>
-            <button class="btn btnAlt" onclick="used(${x.row})">USED</button>
-            <button class="btn btnWarn" onclick="clearAbuse(${x.row})">ปลดผูก/ปลดแบน</button>
+          <div class="actions">
+            ${btnApprove}
+            ${btnReject}
+            ${btnUsed}
+            ${btnClear}
           </div>
         </td>
-      </tr>`;
+      </tr>
+    `;
   }).join("");
+
+  show("✅ โหลดรายการสำเร็จ ("+items.length+" รายการ)","ok");
 }
 
-async function callAdmin(action, extra){
-  let c; try{c=cfg();}catch(e){showMsg(e.message);return null;}
-  const d=await jsonp(c.url,Object.assign({action,admin_token:c.tok},extra||{})).catch(()=>null);
-  if(!d){showMsg("❌ เชื่อมต่อไม่สำเร็จ");return null;}
-  if(!d.ok){showMsg(d.msg||"❌ ทำรายการไม่สำเร็จ");return null;}
-  showMsg(d.msg||"✅ สำเร็จ");
-  return d;
+async function act(action, row){
+  hideMsg();
+  let cfg;
+  try{ cfg = getCfg(); }catch(e){ show(e.message,"err"); return; }
+
+  show("⏳ กำลังทำรายการ...");
+
+  const d = await jsonp(cfg.url, {
+    action,
+    admin_token: cfg.token,
+    row: String(row)
+  }).catch(()=>null);
+
+  if(!d){ show("❌ ทำรายการไม่สำเร็จ (เช็ค SCRIPT_URL/Deploy)","err"); return; }
+  if(!d.ok){ show("❌ "+(d.msg||"ไม่สำเร็จ"),"err"); return; }
+
+  show("✅ "+(d.msg||"สำเร็จ"),"ok");
+  await loadList();
 }
 
-window.approve=async(row)=>{ if(!confirm("อนุมัติแถวนี้?"))return; const d=await callAdmin("admin_approve",{row}); if(d) loadList(); };
-window.reject =async(row)=>{ if(!confirm("ปฏิเสธแถวนี้?"))return; const d=await callAdmin("admin_reject",{row}); if(d) loadList(); };
-window.used   =async(row)=>{ if(!confirm("ตั้งเป็น USED?"))return; const d=await callAdmin("admin_used",{row}); if(d) loadList(); };
-window.clearAbuse=async(row)=>{ if(!confirm("ปลดผูก/ปลดแบนเบอร์นี้?"))return; const d=await callAdmin("admin_clear",{row}); if(d) loadList(); };
+async function addCodes(){
+  hideMsg();
+  let cfg;
+  try{ cfg = getCfg(); }catch(e){ show(e.message,"err"); return; }
 
-$("btnSave").onclick=()=>{
-  localStorage.setItem(LS_URL,$scriptUrl.value.trim());
-  localStorage.setItem(LS_TOK,$adminToken.value.trim());
-  showMsg("บันทึกแล้ว ✅");
-};
-$("btnLoad").onclick=()=>{ loadCfg(); loadList(); };
-$("btnRefresh").onclick=loadList;
+  const text = $codes.value.trim();
+  if(!text){ show("กรุณาวางโค้ดก่อน","err"); return; }
 
-$("btnAddCodes").onclick=async()=>{
-  const text=($codes.value||"").trim();
-  if(!text){showMsg("วางโค้ดก่อน");return;}
-  if(!confirm("เพิ่มโค้ดเข้า codes?"))return;
-  const d=await callAdmin("admin_add_codes",{codes:text});
-  if(d){ $codes.value=""; }
-};
+  show("⏳ กำลังเพิ่มโค้ด...");
+  const d = await jsonp(cfg.url, {
+    action:"admin_add_codes",
+    admin_token: cfg.token,
+    codes: text
+  }).catch(()=>null);
 
-function loadCfg(){
-  // ถ้าเคยบันทึกไว้ จะใช้ค่าที่บันทึก
-  $scriptUrl.value = localStorage.getItem(LS_URL) || DEFAULT_SCRIPT_URL;
-  $adminToken.value= localStorage.getItem(LS_TOK) || "";
+  if(!d){ show("❌ เพิ่มโค้ดไม่สำเร็จ","err"); return; }
+  if(!d.ok){ show("❌ "+(d.msg||"เพิ่มโค้ดไม่สำเร็จ"),"err"); return; }
+
+  show("✅ "+(d.msg||"เพิ่มโค้ดสำเร็จ"),"ok");
+  $codes.value = "";
 }
-loadCfg();
+
+$btnSave.onclick = saveLocal;
+$btnLoad.onclick = loadList;
+$btnRefresh.onclick = loadList;
+$btnAddCodes.onclick = addCodes;
+
+$tbody.addEventListener("click", (ev)=>{
+  const btn = ev.target.closest("button[data-act]");
+  if(!btn) return;
+  const action = btn.getAttribute("data-act");
+  const row = Number(btn.getAttribute("data-row")||0);
+  if(!row) return;
+  act(action,row);
+});
 </script>
 </body>
 </html>
