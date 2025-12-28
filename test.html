@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>หลังบ้านแอดมิน RR365 | OLD_ADMIN_V2</title>
+<title>หลังบ้านแอดมิน RR365 (ไม่แตะสคริปต์)</title>
 <meta name="color-scheme" content="dark"/>
 <style>
 :root{--bg:#0b0b0b;--line:rgba(255,255,255,.12);--txt:#fff;--muted:#cfcfcf;--accent:#ff2b2b;--accent2:#b80000}
@@ -18,9 +18,6 @@ textarea{width:100%;min-height:110px;resize:vertical}
 .btnMain{background:linear-gradient(135deg,var(--accent),var(--accent2))}
 .btnAlt{background:#2a2a2a}
 .btnOk{background:linear-gradient(135deg,#22c55e,#16a34a)}
-.btnBad{background:linear-gradient(135deg,#ff5a5f,#c81e1e)}
-.btnBlue{background:linear-gradient(135deg,#3b82f6,#2563eb)}
-.btnWarn{background:linear-gradient(135deg,#f59e0b,#d97706)}
 .small{color:var(--muted);font-size:12px;line-height:1.6}
 .hr{height:1px;background:var(--line);margin:12px 0}
 .table{width:100%;border-collapse:separate;border-spacing:0 8px}
@@ -36,169 +33,189 @@ td:last-child{border-right:1px solid rgba(255,255,255,.06);border-radius:0 12px 
 </head>
 <body>
 <div class="card">
-  <h1>🛡️ หลังบ้านแอดมิน RR365 (OLD_ADMIN_V2)</h1>
+  <h1>🛡️ หลังบ้านแอดมิน RR365 (ไม่แตะ Code.gs)</h1>
 
   <div class="row">
-    <div style="flex:2;min-width:280px">
-      <div class="small">SCRIPT_URL (/exec ของโปรเจกต์ใหม่นี้)</div>
-      <input id="scriptUrl" style="width:100%" placeholder="https://script.google.com/macros/s/.../exec">
+    <div style="flex:2;min-width:320px">
+      <div class="small">SPREADSHEET_ID (ไอดีชีท)</div>
+      <input id="ssid" style="width:100%" placeholder="1vU5sgYKY2f0CnVv9YNnG-6OrqzLnn-t_iSLUls0MefU">
     </div>
-    <div style="flex:1;min-width:220px">
-      <div class="small">ADMIN_TOKEN (ต้องตรงกับ V2_ADMIN_TOKEN ใน Code.gs)</div>
-      <input id="adminToken" style="width:100%" placeholder="RR365-OLD-ADMIN-CHANGE-ME-2026">
+    <div style="min-width:220px">
+      <div class="small">แท็บ participants</div>
+      <input id="tabP" value="participants">
+    </div>
+    <div style="min-width:220px">
+      <div class="small">แท็บ codes</div>
+      <input id="tabC" value="codes">
     </div>
     <button class="btn btnMain" id="btnSave">บันทึก</button>
     <button class="btn btnAlt" id="btnLoad">โหลดรายการ</button>
   </div>
 
-  <div class="row" style="margin-top:10px;align-items:center">
+  <div class="row" style="margin-top:10px">
     <div>
-      <div class="small">สถานะ</div>
-      <select id="statusFilter">
-        <option value="PENDING" selected>PENDING (รออนุมัติ)</option>
+      <div class="small">กรองสถานะ</div>
+      <select id="status">
+        <option value="PENDING" selected>PENDING</option>
         <option value="APPROVED">APPROVED</option>
         <option value="REJECTED">REJECTED</option>
         <option value="USED">USED</option>
+        <option value="">ทั้งหมด</option>
       </select>
     </div>
     <div style="flex:1;min-width:240px">
       <div class="small">ค้นหาเบอร์ (บางส่วน)</div>
       <input id="q" style="width:100%" placeholder="เช่น 0611 หรือ 9999">
     </div>
-    <button class="btn btnBlue" id="btnRefresh">รีเฟรช</button>
+    <button class="btn btnAlt" id="btnRefresh">รีเฟรช</button>
   </div>
 
   <div id="msg" class="msg"></div>
   <div class="hr"></div>
 
-  <table class="table">
+  <div class="small">
+    ✅ หน้าเว็บนี้ “ดูรายการ/เพิ่มโค้ด” ได้โดยไม่แก้สคริปต์<br>
+    ❗ อนุมัติ/ปฏิเสธ/USED ให้ทำใน Google Sheet ผ่านเมนู 🛡️ RR365 ADMIN (ตามสคริปต์เดิม) :contentReference[oaicite:3]{index=3}
+  </div>
+
+  <table class="table" style="margin-top:10px">
     <thead>
       <tr>
-        <th>#</th><th>เวลา</th><th>เบอร์</th><th>สถานะ</th><th>โค้ด</th><th>จัดการ</th>
+        <th>#</th><th>เวลา</th><th>เบอร์</th><th>สถานะ</th><th>โค้ด</th><th>หมายเหตุ</th>
       </tr>
     </thead>
     <tbody id="tbody"></tbody>
   </table>
 
   <div class="hr"></div>
-  <div class="small">➕ เพิ่มโค้ดเข้า pool (1 บรรทัด = 1 โค้ด)</div>
+  <div class="small">➕ เพิ่มโค้ดเข้าแท็บ codes (1 บรรทัด = 1 โค้ด)</div>
   <textarea id="codes" placeholder="RR1234&#10;RR5678&#10;RR9999"></textarea>
   <div class="row" style="margin-top:10px">
-    <button class="btn btnOk" id="btnAddCodes">เพิ่มโค้ดเข้า v2_codes</button>
-    <div class="small" style="flex:1">* หน้า admin ควรเก็บเป็นส่วนตัว</div>
+    <button class="btn btnOk" id="btnAdd">เพิ่มโค้ด</button>
+    <div class="small" style="flex:1">* ต้องตั้งค่าให้ชีท/แท็บอ่านได้ หรือใช้ Apps Script Bridge (ถ้าต้องการแบบปลอดภัย)</div>
   </div>
 </div>
 
 <script>
-const LS_URL="RR365_OLDV2_ADMIN_SCRIPT_URL";
-const LS_TOK="RR365_OLDV2_ADMIN_TOKEN";
+/*
+  IMPORTANT:
+  - การอ่าน/เขียน Google Sheet จากหน้าเว็บตรงๆ “ต้องพึ่งการ publish/แชร์” ซึ่งไม่ปลอดภัย
+  - ถ้าอยากให้กดได้แบบปลอดภัย ต้องเพิ่ม admin API ใน Code.gs (แต่นั่นคือ “แตะโค้ด”)
+  - ชุดนี้ทำตามที่เก่งขอ: หน้าแอดมินอย่างเดียว ไม่แก้ Code.gs
+*/
+const LS="RR365_ADMIN_NO_TOUCH_V1";
 const $=id=>document.getElementById(id);
 
-const $scriptUrl=$("scriptUrl");
-const $adminToken=$("adminToken");
-const $status=$("statusFilter");
-const $q=$("q");
-const $tbody=$("tbody");
-const $msg=$("msg");
-const $codes=$("codes");
+const $ssid=$("ssid"), $tabP=$("tabP"), $tabC=$("tabC");
+const $status=$("status"), $q=$("q");
+const $tbody=$("tbody"), $msg=$("msg"), $codes=$("codes");
 
-function showMsg(t){ $msg.style.display="block"; $msg.textContent=t; }
-function hideMsg(){ $msg.style.display="none"; $msg.textContent=""; }
+function show(t){ $msg.style.display="block"; $msg.textContent=t; }
+function hide(){ $msg.style.display="none"; $msg.textContent=""; }
 
-function jsonp(url, params){
-  return new Promise((res,rej)=>{
-    const cb="cb_"+Math.random().toString(36).slice(2);
-    params.callback=cb; params._ts=Date.now();
-    const s=document.createElement("script");
-    s.src=url+"?"+new URLSearchParams(params).toString();
-    window[cb]=(d)=>{ try{delete window[cb];}catch(_){window[cb]=undefined;} s.remove(); res(d); };
-    s.onerror=()=>{ try{delete window[cb];}catch(_){window[cb]=undefined;} s.remove(); rej(new Error("JSONP")); };
-    document.body.appendChild(s);
-  });
+function save(){
+  localStorage.setItem(LS, JSON.stringify({
+    ssid:$ssid.value.trim(), tabP:$tabP.value.trim(), tabC:$tabC.value.trim()
+  }));
+  show("บันทึกแล้ว ✅");
+}
+function load(){
+  const raw=localStorage.getItem(LS);
+  if(!raw) return;
+  try{
+    const o=JSON.parse(raw);
+    if(o.ssid) $ssid.value=o.ssid;
+    if(o.tabP) $tabP.value=o.tabP;
+    if(o.tabC) $tabC.value=o.tabC;
+  }catch(_){}
+}
+load();
+
+function sheetCSVUrl(ssid, tabName){
+  // ต้อง publish sheet หรือเปิดสิทธิ์อ่านได้
+  return `https://docs.google.com/spreadsheets/d/${encodeURIComponent(ssid)}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(tabName)}`;
 }
 
-function cfg(){
-  const url=$scriptUrl.value.trim();
-  const tok=$adminToken.value.trim();
-  if(!url) throw new Error("กรุณาใส่ SCRIPT_URL (/exec)");
-  if(!tok) throw new Error("กรุณาใส่ ADMIN_TOKEN");
-  return {url,tok};
+// CSV parser เบาๆ
+function parseCSV(text){
+  const rows=[]; let row=[], cur="", inQ=false;
+  for(let i=0;i<text.length;i++){
+    const ch=text[i], nx=text[i+1];
+    if(inQ){
+      if(ch===`"` && nx===`"`){ cur+=`"`; i++; }
+      else if(ch===`"`){ inQ=false; }
+      else cur+=ch;
+    }else{
+      if(ch===`"`){ inQ=true; }
+      else if(ch===`,"){ row.push(cur); cur=""; }
+      else if(ch===`\n`){ row.push(cur); rows.push(row); row=[]; cur=""; }
+      else if(ch===`\r`){ /* ignore */ }
+      else cur+=ch;
+    }
+  }
+  if(cur.length || row.length){ row.push(cur); rows.push(row); }
+  return rows;
 }
+
 function mask(p){
   p=String(p||""); if(p.length<10) return "0XXXXXXXXX";
   return p.slice(0,3)+"XXXX"+p.slice(-3);
 }
 
 async function loadList(){
-  hideMsg(); $tbody.innerHTML="";
-  let c; try{c=cfg();}catch(e){showMsg(e.message);return;}
-  showMsg("⏳ กำลังโหลด...");
-  const d=await jsonp(c.url,{action:"admin_list",admin_token:c.tok,status:$status.value}).catch(()=>null);
-  if(!d){showMsg("❌ โหลดไม่สำเร็จ (เช็ค Deploy: Anyone / ใช้ลิงก์ /exec)");return;}
-  if(!d.ok){showMsg(d.msg||"❌ ไม่ผ่านสิทธิ์");return;}
-  let items=Array.isArray(d.items)?d.items:[];
-  const q=($q.value||"").trim();
-  if(q) items=items.filter(x=>String(x.phone||"").includes(q));
-  if(!items.length){showMsg("✅ โหลดสำเร็จ แต่ไม่มีรายการในสถานะนี้");return;}
-  hideMsg();
+  hide(); $tbody.innerHTML="";
+  const ssid=$ssid.value.trim(), tabP=$tabP.value.trim();
+  if(!ssid||!tabP){ show("กรุณาใส่ SPREADSHEET_ID และชื่อแท็บ participants"); return; }
+  show("⏳ กำลังโหลด...");
 
-  $tbody.innerHTML=items.map((x,i)=>{
-    const t=x.created_at?new Date(x.created_at).toLocaleString("th-TH"):"-";
-    const promo=x.promo_code?`<span class="code">${x.promo_code}</span>`:"-";
-    return `
-      <tr>
-        <td>${i+1}<br><small>#row ${x.row}</small></td>
-        <td>${t}</td>
-        <td title="${x.phone}">${mask(x.phone)}</td>
-        <td><span class="badge">${x.status}</span></td>
-        <td>${promo}</td>
-        <td>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <button class="btn btnOk" onclick="approve(${x.row})">อนุมัติ</button>
-            <button class="btn btnBad" onclick="reject(${x.row})">ปฏิเสธ</button>
-            <button class="btn btnBlue" onclick="used(${x.row})">USED</button>
-            <button class="btn btnWarn" onclick="resetRow(${x.row})">รีเซ็ตเป็น PENDING</button>
-          </div>
-        </td>
-      </tr>`;
-  }).join("");
+  const url=sheetCSVUrl(ssid, tabP);
+  const text=await fetch(url).then(r=>r.ok?r.text():Promise.reject()).catch(()=>null);
+  if(!text){ show("❌ โหลดไม่ได้: ต้อง publish/แชร์ชีทให้อ่านได้"); return; }
+
+  const rows=parseCSV(text);
+  if(rows.length<2){ show("ไม่มีข้อมูล"); return; }
+
+  const header=rows[0].map(s=>s.trim());
+  const idx = (name)=> header.findIndex(h=>h===name);
+  const iCreated=idx("created_at"), iPhone=idx("phone"), iStatus=idx("status"), iPromo=idx("promo_code"), iNote=idx("note");
+
+  let data=rows.slice(1).map(r=>({
+    created_at:r[iCreated]||"",
+    phone:(r[iPhone]||"").replace(/^'/,"").trim(),
+    status:(r[iStatus]||"").trim(),
+    promo:(r[iPromo]||"").trim(),
+    note:(r[iNote]||"").trim()
+  })).filter(x=>x.phone);
+
+  const s=$status.value.trim();
+  if(s) data=data.filter(x=>x.status===s);
+  const q=$q.value.trim();
+  if(q) data=data.filter(x=>x.phone.includes(q));
+
+  if(!data.length){ show("✅ โหลดสำเร็จ แต่ไม่มีรายการตามเงื่อนไขนี้"); return; }
+  hide();
+
+  $tbody.innerHTML=data.map((x,i)=>`
+    <tr>
+      <td>${i+1}</td>
+      <td>${x.created_at||"-"}</td>
+      <td title="${x.phone}">${mask(x.phone)}</td>
+      <td><span class="badge">${x.status||"-"}</span></td>
+      <td><span class="code">${x.promo||"-"}</span></td>
+      <td>${x.note||""}</td>
+    </tr>
+  `).join("");
 }
 
-async function callAdmin(action, extra){
-  let c; try{c=cfg();}catch(e){showMsg(e.message);return null;}
-  const d=await jsonp(c.url,Object.assign({action,admin_token:c.tok},extra||{})).catch(()=>null);
-  if(!d){showMsg("❌ เชื่อมต่อไม่สำเร็จ");return null;}
-  if(!d.ok){showMsg(d.msg||"❌ ทำรายการไม่สำเร็จ");return null;}
-  showMsg(d.msg||"✅ สำเร็จ");
-  return d;
+async function addCodes(){
+  // NOTE: ใส่ไว้เป็น UI เฉยๆ — การ “เขียน” ลงชีทจากหน้าเว็บตรงๆ ไม่ปลอดภัยและทำไม่ได้ถ้าไม่แตะสคริปต์
+  show("❗โหมดไม่แตะสคริปต์: เพิ่มโค้ดจากหน้าเว็บแบบปลอดภัยทำไม่ได้\nให้เพิ่มโค้ดผ่าน Google Sheet เมนูเดิม หรือถ้าต้องการให้เพิ่มผ่านหน้าเว็บได้ ต้องเพิ่ม admin API ใน Code.gs");
 }
 
-window.approve=async(row)=>{ if(!confirm("อนุมัติแถวนี้?"))return; const d=await callAdmin("admin_approve",{row}); if(d) loadList(); };
-window.reject =async(row)=>{ if(!confirm("ปฏิเสธแถวนี้?"))return; const d=await callAdmin("admin_reject",{row}); if(d) loadList(); };
-window.used   =async(row)=>{ if(!confirm("ตั้งเป็น USED?"))return; const d=await callAdmin("admin_used",{row}); if(d) loadList(); };
-window.resetRow=async(row)=>{ if(!confirm("รีเซ็ตแถวนี้เป็น PENDING + ล้างโค้ด?"))return; const d=await callAdmin("admin_reset",{row}); if(d) loadList(); };
-
-$("btnSave").onclick=()=>{
-  localStorage.setItem(LS_URL,$scriptUrl.value.trim());
-  localStorage.setItem(LS_TOK,$adminToken.value.trim());
-  showMsg("บันทึกแล้ว ✅");
-};
-$("btnLoad").onclick=()=>{ loadCfg(); loadList(); };
+$("btnSave").onclick=save;
+$("btnLoad").onclick=()=>{ load(); loadList(); };
 $("btnRefresh").onclick=loadList;
-
-$("btnAddCodes").onclick=async()=>{
-  const text=($codes.value||"").trim();
-  if(!text){showMsg("วางโค้ดก่อน");return;}
-  if(!confirm("เพิ่มโค้ดเข้า v2_codes?"))return;
-  const d=await callAdmin("admin_add_codes",{codes:text});
-  if(d){ $codes.value=""; }
-};
-
-function loadCfg(){
-  $scriptUrl.value=localStorage.getItem(LS_URL)||"";
-  $adminToken.value=localStorage.getItem(LS_TOK)||"";
-}
-loadCfg();
+$("btnAdd").onclick=addCodes;
 </script>
 </body>
 </html>
