@@ -99,13 +99,15 @@ button:disabled{opacity:.55;cursor:not-allowed}
 }
 .smallNote{font-size:12px;color:#cfcfcf;margin-top:8px;opacity:.9}
 </style>
+
+<!-- ✅ FingerprintJS (ข้ามเบราว์เซอร์ โหดกว่า localStorage) -->
+<script src="https://openfpcdn.io/fingerprintjs/v4"></script>
 </head>
 
 <body>
 <div class="card">
 
 <img
-  id="heroImg"
   class="hero"
   src="https://img5.pic.in.th/file/secure-sv1/photo_--_--2bb7d3a2870ef8d6.jpg"
   alt="กิจกรรมรับเครดิตฟรี"
@@ -142,7 +144,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 <div class="hint">
 * โค้ดที่ได้รับ ต้องมียอดฝากของวันที่รับครบ 365 บาทก่อนจึงกรอกได้<br>
 * ทำยอด 10 เท่า ถอนได้ 10 เท่า<br>
-* 🔒 เข้มงวด: 1 คน / 1 อุปกรณ์ เท่านั้น (เปลี่ยนเครื่อง/หลายเบอร์ = ตัดสิทธิ์)
+* 🔒 เข้มงวด: 1 คน / 1 อุปกรณ์ (ตรวจเครื่องแบบข้ามเบราว์เซอร์)
 <div class="smallNote" id="devNote"></div>
 </div>
 
@@ -163,12 +165,10 @@ button:disabled{opacity:.55;cursor:not-allowed}
 
 <script>
 /* 🔴 ใส่ลิงก์ exec ของ Google Apps Script (Deploy Web App) */
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzHhFGid9BEW8t0n0yIAR7b4g7SSpIahVWrKJk5-jMNHjy995TT8kONudsasS3GiUoQLw/exec";
-
-/* ✅ ลิงก์ไปกรอกโค้ด */
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby3z4WYK4Y40xK5GYDZ9vfS2zVwv4ljONm26ogPO1dZILf-I-nylXqCZL4mJx6MDa8khw/exec";
 const REDEEM_URL = "https://rumruay365.uk/events/free-credit";
 
-/* ============ DOM ============ */
+/* DOM */
 const $phone=document.getElementById("phone");
 const $btnCheck=document.getElementById("btnCheck");
 const $btnJoin=document.getElementById("btnJoin");
@@ -182,7 +182,6 @@ const $modalAck=document.getElementById("modalAcknowledge");
 const $goRedeem=document.getElementById("goRedeem");
 const $devNote=document.getElementById("devNote");
 
-/* ============ UI helpers ============ */
 function openRule(){ $ruleModal.classList.add("show"); document.body.style.overflow="hidden"; }
 function closeRule(){ $ruleModal.classList.remove("show"); document.body.style.overflow=""; }
 $modalAck.onclick=closeRule;
@@ -200,7 +199,7 @@ function hideCopy(){
   $goRedeem.href = REDEEM_URL;
 }
 
-/* ============ Phone normalize ============ */
+/* normalize phone */
 function normalizePhone(v){
   let s=String(v||"").trim(); const th="๐๑๒๓๔๕๖๗๘๙";
   for(let i=0;i<th.length;i++) s=s.replace(new RegExp(th[i],"g"),String(i));
@@ -211,98 +210,76 @@ function normalizePhone(v){
   return /^0[689]\d{8}$/.test(p)?p:"";
 }
 
-/* ============ Device Lock (1 คน / 1 อุปกรณ์) ============ */
-/* แนวทาง: ทำ device_id คงที่ + เก็บ localStorage กันการเปลี่ยนเบอร์ในเครื่องเดียว */
-function getStableDeviceSeed(){
-  const k="RR365_DEVICE_SEED_V1";
-  let seed = localStorage.getItem(k);
-  if(!seed){
-    seed = (crypto?.randomUUID ? crypto.randomUUID() : ("seed_"+Math.random().toString(36).slice(2)+"_"+Date.now()));
-    localStorage.setItem(k, seed);
-  }
-  return seed;
-}
-
-async function sha256Hex(str){
-  // ถ้าบราวเซอร์รองรับ SubtleCrypto
-  if (window.crypto && crypto.subtle){
-    const buf = new TextEncoder().encode(str);
-    const hash = await crypto.subtle.digest("SHA-256", buf);
-    return [...new Uint8Array(hash)].map(b=>b.toString(16).padStart(2,"0")).join("");
-  }
-  // fallback (ไม่สวยมากแต่พอใช้ได้)
-  let h=0; for(let i=0;i<str.length;i++){ h=(h<<5)-h+str.charCodeAt(i); h|=0; }
-  return ("fallback_"+(h>>>0).toString(16)).padStart(10,"0");
-}
-
-async function getDeviceId(){
-  const seed = getStableDeviceSeed();
-  const parts = [
-    seed,
-    navigator.userAgent || "",
-    navigator.platform || "",
-    (Intl.DateTimeFormat().resolvedOptions().timeZone || ""),
-    String(screen.width||"")+"x"+String(screen.height||""),
-    String(window.devicePixelRatio||""),
-    String(navigator.language||""),
-  ].join("|");
-  const hex = await sha256Hex(parts);
-  // ทำให้สั้นลงนิด
-  return "dev_" + hex.slice(0, 24);
-}
-
-let DEVICE_ID = "";
-(async ()=>{
-  DEVICE_ID = await getDeviceId();
-  $devNote.textContent = "Device Lock: " + DEVICE_ID;
-})();
-
-/* ============ JSONP ============ */
+/* JSONP */
 function jsonp(params){
   return new Promise((res,rej)=>{
     const cb="cb_"+Math.random().toString(36).slice(2);
     params.callback=cb;
     params._ts=Date.now();
-
     const s=document.createElement("script");
     s.src = SCRIPT_URL + "?" + new URLSearchParams(params).toString();
-
     window[cb]=(d)=>{ try{ delete window[cb]; }catch(_){ window[cb]=undefined; } s.remove(); res(d); };
     s.onerror=()=>{ try{ delete window[cb]; }catch(_){ window[cb]=undefined; } s.remove(); rej(new Error("JSONP_ERROR")); };
-
     document.body.appendChild(s);
   });
 }
 
-/* ============ Copy & Go ============ */
+/* ✅ Device Fingerprint (ข้ามเบราว์เซอร์) */
+let DEVICE_ID = "";
+async function getDeviceId(){
+  if (DEVICE_ID) return DEVICE_ID;
+  if (!window.FingerprintJS) return "";
+  const fp = await FingerprintJS.load();
+  const r = await fp.get();
+  // visitorId = fingerprint หลัก
+  // เสริมให้แน่น: ใส่ UA/Language/Timezone เข้าไปด้วย
+  const ua = navigator.userAgent || "";
+  const lang = navigator.language || "";
+  const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || "");
+  DEVICE_ID = "fp_" + r.visitorId + "_" + simpleHash(ua + "|" + lang + "|" + tz).slice(0,8);
+  $devNote.textContent = "Device Lock: " + DEVICE_ID;
+  return DEVICE_ID;
+}
+function simpleHash(str){
+  // ไม่ใช่ crypto แท้ แต่พอสำหรับ suffix
+  let h=2166136261;
+  for (let i=0;i<str.length;i++){
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return (h>>>0).toString(16).padStart(8,"0");
+}
+
+/* Copy */
 $btnCopy.onclick=async()=>{
   const t=$promoCode.textContent.trim(); if(!t) return;
   try{
     await navigator.clipboard.writeText(t);
     $btnCopy.classList.add("copied");
     setTimeout(()=>$btnCopy.classList.remove("copied"),1200);
-  }catch(_){/* ignore */}
-  // (ทางเลือก) ถ้าพี่อยากให้เด้งออโต้หลังคัดลอก:
-  // setTimeout(()=>window.open(REDEEM_URL, "_blank", "noopener"), 600);
+  }catch(_){}
 };
 
-/* ============ Actions ============ */
+async function getPayloadBase(phone){
+  const device_id = await getDeviceId();
+  const ua = navigator.userAgent || "";
+  const lang = navigator.language || "";
+  const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || "");
+  return { phone, device_id, ua, lang, tz };
+}
+
+/* Actions */
 $btnCheck.onclick=async()=>{
   hideMsg(); hideCopy(); $btnJoin.disabled=true;
   const p=normalizePhone($phone.value);
   if(!p){ show("กรุณากรอกเบอร์ให้ถูกต้อง","err"); return; }
 
-  const dev = DEVICE_ID || await getDeviceId();
-
   show("⏳ กำลังตรวจสอบสิทธิ์...");
-  const d=await jsonp({action:"check",phone:p,device_id:dev}).catch(()=>null);
+  const base = await getPayloadBase(p);
+  const d=await jsonp({action:"check", ...base}).catch(()=>null);
   if(!d){ show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err"); return; }
 
-  if(!d.ok){
-    show(d.msg || "ไม่ผ่านเงื่อนไข","err");
-    return;
-  }
-
+  if(!d.ok){ show(d.msg || "ไม่ผ่านเงื่อนไข","err"); return; }
   show(d.msg || "✅ ผ่านการตรวจสอบ กดยืนยันเข้าร่วมได้","ok");
   $btnJoin.disabled=false;
 };
@@ -312,17 +289,12 @@ $btnJoin.onclick=async()=>{
   const p=normalizePhone($phone.value);
   if(!p){ show("กรุณากรอกเบอร์ให้ถูกต้อง","err"); return; }
 
-  const dev = DEVICE_ID || await getDeviceId();
-
   show("⏳ กำลังลงชื่อเข้าร่วม...");
-  const d=await jsonp({action:"register",phone:p,device_id:dev}).catch(()=>null);
+  const base = await getPayloadBase(p);
+  const d=await jsonp({action:"register", ...base}).catch(()=>null);
   if(!d){ show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err"); return; }
 
-  if(!d.ok){
-    show(d.msg || "ยืนยันไม่สำเร็จ","err");
-    return;
-  }
-
+  if(!d.ok){ show(d.msg || "ยืนยันไม่สำเร็จ","err"); return; }
   show(d.msg || "✅ ลงชื่อแล้ว รอแอดมินอนุมัติ","ok");
   openRule();
 };
@@ -332,16 +304,12 @@ $btnPoll.onclick=async()=>{
   const p=normalizePhone($phone.value);
   if(!p){ show("กรุณากรอกเบอร์ให้ถูกต้อง","err"); return; }
 
-  const dev = DEVICE_ID || await getDeviceId();
-
   show("⏳ กำลังเช็คสถานะ...");
-  const d=await jsonp({action:"poll",phone:p,device_id:dev}).catch(()=>null);
+  const base = await getPayloadBase(p);
+  const d=await jsonp({action:"poll", ...base}).catch(()=>null);
   if(!d){ show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err"); return; }
 
-  if(!d.ok){
-    show(d.msg || "ยังไม่พร้อม","err");
-    return;
-  }
+  if(!d.ok){ show(d.msg || "ยังไม่พร้อม","err"); return; }
 
   if(d.status==="APPROVED" && d.promo_code){
     $promoCode.textContent=d.promo_code;
