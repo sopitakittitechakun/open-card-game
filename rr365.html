@@ -349,7 +349,7 @@ $btnPoll.onclick=async()=>{
     openRule();
     return;
   }
-  if(d.status==="PENDING"){ show("⏳ รอการอนุมัติจากแอดมิน","ok"); return; }
+  if(d.status==="PENDING"){ show("⏳ รอการอนุมัติเช็คยอดฝากวันนี้","ok"); return; }
   if(d.status==="REJECTED"){ show("❌ ไม่ผ่านการอนุมัติ กรุณาติดต่อแอดมิน","err"); return; }
   if(d.status==="USED"){ show("⚠️ รายการนี้ถูกใช้ไปแล้ว","err"); return; }
 
