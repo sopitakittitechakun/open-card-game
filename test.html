@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>ปีใหม่ | รับโค้ดสุ่ม</title>
 <meta name="color-scheme" content="dark"/>
-
 <style>
 :root{
   --bg:#0b0b0b; --card:#141414; --line:rgba(255,255,255,.12);
@@ -41,7 +40,7 @@ input{
 .row{display:flex;gap:10px;margin-top:12px}
 button{
   flex:1;padding:12px 14px;border-radius:14px;border:0;
-  font-size:16px;font-weight:800;color:#fff;cursor:pointer;
+  font-size:16px;font-weight:900;color:#fff;cursor:pointer;
 }
 .btnAlt{background:#2a2a2a}
 .btnMain{background:linear-gradient(135deg,var(--accent),var(--accent2))}
@@ -138,7 +137,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 <div class="hint">
 * โค้ดที่ได้รับ ต้องมียอดฝากของวันที่รับครบ 365 บาทก่อนจึงกรอกได้<br>
 * ทำยอด 10 เท่า ถอนได้ 10 เท่า<br>
-* 🔒 เข้มงวด: 1 คน / 1 เครื่อง (ข้ามบราวเซอร์)
+* 🔒 เข้มงวด: 1 เครื่อง / 1 เบอร์ (ข้ามบราวเซอร์)
 <div class="smallNote" id="devNote"></div>
 </div>
 
@@ -150,7 +149,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
     <div class="modalText">
       1) ต้องมียอดฝากของวันที่รับครบ 365 บาท<br>
       2) ทำยอด 10 เท่า ถอนได้ 10 เท่า<br>
-      3) 🔒 1 คน / 1 เครื่อง เท่านั้น<br>
+      3) 🔒 1 เครื่อง / 1 เบอร์ เท่านั้น<br>
       4) โค้ดปล่อยหลังแอดมินอนุมัติ
     </div>
     <button class="modalBtnMain" id="modalAcknowledge" type="button">รับทราบ</button>
@@ -159,7 +158,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 
 <script>
 /* 🔴 ใส่ลิงก์ exec ของ Google Apps Script */
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwKv0PkwqSdnJ9ZyDmHYbRN4o-XxZ4K0OXgcEKMYl-lOjFaLkTrvQmfzWQ5oLwN2n0r7A/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw2JyhMVi6NkCw95ycGaHyVY6jg8gcQuDmj7tYovQUJQ4kngvWbMA_5Z0j2m9TLIvWfXA/exec";
 const REDEEM_URL = "https://rumruay365.uk/events/free-credit";
 
 /* DOM */
@@ -234,17 +233,14 @@ $btnCopy.onclick=async()=>{
   }catch(_){}
 };
 
-/* =========================================================
-   ✅ DEVICE PROFILE (ข้ามบราวเซอร์)
-   - ไม่ใช้ localStorage seed
-   - ไม่เอา userAgent (เพราะ Chrome/Edge จะต่างกัน)
-   - ใช้ค่าที่ “เหมือนกัน” ในเครื่องเดียว: screen/tz/platform/hw/mem/touch/colorDepth
-   - ส่งให้ GAS ไปคำนวณ device_key เอง (ล็อกโหด)
-========================================================= */
-let DEVICE_READY=false;
-let DEVICE_PROFILE=null;
+/* ======================================================
+   ✅ ส่งโปรไฟล์เครื่องให้ GAS คำนวณ device_key เอง
+   (ข้ามบราวเซอร์จริง เพราะ GAS ไม่ใช้ UA ทำ key)
+====================================================== */
+let READY=false;
+let PROF=null;
 
-function getDeviceProfile(){
+function getProf(){
   const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || "");
   const scrW = screen.width || 0;
   const scrH = screen.height || 0;
@@ -270,38 +266,41 @@ function getDeviceProfile(){
   }catch(_){}
 
   return {
-    tz, scrW, scrH, dpr, cd,
-    plat, hc, dm, lang, mtp, touch,
+    tz,
+    scrW, scrH, dpr, cd,
+    plat, hc, dm,
+    lang, mtp, touch,
     glv: String(glv||"").slice(0,120),
     glr: String(glr||"").slice(0,200),
   };
 }
 
-async function ensureDeviceReady(){
-  if(DEVICE_READY && DEVICE_PROFILE) return DEVICE_PROFILE;
+async function ensureReady(){
+  if(READY && PROF) return PROF;
   setButtons(false);
-  note("กำลังตรวจสอบเครื่อง...");
-
-  // โปรไฟล์สร้างได้ทันที ไม่ต้องรอ CDN
-  DEVICE_PROFILE = getDeviceProfile();
-  DEVICE_READY = true;
-
-  // โชว์สั้น ๆ ให้แอดมินดูดีบั๊กได้
-  note(`Device Lock: ${DEVICE_PROFILE.scrW}x${DEVICE_PROFILE.scrH}@${DEVICE_PROFILE.dpr} | ${DEVICE_PROFILE.tz}`);
-
+  PROF=getProf();
+  READY=true;
+  note(`Device: ${PROF.scrW}x${PROF.scrH}@${PROF.dpr} | ${PROF.tz}`);
   setButtons(true);
-  return DEVICE_PROFILE;
+  return PROF;
 }
+window.addEventListener("load", ()=>ensureReady());
 
-window.addEventListener("load", async ()=>{
-  await ensureDeviceReady();
-});
-
-/* payload */
 async function payloadBase(phone){
-  const prof = await ensureDeviceReady();
-  const ua = navigator.userAgent || ""; // ส่งไว้ดู log ได้ แต่ GAS ไม่ใช้ทำ key
-  return { phone, ua, ...prof };
+  const p = await ensureReady();
+  const ua = navigator.userAgent || "";
+  return {
+    phone,
+    ua,
+    tz: p.tz,
+    scrW: p.scrW, scrH: p.scrH, dpr: p.dpr, cd: p.cd,
+    plat: p.plat, hc: p.hc, dm: p.dm,
+    lang: p.lang, mtp: p.mtp, touch: p.touch,
+    glv: p.glv, glr: p.glr,
+    // ส่งแบบอ่านง่ายเผื่อ log
+    screen: `${p.scrW}x${p.scrH}@${p.dpr}`,
+    webgl: `${p.glv}|${p.glr}`.slice(0,220),
+  };
 }
 
 /* actions */
@@ -309,13 +308,11 @@ $btnCheck.onclick=async()=>{
   hideMsg(); hideCopy(); $btnJoin.disabled=true;
   const p=normalizePhone($phone.value);
   if(!p){ show("กรุณากรอกเบอร์ให้ถูกต้อง","err"); return; }
-
   const base = await payloadBase(p);
   show("⏳ กำลังตรวจสอบสิทธิ์...");
   const d=await jsonp({action:"check", ...base}).catch(()=>null);
   if(!d){ show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err"); return; }
   if(!d.ok){ show(d.msg || "ไม่ผ่านเงื่อนไข","err"); return; }
-
   show(d.msg || "✅ ผ่านการตรวจสอบ กดยืนยันเข้าร่วมได้","ok");
   $btnJoin.disabled=false;
 };
@@ -324,13 +321,11 @@ $btnJoin.onclick=async()=>{
   hideMsg(); hideCopy();
   const p=normalizePhone($phone.value);
   if(!p){ show("กรุณากรอกเบอร์ให้ถูกต้อง","err"); return; }
-
   const base = await payloadBase(p);
   show("⏳ กำลังลงชื่อเข้าร่วม...");
   const d=await jsonp({action:"register", ...base}).catch(()=>null);
   if(!d){ show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err"); return; }
   if(!d.ok){ show(d.msg || "ยืนยันไม่สำเร็จ","err"); return; }
-
   show(d.msg || "✅ ลงชื่อแล้ว รอแอดมินอนุมัติ","ok");
   openRule();
 };
@@ -339,7 +334,6 @@ $btnPoll.onclick=async()=>{
   hideMsg(); hideCopy();
   const p=normalizePhone($phone.value);
   if(!p){ show("กรุณากรอกเบอร์ให้ถูกต้อง","err"); return; }
-
   const base = await payloadBase(p);
   show("⏳ กำลังเช็คสถานะ...");
   const d=await jsonp({action:"poll", ...base}).catch(()=>null);
@@ -355,7 +349,6 @@ $btnPoll.onclick=async()=>{
     openRule();
     return;
   }
-
   if(d.status==="PENDING"){ show("⏳ รอการอนุมัติจากแอดมิน","ok"); return; }
   if(d.status==="REJECTED"){ show("❌ ไม่ผ่านการอนุมัติ กรุณาติดต่อแอดมิน","err"); return; }
   if(d.status==="USED"){ show("⚠️ รายการนี้ถูกใช้ไปแล้ว","err"); return; }
