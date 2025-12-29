@@ -8,275 +8,539 @@
 
 <style>
 :root{
-  --bg:#070707;
-  --card:#141414;
-  --line:rgba(255,255,255,.14);
+  --bg:#060607;
   --txt:#fff;
   --muted:#cfcfcf;
-  --accent:#ff2b2b;
-  --accent2:#ffb703;
+  --line:rgba(255,255,255,.14);
+
+  --red:#ff2b2b;
+  --gold:#ffb703;
+  --gold2:#ffd700;
+
   --ok:#36d399;
   --bad:#ff5a5f;
-  --gold:#ffd700;
+
+  --card:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.03));
+  --shadow: 0 28px 90px rgba(0,0,0,.85);
+  --radius:22px;
 }
+
 *{box-sizing:border-box}
 body{
-  margin:0;padding:24px;
+  margin:0;
+  padding:22px 16px 34px;
   font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;
   color:var(--txt);
   background:
-    radial-gradient(600px 300px at 15% 0%, rgba(255,215,0,.22), transparent 60%),
-    radial-gradient(800px 420px at 85% 5%, rgba(255,60,60,.22), transparent 60%),
-    radial-gradient(1000px 520px at 50% -20%, rgba(255,255,255,.14), transparent 65%),
+    radial-gradient(700px 380px at 15% 0%, rgba(255,215,0,.22), transparent 60%),
+    radial-gradient(900px 420px at 85% 8%, rgba(255,60,60,.22), transparent 60%),
+    radial-gradient(1100px 560px at 50% -20%, rgba(255,255,255,.12), transparent 65%),
     var(--bg);
 }
+
+.wrap{max-width:640px;margin:0 auto}
 .card{
-  max-width:560px;margin:0 auto;
-  padding:18px;
-  border-radius:24px;
-  background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
-  border:1px solid var(--line);
-  box-shadow:
-    0 0 0 1px rgba(255,215,0,.18),
-    0 28px 90px rgba(0,0,0,.85);
+  border:1px solid rgba(255,215,0,.18);
+  background:var(--card);
+  border-radius:calc(var(--radius) + 6px);
+  padding:16px;
+  box-shadow:var(--shadow);
   backdrop-filter: blur(6px);
 }
+
 .hero{
-  width:100%;
-  border-radius:18px;
-  border:1px solid rgba(255,255,255,.12);
-  display:block;
+  border-radius:var(--radius);
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(0,0,0,.25);
 }
-h1{font-size:20px;margin:12px 0 6px}
-p{margin:0 0 12px;color:var(--muted);line-height:1.6}
-input{
+.hero img{display:block;width:100%;height:auto}
+
+.top{
+  padding:12px 6px 6px;
+}
+.h1{
+  margin:6px 0 6px;
+  font-size:20px;
+  font-weight:900;
+  letter-spacing:.2px;
+}
+.sub{
+  margin:0 0 10px;
+  color:var(--muted);
+  line-height:1.5;
+  font-size:13px;
+}
+
+.pills{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin:10px 0 0;
+}
+.pill{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.06);
+  color:#fff;
+  font-size:12px;
+  font-weight:800;
+}
+
+.label{color:var(--muted);font-size:13px;margin:10px 0 6px}
+.input{
   width:100%;
-  padding:12px 14px;
-  border-radius:14px;
-  border:1px solid var(--line);
-  background:#0f0f0f;
+  padding:14px 14px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.14);
+  outline:none;
+  background:#0f0f10;
   color:#fff;
   font-size:16px;
 }
-.row{display:flex;gap:10px;margin-top:12px}
+.row{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
 button{
   flex:1;
-  padding:12px 14px;
-  border-radius:14px;
+  min-width:180px;
   border:0;
+  padding:13px 14px;
+  border-radius:16px;
   font-weight:900;
-  color:#fff;
   cursor:pointer;
+  color:#fff;
 }
-.btnAlt{background:#2a2a2a}
 .btnMain{
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  background:linear-gradient(135deg,var(--red),var(--gold));
   box-shadow:0 0 22px rgba(255,215,0,.55);
 }
-.btnMain:hover{
-  transform:translateY(-1px) scale(1.01);
-  box-shadow:0 0 36px rgba(255,215,0,.85);
+.btnMain:hover{transform:translateY(-1px) scale(1.01);box-shadow:0 0 36px rgba(255,215,0,.85)}
+.btnAlt{
+  background:linear-gradient(135deg,#2b2b2b,#161616);
+  border:1px solid rgba(255,255,255,.12);
 }
-#btnPoll{
+button:disabled{opacity:.55;cursor:not-allowed;transform:none;box-shadow:none}
+
+.msg{
+  margin-top:12px;
+  padding:12px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(0,0,0,.28);
+  white-space:pre-line;
+  line-height:1.55;
+  display:none;
+}
+.msg.ok{border-color:rgba(54,211,153,.45)}
+.msg.bad{border-color:rgba(255,90,95,.55)}
+
+.hr{height:1px;background:rgba(255,255,255,.10);margin:14px 0}
+
+.small{
+  font-size:12px;
+  color:#d0d0d0;
+  line-height:1.6;
+}
+.kbd{
+  display:inline-block;
+  padding:2px 9px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.16);
+  background:rgba(255,255,255,.06);
+  color:#fff;
+  font-size:12px;
+  font-weight:900;
+}
+
+/* ====== หน้าโค้ด (ปิดไว้ก่อน) ====== */
+.screen{display:none}
+.screen.active{display:block}
+
+.codeCard{
   margin-top:10px;
-  width:100%;
-  border:1px solid rgba(255,215,0,.35);
+  border-radius:22px;
+  border:1px solid rgba(255,215,0,.22);
+  background:linear-gradient(180deg, rgba(255,215,0,.08), rgba(255,255,255,.04));
+  padding:14px;
+}
+.bigTitle{
+  margin:2px 0 6px;
+  font-size:18px;
+  font-weight:1000;
+}
+.codeBox{
+  display:flex;
+  gap:10px;
+  align-items:stretch;
+  margin-top:10px;
+}
+.code{
+  flex:1;
+  border-radius:16px;
+  border:1px dashed rgba(255,255,255,.25);
+  background:rgba(0,0,0,.35);
+  padding:14px;
+  font-size:18px;
+  font-weight:1000;
+  letter-spacing:1.2px;
+  user-select:all;
+}
+.copyBtn{
+  width:auto;
+  white-space:nowrap;
+  padding:14px 14px;
+  border-radius:16px;
+  background:linear-gradient(135deg,#22c55e,#16a34a);
+  border:0;
+  font-weight:1000;
+}
+.goLink{
+  display:block;
+  margin-top:12px;
+  padding:14px;
+  text-align:center;
+  font-weight:1000;
+  border-radius:16px;
+  color:#0b0b0b;
+  background:linear-gradient(135deg,var(--gold2),#fff3b0);
+  text-decoration:none;
+}
+.goLink:hover{filter:brightness(1.03)}
+
+.badgeWait{
+  border:1px solid rgba(255,215,0,.25);
+  background:rgba(255,215,0,.08);
+}
+
+/* ปุ่มเช็คสถานะให้เด่นตอนรอ */
+#btnPoll{
   animation:nyPulse 2s infinite;
+  border:1px solid rgba(255,215,0,.35);
 }
 @keyframes nyPulse{
   0%{ box-shadow:0 0 0 rgba(255,215,0,.35); }
   50%{ box-shadow:0 0 30px rgba(255,215,0,.85); }
   100%{ box-shadow:0 0 0 rgba(255,215,0,.35); }
 }
-.msg{
-  margin-top:12px;
-  padding:12px;
-  border-radius:14px;
-  border:1px solid var(--line);
-  background:rgba(0,0,0,.35);
-  white-space:pre-line;
-  display:none;
-}
-.msg.ok{border-color:rgba(54,211,153,.45)}
-.msg.bad{border-color:rgba(255,90,95,.55)}
-.copyBox{
-  display:none;
-  margin-top:12px;
-  padding:12px;
-  border-radius:14px;
-  border:1px dashed rgba(255,255,255,.25);
-  display:flex;
-  gap:10px;
-  align-items:center;
-}
-.copyCode{
-  flex:1;
-  font-weight:900;
-  font-size:16px;
-  letter-spacing:1px;
-  user-select:all;
-}
-.copyBtn{
-  padding:10px 14px;
-  border-radius:12px;
-  border:0;
-  font-weight:900;
-  color:#fff;
-  background:linear-gradient(135deg,#22c55e,#16a34a);
-}
-.goLink{
-  display:none;
-  margin-top:12px;
-  padding:14px;
-  text-align:center;
-  font-weight:900;
-  border-radius:14px;
-  color:#fff;
-  background:linear-gradient(135deg,#ff2b2b,#b80000);
-  text-decoration:none;
-}
-.hint{
-  font-size:12px;
-  color:#cfcfcf;
-  margin-top:10px;
-  line-height:1.6;
-}
 </style>
 </head>
 
 <body>
+<div class="wrap">
 
-<div class="card">
-  <img class="hero"
-    src="https://img5.pic.in.th/file/secure-sv1/photo_--_--1c67466a2f55fbd2.jpg"
-    alt="ปีใหม่ 2569">
+  <!-- ====== SCREEN A: ลงทะเบียน/รออนุมัติ ====== -->
+  <section id="screenWait" class="screen active">
+    <div class="card">
+      <div class="hero">
+        <img src="https://img5.pic.in.th/file/secure-sv1/photo_--_--1c67466a2f55fbd2.jpg" alt="New Year 2569">
+      </div>
 
-  <h1>🎁 ปีใหม่ 2569 รับโค้ดสุ่ม 🎁</h1>
-  <p>ระบบสุ่มโค้ดอัตโนมัติ (ปล่อยโค้ดหลังแอดมินอนุมัติ)</p>
+      <div class="top">
+        <div class="h1">🎆 ปีใหม่ 2569 | รับโค้ดสุ่ม 🎆</div>
+        <div class="sub">ระบบเข้มงวด 1 คน / 1 อุปกรณ์ — โค้ดจะ “แสดง” เมื่อแอดมินอนุมัติเท่านั้น</div>
 
-  <input id="phone" inputmode="numeric" placeholder="กรอกเบอร์โทรศัพท์">
+        <div class="pills">
+          <span class="pill badgeWait">⏳ รออนุมัติจากแอดมิน</span>
+          <span class="pill">🔒 1 เครื่อง / 1 เบอร์</span>
+          <span class="pill">🎁 ได้โค้ดแล้วไปกรอกลิงก์</span>
+        </div>
 
-  <div class="row">
-    <button id="btnCheck" class="btnAlt">เช็คสิทธิ์</button>
-    <button id="btnJoin" class="btnMain" disabled>ยืนยันเข้าร่วม</button>
-  </div>
+        <div class="label">เบอร์โทรศัพท์ที่สมัคร</div>
+        <input id="phone" class="input" inputmode="numeric" placeholder="เช่น 0611111111" maxlength="20"/>
 
-  <button id="btnPoll" class="btnAlt">เช็คสถานะ / รับโค้ด</button>
+        <div class="row">
+          <button id="btnCheck" class="btnAlt" type="button">เช็คสิทธิ์</button>
+          <button id="btnJoin" class="btnMain" type="button" disabled>ยืนยันเข้าร่วม</button>
+        </div>
 
-  <div id="msg" class="msg"></div>
+        <div class="row">
+          <button id="btnPoll" class="btnAlt" type="button">เช็คสถานะ (รออนุมัติ)</button>
+        </div>
 
-  <div id="copyWrap" class="copyBox">
-    <div id="promoCode" class="copyCode">RRXXXXXX</div>
-    <button id="btnCopy" class="copyBtn">คัดลอก</button>
-  </div>
+        <div id="msg" class="msg"></div>
 
-  <a id="goRedeem"
-     class="goLink"
-     href="https://rumruay365.uk/events/free-credit"
-     target="_blank">
-     👉 ไปกรอกโค้ดรับเครดิตฟรี
-  </a>
+        <div class="hr"></div>
+        <div class="small">
+          * โค้ดที่ได้รับ ต้องมียอดฝากของวันที่รับครบ <span class="kbd">365</span> บาทก่อนจึงใช้งานได้<br/>
+          * ทำยอด <span class="kbd">10 เท่า</span> ถอนได้ <span class="kbd">10 เท่า</span><br/>
+          * หากระบบแจ้งผิดปกติ = ตรวจพบการพยายามรับซ้ำ/เปลี่ยนเครื่อง/หลายเบอร์
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <div class="hint">
-    * โค้ดที่ได้รับ ต้องมียอดฝากของวันที่รับครบ 365 บาท<br>
-    * ทำยอด 10 เท่า ถอนได้ 10 เท่า<br>
-    * 🔒 เข้มงวด: 1 คน / 1 เครื่อง (ข้ามเบราว์เซอร์)
-  </div>
+  <!-- ====== SCREEN B: หน้าโค้ด (แสดงหลัง APPROVED เท่านั้น) ====== -->
+  <section id="screenCode" class="screen">
+    <div class="card">
+      <div class="top">
+        <div class="h1">🎉 อนุมัติแล้ว! รับโค้ดได้เลย</div>
+        <div class="sub">นี่คือโค้ดของคุณ — คัดลอกแล้วไปกรอกที่ลิงก์ด้านล่าง</div>
+
+        <div class="codeCard">
+          <div class="bigTitle">🔑 โค้ดของคุณ</div>
+
+          <div class="codeBox">
+            <div id="code" class="code">-</div>
+            <button id="btnCopy" class="copyBtn" type="button">คัดลอก</button>
+          </div>
+
+          <a class="goLink" href="https://rumruay365.uk/events/free-credit" target="_blank" rel="noopener">
+            👉 ไปกรอกโค้ดรับเครดิตฟรี
+          </a>
+
+          <div class="small" style="margin-top:10px">
+            * หากกรอกโค้ดแล้วไม่ได้ โปรดตรวจสอบเงื่อนไขยอดฝากของ “วันเดียวกัน” ก่อนนะคะ
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:12px">
+          <button id="btnBack" class="btnAlt" type="button">⬅ กลับหน้าหลัก</button>
+          <button id="btnPoll2" class="btnMain" type="button">รีเช็คสถานะอีกครั้ง</button>
+        </div>
+
+        <div id="msg2" class="msg"></div>
+      </div>
+    </div>
+  </section>
+
 </div>
 
 <script>
-/* ================= CONFIG ================= */
+/* ====== CONFIG (แก้เป็นลิงก์ของพี่) ====== */
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyokjZuq_w45cvwNjSGcjlcH1xpMLi_0K7jG84a5sm7EuIKTDIBF9Uzw4_yisVP9KtTJA/exec";
 
-/* ================= UTIL ================= */
-const $ = id => document.getElementById(id);
-function showMsg(t,type){
-  const m=$("msg");
-  m.style.display="block";
-  m.className="msg "+(type||"");
-  m.textContent=t;
-}
-function hideMsg(){ $("msg").style.display="none"; }
-function normalizePhone(v){
-  let p=String(v||"").replace(/\D/g,"");
-  if(p.startsWith("66")) p="0"+p.slice(2);
-  return /^0[689]\d{8}$/.test(p)?p:"";
+/* ====== UI Helpers ====== */
+const $ = (id)=>document.getElementById(id);
+
+function showScreen(name){
+  $("screenWait").classList.remove("active");
+  $("screenCode").classList.remove("active");
+  $(name).classList.add("active");
 }
 
-/* ================= DEVICE FINGERPRINT ================= */
-async function deviceInfo(){
+function showMsg(id, text, type){
+  const el = $(id);
+  el.style.display="block";
+  el.className="msg " + (type||"");
+  el.textContent = text;
+}
+function hideMsg(id){
+  const el=$(id);
+  el.style.display="none";
+  el.textContent="";
+  el.className="msg";
+}
+
+function normalizePhone(v){
+  let s=String(v||"").trim();
+  const th="๐๑๒๓๔๕๖๗๘๙";
+  for(let i=0;i<th.length;i++) s=s.replace(new RegExp(th[i],"g"), String(i));
+  let p=s.replace(/\D/g,"");
+  if(p.startsWith("0066")) p=p.slice(2);
+  if(p.startsWith("66")) p="0"+p.slice(2);
+  if(!p.startsWith("0") && p.length===9) p="0"+p;
+  return /^0[689]\d{8}$/.test(p) ? p : "";
+}
+
+/* ====== Device Profile (ข้ามบราวเซอร์) ====== */
+async function getWebGLInfo(){
+  try{
+    const c=document.createElement("canvas");
+    const gl=c.getContext("webgl")||c.getContext("experimental-webgl");
+    if(!gl) return {glv:"", glr:""};
+    const dbg=gl.getExtension("WEBGL_debug_renderer_info");
+    const glv=dbg?gl.getParameter(dbg.UNMASKED_VENDOR_WEBGL):"";
+    const glr=dbg?gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL):"";
+    return {glv:String(glv||""), glr:String(glr||"")};
+  }catch(_){ return {glv:"", glr:""}; }
+}
+
+async function buildParams(phone){
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+  const scrW = String(screen.width||0);
+  const scrH = String(screen.height||0);
+  const dpr  = String(window.devicePixelRatio||1);
+  const cd   = String(screen.colorDepth||0);
+  const plat = String(navigator.platform||"");
+  const hc   = navigator.hardwareConcurrency ? String(navigator.hardwareConcurrency) : "0";
+  const dm   = (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "1" : "0";
+  const lang = String(navigator.language||"").slice(0,20);
+  const mtp  = (navigator.maxTouchPoints!=null) ? String(navigator.maxTouchPoints) : "0";
+  const touch= ("ontouchstart" in window) ? "1" : "0";
+  const ua   = String(navigator.userAgent||"").slice(0,500);
+
+  const gl = await getWebGLInfo();
+  const glv = String(gl.glv||"").slice(0,120);
+  const glr = String(gl.glr||"").slice(0,200);
+
   return {
-    ua:navigator.userAgent,
-    lang:navigator.language,
-    tz:Intl.DateTimeFormat().resolvedOptions().timeZone,
-    scr:`${screen.width}x${screen.height}@${devicePixelRatio}`,
-    plat:navigator.platform,
-    hc:navigator.hardwareConcurrency||0
+    phone,
+    tz, scrW, scrH, dpr, cd, plat, hc, dm, lang, mtp, touch,
+    ua,
+    screen: `${scrW}x${scrH}@${dpr}`,
+    webgl: `${glv}|${glr}`,
+    glv, glr
   };
 }
 
-/* ================= JSONP ================= */
+/* ====== JSONP ====== */
 function jsonp(params){
-  return new Promise((res,rej)=>{
-    const cb="cb_"+Math.random().toString(36).slice(2);
-    params.callback=cb;
-    const s=document.createElement("script");
-    s.src=SCRIPT_URL+"?"+new URLSearchParams(params);
-    window[cb]=d=>{
-      delete window[cb];
+  return new Promise((resolve, reject)=>{
+    const cb = "cb_" + Math.random().toString(36).slice(2);
+    params.callback = cb;
+    params._ts = Date.now();
+    const s = document.createElement("script");
+    s.src = SCRIPT_URL + "?" + new URLSearchParams(params).toString();
+    window[cb] = (data)=>{
+      try{ delete window[cb]; }catch(_){ window[cb]=undefined; }
       s.remove();
-      res(d);
+      resolve(data);
     };
-    s.onerror=()=>{ delete window[cb]; s.remove(); rej(); };
+    s.onerror = ()=>{
+      try{ delete window[cb]; }catch(_){ window[cb]=undefined; }
+      s.remove();
+      reject(new Error("JSONP_ERROR"));
+    };
     document.body.appendChild(s);
   });
 }
 
-/* ================= EVENTS ================= */
-$("btnCheck").onclick=async()=>{
-  hideMsg();
-  const phone=normalizePhone($("phone").value);
-  if(!phone) return showMsg("❌ เบอร์ไม่ถูกต้อง","bad");
-  showMsg("⏳ กำลังตรวจสอบ...");
-  const d=await jsonp({action:"check",phone,...await deviceInfo()}).catch(()=>null);
-  if(!d) return showMsg("❌ เชื่อมต่อไม่สำเร็จ","bad");
-  if(d.ok && !d.exists){
-    showMsg("✅ ผ่านการตรวจสอบ กดยืนยันได้","ok");
-    $("btnJoin").disabled=false;
+/* ====== Flow ====== */
+let lastPhone = "";
+
+async function doCheck(){
+  hideMsg("msg"); hideMsg("msg2");
+  const p = normalizePhone($("phone").value);
+  if(!p) return showMsg("msg","กรุณากรอกเบอร์ให้ถูกต้อง (06/08/09 10 หลัก)","bad");
+
+  lastPhone = p;
+  showMsg("msg","⏳ กำลังตรวจสอบสิทธิ์...","");
+  const prm = await buildParams(p);
+  const d = await jsonp({action:"check", ...prm}).catch(()=>null);
+  if(!d) return showMsg("msg","❌ เชื่อมต่อไม่สำเร็จ","bad");
+
+  if(d.ok && d.exists===false){
+    showMsg("msg", d.msg || "✅ ผ่านการตรวจสอบ กดยืนยันเข้าร่วมได้", "ok");
+    $("btnJoin").disabled = false;
   }else{
-    showMsg(d.msg||"❌ ไม่ผ่านเงื่อนไข","bad");
+    showMsg("msg", d.msg || "พบข้อมูลแล้ว", (d.status==="APPROVED" ? "ok" : "bad"));
+    $("btnJoin").disabled = true;
   }
-};
+}
 
-$("btnJoin").onclick=async()=>{
-  hideMsg();
-  const phone=normalizePhone($("phone").value);
-  showMsg("⏳ กำลังลงทะเบียน...");
-  const d=await jsonp({action:"register",phone,...await deviceInfo()}).catch(()=>null);
-  if(!d||!d.ok) return showMsg(d?.msg||"❌ ลงทะเบียนไม่สำเร็จ","bad");
-  showMsg("✅ ลงทะเบียนแล้ว รอแอดมินอนุมัติ","ok");
-};
+async function doRegister(){
+  hideMsg("msg");
+  const p = normalizePhone($("phone").value);
+  if(!p) return showMsg("msg","กรุณากรอกเบอร์ให้ถูกต้อง","bad");
 
-$("btnPoll").onclick=async()=>{
-  hideMsg();
-  const phone=normalizePhone($("phone").value);
-  showMsg("⏳ กำลังเช็คสถานะ...");
-  const d=await jsonp({action:"poll",phone,...await deviceInfo()}).catch(()=>null);
-  if(!d||!d.ok) return showMsg(d?.msg||"❌ เช็คไม่สำเร็จ","bad");
-  if(d.status==="APPROVED"){
-    showMsg("🎉 ได้รับโค้ดแล้ว","ok");
-    $("promoCode").textContent=d.promo_code;
-    $("copyWrap").style.display="flex";
-    $("goRedeem").style.display="block";
-  }else{
-    showMsg(d.msg||"⏳ ยังไม่อนุมัติ","");
+  lastPhone = p;
+  showMsg("msg","⏳ กำลังลงทะเบียน...","");
+  const prm = await buildParams(p);
+  const d = await jsonp({action:"register", ...prm}).catch(()=>null);
+  if(!d) return showMsg("msg","❌ เชื่อมต่อไม่สำเร็จ","bad");
+  if(!d.ok) return showMsg("msg", d.msg || "ลงทะเบียนไม่สำเร็จ", "bad");
+
+  showMsg("msg", d.msg || "✅ ลงชื่อแล้ว รอแอดมินอนุมัติ", "ok");
+  $("btnJoin").disabled = true;
+}
+
+function openCodeScreen(code){
+  $("code").textContent = code || "-";
+  showScreen("screenCode");
+}
+
+async function doPoll(targetMsgId){
+  hideMsg(targetMsgId);
+  const p = normalizePhone($("phone").value || lastPhone);
+  if(!p) return showMsg(targetMsgId,"กรุณากรอกเบอร์ให้ถูกต้อง","bad");
+
+  lastPhone = p;
+  showMsg(targetMsgId,"⏳ กำลังเช็คสถานะ...","");
+  const prm = await buildParams(p);
+  const d = await jsonp({action:"poll", ...prm}).catch(()=>null);
+  if(!d) return showMsg(targetMsgId,"❌ เชื่อมต่อไม่สำเร็จ","bad");
+  if(!d.ok) return showMsg(targetMsgId, d.msg || "เช็คสถานะไม่สำเร็จ", "bad");
+
+  // ✅ เงื่อนไขสำคัญ: แสดงหน้าโค้ดเฉพาะ APPROVED เท่านั้น
+  if(d.status==="APPROVED" && d.promo_code){
+    showMsg(targetMsgId,"🎉 อนุมัติแล้ว! กำลังเปิดหน้าโค้ด...","ok");
+    openCodeScreen(d.promo_code);
+    return;
   }
-};
 
-$("btnCopy").onclick=async()=>{
-  await navigator.clipboard.writeText($("promoCode").textContent);
-  showMsg("✅ คัดลอกโค้ดแล้ว","ok");
-};
+  showMsg(targetMsgId, d.msg || ("สถานะ: "+(d.status||"UNKNOWN")), "");
+}
+
+/* ====== Bind ====== */
+$("btnCheck").addEventListener("click", doCheck);
+$("btnJoin").addEventListener("click", doRegister);
+$("btnPoll").addEventListener("click", ()=>doPoll("msg"));
+
+$("btnBack").addEventListener("click", ()=>{
+  showScreen("screenWait");
+});
+$("btnPoll2").addEventListener("click", ()=>doPoll("msg2"));
+
+$("btnCopy").addEventListener("click", async ()=>{
+  const t = ($("code").textContent||"").trim();
+  if(!t || t==="-" ) return;
+  try{
+    await navigator.clipboard.writeText(t);
+    showMsg("msg2","✅ คัดลอกโค้ดแล้ว","ok");
+  }catch(_){
+    const ta=document.createElement("textarea");
+    ta.value=t;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    ta.remove();
+    showMsg("msg2","✅ คัดลอกโค้ดแล้ว","ok");
+  }
+});
+</script>
+
+<!-- ✨ กลิตเตอร์ปีใหม่ (เบามาก) -->
+<script>
+(function(){
+  const c=document.createElement("canvas");
+  c.style.position="fixed";
+  c.style.inset="0";
+  c.style.pointerEvents="none";
+  c.style.zIndex="1";
+  document.body.appendChild(c);
+
+  const ctx=c.getContext("2d");
+  let w=0,h=0,pts=[];
+  function resize(){
+    w=c.width=window.innerWidth||document.documentElement.clientWidth||0;
+    h=c.height=window.innerHeight||document.documentElement.clientHeight||0;
+  }
+  window.addEventListener("resize", resize, {passive:true});
+  resize();
+
+  const N = 36;
+  for(let i=0;i<N;i++){
+    pts.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.6+0.6,s:Math.random()*0.6+0.3,a:Math.random()*0.35+0.35});
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,w,h);
+    for(const p of pts){
+      ctx.fillStyle=`rgba(255,215,0,${p.a})`;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fill();
+      p.y += p.s;
+      p.x += Math.sin(p.y/90)*0.25;
+      if(p.y>h+10){ p.y=-10; p.x=Math.random()*w; }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
 </script>
 
 </body>
