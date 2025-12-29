@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>สวัสดีปีใหม่ | รับโค้ดสุ่ม</title>
+<title>ปีใหม่ | รับโค้ดสุ่ม</title>
 <meta name="color-scheme" content="dark"/>
 
 <style>
@@ -99,22 +99,15 @@ button:disabled{opacity:.55;cursor:not-allowed}
 }
 .smallNote{font-size:12px;color:#cfcfcf;margin-top:8px;opacity:.9}
 </style>
-
-<!-- ✅ FingerprintJS (ข้ามเบราว์เซอร์) -->
-<script src="https://openfpcdn.io/fingerprintjs/v4"></script>
 </head>
 
 <body>
 <div class="card">
 
-<img
-  id="heroImg"
-  class="hero"
+<img class="hero"
   src="https://img5.pic.in.th/file/secure-sv1/photo_--_--2bb7d3a2870ef8d6.jpg"
   alt="กิจกรรมรับเครดิตฟรี"
-  loading="eager"
-  decoding="async"
-/>
+  loading="eager" decoding="async"/>
 
 <h1>🎁 ปีใหม่แจกคูปองสูงสุด 38,888 บาท 🎁</h1>
 <p>ระบบลงทะเบียนและรับโค้ด (ปล่อยโค้ดหลังแอดมินอนุมัติ)</p>
@@ -124,7 +117,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 
 <div class="row">
   <button id="btnCheck" class="btnAlt" type="button" disabled>เช็คสิทธิ์</button>
-  <button id="btnJoin" class="btnMain" type="button" disabled>ยืนยันเข้าร่วม</button>
+  <button id="btnJoin"  class="btnMain" type="button" disabled>ยืนยันเข้าร่วม</button>
 </div>
 
 <button id="btnPoll" class="btnAlt" type="button" style="margin-top:10px;width:100%" disabled>
@@ -145,7 +138,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 <div class="hint">
 * โค้ดที่ได้รับ ต้องมียอดฝากของวันที่รับครบ 365 บาทก่อนจึงกรอกได้<br>
 * ทำยอด 10 เท่า ถอนได้ 10 เท่า<br>
-* 🔒 เข้มงวด: 1 คน / 1 อุปกรณ์ (ตรวจแบบข้ามเบราว์เซอร์)
+* 🔒 เข้มงวด: 1 คน / 1 อุปกรณ์ (ตรวจสอบอุปกรณ์)
 <div class="smallNote" id="devNote"></div>
 </div>
 
@@ -157,7 +150,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
     <div class="modalText">
       1) ต้องมียอดฝากของวันที่รับครบ 365 บาท<br>
       2) ทำยอด 10 เท่า ถอนได้ 10 เท่า<br>
-      3) 🔒 1 คน / 1 อุปกรณ์ เท่านั้น (ตรวจสอบทั้งเบอร์และอุปกรณ์)<br>
+      3) 🔒 1 คน / 1 อุปกรณ์ เท่านั้น<br>
       4) โค้ดปล่อยหลังแอดมินอนุมัติ
     </div>
     <button class="modalBtnMain" id="modalAcknowledge" type="button">รับทราบ</button>
@@ -165,13 +158,11 @@ button:disabled{opacity:.55;cursor:not-allowed}
 </div>
 
 <script>
-/* 🔴 ใส่ลิงก์ exec ของ Google Apps Script (Deploy Web App) */
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyviT8Hah3OwcbS9CrlFsF-JM0x4OGdHWcComsURO7KBMaKz6N4FSA65gt8kxLOA-MwdQ/exec";
-
-/* ✅ ลิงก์ไปกรอกโค้ด */
+/* 🔴 ใส่ลิงก์ exec ของ Google Apps Script */
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzLWLGGLhMJGXUO6gP4ybocD0t83K-tsLVoUoBHlZPGKAdWfvxx6hDPGm9mzmLIVgjmBA/exec";
 const REDEEM_URL = "https://rumruay365.uk/events/free-credit";
 
-/* ============ DOM ============ */
+/* DOM */
 const $phone=document.getElementById("phone");
 const $btnCheck=document.getElementById("btnCheck");
 const $btnJoin=document.getElementById("btnJoin");
@@ -185,7 +176,6 @@ const $modalAck=document.getElementById("modalAcknowledge");
 const $goRedeem=document.getElementById("goRedeem");
 const $devNote=document.getElementById("devNote");
 
-/* ============ UI helpers ============ */
 function openRule(){ $ruleModal.classList.add("show"); document.body.style.overflow="hidden"; }
 function closeRule(){ $ruleModal.classList.remove("show"); document.body.style.overflow=""; }
 $modalAck.onclick=closeRule;
@@ -203,14 +193,13 @@ function hideCopy(){
   $goRedeem.href = REDEEM_URL;
 }
 function setButtons(enabled){
-  // btnJoin ต้องรอ check ผ่านก่อนอยู่แล้ว
   $btnCheck.disabled = !enabled;
   $btnPoll.disabled  = !enabled;
   if(!enabled) $btnJoin.disabled = true;
 }
-function note(text){ $devNote.textContent = text || ""; }
+function note(t){ $devNote.textContent = t || ""; }
 
-/* ============ Phone normalize ============ */
+/* phone normalize */
 function normalizePhone(v){
   let s=String(v||"").trim(); const th="๐๑๒๓๔๕๖๗๘๙";
   for(let i=0;i<th.length;i++) s=s.replace(new RegExp(th[i],"g"),String(i));
@@ -221,7 +210,7 @@ function normalizePhone(v){
   return /^0[689]\d{8}$/.test(p)?p:"";
 }
 
-/* ============ JSONP ============ */
+/* JSONP */
 function jsonp(params){
   return new Promise((res,rej)=>{
     const cb="cb_"+Math.random().toString(36).slice(2);
@@ -235,85 +224,108 @@ function jsonp(params){
   });
 }
 
-/* ============ Copy ============ */
+/* copy */
 $btnCopy.onclick=async()=>{
   const t=$promoCode.textContent.trim(); if(!t) return;
   try{
     await navigator.clipboard.writeText(t);
     $btnCopy.classList.add("copied");
-    setTimeout(()=>$btnCopy.classList.remove("copied"),1200);
+    setTimeout(()=> $btnCopy.classList.remove("copied"), 1200);
   }catch(_){}
 };
 
 /* =========================================================
-   ✅ DEVICE LOCK (แก้ปัญหา "ตรวจไม่พบ device_id")
-   - บังคับรอพร้อมก่อนกดปุ่ม
-   - Retry 3 รอบ
-   - Timeout กันค้าง
-   - แจ้งให้เปิด Chrome ถ้าเปิดใน LINE/FB in-app หรือโดนบล็อก
+   ✅ DEVICE ID (ไม่พึ่ง CDN) => device_id จะมีเสมอ
+   - ใช้ canvas/webgl + ua/tz/screen
+   - ถ้าบางอย่างโดนบล็อก ก็ยังมีค่า fallback
 ========================================================= */
 let DEVICE_ID = "";
 let DEVICE_READY = false;
 
-function simpleHash(str){
-  let h=2166136261;
-  for (let i=0;i<str.length;i++){
-    h ^= str.charCodeAt(i);
-    h = Math.imul(h, 16777619);
-  }
-  return (h>>>0).toString(16).padStart(8,"0");
+function safeStr(x){ return (x===undefined || x===null) ? "" : String(x); }
+
+function canvasFp(){
+  try{
+    const c=document.createElement("canvas");
+    c.width=320; c.height=120;
+    const ctx=c.getContext("2d");
+    if(!ctx) return "nocanvas";
+    ctx.textBaseline="top";
+    ctx.font="16px Arial";
+    ctx.fillStyle="#f60"; ctx.fillRect(10,10,100,40);
+    ctx.fillStyle="#069"; ctx.fillText("RR365-ล็อกอุปกรณ์", 12, 18);
+    ctx.fillStyle="rgba(102, 204, 0, 0.7)";
+    ctx.fillText("ปีใหม่ 38,888", 12, 40);
+    return c.toDataURL();
+  }catch(_){ return "canvas_err"; }
 }
 
-async function loadFpFallback(){
-  if(window.FingerprintJS) return true;
-  // เผื่อบางธีม/ปลั๊กอินทำให้ script ไม่โหลด ลองยัดอีกครั้ง
+function webglFp(){
   try{
-    await new Promise((res,rej)=>{
-      const s=document.createElement("script");
-      s.src="https://openfpcdn.io/fingerprintjs/v4";
-      s.async=true;
-      s.onload=res;
-      s.onerror=rej;
-      document.head.appendChild(s);
-    });
-    return !!window.FingerprintJS;
+    const c=document.createElement("canvas");
+    const gl=c.getContext("webgl") || c.getContext("experimental-webgl");
+    if(!gl) return "nowebgl";
+    const dbg = gl.getExtension("WEBGL_debug_renderer_info");
+    const vendor = dbg ? gl.getParameter(dbg.UNMASKED_VENDOR_WEBGL) : gl.getParameter(gl.VENDOR);
+    const renderer = dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER);
+    return safeStr(vendor)+"|"+safeStr(renderer);
+  }catch(_){ return "webgl_err"; }
+}
+
+async function sha256Hex(str){
+  try{
+    if (crypto && crypto.subtle){
+      const buf = new TextEncoder().encode(str);
+      const hash = await crypto.subtle.digest("SHA-256", buf);
+      return [...new Uint8Array(hash)].map(b=>b.toString(16).padStart(2,"0")).join("");
+    }
+  }catch(_){}
+  // fallback hash
+  let h=0; for(let i=0;i<str.length;i++){ h=(h<<5)-h+str.charCodeAt(i); h|=0; }
+  return ("fallback"+(h>>>0).toString(16)).padStart(16,"0");
+}
+
+function getSeed(){
+  // seed เพื่อให้ “มีค่าแน่นอน” แม้บาง API ถูกบล็อก
+  // (ไม่ข้ามเบราว์เซอร์ แต่ช่วยกันกรณีสุดโต่ง)
+  const k="RR365_SEED_V2";
+  try{
+    let s=localStorage.getItem(k);
+    if(!s){
+      s = (crypto?.randomUUID ? crypto.randomUUID() : ("s_"+Math.random().toString(36).slice(2)+"_"+Date.now()));
+      localStorage.setItem(k,s);
+    }
+    return s;
   }catch(_){
-    return false;
+    return "seed_no_storage";
   }
 }
 
 async function buildDeviceId(){
-  const ok = await loadFpFallback();
-  if(!ok || !window.FingerprintJS) return "";
+  const ua = navigator.userAgent || "";
+  const lang = navigator.language || "";
+  const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || "");
+  const scr = `${screen.width||0}x${screen.height||0}@${window.devicePixelRatio||1}`;
+  const hc = safeStr(navigator.hardwareConcurrency);
+  const dm = safeStr(navigator.deviceMemory);
+  const plat = safeStr(navigator.platform);
 
-  const timeoutMs = 6500;
+  const fp = [
+    "ua="+ua,
+    "lang="+lang,
+    "tz="+tz,
+    "scr="+scr,
+    "hc="+hc,
+    "dm="+dm,
+    "plat="+plat,
+    "canvas="+canvasFp(),
+    "webgl="+webglFp(),
+    "seed="+getSeed()
+  ].join("||");
 
-  try{
-    const fp = await Promise.race([
-      FingerprintJS.load(),
-      new Promise((_,rej)=>setTimeout(()=>rej(new Error("FP_LOAD_TIMEOUT")), timeoutMs))
-    ]);
-
-    const r = await Promise.race([
-      fp.get(),
-      new Promise((_,rej)=>setTimeout(()=>rej(new Error("FP_GET_TIMEOUT")), timeoutMs))
-    ]);
-
-    const ua = navigator.userAgent || "";
-    const lang = navigator.language || "";
-    const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || "");
-    const suffix = simpleHash(ua + "|" + lang + "|" + tz).slice(0,8);
-
-    return "fp_" + r.visitorId + "_" + suffix; // ยาวพอ
-  }catch(_){
-    return "";
-  }
-}
-
-function isInAppBrowser(){
-  const ua = (navigator.userAgent || "").toLowerCase();
-  // คร่าว ๆ: line / facebook / instagram / tiktok in-app
-  return ua.includes("line") || ua.includes("fbav") || ua.includes("fban") || ua.includes("instagram") || ua.includes("tiktok");
+  const hex = await sha256Hex(fp);
+  // ให้ยาวพอ + สั้นอ่านง่าย
+  return "dev_" + hex.slice(0, 32);
 }
 
 async function ensureDeviceReady(){
@@ -323,62 +335,51 @@ async function ensureDeviceReady(){
   note("กำลังตรวจสอบอุปกรณ์...");
   hideMsg();
 
-  for(let i=1;i<=3;i++){
+  // ลอง 2 รอบ (พอแล้ว เพราะเราไม่รอ CDN)
+  for(let i=1;i<=2;i++){
     const id = await buildDeviceId();
-    if(id && id.length >= 16){
+    if(id && id.length >= 12){
       DEVICE_ID = id;
       DEVICE_READY = true;
       note("Device Lock: " + DEVICE_ID);
       setButtons(true);
       return DEVICE_ID;
     }
-    note(`กำลังตรวจสอบอุปกรณ์... (ลองใหม่ ${i}/3)`);
-    await new Promise(r=>setTimeout(r, 650));
+    await new Promise(r=>setTimeout(r, 200));
   }
 
-  note("");
-  const extra = isInAppBrowser()
-    ? "\n• ตรวจพบว่าเปิดผ่านแอป (in-app) กรุณาเปิดด้วย Chrome/Safari"
-    : "\n• ถ้าใช้ Brave/AdBlock/Tracking Protection ให้ปิดชั่วคราวแล้วลองใหม่";
-
-  show(
-`❌ ตรวจไม่พบอุปกรณ์ (device_id)
-กรุณาทำตามนี้:
-1) เปิดลิงก์ด้วย Chrome / Safari (ห้ามเปิดใน LINE/FB/TikTok in-app)
-2) ปิด AdBlock/Brave Shield/Tracking Protection ชั่วคราว
-3) รีเฟรชหน้า 1 ครั้ง แล้วลองใหม่${extra}`,
-"err");
-  return "";
+  // กรณีสุดโต่งจริง ๆ (แทบไม่เกิด) => สร้างแบบสุ่มและล็อกไว้
+  DEVICE_ID = "dev_fallback_" + getSeed().slice(0,16);
+  DEVICE_READY = true;
+  note("Device Lock: " + DEVICE_ID);
+  setButtons(true);
+  return DEVICE_ID;
 }
 
-/* เรียกตอนหน้าโหลด: บังคับจับ device ก่อน */
+/* เริ่มต้น */
 window.addEventListener("load", async ()=>{
   await ensureDeviceReady();
 });
 
-/* payload base */
+/* payload */
 async function payloadBase(phone){
   const device_id = await ensureDeviceReady();
-  if(!device_id) return null;
   const ua = navigator.userAgent || "";
   const lang = navigator.language || "";
   const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || "");
   return { phone, device_id, ua, lang, tz };
 }
 
-/* ============ Actions ============ */
+/* actions */
 $btnCheck.onclick=async()=>{
   hideMsg(); hideCopy(); $btnJoin.disabled=true;
   const p=normalizePhone($phone.value);
   if(!p){ show("กรุณากรอกเบอร์ให้ถูกต้อง","err"); return; }
 
   const base = await payloadBase(p);
-  if(!base) return;
-
   show("⏳ กำลังตรวจสอบสิทธิ์...");
   const d=await jsonp({action:"check", ...base}).catch(()=>null);
   if(!d){ show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err"); return; }
-
   if(!d.ok){ show(d.msg || "ไม่ผ่านเงื่อนไข","err"); return; }
 
   show(d.msg || "✅ ผ่านการตรวจสอบ กดยืนยันเข้าร่วมได้","ok");
@@ -391,12 +392,9 @@ $btnJoin.onclick=async()=>{
   if(!p){ show("กรุณากรอกเบอร์ให้ถูกต้อง","err"); return; }
 
   const base = await payloadBase(p);
-  if(!base) return;
-
   show("⏳ กำลังลงชื่อเข้าร่วม...");
   const d=await jsonp({action:"register", ...base}).catch(()=>null);
   if(!d){ show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err"); return; }
-
   if(!d.ok){ show(d.msg || "ยืนยันไม่สำเร็จ","err"); return; }
 
   show(d.msg || "✅ ลงชื่อแล้ว รอแอดมินอนุมัติ","ok");
@@ -409,12 +407,9 @@ $btnPoll.onclick=async()=>{
   if(!p){ show("กรุณากรอกเบอร์ให้ถูกต้อง","err"); return; }
 
   const base = await payloadBase(p);
-  if(!base) return;
-
   show("⏳ กำลังเช็คสถานะ...");
   const d=await jsonp({action:"poll", ...base}).catch(()=>null);
   if(!d){ show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err"); return; }
-
   if(!d.ok){ show(d.msg || "ยังไม่พร้อม","err"); return; }
 
   if(d.status==="APPROVED" && d.promo_code){
