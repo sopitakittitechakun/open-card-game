@@ -138,7 +138,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 <div class="hint">
 * โค้ดที่ได้รับ ต้องมียอดฝากของวันที่รับครบ 365 บาทก่อนจึงกรอกได้<br>
 * ทำยอด 10 เท่า ถอนได้ 10 เท่า<br>
-* 🔒 เข้มงวด: 1 คน / 1 อุปกรณ์ (ตรวจสอบอุปกรณ์)
+* 🔒 เข้มงวด: 1 คน / 1 เครื่อง (ข้ามบราวเซอร์)
 <div class="smallNote" id="devNote"></div>
 </div>
 
@@ -150,7 +150,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
     <div class="modalText">
       1) ต้องมียอดฝากของวันที่รับครบ 365 บาท<br>
       2) ทำยอด 10 เท่า ถอนได้ 10 เท่า<br>
-      3) 🔒 1 คน / 1 อุปกรณ์ เท่านั้น<br>
+      3) 🔒 1 คน / 1 เครื่อง เท่านั้น<br>
       4) โค้ดปล่อยหลังแอดมินอนุมัติ
     </div>
     <button class="modalBtnMain" id="modalAcknowledge" type="button">รับทราบ</button>
@@ -159,7 +159,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 
 <script>
 /* 🔴 ใส่ลิงก์ exec ของ Google Apps Script */
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzLWLGGLhMJGXUO6gP4ybocD0t83K-tsLVoUoBHlZPGKAdWfvxx6hDPGm9mzmLIVgjmBA/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwPzbCkaEKl26HHS3y5ZO38N29nzR6EZZ5zgP0L61pNOUY1b_rmFu-rTXEmjFE0sB4zlw/exec";
 const REDEEM_URL = "https://rumruay365.uk/events/free-credit";
 
 /* DOM */
@@ -235,139 +235,73 @@ $btnCopy.onclick=async()=>{
 };
 
 /* =========================================================
-   ✅ DEVICE ID (ไม่พึ่ง CDN) => device_id จะมีเสมอ
-   - ใช้ canvas/webgl + ua/tz/screen
-   - ถ้าบางอย่างโดนบล็อก ก็ยังมีค่า fallback
+   ✅ DEVICE PROFILE (ข้ามบราวเซอร์)
+   - ไม่ใช้ localStorage seed
+   - ไม่เอา userAgent (เพราะ Chrome/Edge จะต่างกัน)
+   - ใช้ค่าที่ “เหมือนกัน” ในเครื่องเดียว: screen/tz/platform/hw/mem/touch/colorDepth
+   - ส่งให้ GAS ไปคำนวณ device_key เอง (ล็อกโหด)
 ========================================================= */
-let DEVICE_ID = "";
-let DEVICE_READY = false;
+let DEVICE_READY=false;
+let DEVICE_PROFILE=null;
 
-function safeStr(x){ return (x===undefined || x===null) ? "" : String(x); }
+function getDeviceProfile(){
+  const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || "");
+  const scrW = screen.width || 0;
+  const scrH = screen.height || 0;
+  const dpr  = window.devicePixelRatio || 1;
+  const cd   = screen.colorDepth || 0;
+  const plat = (navigator.platform || "");
+  const hc   = navigator.hardwareConcurrency || 0;
+  const dm   = navigator.deviceMemory || 0;
+  const lang = navigator.language || "";
+  const mtp  = navigator.maxTouchPoints || 0;
+  const touch = ("ontouchstart" in window) ? 1 : 0;
 
-function canvasFp(){
+  // webgl vendor/renderer (มักเหมือนกันข้ามบราวเซอร์)
+  let glv="", glr="";
   try{
     const c=document.createElement("canvas");
-    c.width=320; c.height=120;
-    const ctx=c.getContext("2d");
-    if(!ctx) return "nocanvas";
-    ctx.textBaseline="top";
-    ctx.font="16px Arial";
-    ctx.fillStyle="#f60"; ctx.fillRect(10,10,100,40);
-    ctx.fillStyle="#069"; ctx.fillText("RR365-ล็อกอุปกรณ์", 12, 18);
-    ctx.fillStyle="rgba(102, 204, 0, 0.7)";
-    ctx.fillText("ปีใหม่ 38,888", 12, 40);
-    return c.toDataURL();
-  }catch(_){ return "canvas_err"; }
-}
-
-function webglFp(){
-  try{
-    const c=document.createElement("canvas");
-    const gl=c.getContext("webgl") || c.getContext("experimental-webgl");
-    if(!gl) return "nowebgl";
-    const dbg = gl.getExtension("WEBGL_debug_renderer_info");
-    const vendor = dbg ? gl.getParameter(dbg.UNMASKED_VENDOR_WEBGL) : gl.getParameter(gl.VENDOR);
-    const renderer = dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER);
-    return safeStr(vendor)+"|"+safeStr(renderer);
-  }catch(_){ return "webgl_err"; }
-}
-
-async function sha256Hex(str){
-  try{
-    if (crypto && crypto.subtle){
-      const buf = new TextEncoder().encode(str);
-      const hash = await crypto.subtle.digest("SHA-256", buf);
-      return [...new Uint8Array(hash)].map(b=>b.toString(16).padStart(2,"0")).join("");
+    const gl=c.getContext("webgl")||c.getContext("experimental-webgl");
+    if(gl){
+      const dbg = gl.getExtension("WEBGL_debug_renderer_info");
+      glv = dbg ? gl.getParameter(dbg.UNMASKED_VENDOR_WEBGL) : gl.getParameter(gl.VENDOR);
+      glr = dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER);
     }
   }catch(_){}
-  // fallback hash
-  let h=0; for(let i=0;i<str.length;i++){ h=(h<<5)-h+str.charCodeAt(i); h|=0; }
-  return ("fallback"+(h>>>0).toString(16)).padStart(16,"0");
-}
 
-function getSeed(){
-  // seed เพื่อให้ “มีค่าแน่นอน” แม้บาง API ถูกบล็อก
-  // (ไม่ข้ามเบราว์เซอร์ แต่ช่วยกันกรณีสุดโต่ง)
-  const k="RR365_SEED_V2";
-  try{
-    let s=localStorage.getItem(k);
-    if(!s){
-      s = (crypto?.randomUUID ? crypto.randomUUID() : ("s_"+Math.random().toString(36).slice(2)+"_"+Date.now()));
-      localStorage.setItem(k,s);
-    }
-    return s;
-  }catch(_){
-    return "seed_no_storage";
-  }
-}
-
-async function buildDeviceId(){
-  const ua = navigator.userAgent || "";
-  const lang = navigator.language || "";
-  const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || "");
-  const scr = `${screen.width||0}x${screen.height||0}@${window.devicePixelRatio||1}`;
-  const hc = safeStr(navigator.hardwareConcurrency);
-  const dm = safeStr(navigator.deviceMemory);
-  const plat = safeStr(navigator.platform);
-
-  const fp = [
-    "ua="+ua,
-    "lang="+lang,
-    "tz="+tz,
-    "scr="+scr,
-    "hc="+hc,
-    "dm="+dm,
-    "plat="+plat,
-    "canvas="+canvasFp(),
-    "webgl="+webglFp(),
-    "seed="+getSeed()
-  ].join("||");
-
-  const hex = await sha256Hex(fp);
-  // ให้ยาวพอ + สั้นอ่านง่าย
-  return "dev_" + hex.slice(0, 32);
+  return {
+    tz, scrW, scrH, dpr, cd,
+    plat, hc, dm, lang, mtp, touch,
+    glv: String(glv||"").slice(0,120),
+    glr: String(glr||"").slice(0,200),
+  };
 }
 
 async function ensureDeviceReady(){
-  if(DEVICE_READY && DEVICE_ID) return DEVICE_ID;
-
+  if(DEVICE_READY && DEVICE_PROFILE) return DEVICE_PROFILE;
   setButtons(false);
-  note("กำลังตรวจสอบอุปกรณ์...");
-  hideMsg();
+  note("กำลังตรวจสอบเครื่อง...");
 
-  // ลอง 2 รอบ (พอแล้ว เพราะเราไม่รอ CDN)
-  for(let i=1;i<=2;i++){
-    const id = await buildDeviceId();
-    if(id && id.length >= 12){
-      DEVICE_ID = id;
-      DEVICE_READY = true;
-      note("Device Lock: " + DEVICE_ID);
-      setButtons(true);
-      return DEVICE_ID;
-    }
-    await new Promise(r=>setTimeout(r, 200));
-  }
-
-  // กรณีสุดโต่งจริง ๆ (แทบไม่เกิด) => สร้างแบบสุ่มและล็อกไว้
-  DEVICE_ID = "dev_fallback_" + getSeed().slice(0,16);
+  // โปรไฟล์สร้างได้ทันที ไม่ต้องรอ CDN
+  DEVICE_PROFILE = getDeviceProfile();
   DEVICE_READY = true;
-  note("Device Lock: " + DEVICE_ID);
+
+  // โชว์สั้น ๆ ให้แอดมินดูดีบั๊กได้
+  note(`Device Lock: ${DEVICE_PROFILE.scrW}x${DEVICE_PROFILE.scrH}@${DEVICE_PROFILE.dpr} | ${DEVICE_PROFILE.tz}`);
+
   setButtons(true);
-  return DEVICE_ID;
+  return DEVICE_PROFILE;
 }
 
-/* เริ่มต้น */
 window.addEventListener("load", async ()=>{
   await ensureDeviceReady();
 });
 
 /* payload */
 async function payloadBase(phone){
-  const device_id = await ensureDeviceReady();
-  const ua = navigator.userAgent || "";
-  const lang = navigator.language || "";
-  const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || "");
-  return { phone, device_id, ua, lang, tz };
+  const prof = await ensureDeviceReady();
+  const ua = navigator.userAgent || ""; // ส่งไว้ดู log ได้ แต่ GAS ไม่ใช้ทำ key
+  return { phone, ua, ...prof };
 }
 
 /* actions */
