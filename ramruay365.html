@@ -35,7 +35,6 @@ body{
   padding:24px;
   font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;
   color:var(--txt);
-
   background:
     radial-gradient(1100px 560px at 50% -10%, rgba(255,43,43,.22), transparent 60%),
     radial-gradient(900px 520px at 10% 10%, rgba(125,211,252,.14), transparent 62%),
@@ -78,7 +77,7 @@ body:before{
   50%{ transform: translate3d(-18px, 22px, 0) scale(1.03); }
 }
 
-/* confetti layer (CSS only) */
+/* confetti layer */
 .confetti{
   position:fixed; inset:0;
   pointer-events:none;
@@ -98,13 +97,12 @@ body:before{
 
 /* Card */
 .card{
-  max-width:590px;
+  max-width:610px;
   margin:0 auto;
   border-radius:calc(var(--radius) + 6px);
   padding:16px;
   border:1px solid rgba(255,255,255,.14);
   box-shadow: var(--shadow);
-
   background:
     radial-gradient(900px 420px at 20% 0%, rgba(255,213,106,.10), transparent 55%),
     radial-gradient(820px 420px at 90% 20%, rgba(255,43,43,.14), transparent 60%),
@@ -113,8 +111,6 @@ body:before{
   position:relative;
   overflow:hidden;
 }
-
-/* top border glow */
 .card:before{
   content:"";
   position:absolute; left:-40%; top:-60%;
@@ -132,11 +128,10 @@ body:before{
   align-items:center;
   justify-content:space-between;
   gap:12px;
-  margin:4px 2px 12px;
+  margin:4px 2px 10px;
   position:relative;
-  z-index:1;
+  z-index:2;
 }
-
 .badgeNY{
   display:inline-flex;
   align-items:center;
@@ -147,15 +142,12 @@ body:before{
   background: linear-gradient(135deg, rgba(255,43,43,.18), rgba(255,213,106,.10));
   box-shadow: 0 10px 24px rgba(0,0,0,.35);
   font-weight:900;
-  letter-spacing:.2px;
-  color:#fff;
 }
 .badgeDot{
   width:10px;height:10px;border-radius:50%;
   background: radial-gradient(circle at 30% 30%, #fff, rgba(255,255,255,.2));
   box-shadow: 0 0 0 4px rgba(255,43,43,.18), 0 0 24px rgba(255,43,43,.45);
 }
-
 .pill{
   display:inline-flex;
   align-items:center;
@@ -169,6 +161,47 @@ body:before{
   font-size:12px;
 }
 
+/* Stepper */
+.stepper{
+  display:flex;
+  gap:10px;
+  padding:10px 10px 0;
+  position:relative;
+  z-index:2;
+}
+.step{
+  flex:1;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.22);
+  padding:10px 10px;
+  display:flex;
+  gap:8px;
+  align-items:center;
+  min-height:42px;
+}
+.step .dot{
+  width:12px;height:12px;border-radius:50%;
+  background: rgba(255,255,255,.18);
+  box-shadow: 0 0 0 4px rgba(255,255,255,.06);
+}
+.step .txt{
+  font-size:12px;
+  font-weight:900;
+  color: rgba(255,255,255,.82);
+  line-height:1.2;
+}
+.step.done{ border-color: rgba(54,211,153,.35); }
+.step.done .dot{
+  background: radial-gradient(circle at 30% 30%, #fff, rgba(54,211,153,.55));
+  box-shadow: 0 0 0 4px rgba(54,211,153,.14), 0 0 22px rgba(54,211,153,.25);
+}
+.step.live{ border-color: rgba(255,43,43,.32); }
+.step.live .dot{
+  background: radial-gradient(circle at 30% 30%, #fff, rgba(255,43,43,.55));
+  box-shadow: 0 0 0 4px rgba(255,43,43,.14), 0 0 22px rgba(255,43,43,.22);
+}
+
 .heroWrap{
   position:relative;
   border-radius:18px;
@@ -177,12 +210,9 @@ body:before{
   background: rgba(0,0,0,.25);
   box-shadow: 0 18px 42px rgba(0,0,0,.55);
   z-index:1;
+  margin-top:10px;
 }
-.hero{
-  width:100%;
-  display:block;
-  transform: scale(1.01);
-}
+.hero{ width:100%; display:block; transform: scale(1.01); }
 .heroGlow{
   position:absolute; inset:0;
   background:
@@ -192,25 +222,10 @@ body:before{
   pointer-events:none;
   animation: heroPulse 3.8s ease-in-out infinite;
 }
-@keyframes heroPulse{
-  0%,100%{ opacity:.65; }
-  50%{ opacity:.9; }
-}
+@keyframes heroPulse{ 0%,100%{ opacity:.65; } 50%{ opacity:.9; } }
 
-h1{
-  font-size:20px;
-  margin:14px 6px 8px;
-  letter-spacing:.2px;
-  position:relative;
-  z-index:1;
-}
-.sub{
-  margin:0 6px 14px;
-  color:var(--muted);
-  line-height:1.65;
-  position:relative;
-  z-index:1;
-}
+h1{ font-size:20px; margin:14px 6px 8px; letter-spacing:.2px; position:relative; z-index:2; }
+.sub{ margin:0 6px 14px; color:var(--muted); line-height:1.65; position:relative; z-index:2; }
 
 label{
   display:block;
@@ -219,8 +234,7 @@ label{
   font-weight:800;
   font-size:13px;
   letter-spacing:.2px;
-  position:relative;
-  z-index:1;
+  position:relative; z-index:2;
 }
 
 input{
@@ -234,8 +248,7 @@ input{
   outline:none;
   box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
   transition: transform .12s ease, border-color .2s ease, box-shadow .2s ease;
-  position:relative;
-  z-index:1;
+  position:relative; z-index:2;
 }
 input:focus{
   border-color: rgba(255,43,43,.55);
@@ -248,8 +261,7 @@ input:focus{
   gap:10px;
   margin-top:12px;
   padding:0 6px;
-  position:relative;
-  z-index:1;
+  position:relative; z-index:2;
 }
 
 button{
@@ -263,27 +275,22 @@ button{
   cursor:pointer;
   transition: transform .12s ease, filter .2s ease, opacity .2s ease, box-shadow .2s ease;
   box-shadow: 0 16px 30px rgba(0,0,0,.45);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
 }
 button:hover{ transform: translateY(-1px); filter: brightness(1.05); }
 button:active{ transform: translateY(0px) scale(.99); }
-button:disabled{
-  opacity:.55;
-  cursor:not-allowed;
-  transform:none !important;
-  box-shadow:none;
-}
+button:disabled{ opacity:.55; cursor:not-allowed; transform:none !important; box-shadow:none; }
 
-.btnAlt{
-  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
-}
-
+.btnAlt{ background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)); }
 .btnMain{
   border-color: rgba(255,43,43,.28);
   background:
     radial-gradient(140px 120px at 30% 10%, rgba(255,213,106,.35), transparent 60%),
     linear-gradient(135deg, var(--accent), var(--accent2));
-  position:relative;
-  overflow:hidden;
+  position:relative; overflow:hidden;
 }
 .btnMain:before{
   content:"";
@@ -297,12 +304,24 @@ button:disabled{
 
 .fullBtn{
   margin-top:10px;
-  width:100%;
+  width:calc(100% - 12px);
+  margin-left:6px;
+  margin-right:6px;
   padding:12px 14px;
   border-radius:16px;
   background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
   border:1px solid rgba(255,255,255,.12);
+  position:relative; z-index:2;
 }
+
+.spinner{
+  width:16px;height:16px;
+  border-radius:50%;
+  border:2px solid rgba(255,255,255,.28);
+  border-top-color: rgba(255,255,255,.95);
+  animation: spin .75s linear infinite;
+}
+@keyframes spin{ to{ transform: rotate(360deg);} }
 
 .msg{
   margin:14px 6px 0;
@@ -313,17 +332,10 @@ button:disabled{
   white-space:pre-line;
   display:none;
   line-height:1.65;
-  position:relative;
-  z-index:1;
+  position:relative; z-index:2;
 }
-.msg.ok{
-  border-color: rgba(54,211,153,.40);
-  box-shadow: 0 0 0 4px rgba(54,211,153,.10);
-}
-.msg.err{
-  border-color: rgba(255,90,95,.45);
-  box-shadow: 0 0 0 4px rgba(255,90,95,.10);
-}
+.msg.ok{ border-color: rgba(54,211,153,.40); box-shadow: 0 0 0 4px rgba(54,211,153,.10); }
+.msg.err{ border-color: rgba(255,90,95,.45); box-shadow: 0 0 0 4px rgba(255,90,95,.10); }
 
 /* Copy */
 .copyBox{
@@ -335,8 +347,7 @@ button:disabled{
   display:none;
   align-items:center;
   gap:10px;
-  position:relative;
-  z-index:1;
+  position:relative; z-index:2;
 }
 .copyCode{
   flex:1;
@@ -344,6 +355,22 @@ button:disabled{
   font-size:16px;
   letter-spacing:1.2px;
   user-select:all;
+  padding:8px 10px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.18);
+}
+.copyCode.glow{
+  border-color: rgba(255,213,106,.42);
+  box-shadow: 0 0 0 4px rgba(255,213,106,.12), 0 0 26px rgba(255,213,106,.18);
+  animation: nudge .28s ease 1;
+}
+@keyframes nudge{
+  0%{ transform: translateX(0); }
+  25%{ transform: translateX(-2px); }
+  50%{ transform: translateX(2px); }
+  75%{ transform: translateX(-1px); }
+  100%{ transform: translateX(0); }
 }
 .copyBtn{
   padding:10px 14px;
@@ -375,8 +402,7 @@ button:disabled{
     linear-gradient(135deg,#ff2b2b,#b80000);
   text-decoration:none;
   box-shadow: 0 22px 40px rgba(0,0,0,.55);
-  position:relative;
-  z-index:1;
+  position:relative; z-index:2;
 }
 .goLink:hover{ filter: brightness(1.05); transform: translateY(-1px); }
 .goLink:active{ transform: translateY(0px) scale(.99); }
@@ -391,20 +417,13 @@ button:disabled{
   border-radius:16px;
   border:1px solid rgba(255,255,255,.10);
   background: rgba(0,0,0,.18);
-  position:relative;
-  z-index:1;
+  position:relative; z-index:2;
 }
-.smallNote{
-  font-size:12px;
-  color:rgba(255,255,255,.72);
-  margin-top:8px;
-  opacity:.9
-}
+.smallNote{ font-size:12px; color:rgba(255,255,255,.72); margin-top:8px; opacity:.9 }
 
 /* Modal (Rule) */
 .modal{
-  position:fixed;
-  inset:0;
+  position:fixed; inset:0;
   background: rgba(0,0,0,.72);
   display:none;
   align-items:center;
@@ -425,16 +444,8 @@ button:disabled{
   box-shadow: 0 26px 90px rgba(0,0,0,.82);
   backdrop-filter: blur(10px);
 }
-.modalTitle{
-  font-weight:1000;
-  font-size:18px;
-  margin-bottom:10px;
-}
-.modalText{
-  color:rgba(255,255,255,.88);
-  line-height:1.75;
-  margin-bottom:12px;
-}
+.modalTitle{ font-weight:1000; font-size:18px; margin-bottom:10px; }
+.modalText{ color:rgba(255,255,255,.88); line-height:1.75; margin-bottom:12px; }
 .modalBtnMain{
   width:100%;
   padding:12px 14px;
@@ -451,11 +462,10 @@ button:disabled{
 .modalBtnMain:active{ transform: scale(.99); }
 
 /* =========================================
-   🎁 Gift Popup (เปิดกล่อง + พลุ)
+   🎁 Gift Popup (เปิดกล่อง + พลุ + QR + Countdown)
 ========================================= */
 .giftModal{
-  position:fixed;
-  inset:0;
+  position:fixed; inset:0;
   background: rgba(0,0,0,.82);
   display:none;
   align-items:center;
@@ -466,7 +476,7 @@ button:disabled{
 .giftModal.show{ display:flex; }
 
 .giftCard{
-  width:min(580px, 100%);
+  width:min(600px, 100%);
   border-radius:24px;
   padding:16px;
   border:1px solid rgba(255,255,255,.16);
@@ -482,41 +492,6 @@ button:disabled{
   animation: giftIn .22s ease forwards;
 }
 @keyframes giftIn{ to{ transform: translateY(0) scale(1);} }
-
-.giftTopRow{
-  display:flex; align-items:center; justify-content:space-between;
-  gap:10px; margin-bottom:10px;
-  position:relative; z-index:2;
-}
-.giftTitle{
-  font-weight:1000; font-size:18px;
-  display:flex; align-items:center; gap:8px;
-}
-.giftClose{
-  border:1px solid rgba(255,255,255,.16);
-  background: rgba(0,0,0,.25);
-  color: rgba(255,255,255,.9);
-  border-radius:14px;
-  padding:10px 12px;
-  cursor:pointer;
-  font-weight:1000;
-}
-.giftClose:hover{ filter: brightness(1.06); }
-
-.giftBody{ position:relative; z-index:2; }
-
-/* 🔥 Canvas พลุ */
-#fwCanvas{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  pointer-events:none;
-  z-index:1;
-  opacity:.95;
-}
-
-/* 🌟 แสงวิ้งรอบการ์ด */
 .giftCard:before{
   content:"";
   position:absolute; inset:-2px;
@@ -530,11 +505,36 @@ button:disabled{
   z-index:0;
 }
 
-/* 🎁 Gift Box (เปิดฝา) */
+.giftTopRow{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:10px; margin-bottom:10px;
+  position:relative; z-index:2;
+}
+.giftTitle{ font-weight:1000; font-size:18px; display:flex; align-items:center; gap:8px; }
+.giftClose{
+  border:1px solid rgba(255,255,255,.16);
+  background: rgba(0,0,0,.25);
+  color: rgba(255,255,255,.9);
+  border-radius:14px;
+  padding:10px 12px;
+  cursor:pointer;
+  font-weight:1000;
+}
+.giftClose:hover{ filter: brightness(1.06); }
+.giftBody{ position:relative; z-index:2; }
+
+/* 🔥 Canvas พลุ */
+#fwCanvas{
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  pointer-events:none;
+  z-index:1;
+  opacity:.95;
+}
+
+/* 🎁 กล่องของขวัญ */
 .boxStage{
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  display:flex; align-items:center; justify-content:center;
   margin:10px 0 8px;
   position:relative;
 }
@@ -554,8 +554,7 @@ button:disabled{
   overflow:hidden;
 }
 .giftBox .base:before{
-  content:"";
-  position:absolute; inset:0;
+  content:""; position:absolute; inset:0;
   background:
     linear-gradient(90deg, transparent 0 40%, rgba(255,213,106,.95) 40% 60%, transparent 60% 100%),
     linear-gradient(0deg, transparent 0 44%, rgba(255,213,106,.92) 44% 56%, transparent 56% 100%);
@@ -574,8 +573,7 @@ button:disabled{
   box-shadow: 0 18px 38px rgba(0,0,0,.45);
 }
 .giftBox .bow{
-  position:absolute;
-  left:50%; top:4px;
+  position:absolute; left:50%; top:4px;
   width:68px; height:34px;
   transform: translateX(-50%);
   filter: drop-shadow(0 10px 18px rgba(0,0,0,.35));
@@ -583,17 +581,15 @@ button:disabled{
 }
 .giftBox .bow:before,
 .giftBox .bow:after{
-  content:"";
-  position:absolute;
-  width:34px; height:34px;
-  border-radius:18px;
+  content:""; position:absolute;
+  width:34px; height:34px; border-radius:18px;
   background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), transparent 60%),
               radial-gradient(circle at 50% 50%, rgba(255,213,106,.98), rgba(255,213,106,.78));
 }
 .giftBox .bow:before{ left:0; }
 .giftBox .bow:after{ right:0; }
 
-/* ✨ ประกายลอยออกมาจากกล่อง */
+/* ✨ ประกาย */
 .sparkBurst{
   position:absolute;
   left:50%; top:32px;
@@ -603,55 +599,76 @@ button:disabled{
   opacity:0;
 }
 .sparkBurst i{
-  position:absolute;
-  left:0; top:0;
-  width:8px; height:8px;
-  border-radius:50%;
+  position:absolute; left:0; top:0;
+  width:8px; height:8px; border-radius:50%;
   background: radial-gradient(circle at 30% 30%, #fff, rgba(255,255,255,.25));
   box-shadow: 0 0 18px rgba(255,255,255,.75), 0 0 24px rgba(255,213,106,.55);
   transform: translate(0,0) scale(.8);
-  opacity:.0;
+  opacity:0;
 }
 
-/* เปิดกล่องเมื่อ active */
-.giftCard.opening .giftBox .lid{
-  animation: lidOpen .55s cubic-bezier(.2,.9,.2,1) forwards;
-}
+/* เปิดกล่อง */
+.giftCard.opening .giftBox .lid{ animation: lidOpen .55s cubic-bezier(.2,.9,.2,1) forwards; }
 @keyframes lidOpen{
   0%{ transform: translateY(0) rotateX(0deg); }
   100%{ transform: translateY(-26px) rotateX(70deg); }
 }
-
-.giftCard.opening .sparkBurst{
-  animation: burstShow .15s ease forwards;
-}
+.giftCard.opening .sparkBurst{ animation: burstShow .15s ease forwards; }
 @keyframes burstShow{ to{ opacity:1; } }
-
-.giftCard.opening .sparkBurst i{
-  animation: sparkleFly .75s ease forwards;
-}
+.giftCard.opening .sparkBurst i{ animation: sparkleFly .75s ease forwards; }
 .giftCard.opening .sparkBurst i:nth-child(1){ --x:-60; --y:-70; animation-delay:.02s; }
 .giftCard.opening .sparkBurst i:nth-child(2){ --x:-22; --y:-88; animation-delay:.03s; }
 .giftCard.opening .sparkBurst i:nth-child(3){ --x: 20; --y:-92; animation-delay:.01s; }
 .giftCard.opening .sparkBurst i:nth-child(4){ --x: 56; --y:-70; animation-delay:.04s; }
 .giftCard.opening .sparkBurst i:nth-child(5){ --x:-40; --y:-45; animation-delay:.06s; }
 .giftCard.opening .sparkBurst i:nth-child(6){ --x: 40; --y:-45; animation-delay:.05s; }
-
 @keyframes sparkleFly{
   0%{ opacity:0; transform: translate(0,0) scale(.7); }
   10%{ opacity:1; }
   100%{ opacity:0; transform: translate(calc(var(--x)*1px), calc(var(--y)*1px)) scale(1.05); }
 }
 
+.giftMetaRow{
+  display:flex;
+  gap:10px;
+  margin:10px 0 0;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+.badgeMini{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.22);
+  font-weight:1000;
+  font-size:12px;
+  color: rgba(255,255,255,.85);
+}
+.badgeMini strong{ color:#fff; }
+
 .giftDesc{
-  margin:8px 0 0;
+  margin:10px 0 0;
   color:rgba(255,255,255,.90);
   line-height:1.75;
   text-align:center;
 }
 
+/* โค้ดเฟดอินหลังเปิดกล่อง */
+.revealWrap{
+  margin-top:12px;
+  opacity:0;
+  transform: translateY(6px);
+  transition: opacity .28s ease, transform .28s ease;
+}
+.revealWrap.show{
+  opacity:1;
+  transform: translateY(0);
+}
+
 .giftCodeBox{
-  margin:12px 0 0;
   padding:12px;
   border-radius:18px;
   border:1px dashed rgba(255,255,255,.28);
@@ -666,6 +683,15 @@ button:disabled{
   font-size:18px;
   letter-spacing:1.4px;
   user-select:all;
+  padding:10px 12px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.18);
+}
+.giftCode.glow{
+  border-color: rgba(255,213,106,.42);
+  box-shadow: 0 0 0 4px rgba(255,213,106,.12), 0 0 26px rgba(255,213,106,.18);
+  animation: nudge .28s ease 1;
 }
 .giftCopy{
   padding:10px 14px;
@@ -680,6 +706,36 @@ button:disabled{
 .giftCopy.copied{
   color:#061427;
   background: linear-gradient(135deg, #93c5fd, #3b82f6);
+}
+
+/* QR */
+.qrWrap{
+  margin-top:12px;
+  display:flex;
+  gap:12px;
+  align-items:center;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+.qrBox{
+  width:140px;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.18);
+  padding:10px;
+  text-align:center;
+}
+.qrBox img{
+  width:120px; height:120px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.10);
+  background:#fff;
+}
+.qrHint{
+  font-size:12px;
+  color:rgba(255,255,255,.78);
+  line-height:1.6;
+  max-width:320px;
 }
 
 .giftActions{
@@ -712,6 +768,12 @@ button:disabled{
 .giftActions a:active,
 .giftActions button:active{ transform: translateY(0px) scale(.99); }
 
+@media (max-width:420px){
+  body{ padding:16px; }
+  .stepper{ flex-direction:column; }
+  .step{ min-height:auto; }
+}
+
 @media (prefers-reduced-motion: reduce){
   .bgGlow,.confetti,.heroGlow,.btnMain:before{ animation:none !important; }
   .giftCard.opening .giftBox .lid,
@@ -725,10 +787,17 @@ button:disabled{
 <div class="confetti" aria-hidden="true"></div>
 
 <div class="card">
-
   <div class="headerRow">
     <div class="badgeNY"><span class="badgeDot"></span> NEW YEAR 2569</div>
     <div class="pill">🔒 1 เครื่อง / 1 เบอร์</div>
+  </div>
+
+  <!-- Stepper -->
+  <div class="stepper" aria-label="สถานะการทำรายการ">
+    <div id="st1" class="step live"><span class="dot"></span><div class="txt">1) เช็คสิทธิ์</div></div>
+    <div id="st2" class="step"><span class="dot"></span><div class="txt">2) ยืนยันเข้าร่วม</div></div>
+    <div id="st3" class="step"><span class="dot"></span><div class="txt">3) รออนุมัติ</div></div>
+    <div id="st4" class="step"><span class="dot"></span><div class="txt">4) ได้โค้ด</div></div>
   </div>
 
   <div class="heroWrap">
@@ -746,12 +815,19 @@ button:disabled{
   <input id="phone" inputmode="numeric" placeholder="เช่น 0611111111"/>
 
   <div class="row">
-    <button id="btnCheck" class="btnAlt" type="button" disabled>เช็คสิทธิ์</button>
-    <button id="btnJoin"  class="btnMain" type="button" disabled>ยืนยันเข้าร่วม</button>
+    <button id="btnCheck" class="btnAlt" type="button" disabled>
+      <span class="spinner" id="spCheck" style="display:none"></span>
+      <span id="txCheck">เช็คสิทธิ์</span>
+    </button>
+    <button id="btnJoin" class="btnMain" type="button" disabled>
+      <span class="spinner" id="spJoin" style="display:none"></span>
+      <span id="txJoin">ยืนยันเข้าร่วม</span>
+    </button>
   </div>
 
   <button id="btnPoll" class="fullBtn" type="button" disabled>
-    เช็คสถานะ / รับโค้ด
+    <span class="spinner" id="spPoll" style="display:none"></span>
+    <span id="txPoll">เช็คสถานะ / รับโค้ด</span>
   </button>
 
   <div id="msg" class="msg"></div>
@@ -768,10 +844,10 @@ button:disabled{
   <div class="hint">
     * โค้ดที่ได้รับ ต้องมียอดฝากของวันที่รับครบ 365 บาทก่อนจึงกรอกได้<br>
     * ทำยอด 10 เท่า ถอนได้ 10 เท่า<br>
-    * 🔒 เข้มงวด: 1 เครื่อง / 1 เบอร์ (ข้ามบราวเซอร์)
+    * 🔒 เข้มงวด: 1 เครื่อง / 1 เบอร์ (ข้ามบราวเซอร์)<br>
+    * 📱 เขย่าโทรศัพท์เพื่อโชว์กล่องอีกครั้ง (เมื่ออนุมัติแล้ว)
     <div class="smallNote" id="devNote"></div>
   </div>
-
 </div>
 
 <!-- Rule Modal -->
@@ -788,7 +864,7 @@ button:disabled{
   </div>
 </div>
 
-<!-- 🎁 Gift Popup Modal (เปิดกล่อง + พลุ) -->
+<!-- 🎁 Gift Popup Modal -->
 <div id="giftModal" class="giftModal" aria-hidden="true">
   <div id="giftCard" class="giftCard" role="dialog" aria-modal="true">
     <canvas id="fwCanvas"></canvas>
@@ -810,19 +886,39 @@ button:disabled{
         </div>
       </div>
 
-      <p class="giftDesc">
-        ✅ แอดมินอนุมัติแล้ว<br>
-        โค้ดของคุณอยู่ด้านล่าง กด “คัดลอก” แล้วไปกรอกได้เลย
-      </p>
-
-      <div class="giftCodeBox">
-        <div id="giftCode" class="giftCode">RRXXXXXXXX</div>
-        <button id="giftCopyBtn" class="giftCopy" type="button">คัดลอก</button>
+      <div class="giftMetaRow">
+        <div class="badgeMini">✅ สถานะ: <strong>อนุมัติแล้ว</strong></div>
+        <div class="badgeMini">⏳ เหลือเวลา: <strong id="countdown">15:00</strong></div>
       </div>
 
-      <div class="giftActions">
-        <button id="giftOkBtn" type="button">รับทราบ</button>
-        <a id="giftGoBtn" class="primary" href="#" target="_blank" rel="noopener">ไปกรอกโค้ด</a>
+      <p class="giftDesc">
+        เปิดกล่องแล้วรอแป๊บ… ระบบจะโชว์โค้ดให้เอง 🎆<br>
+        กด “คัดลอก” แล้วไปกรอกได้เลย
+      </p>
+
+      <!-- reveal after open -->
+      <div id="revealWrap" class="revealWrap">
+        <div class="giftCodeBox">
+          <div id="giftCode" class="giftCode">RRXXXXXXXX</div>
+          <button id="giftCopyBtn" class="giftCopy" type="button">คัดลอก</button>
+        </div>
+
+        <div class="qrWrap">
+          <div class="qrBox">
+            <img id="qrImg" alt="QR ไปกรอกโค้ด"/>
+            <div style="margin-top:8px;font-size:12px;color:rgba(255,255,255,.75);font-weight:900;">สแกนเพื่อไปกรอกโค้ด</div>
+          </div>
+          <div class="qrHint">
+            ✅ ถ้ากรอกในอีกเครื่อง ให้สแกน QR ได้เลย<br>
+            ⚠️ อย่าแชร์โค้ดให้คนอื่น ระบบตรวจสอบเข้มงวด<br>
+            🔊 แนะนำเปิดเสียงเพื่อเอฟเฟกต์ (ถ้าเบราว์เซอร์อนุญาต)
+          </div>
+        </div>
+
+        <div class="giftActions">
+          <button id="giftOkBtn" type="button">รับทราบ</button>
+          <a id="giftGoBtn" class="primary" href="#" target="_blank" rel="noopener">ไปกรอกโค้ด</a>
+        </div>
       </div>
     </div>
   </div>
@@ -838,15 +934,49 @@ const $phone=document.getElementById("phone");
 const $btnCheck=document.getElementById("btnCheck");
 const $btnJoin=document.getElementById("btnJoin");
 const $btnPoll=document.getElementById("btnPoll");
+
+const $spCheck=document.getElementById("spCheck");
+const $spJoin=document.getElementById("spJoin");
+const $spPoll=document.getElementById("spPoll");
+const $txCheck=document.getElementById("txCheck");
+const $txJoin=document.getElementById("txJoin");
+const $txPoll=document.getElementById("txPoll");
+
 const $msg=document.getElementById("msg");
 const $copyWrap=document.getElementById("copyWrap");
 const $promoCode=document.getElementById("promoCode");
 const $btnCopy=document.getElementById("btnCopy");
+
 const $ruleModal=document.getElementById("ruleModal");
 const $modalAck=document.getElementById("modalAcknowledge");
 const $goRedeem=document.getElementById("goRedeem");
 const $devNote=document.getElementById("devNote");
 
+/* Stepper */
+const $st1=document.getElementById("st1");
+const $st2=document.getElementById("st2");
+const $st3=document.getElementById("st3");
+const $st4=document.getElementById("st4");
+
+/* Gift */
+const $giftModal = document.getElementById("giftModal");
+const $giftCard  = document.getElementById("giftCard");
+const $giftCloseBtn = document.getElementById("giftCloseBtn");
+const $giftOkBtn = document.getElementById("giftOkBtn");
+const $giftGoBtn = document.getElementById("giftGoBtn");
+const $giftCode = document.getElementById("giftCode");
+const $giftCopyBtn = document.getElementById("giftCopyBtn");
+const $revealWrap = document.getElementById("revealWrap");
+const $countdown = document.getElementById("countdown");
+const $qrImg = document.getElementById("qrImg");
+
+/* Fireworks Canvas */
+const fwCanvas = document.getElementById("fwCanvas");
+const fwCtx = fwCanvas.getContext("2d");
+
+/* =========================
+   UI helpers
+========================= */
 function openRule(){ $ruleModal.classList.add("show"); document.body.style.overflow="hidden"; }
 function closeRule(){ $ruleModal.classList.remove("show"); document.body.style.overflow=""; }
 $modalAck.onclick=closeRule;
@@ -857,20 +987,48 @@ function show(t,type="ok"){
   $msg.textContent=t;
 }
 function hideMsg(){ $msg.style.display="none"; $msg.textContent=""; }
+
 function hideCopy(){
   $copyWrap.style.display="none";
   $promoCode.textContent="RRXXXXXXXX";
+  $promoCode.classList.remove("glow");
   $goRedeem.style.display="none";
   $goRedeem.href = REDEEM_URL;
 }
+
 function setButtons(enabled){
   $btnCheck.disabled = !enabled;
   $btnPoll.disabled  = !enabled;
   if(!enabled) $btnJoin.disabled = true;
 }
+
 function note(t){ $devNote.textContent = t || ""; }
 
-/* phone normalize */
+function setStepper(stage){ // 1 check,2 join,3 pending,4 approved
+  [$st1,$st2,$st3,$st4].forEach(x=>x.classList.remove("done","live"));
+  if(stage>=1){ $st1.classList.add(stage===1?"live":"done"); }
+  if(stage>=2){ $st2.classList.add(stage===2?"live":"done"); }
+  if(stage>=3){ $st3.classList.add(stage===3?"live":"done"); }
+  if(stage>=4){ $st4.classList.add(stage===4?"live":"done"); }
+}
+
+/* =========================
+   debounce / loading / anti-spam
+========================= */
+let busy = false;
+function setLoading(btn, spinner, label, isOn, textOn){
+  spinner.style.display = isOn ? "inline-block" : "none";
+  label.textContent = isOn ? (textOn || label.textContent) : label.getAttribute("data-orig") || label.textContent;
+  if(!label.getAttribute("data-orig")) label.setAttribute("data-orig", label.textContent);
+}
+function lock(ms=1200){
+  busy = true;
+  setTimeout(()=>busy=false, ms);
+}
+
+/* =========================
+   Phone normalize
+========================= */
 function normalizePhone(v){
   let s=String(v||"").trim(); const th="๐๑๒๓๔๕๖๗๘๙";
   for(let i=0;i<th.length;i++) s=s.replace(new RegExp(th[i],"g"),String(i));
@@ -881,7 +1039,9 @@ function normalizePhone(v){
   return /^0[689]\d{8}$/.test(p)?p:"";
 }
 
-/* JSONP */
+/* =========================
+   JSONP
+========================= */
 function jsonp(params){
   return new Promise((res,rej)=>{
     const cb="cb_"+Math.random().toString(36).slice(2);
@@ -895,19 +1055,29 @@ function jsonp(params){
   });
 }
 
-/* copy (เดิม) */
+/* =========================
+   Copy (main)
+========================= */
 $btnCopy.onclick=async()=>{
-  const t=$promoCode.textContent.trim(); if(!t) return;
+  const t=$promoCode.textContent.trim();
+  if(!t) return;
   try{
     await navigator.clipboard.writeText(t);
     $btnCopy.classList.add("copied");
-    setTimeout(()=> $btnCopy.classList.remove("copied"), 1200);
+    $btnCopy.textContent="คัดลอกแล้ว!";
+    $promoCode.classList.add("glow");
+    setTimeout(()=>{
+      $btnCopy.classList.remove("copied");
+      $btnCopy.textContent="คัดลอก";
+      $promoCode.classList.remove("glow");
+    }, 1200);
+    sfx("copy");
   }catch(_){}
 };
 
-/* ======================================================
-   ✅ ส่งโปรไฟล์เครื่องให้ GAS คำนวณ device_key เอง
-====================================================== */
+/* =========================
+   Device profile (ส่งให้ GAS คำนวณ device_key เอง)
+========================= */
 let READY=false;
 let PROF=null;
 
@@ -924,7 +1094,6 @@ function getProf(){
   const mtp  = navigator.maxTouchPoints || 0;
   const touch = ("ontouchstart" in window) ? 1 : 0;
 
-  // webgl vendor/renderer (มักเหมือนกันข้ามบราวเซอร์)
   let glv="", glr="";
   try{
     const c=document.createElement("canvas");
@@ -972,19 +1141,41 @@ async function payloadBase(phone){
   };
 }
 
-/* ============ 🎁 Gift + Fireworks ============ */
-const $giftModal = document.getElementById("giftModal");
-const $giftCard  = document.getElementById("giftCard");
-const $giftCloseBtn = document.getElementById("giftCloseBtn");
-const $giftOkBtn = document.getElementById("giftOkBtn");
-const $giftGoBtn = document.getElementById("giftGoBtn");
-const $giftCode = document.getElementById("giftCode");
-const $giftCopyBtn = document.getElementById("giftCopyBtn");
+/* =========================
+   Sound FX (ต้องมี gesture ก่อน)
+========================= */
+let audioCtx = null;
+function ensureAudio(){
+  if(audioCtx) return;
+  try{
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }catch(_){}
+}
+function beep(freq=880, dur=0.08, type="sine", gain=0.06){
+  if(!audioCtx) return;
+  const o=audioCtx.createOscillator();
+  const g=audioCtx.createGain();
+  o.type=type; o.frequency.value=freq;
+  g.gain.value=gain;
+  o.connect(g); g.connect(audioCtx.destination);
+  o.start();
+  o.stop(audioCtx.currentTime+dur);
+}
+function sfx(name){
+  ensureAudio();
+  if(!audioCtx) return;
+  if(audioCtx.state==="suspended"){ audioCtx.resume().catch(()=>{}); }
+  if(name==="open"){ beep(523,0.06,"triangle",0.06); setTimeout(()=>beep(784,0.08,"triangle",0.06),70); setTimeout(()=>beep(1046,0.10,"triangle",0.06),150); }
+  if(name==="copy"){ beep(880,0.06,"sine",0.05); setTimeout(()=>beep(1174,0.06,"sine",0.05),70); }
+  if(name==="error"){ beep(220,0.10,"sawtooth",0.05); }
+}
 
-/* 🔥 Fireworks Canvas */
-const fwCanvas = document.getElementById("fwCanvas");
-const fwCtx = fwCanvas.getContext("2d");
+/* prime audio on first user gesture */
+window.addEventListener("pointerdown", ()=>ensureAudio(), {once:true});
 
+/* =========================
+   Gift + Fireworks + Countdown + One-time popup + QR
+========================= */
 let fwRAF = 0;
 let fwParticles = [];
 let fwRunning = false;
@@ -1018,7 +1209,6 @@ function fwLoop(){
   fwRAF = requestAnimationFrame(fwLoop);
   const w = $giftCard.clientWidth;
   const h = $giftCard.clientHeight;
-
   fwCtx.clearRect(0,0,w,h);
 
   for(let i=fwParticles.length-1;i>=0;i--){
@@ -1026,14 +1216,10 @@ function fwLoop(){
     p.age++;
     p.vx *= 0.985;
     p.vy = p.vy*0.985 + 0.06;
-    p.x += p.vx;
-    p.y += p.vy;
+    p.x += p.vx; p.y += p.vy;
 
     const t = 1 - (p.age / p.life);
-    if(t<=0){
-      fwParticles.splice(i,1);
-      continue;
-    }
+    if(t<=0){ fwParticles.splice(i,1); continue; }
 
     fwCtx.globalAlpha = Math.max(0, t);
     fwCtx.beginPath();
@@ -1041,7 +1227,6 @@ function fwLoop(){
     fwCtx.arc(p.x, p.y, p.size, 0, Math.PI*2);
     fwCtx.fill();
   }
-
   fwCtx.globalAlpha = 1;
 
   if(fwParticles.length===0 && fwRunning){
@@ -1060,45 +1245,108 @@ function playFireworks(){
   const w = $giftCard.clientWidth;
   const h = $giftCard.clientHeight;
 
-  spawnBurst(w*0.50, h*0.22, 85);
-  setTimeout(()=>spawnBurst(w*0.25, h*0.28, 70), 120);
-  setTimeout(()=>spawnBurst(w*0.75, h*0.30, 70), 240);
-  setTimeout(()=>spawnBurst(w*0.50, h*0.38, 55), 360);
+  spawnBurst(w*0.50, h*0.22, 90);
+  setTimeout(()=>spawnBurst(w*0.25, h*0.28, 75), 120);
+  setTimeout(()=>spawnBurst(w*0.75, h*0.30, 75), 240);
+  setTimeout(()=>spawnBurst(w*0.50, h*0.38, 60), 360);
 
   if(!fwRAF) fwLoop();
 }
 
-function openGift(code){
-  $giftCode.textContent = code || "RRXXXXXXXX";
-  $giftGoBtn.href = REDEEM_URL;
+/* Countdown 15 นาที */
+let countdownTimer = 0;
+function startCountdown(startTs){
+  clearInterval(countdownTimer);
+  const end = startTs + 15*60*1000;
 
+  function tick(){
+    const left = Math.max(0, end - Date.now());
+    const mm = Math.floor(left/60000);
+    const ss = Math.floor((left%60000)/1000);
+    $countdown.textContent = String(mm).padStart(2,"0")+":"+String(ss).padStart(2,"0");
+    if(left<=0){
+      clearInterval(countdownTimer);
+      $countdown.textContent = "00:00";
+    }
+  }
+  tick();
+  countdownTimer = setInterval(tick, 500);
+}
+
+function buildQR(url){
+  // ใช้ Google Chart API (ไม่ต้องใช้ไลบรารี)
+  const u = encodeURIComponent(url);
+  return `https://chart.googleapis.com/chart?cht=qr&chs=240x240&chld=M|0&chl=${u}`;
+}
+
+let lastApprovedCode = "";
+let lastApprovedAt = 0;
+
+function openGift(code, opts={}){
+  const now = Date.now();
+  const popupKey = "giftShown_"+String(code||"");
+  const isSilent = !!opts.silent; // เปิดแบบไม่ทำซ้ำ/ไม่เสียง
+
+  // กันเด้งซ้ำต่อโค้ด (ข้อ 1)
+  if(!opts.force && code && sessionStorage.getItem(popupKey)==="1"){
+    // ถ้าอยากให้เปิดซ้ำจากการเขย่า -> force:true
+    return;
+  }
+
+  lastApprovedCode = code || lastApprovedCode;
+  if(!lastApprovedAt) lastApprovedAt = now;
+
+  if(code){
+    sessionStorage.setItem(popupKey,"1");
+  }
+
+  // รีเซ็ต UI
+  $revealWrap.classList.remove("show");
+  $giftCode.textContent = code || "RRXXXXXXXX";
+  $giftCode.classList.remove("glow");
+  $giftCopyBtn.classList.remove("copied");
+  $giftCopyBtn.textContent = "คัดลอก";
+
+  // ตั้งลิงก์ + QR
+ $qrImg.onerror = ()=> { $qrImg.src = buildQR(REDEEM_URL); };
+$qrImg.src = "https://img2.pic.in.th/TiAbFC_qrcode.png";
+
+  // เปิด modal
   $giftModal.classList.add("show");
   document.body.style.overflow="hidden";
 
-  // รีเซ็ต/เล่นเปิดกล่อง
+  // เล่นเปิดกล่อง + พลุ
   $giftCard.classList.remove("opening");
   void $giftCard.offsetWidth;
   $giftCard.classList.add("opening");
 
+  if(!isSilent){
+    sfx("open");
+  }
   playFireworks();
+
+  // เริ่มนับเวลา 15 นาที (ข้อ 6)
+  const startTs = opts.startTs || now;
+  lastApprovedAt = startTs;
+  startCountdown(startTs);
+
+  // โชว์โค้ดหลังเปิดกล่อง (ข้อ 2)
+  setTimeout(()=>{
+    $revealWrap.classList.add("show");
+  }, 600);
 }
 
 function closeGift(){
   $giftModal.classList.remove("show");
   document.body.style.overflow="";
-  if(fwRAF){
-    cancelAnimationFrame(fwRAF);
-    fwRAF = 0;
-  }
-  fwParticles = [];
-  fwRunning = false;
+  clearInterval(countdownTimer);
+  if(fwRAF){ cancelAnimationFrame(fwRAF); fwRAF=0; }
+  fwParticles=[]; fwRunning=false;
 }
 
 $giftCloseBtn.onclick = closeGift;
 $giftOkBtn.onclick = closeGift;
-$giftModal.addEventListener("click", (e)=>{
-  if(e.target === $giftModal) closeGift();
-});
+$giftModal.addEventListener("click", (e)=>{ if(e.target === $giftModal) closeGift(); });
 
 $giftCopyBtn.onclick=async()=>{
   const t = ($giftCode.textContent||"").trim();
@@ -1106,10 +1354,13 @@ $giftCopyBtn.onclick=async()=>{
   try{
     await navigator.clipboard.writeText(t);
     $giftCopyBtn.classList.add("copied");
-    $giftCopyBtn.textContent = "คัดลอกแล้ว";
+    $giftCopyBtn.textContent = "คัดลอกแล้ว!";
+    $giftCode.classList.add("glow");
+    sfx("copy");
     setTimeout(()=>{
       $giftCopyBtn.classList.remove("copied");
       $giftCopyBtn.textContent = "คัดลอก";
+      $giftCode.classList.remove("glow");
     }, 1200);
   }catch(_){}
 };
@@ -1117,65 +1368,183 @@ $giftCopyBtn.onclick=async()=>{
 window.addEventListener("resize", ()=>{
   if($giftModal.classList.contains("show")) resizeFW();
 });
-/* ============ end Gift ============ */
 
-/* actions */
+/* =========================
+   Shake detect (ข้อ 5)
+========================= */
+let shakeArmed = true;
+let lastShake = 0;
+function onMotion(e){
+  if(!shakeArmed) return;
+  const a = e.accelerationIncludingGravity;
+  if(!a) return;
+  const mag = Math.abs(a.x||0)+Math.abs(a.y||0)+Math.abs(a.z||0);
+  const now = Date.now();
+  // threshold ปรับได้
+  if(mag > 35 && (now - lastShake) > 1200){
+    lastShake = now;
+    if(lastApprovedCode){
+      openGift(lastApprovedCode, {force:true, silent:true, startTs:lastApprovedAt||Date.now()});
+    }
+  }
+}
+
+async function enableShake(){
+  try{
+    // iOS ต้องขอ permission
+    if(typeof DeviceMotionEvent !== "undefined" && typeof DeviceMotionEvent.requestPermission === "function"){
+      const p = await DeviceMotionEvent.requestPermission();
+      if(p !== "granted") return;
+    }
+    window.addEventListener("devicemotion", onMotion, {passive:true});
+  }catch(_){}
+}
+
+/* เปิด shake หลังมี gesture */
+window.addEventListener("pointerdown", ()=>enableShake(), {once:true});
+
+/* =========================
+   Stepper stage helper from responses
+========================= */
+function markStageFromPoll(status){
+  if(status==="PENDING"){ setStepper(3); return; }
+  if(status==="APPROVED"){ setStepper(4); return; }
+  if(status==="REJECTED" || status==="USED"){ setStepper(3); return; }
+  setStepper(1);
+}
+
+/* =========================
+   Actions: check / register / poll
+========================= */
+setStepper(1);
+
 $btnCheck.onclick=async()=>{
+  if(busy) return;
+  lock(900);
+
   hideMsg(); hideCopy(); $btnJoin.disabled=true;
   const p=normalizePhone($phone.value);
-  if(!p){ show("กรุณากรอกเบอร์ให้ถูกต้อง","err"); return; }
+  if(!p){ show("กรุณากรอกเบอร์ให้ถูกต้อง","err"); sfx("error"); return; }
+
   const base = await payloadBase(p);
-  show("⏳ กำลังตรวจสอบสิทธิ์...");
-  const d=await jsonp({action:"check", ...base}).catch(()=>null);
-  if(!d){ show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err"); return; }
-  if(!d.ok){ show(d.msg || "ไม่ผ่านเงื่อนไข","err"); return; }
-  show(d.msg || "✅ ผ่านการตรวจสอบ กดยืนยันเข้าร่วมได้","ok");
-  $btnJoin.disabled=false;
+
+  setLoading($btnCheck,$spCheck,$txCheck,true,"กำลังตรวจสอบ...");
+  $btnCheck.disabled = true;
+  $btnPoll.disabled = true;
+
+  try{
+    const d=await jsonp({action:"check", ...base}).catch(()=>null);
+    if(!d){ show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err"); sfx("error"); return; }
+    if(!d.ok){ show(d.msg || "ไม่ผ่านเงื่อนไข","err"); sfx("error"); return; }
+
+    show(d.msg || "✅ ผ่านการตรวจสอบ กดยืนยันเข้าร่วมได้","ok");
+    $btnJoin.disabled=false;
+    setStepper(2);
+  }finally{
+    setLoading($btnCheck,$spCheck,$txCheck,false);
+    $btnCheck.disabled = false;
+    $btnPoll.disabled = false;
+  }
 };
 
 $btnJoin.onclick=async()=>{
+  if(busy) return;
+  lock(1100);
+
   hideMsg(); hideCopy();
   const p=normalizePhone($phone.value);
-  if(!p){ show("กรุณากรอกเบอร์ให้ถูกต้อง","err"); return; }
+  if(!p){ show("กรุณากรอกเบอร์ให้ถูกต้อง","err"); sfx("error"); return; }
+
   const base = await payloadBase(p);
-  show("⏳ กำลังลงชื่อเข้าร่วม...");
-  const d=await jsonp({action:"register", ...base}).catch(()=>null);
-  if(!d){ show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err"); return; }
-  if(!d.ok){ show(d.msg || "ยืนยันไม่สำเร็จ","err"); return; }
-  show(d.msg || "✅ ลงชื่อแล้ว รอแอดมินเช็คยอดฝากวันนี้","ok");
-  openRule();
+
+  setLoading($btnJoin,$spJoin,$txJoin,true,"กำลังยืนยัน...");
+  $btnJoin.disabled = true;
+  $btnCheck.disabled = true;
+  $btnPoll.disabled = true;
+
+  try{
+    const d=await jsonp({action:"register", ...base}).catch(()=>null);
+    if(!d){ show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err"); sfx("error"); return; }
+    if(!d.ok){ show(d.msg || "ยืนยันไม่สำเร็จ","err"); sfx("error"); return; }
+
+    show(d.msg || "✅ ลงชื่อแล้ว รอแอดมินเช็คยอดฝากวันนี้","ok");
+    setStepper(3);
+    openRule();
+  }finally{
+    setLoading($btnJoin,$spJoin,$txJoin,false);
+    $btnJoin.disabled = false;
+    $btnCheck.disabled = false;
+    $btnPoll.disabled = false;
+  }
 };
 
 $btnPoll.onclick=async()=>{
+  if(busy) return;
+  lock(1200);
+
   hideMsg(); hideCopy();
   const p=normalizePhone($phone.value);
-  if(!p){ show("กรุณากรอกเบอร์ให้ถูกต้อง","err"); return; }
+  if(!p){ show("กรุณากรอกเบอร์ให้ถูกต้อง","err"); sfx("error"); return; }
+
   const base = await payloadBase(p);
-  show("⏳ กำลังเช็คสถานะ...");
-  const d=await jsonp({action:"poll", ...base}).catch(()=>null);
-  if(!d){ show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err"); return; }
-  if(!d.ok){ show(d.msg || "ยังไม่พร้อม","err"); return; }
 
-  if(d.status==="APPROVED" && d.promo_code){
-    // แสดงในหน้าเดิม
-    $promoCode.textContent=d.promo_code;
-    $copyWrap.style.display="flex";
-    $goRedeem.style.display="block";
-    $goRedeem.href = REDEEM_URL;
+  setLoading($btnPoll,$spPoll,$txPoll,true,"กำลังเช็คสถานะ...");
+  $btnPoll.disabled = true;
+  $btnCheck.disabled = true;
+  $btnJoin.disabled = true;
 
-    show("🎉 อนุมัติแล้ว รับโค้ดได้เลย\nจากนั้นกดปุ่ม “ไปกรอกโค้ดรับเครดิตฟรี”","ok");
-    openRule();
+  try{
+    const d=await jsonp({action:"poll", ...base}).catch(()=>null);
+    if(!d){ show("❌ เชื่อมต่อไม่สำเร็จ (เช็ค SCRIPT_URL / Deploy)","err"); sfx("error"); return; }
+    if(!d.ok){ show(d.msg || "ยังไม่พร้อม","err"); sfx("error"); return; }
 
-    // 🎁 เปิดกล่อง + พลุ
-    openGift(d.promo_code);
-    return;
+    markStageFromPoll(d.status);
+
+    if(d.status==="APPROVED" && d.promo_code){
+      lastApprovedCode = d.promo_code;
+      lastApprovedAt = Date.now();
+      // เก็บไว้ให้ shake เรียกซ้ำได้
+      sessionStorage.setItem("lastApprovedCode", lastApprovedCode);
+      sessionStorage.setItem("lastApprovedAt", String(lastApprovedAt));
+
+      // แสดงในหน้าเดิม
+      $promoCode.textContent=d.promo_code;
+      $copyWrap.style.display="flex";
+      $goRedeem.style.display="block";
+      $goRedeem.href = REDEEM_URL;
+
+      show("🎉 อนุมัติแล้ว รับโค้ดได้เลย\nจากนั้นกดปุ่ม “ไปกรอกโค้ดรับเครดิตฟรี”","ok");
+      openRule();
+
+      // 🎁 เปิดกล่อง + พลุ + reveal + qr + countdown + one-time
+      openGift(d.promo_code, {startTs:lastApprovedAt});
+      return;
+    }
+
+    if(d.status==="PENDING"){ show("⏳ รอการอนุมัติเช็คยอดฝากวันนี้","ok"); return; }
+    if(d.status==="REJECTED"){ show("❌ ไม่ผ่านการอนุมัติ กรุณาติดต่อแอดมิน","err"); return; }
+    if(d.status==="USED"){ show("⚠️ รายการนี้ถูกใช้ไปแล้ว","err"); return; }
+
+    show(d.msg || ("สถานะ: "+(d.status||"UNKNOWN")),"ok");
+  }finally{
+    setLoading($btnPoll,$spPoll,$txPoll,false);
+    $btnPoll.disabled = false;
+    $btnCheck.disabled = false;
+    // ปล่อย join ต่อเมื่อผ่าน check จริง ๆ
+    // (ถ้าต้องการให้ join เปิดเสมอหลัง poll ก็ปรับได้)
+    $btnJoin.disabled = false;
   }
-  if(d.status==="PENDING"){ show("⏳ รอการอนุมัติเช็คยอดฝากวันนี้","ok"); return; }
-  if(d.status==="REJECTED"){ show("❌ ไม่ผ่านการอนุมัติ กรุณาติดต่อแอดมิน","err"); return; }
-  if(d.status==="USED"){ show("⚠️ รายการนี้ถูกใช้ไปแล้ว","err"); return; }
-
-  show(d.msg || ("สถานะ: "+(d.status||"UNKNOWN")),"ok");
 };
+
+/* restore last approved for shake (ถ้ามี) */
+try{
+  const c = sessionStorage.getItem("lastApprovedCode") || "";
+  const t = parseInt(sessionStorage.getItem("lastApprovedAt")||"0",10) || 0;
+  if(c){ lastApprovedCode=c; lastApprovedAt=t||Date.now(); }
+}catch(_){}
+
+/* init */
+ensureReady();
 </script>
 </body>
 </html>
